@@ -96,6 +96,7 @@ partial class SelectLocation
 		Controls.Add(employeeComboBox);
 		Controls.Add(locationComboBox);
 		Name = "SelectLocation";
+		StartPosition = FormStartPosition.CenterScreen;
 		Text = "Select Location";
 		ResumeLayout(false);
 		PerformLayout();

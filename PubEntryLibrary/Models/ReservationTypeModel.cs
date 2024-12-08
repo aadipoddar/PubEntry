@@ -1,6 +1,6 @@
 ﻿namespace PubEntryLibrary.Models;
 
-public class PaymentMethodModel
+public class ReservationTypeModel
 {
 	public int Id { get; set; }
 	public string Name { get; set; }

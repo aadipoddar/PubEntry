@@ -1,4 +1,7 @@
-﻿using PubEntryLibrary.Data;
+﻿using System;
+using System.Drawing.Printing;
+
+using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
 
 using QuestPDF.Fluent;
@@ -9,122 +12,130 @@ namespace PubEntry;
 
 public partial class MainForm : Form
 {
-	int employee, location;
-	PersonModel person = new PersonModel();
+	int employeeId, locationId;
+	bool personFound = false;
+	PersonModel foundPerson = new();
+	TransactionModel transaction = new();
 
-	public MainForm(int location, int employee)
+	public MainForm(int locationId, int employeeId)
 	{
 		InitializeComponent();
 
-		this.employee = employee;
-		this.location = location;
+		this.employeeId = employeeId;
+		this.locationId = locationId;
 
 		Task task = LoadComboBox();
 	}
 
 	private async Task LoadComboBox()
 	{
-		paymentMethodComboBox.DataSource = null;
+		reservationComboBox.DataSource = null;
+		reservationComboBox.DataSource = (await DataAccess.LoadTableData<ReservationTypeModel>("ReservationTypeTable")).ToList();
+		reservationComboBox.DisplayMember = "Name";
 
-		var methods = (await DataAccess.LoadTableData<PaymentMethodModel>("PaymentMethodTable")).ToList();
-
-		paymentMethodComboBox.DataSource = methods;
-		paymentMethodComboBox.DisplayMember = "Name";
-	}
-
-	private async void insertButton_Click(object sender, EventArgs e)
-	{
-		var people = (await DataAccess.LoadTableData<PersonModel>("PersonTable")).ToList();
-
-		if (people.Count != 0)
-			person.Id = people.LastOrDefault().Id + 1;
-		else
-			person.Id = 1;
-
-		person.Name = nameTextBox.Text;
-		person.Number = numberTextBox.Text;
-		person.Amount = (int)Convert.ToInt64(amountTextBox.Text);
-		person.ModeOfPayment = paymentMethodComboBox.SelectedIndex + 1;
-		person.EntryTime = DateTime.Now;
-		person.EmployeeId = employee;
-		person.LocationId = location;
-
-		await DataAccess.InsertPersonTableData(person);
-
-		Print();
-
-		ClearForm();
-	}
-
-	private void Print()
-	{
-		Document.Create(container =>
-		{
-			container.Page(page =>
-			{
-				page.Size(PageSizes.A4);
-				page.Margin(2, Unit.Centimetre);
-				page.PageColor(Colors.White);
-				page.DefaultTextStyle(x => x.FontSize(20));
-
-
-				page.Header()
-					.Text($"{Task.Run(async () => await DataAccess.GetLocationNameById(person.LocationId)).Result}")
-					.SemiBold().FontSize(36).FontColor(Colors.Blue.Medium);
-
-				page.Content()
-					.PaddingVertical(1, Unit.Centimetre)
-					.Column(x =>
-					{
-						x.Spacing(20);
-
-						x.Item().Text($"Bill Id / Guest Id = #{person.Id}");
-						x.Item().Text($"Employee Name = {Task.Run(async () => await DataAccess.GetEmployeeNameById(person.EmployeeId)).Result}");
-						x.Item().Text($"Guest Name = {person.Name}");
-						x.Item().Text($"Guest Number = {person.Number}");
-						x.Item().Text($"Amount Paid = {person.Amount}");
-						x.Item().Text($"Mode of Payment = {Task.Run(async () => await DataAccess.GetModOfPaymentName(person.ModeOfPayment)).Result}");
-						x.Item().Text($"Time Entered = {person.EntryTime}");
-					});
-
-				page.Footer()
-					.AlignCenter()
-					.Text(x =>
-					{
-						x.Span($"Thank you for Visiting {Task.Run(async () => await DataAccess.GetLocationNameById(person.LocationId)).Result}");
-					});
-			});
-		}).GeneratePdfAndShow();
+		dateTimeLabel.Text = DateTime.Now.ToString();
 	}
 
 	private void ClearForm()
 	{
 		nameTextBox.Text = string.Empty;
 		numberTextBox.Text = string.Empty;
-		amountTextBox.Text = string.Empty;
+		cashAmountTextBox.Text = "0";
+		cardAmountTextBox.Text = "0";
+		upiAmountTextBox.Text = "0";
+		maleTextBox.Text = "0";
+		femaleTextBox.Text = "0";
+		approvedByTextBox.Text = string.Empty;
 	}
 
-	private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
-	{
-		Application.Exit();
-	}
+	private void MainForm_FormClosed(object sender, FormClosedEventArgs e) => Application.Exit();
 
 	private void numberTextBox_TextChanged(object sender, EventArgs e)
 	{
-		var foundPerson = Task.Run(async () => await DataAccess.GetPersonByNumber(numberTextBox.Text)).Result.FirstOrDefault();
+		foundPerson = Task.Run(async () => await DataAccess.GetPersonByNumber(numberTextBox.Text)).Result.FirstOrDefault();
 		if (foundPerson != null)
 		{
 			nameTextBox.Text = foundPerson.Name;
 			numberTextBox.Text = foundPerson.Number;
-			amountTextBox.Text = foundPerson.Amount.ToString();
-			paymentMethodComboBox.SelectedIndex = foundPerson.ModeOfPayment - 1;
-
-			insertButton.Enabled = false;
+			personFound = true;
+			nameTextBox.ReadOnly = true;
 		}
 
 		else
 		{
-			insertButton.Enabled = true;
+			personFound = false;
+			nameTextBox.ReadOnly = false;
+			nameTextBox.Text = string.Empty;
 		}
+	}
+
+	private async void insertButton_Click(object sender, EventArgs e)
+	{
+		if (!personFound)
+			await DataAccess.InsertPersonTableData(nameTextBox.Text, numberTextBox.Text);
+
+		foundPerson = Task.Run(async () => await DataAccess.GetPersonByNumber(numberTextBox.Text)).Result.FirstOrDefault();
+
+		transaction.PersonId = foundPerson.Id;
+		transaction.Male = (int)Convert.ToInt64(maleTextBox.Text);
+		transaction.Female = (int)Convert.ToInt64(femaleTextBox.Text);
+		transaction.Cash = (int)Convert.ToInt64(cashAmountTextBox.Text);
+		transaction.Card = (int)Convert.ToInt64(cardAmountTextBox.Text);
+		transaction.UPI = (int)Convert.ToInt64(upiAmountTextBox.Text);
+		transaction.ReservationType = reservationComboBox.SelectedIndex;
+		transaction.DateTime = DateTime.Now;
+		transaction.ApprovedBy = approvedByTextBox.Text == "" ? null : approvedByTextBox.Text;
+		transaction.LocationId = locationId;
+		transaction.EmployeeId = employeeId;
+
+		await DataAccess.InsertTransactionTableData(transaction);
+
+		PrintDialog printDialog = new PrintDialog();
+		printDialog.Document = printDocument;
+
+		if (printDialog.ShowDialog() == DialogResult.OK)
+			printDocument.Print();
+
+		ClearForm();
+	}
+
+	private decimal CalculateSubtotal(decimal[] prices, int[] quantities)
+	{
+		decimal subtotal = 0;
+		for (int i = 0; i < prices.Length; i++)
+		{
+			subtotal += prices[i] * quantities[i];
+		}
+		return subtotal;
+	}
+
+	private void printDocument_PrintPage(object sender, PrintPageEventArgs e)
+	{
+		Graphics g = e.Graphics;
+		Font font = new Font("Courier New", 9); // Use Courier New for better alignment on thermal printers
+
+		// Receipt Header
+		g.DrawString($"** {Task.Run(async () => await DataAccess.GetLocationNameById(locationId)).Result} **", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 10, 10);
+		//g.DrawString($"Serial Number: {Task.Run(async () => await DataAccess.GetTransactionIdbyDate(transaction.DateTime.ToString())).Result}", font, Brushes.Black, 10, 60);
+		g.DrawString($"Name: {foundPerson.Name}", font, Brushes.Black, 10, 30);
+		g.DrawString($"Mobile Number: {foundPerson.Number}", font, Brushes.Black, 10, 45);
+		g.DrawString($"Reservation Type: {Task.Run(async () => await DataAccess.GetReservationTypeById(transaction.ReservationType)).Result}", font, Brushes.Black, 10, 60);
+
+		g.DrawString("---------------------------------", font, Brushes.Black, 10, 75);
+		g.DrawString($"Total Persons: {transaction.Male + transaction.Female}", font, Brushes.Black, 10, 90);
+		g.DrawString("Male\tFemale", font, Brushes.Black, 10, 105);
+		g.DrawString($"{transaction.Male}\t{transaction.Female}", font, Brushes.Black, 10, 120);
+
+		g.DrawString("---------------------------------", font, Brushes.Black, 10, 140);
+		g.DrawString($"Total Payment: {transaction.Cash + transaction.Card + transaction.UPI}", font, Brushes.Black, 10, 155);
+		g.DrawString("Cash\tCard\tUPI", font, Brushes.Black, 10, 170);
+		g.DrawString($"{transaction.Cash}\t{transaction.Card}\t{transaction.UPI}", font, Brushes.Black, 10, 185);
+
+		g.DrawString("---------------------------------", font, Brushes.Black, 10, 205);
+		g.DrawString($"Approved By: {transaction.ApprovedBy}", font, Brushes.Black, 10, 225);
+
+		g.DrawString($"This coupon is non-transferable to\nany Person or any other outlet\nThis coupon is to be redeemed until\nthe end of the operations of the\nparticular night:\n{transaction.DateTime.ToString()}\nThe hotel does not take liability\nor responsibility if the coupon is\nlost by the guest", font, Brushes.Black, 10, 265);
+
+		e.HasMorePages = false;
 	}
 }
