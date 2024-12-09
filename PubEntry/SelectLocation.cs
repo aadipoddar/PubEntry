@@ -68,20 +68,16 @@ public partial class SelectLocation : Form
 		Font font = new Font("Courier New", 9);
 
 		int y = 0;
-
-		string fromDateTime, toDateTime;
-		GetDateTime(out fromDateTime, out toDateTime);
-
-		g.DrawString($"{fromDateTime} - {toDateTime}", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 200	, y += 20);
-
 		int grandTotalMale = 0, grandTotalFemale = 0, grandTotalCash = 0, grandTotalCard = 0, grandTotalUPI = 0;
-
 		var locations = Task.Run(async () => await DataAccess.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
+		string fromDateTime, toDateTime;
+
+		GetDateTime(out fromDateTime, out toDateTime);
+		g.DrawString($"{fromDateTime} - {toDateTime}", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 200	, y += 20);
 
 		foreach (var location in locations)
 		{
 			int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0;
-
 			List<TransactionModel> transactions = Task.Run(async () => await DataAccess.GetTransactionsByDateRangeAndLocation(fromDateTime, toDateTime, location.Id)).Result;
 
 			g.DrawString($"** {location.Name} **", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 350, y += 20);
