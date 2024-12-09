@@ -94,16 +94,6 @@ public partial class MainForm : Form
 		ClearForm();
 	}
 
-	private decimal CalculateSubtotal(decimal[] prices, int[] quantities)
-	{
-		decimal subtotal = 0;
-		for (int i = 0; i < prices.Length; i++)
-		{
-			subtotal += prices[i] * quantities[i];
-		}
-		return subtotal;
-	}
-
 	private void printDocument_PrintPage(object sender, PrintPageEventArgs e)
 	{
 		Graphics g = e.Graphics;
@@ -112,7 +102,7 @@ public partial class MainForm : Form
 		// Receipt Header
 		int y = 0;
 		g.DrawString($"** {Task.Run(async () => await DataAccess.GetLocationNameById(locationId)).Result} **", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 10, y += 10);
-		g.DrawString($"Serial Number: {Task.Run(async () => await DataAccess.GetTransactionIdbyDate(transaction.DateTime.ToString())).Result}", font, Brushes.Black, 10, y += 25);
+		g.DrawString($"Slip No.: {Task.Run(async () => await DataAccess.GetTransactionIdbyDate(transaction.DateTime.ToString())).Result}", font, Brushes.Black, 10, y += 25);
 		g.DrawString($"Name: {foundPerson.Name}", font, Brushes.Black, 10, y += 15);
 		g.DrawString($"Mobile Number: {foundPerson.Number}", font, Brushes.Black, 10, y += 15);
 		g.DrawString($"Reservation Type: {Task.Run(async () => await DataAccess.GetReservationTypeById(transaction.ReservationType)).Result}", font, Brushes.Black, 10, y += 15);

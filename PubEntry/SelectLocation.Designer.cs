@@ -33,6 +33,13 @@ partial class SelectLocation
 		goButton = new Button();
 		finalPrintButton = new Button();
 		passwordTextBox = new TextBox();
+		fromDateTimePicker = new DateTimePicker();
+		toDateTimePicker = new DateTimePicker();
+		fromLabel = new Label();
+		toLabel = new Label();
+		fromTimeTextBox = new TextBox();
+		toTimeTextBox = new TextBox();
+		printDocument = new System.Drawing.Printing.PrintDocument();
 		SuspendLayout();
 		// 
 		// locationComboBox
@@ -56,7 +63,7 @@ partial class SelectLocation
 		// goButton
 		// 
 		goButton.Font = new Font("Segoe UI", 15F);
-		goButton.Location = new Point(90, 253);
+		goButton.Location = new Point(161, 248);
 		goButton.Name = "goButton";
 		goButton.Size = new Size(118, 38);
 		goButton.TabIndex = 13;
@@ -67,10 +74,10 @@ partial class SelectLocation
 		// finalPrintButton
 		// 
 		finalPrintButton.Font = new Font("Segoe UI", 15F);
-		finalPrintButton.Location = new Point(243, 253);
+		finalPrintButton.Location = new Point(161, 450);
 		finalPrintButton.Name = "finalPrintButton";
 		finalPrintButton.Size = new Size(118, 38);
-		finalPrintButton.TabIndex = 14;
+		finalPrintButton.TabIndex = 18;
 		finalPrintButton.Text = "Final Print";
 		finalPrintButton.UseVisualStyleBackColor = true;
 		finalPrintButton.Click += finalPrintButton_Click;
@@ -85,11 +92,79 @@ partial class SelectLocation
 		passwordTextBox.Size = new Size(271, 39);
 		passwordTextBox.TabIndex = 12;
 		// 
+		// fromDateTimePicker
+		// 
+		fromDateTimePicker.Font = new Font("Segoe UI", 15F);
+		fromDateTimePicker.Format = DateTimePickerFormat.Short;
+		fromDateTimePicker.Location = new Point(90, 340);
+		fromDateTimePicker.Name = "fromDateTimePicker";
+		fromDateTimePicker.Size = new Size(131, 34);
+		fromDateTimePicker.TabIndex = 14;
+		// 
+		// toDateTimePicker
+		// 
+		toDateTimePicker.Font = new Font("Segoe UI", 15F);
+		toDateTimePicker.Format = DateTimePickerFormat.Short;
+		toDateTimePicker.Location = new Point(259, 340);
+		toDateTimePicker.Name = "toDateTimePicker";
+		toDateTimePicker.Size = new Size(135, 34);
+		toDateTimePicker.TabIndex = 16;
+		// 
+		// fromLabel
+		// 
+		fromLabel.AutoSize = true;
+		fromLabel.Font = new Font("Segoe UI", 15F);
+		fromLabel.Location = new Point(112, 309);
+		fromLabel.Name = "fromLabel";
+		fromLabel.Size = new Size(58, 28);
+		fromLabel.TabIndex = 19;
+		fromLabel.Text = "From";
+		// 
+		// toLabel
+		// 
+		toLabel.AutoSize = true;
+		toLabel.Font = new Font("Segoe UI", 15F);
+		toLabel.Location = new Point(279, 309);
+		toLabel.Name = "toLabel";
+		toLabel.Size = new Size(32, 28);
+		toLabel.TabIndex = 20;
+		toLabel.Text = "To";
+		// 
+		// fromTimeTextBox
+		// 
+		fromTimeTextBox.Font = new Font("Segoe UI", 18F);
+		fromTimeTextBox.Location = new Point(90, 380);
+		fromTimeTextBox.Name = "fromTimeTextBox";
+		fromTimeTextBox.PlaceholderText = "24hr Time";
+		fromTimeTextBox.Size = new Size(131, 39);
+		fromTimeTextBox.TabIndex = 15;
+		fromTimeTextBox.Text = "12";
+		// 
+		// toTimeTextBox
+		// 
+		toTimeTextBox.Font = new Font("Segoe UI", 18F);
+		toTimeTextBox.Location = new Point(259, 380);
+		toTimeTextBox.Name = "toTimeTextBox";
+		toTimeTextBox.PlaceholderText = "24hr Time";
+		toTimeTextBox.Size = new Size(135, 39);
+		toTimeTextBox.TabIndex = 17;
+		toTimeTextBox.Text = "12";
+		// 
+		// printDocument
+		// 
+		printDocument.PrintPage += printDocument_PrintPage;
+		// 
 		// SelectLocation
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(487, 325);
+		ClientSize = new Size(487, 524);
+		Controls.Add(toTimeTextBox);
+		Controls.Add(fromTimeTextBox);
+		Controls.Add(toLabel);
+		Controls.Add(fromLabel);
+		Controls.Add(toDateTimePicker);
+		Controls.Add(fromDateTimePicker);
 		Controls.Add(passwordTextBox);
 		Controls.Add(finalPrintButton);
 		Controls.Add(goButton);
@@ -109,4 +184,11 @@ partial class SelectLocation
 	private Button goButton;
 	private Button finalPrintButton;
 	private TextBox passwordTextBox;
+	private DateTimePicker fromDateTimePicker;
+	private DateTimePicker toDateTimePicker;
+	private Label fromLabel;
+	private Label toLabel;
+	private TextBox fromTimeTextBox;
+	private TextBox toTimeTextBox;
+	private System.Drawing.Printing.PrintDocument printDocument;
 }
