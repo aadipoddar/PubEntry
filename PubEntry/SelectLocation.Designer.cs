@@ -31,7 +31,7 @@ partial class SelectLocation
 		locationComboBox = new ComboBox();
 		employeeComboBox = new ComboBox();
 		goButton = new Button();
-		finalPrintButton = new Button();
+		showDataButton = new Button();
 		passwordTextBox = new TextBox();
 		fromDateTimePicker = new DateTimePicker();
 		toDateTimePicker = new DateTimePicker();
@@ -39,7 +39,6 @@ partial class SelectLocation
 		toLabel = new Label();
 		fromTimeTextBox = new TextBox();
 		toTimeTextBox = new TextBox();
-		printDocument = new System.Drawing.Printing.PrintDocument();
 		SuspendLayout();
 		// 
 		// locationComboBox
@@ -71,16 +70,16 @@ partial class SelectLocation
 		goButton.UseVisualStyleBackColor = true;
 		goButton.Click += goButton_Click;
 		// 
-		// finalPrintButton
+		// showDataButton
 		// 
-		finalPrintButton.Font = new Font("Segoe UI", 15F);
-		finalPrintButton.Location = new Point(161, 450);
-		finalPrintButton.Name = "finalPrintButton";
-		finalPrintButton.Size = new Size(118, 38);
-		finalPrintButton.TabIndex = 18;
-		finalPrintButton.Text = "Final Print";
-		finalPrintButton.UseVisualStyleBackColor = true;
-		finalPrintButton.Click += finalPrintButton_Click;
+		showDataButton.Font = new Font("Segoe UI", 15F);
+		showDataButton.Location = new Point(161, 450);
+		showDataButton.Name = "showDataButton";
+		showDataButton.Size = new Size(118, 38);
+		showDataButton.TabIndex = 18;
+		showDataButton.Text = "Show Data";
+		showDataButton.UseVisualStyleBackColor = true;
+		showDataButton.Click += showDataButton_Click;
 		// 
 		// passwordTextBox
 		// 
@@ -150,10 +149,6 @@ partial class SelectLocation
 		toTimeTextBox.TabIndex = 17;
 		toTimeTextBox.Text = "12";
 		// 
-		// printDocument
-		// 
-		printDocument.PrintPage += printDocument_PrintPage;
-		// 
 		// SelectLocation
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
@@ -166,7 +161,7 @@ partial class SelectLocation
 		Controls.Add(toDateTimePicker);
 		Controls.Add(fromDateTimePicker);
 		Controls.Add(passwordTextBox);
-		Controls.Add(finalPrintButton);
+		Controls.Add(showDataButton);
 		Controls.Add(goButton);
 		Controls.Add(employeeComboBox);
 		Controls.Add(locationComboBox);
@@ -182,7 +177,7 @@ partial class SelectLocation
 	private ComboBox locationComboBox;
 	private ComboBox employeeComboBox;
 	private Button goButton;
-	private Button finalPrintButton;
+	private Button showDataButton;
 	private TextBox passwordTextBox;
 	private DateTimePicker fromDateTimePicker;
 	private DateTimePicker toDateTimePicker;
@@ -190,5 +185,4 @@ partial class SelectLocation
 	private Label toLabel;
 	private TextBox fromTimeTextBox;
 	private TextBox toTimeTextBox;
-	private System.Drawing.Printing.PrintDocument printDocument;
 }

@@ -54,7 +54,7 @@ partial class MainForm
 		// nameTextBox
 		// 
 		nameTextBox.Font = new Font("Segoe UI", 15F);
-		nameTextBox.Location = new Point(259, 98);
+		nameTextBox.Location = new Point(185, 108);
 		nameTextBox.Name = "nameTextBox";
 		nameTextBox.PlaceholderText = "Name";
 		nameTextBox.Size = new Size(271, 34);
@@ -64,7 +64,7 @@ partial class MainForm
 		// 
 		nameLabel.AutoSize = true;
 		nameLabel.Font = new Font("Segoe UI", 15F);
-		nameLabel.Location = new Point(87, 99);
+		nameLabel.Location = new Point(13, 109);
 		nameLabel.Name = "nameLabel";
 		nameLabel.Size = new Size(64, 28);
 		nameLabel.TabIndex = 1;
@@ -74,7 +74,7 @@ partial class MainForm
 		// 
 		numberLabel.AutoSize = true;
 		numberLabel.Font = new Font("Segoe UI", 15F);
-		numberLabel.Location = new Point(86, 40);
+		numberLabel.Location = new Point(12, 68);
 		numberLabel.Name = "numberLabel";
 		numberLabel.Size = new Size(151, 28);
 		numberLabel.TabIndex = 3;
@@ -83,7 +83,7 @@ partial class MainForm
 		// numberTextBox
 		// 
 		numberTextBox.Font = new Font("Segoe UI", 15F);
-		numberTextBox.Location = new Point(259, 40);
+		numberTextBox.Location = new Point(185, 68);
 		numberTextBox.Name = "numberTextBox";
 		numberTextBox.PlaceholderText = "Mobile Number";
 		numberTextBox.Size = new Size(271, 34);
@@ -94,7 +94,7 @@ partial class MainForm
 		// 
 		cashLabel.AutoSize = true;
 		cashLabel.Font = new Font("Segoe UI", 15F);
-		cashLabel.Location = new Point(108, 277);
+		cashLabel.Location = new Point(284, 173);
 		cashLabel.Name = "cashLabel";
 		cashLabel.Size = new Size(53, 28);
 		cashLabel.TabIndex = 5;
@@ -103,7 +103,7 @@ partial class MainForm
 		// cashAmountTextBox
 		// 
 		cashAmountTextBox.Font = new Font("Segoe UI", 15F);
-		cashAmountTextBox.Location = new Point(80, 316);
+		cashAmountTextBox.Location = new Point(343, 170);
 		cashAmountTextBox.Name = "cashAmountTextBox";
 		cashAmountTextBox.PlaceholderText = "Cash Amount";
 		cashAmountTextBox.RightToLeft = RightToLeft.Yes;
@@ -114,7 +114,7 @@ partial class MainForm
 		// saveButton
 		// 
 		saveButton.Font = new Font("Segoe UI", 15F);
-		saveButton.Location = new Point(229, 598);
+		saveButton.Location = new Point(167, 409);
 		saveButton.Name = "saveButton";
 		saveButton.Size = new Size(135, 44);
 		saveButton.TabIndex = 9;
@@ -126,7 +126,7 @@ partial class MainForm
 		// 
 		cardLabel.AutoSize = true;
 		cardLabel.Font = new Font("Segoe UI", 15F);
-		cardLabel.Location = new Point(275, 277);
+		cardLabel.Location = new Point(284, 213);
 		cardLabel.Name = "cardLabel";
 		cardLabel.Size = new Size(53, 28);
 		cardLabel.TabIndex = 15;
@@ -135,7 +135,7 @@ partial class MainForm
 		// cardAmountTextBox
 		// 
 		cardAmountTextBox.Font = new Font("Segoe UI", 15F);
-		cardAmountTextBox.Location = new Point(247, 316);
+		cardAmountTextBox.Location = new Point(343, 213);
 		cardAmountTextBox.Name = "cardAmountTextBox";
 		cardAmountTextBox.PlaceholderText = "Card Amount";
 		cardAmountTextBox.RightToLeft = RightToLeft.Yes;
@@ -147,7 +147,7 @@ partial class MainForm
 		// 
 		upiLabel.AutoSize = true;
 		upiLabel.Font = new Font("Segoe UI", 15F);
-		upiLabel.Location = new Point(456, 277);
+		upiLabel.Location = new Point(284, 256);
 		upiLabel.Name = "upiLabel";
 		upiLabel.Size = new Size(42, 28);
 		upiLabel.TabIndex = 17;
@@ -156,7 +156,7 @@ partial class MainForm
 		// upiAmountTextBox
 		// 
 		upiAmountTextBox.Font = new Font("Segoe UI", 15F);
-		upiAmountTextBox.Location = new Point(423, 316);
+		upiAmountTextBox.Location = new Point(343, 253);
 		upiAmountTextBox.Name = "upiAmountTextBox";
 		upiAmountTextBox.PlaceholderText = "UPI Amount";
 		upiAmountTextBox.RightToLeft = RightToLeft.Yes;
@@ -168,7 +168,7 @@ partial class MainForm
 		// 
 		femaleLabel.AutoSize = true;
 		femaleLabel.Font = new Font("Segoe UI", 15F);
-		femaleLabel.Location = new Point(359, 169);
+		femaleLabel.Location = new Point(22, 213);
 		femaleLabel.Name = "femaleLabel";
 		femaleLabel.Size = new Size(74, 28);
 		femaleLabel.TabIndex = 21;
@@ -177,7 +177,7 @@ partial class MainForm
 		// femaleTextBox
 		// 
 		femaleTextBox.Font = new Font("Segoe UI", 15F);
-		femaleTextBox.Location = new Point(333, 209);
+		femaleTextBox.Location = new Point(105, 210);
 		femaleTextBox.Name = "femaleTextBox";
 		femaleTextBox.PlaceholderText = "Card Amount";
 		femaleTextBox.RightToLeft = RightToLeft.Yes;
@@ -189,7 +189,7 @@ partial class MainForm
 		// 
 		maleLabel.AutoSize = true;
 		maleLabel.Font = new Font("Segoe UI", 15F);
-		maleLabel.Location = new Point(184, 169);
+		maleLabel.Location = new Point(22, 173);
 		maleLabel.Name = "maleLabel";
 		maleLabel.Size = new Size(55, 28);
 		maleLabel.TabIndex = 19;
@@ -198,7 +198,7 @@ partial class MainForm
 		// maleTextBox
 		// 
 		maleTextBox.Font = new Font("Segoe UI", 15F);
-		maleTextBox.Location = new Point(152, 209);
+		maleTextBox.Location = new Point(105, 170);
 		maleTextBox.Name = "maleTextBox";
 		maleTextBox.PlaceholderText = "Cash Amount";
 		maleTextBox.RightToLeft = RightToLeft.Yes;
@@ -210,7 +210,7 @@ partial class MainForm
 		// 
 		reservationComboBox.Font = new Font("Segoe UI", 15F);
 		reservationComboBox.FormattingEnabled = true;
-		reservationComboBox.Location = new Point(259, 379);
+		reservationComboBox.Location = new Point(185, 311);
 		reservationComboBox.Name = "reservationComboBox";
 		reservationComboBox.Size = new Size(271, 36);
 		reservationComboBox.TabIndex = 7;
@@ -219,7 +219,7 @@ partial class MainForm
 		// 
 		reservationLabel.AutoSize = true;
 		reservationLabel.Font = new Font("Segoe UI", 15F);
-		reservationLabel.Location = new Point(87, 382);
+		reservationLabel.Location = new Point(22, 314);
 		reservationLabel.Name = "reservationLabel";
 		reservationLabel.Size = new Size(113, 28);
 		reservationLabel.TabIndex = 23;
@@ -228,7 +228,7 @@ partial class MainForm
 		// approvedByTextBox
 		// 
 		approvedByTextBox.Font = new Font("Segoe UI", 15F);
-		approvedByTextBox.Location = new Point(259, 508);
+		approvedByTextBox.Location = new Point(185, 353);
 		approvedByTextBox.Name = "approvedByTextBox";
 		approvedByTextBox.PlaceholderText = "Approved By";
 		approvedByTextBox.Size = new Size(271, 34);
@@ -238,7 +238,7 @@ partial class MainForm
 		// 
 		approvedByLabel.AutoSize = true;
 		approvedByLabel.Font = new Font("Segoe UI", 15F);
-		approvedByLabel.Location = new Point(87, 510);
+		approvedByLabel.Location = new Point(22, 356);
 		approvedByLabel.Name = "approvedByLabel";
 		approvedByLabel.Size = new Size(126, 28);
 		approvedByLabel.TabIndex = 25;
@@ -248,7 +248,7 @@ partial class MainForm
 		// 
 		dateTimeLabel.AutoSize = true;
 		dateTimeLabel.Font = new Font("Segoe UI", 15F);
-		dateTimeLabel.Location = new Point(166, 452);
+		dateTimeLabel.Location = new Point(94, 22);
 		dateTimeLabel.Name = "dateTimeLabel";
 		dateTimeLabel.Size = new Size(267, 28);
 		dateTimeLabel.TabIndex = 26;
@@ -262,7 +262,7 @@ partial class MainForm
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(617, 654);
+		ClientSize = new Size(486, 473);
 		Controls.Add(dateTimeLabel);
 		Controls.Add(approvedByLabel);
 		Controls.Add(approvedByTextBox);
@@ -285,7 +285,7 @@ partial class MainForm
 		Controls.Add(nameTextBox);
 		Name = "MainForm";
 		StartPosition = FormStartPosition.CenterScreen;
-		Text = "MainForm";
+		Text = "Dashboard";
 		FormClosed += MainForm_FormClosed;
 		ResumeLayout(false);
 		PerformLayout();
