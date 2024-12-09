@@ -39,5 +39,5 @@ public static class DataAccess
 		(await GetById<ReservationTypeModel>("ReservationTypeTable", reservationTypeId) as List<ReservationTypeModel>).FirstOrDefault().Name;
 
 	public static async Task<int> GetTransactionIdbyDate(string dateTime) =>
-		(await SqlDataAccess.LoadDataSQL<TransactionModel>($"SELECT * FROM TransactionTable WHERE DateTime = '{dateTime}'", "PubEntry") as TransactionModel).Id;
+		(int)Convert.ToInt64((await SqlDataAccess.LoadDataSQL<TransactionModel>($"SELECT Id FROM TransactionTable WHERE DateTime = '{dateTime}'", "PubEntry")).FirstOrDefault().Id);
 }

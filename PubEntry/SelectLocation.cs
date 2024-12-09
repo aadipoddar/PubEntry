@@ -1,10 +1,6 @@
 ﻿using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
 
-using QuestPDF.Fluent;
-using QuestPDF.Helpers;
-using QuestPDF.Infrastructure;
-
 namespace PubEntry;
 
 public partial class SelectLocation : Form

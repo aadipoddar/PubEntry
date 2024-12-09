@@ -1,12 +1,7 @@
-﻿using System;
-using System.Drawing.Printing;
+﻿using System.Drawing.Printing;
 
 using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
-
-using QuestPDF.Fluent;
-using QuestPDF.Helpers;
-using QuestPDF.Infrastructure;
 
 namespace PubEntry;
 
@@ -115,26 +110,27 @@ public partial class MainForm : Form
 		Font font = new Font("Courier New", 9); // Use Courier New for better alignment on thermal printers
 
 		// Receipt Header
-		g.DrawString($"** {Task.Run(async () => await DataAccess.GetLocationNameById(locationId)).Result} **", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 10, 10);
-		//g.DrawString($"Serial Number: {Task.Run(async () => await DataAccess.GetTransactionIdbyDate(transaction.DateTime.ToString())).Result}", font, Brushes.Black, 10, 60);
-		g.DrawString($"Name: {foundPerson.Name}", font, Brushes.Black, 10, 30);
-		g.DrawString($"Mobile Number: {foundPerson.Number}", font, Brushes.Black, 10, 45);
-		g.DrawString($"Reservation Type: {Task.Run(async () => await DataAccess.GetReservationTypeById(transaction.ReservationType)).Result}", font, Brushes.Black, 10, 60);
+		int y = 0;
+		g.DrawString($"** {Task.Run(async () => await DataAccess.GetLocationNameById(locationId)).Result} **", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 10, y += 10);
+		g.DrawString($"Serial Number: {Task.Run(async () => await DataAccess.GetTransactionIdbyDate(transaction.DateTime.ToString())).Result}", font, Brushes.Black, 10, y += 25);
+		g.DrawString($"Name: {foundPerson.Name}", font, Brushes.Black, 10, y += 15);
+		g.DrawString($"Mobile Number: {foundPerson.Number}", font, Brushes.Black, 10, y += 15);
+		g.DrawString($"Reservation Type: {Task.Run(async () => await DataAccess.GetReservationTypeById(transaction.ReservationType)).Result}", font, Brushes.Black, 10, y += 15);
 
-		g.DrawString("---------------------------------", font, Brushes.Black, 10, 75);
-		g.DrawString($"Total Persons: {transaction.Male + transaction.Female}", font, Brushes.Black, 10, 90);
-		g.DrawString("Male\tFemale", font, Brushes.Black, 10, 105);
-		g.DrawString($"{transaction.Male}\t{transaction.Female}", font, Brushes.Black, 10, 120);
+		g.DrawString("---------------------------------", font, Brushes.Black, 10, y += 15);
+		g.DrawString($"Total Persons: {transaction.Male + transaction.Female}", font, Brushes.Black, 10, y += 15);
+		g.DrawString("Male\tFemale", font, Brushes.Black, 10, y += 15);
+		g.DrawString($"{transaction.Male}\t{transaction.Female}", font, Brushes.Black, 10, y += 15);
 
-		g.DrawString("---------------------------------", font, Brushes.Black, 10, 140);
-		g.DrawString($"Total Payment: {transaction.Cash + transaction.Card + transaction.UPI}", font, Brushes.Black, 10, 155);
-		g.DrawString("Cash\tCard\tUPI", font, Brushes.Black, 10, 170);
-		g.DrawString($"{transaction.Cash}\t{transaction.Card}\t{transaction.UPI}", font, Brushes.Black, 10, 185);
+		g.DrawString("---------------------------------", font, Brushes.Black, 10, y += 15);
+		g.DrawString($"Total Payment: {transaction.Cash + transaction.Card + transaction.UPI}", font, Brushes.Black, 10, y += 15);
+		g.DrawString("Cash\tCard\tUPI", font, Brushes.Black, 10, y += 15);
+		g.DrawString($"{transaction.Cash}\t{transaction.Card}\t{transaction.UPI}", font, Brushes.Black, 10, y += 15);
 
-		g.DrawString("---------------------------------", font, Brushes.Black, 10, 205);
-		g.DrawString($"Approved By: {transaction.ApprovedBy}", font, Brushes.Black, 10, 225);
+		g.DrawString("---------------------------------", font, Brushes.Black, 10, y += 15);
+		g.DrawString($"Approved By: {transaction.ApprovedBy}", font, Brushes.Black, 10, y += 15);
 
-		g.DrawString($"This coupon is non-transferable to\nany Person or any other outlet\nThis coupon is to be redeemed until\nthe end of the operations of the\nparticular night:\n{transaction.DateTime.ToString()}\nThe hotel does not take liability\nor responsibility if the coupon is\nlost by the guest", font, Brushes.Black, 10, 265);
+		g.DrawString($"This coupon is non-transferable to\nany Person or any other outlet\nThis coupon is to be redeemed until\nthe end of the operations of the\nparticular night:\n{transaction.DateTime.ToString()}\nThe hotel does not take liability\nor responsibility if the coupon is\nlost by the guest", new Font("Courier New", 6), Brushes.Black, 10, y += 20);
 
 		e.HasMorePages = false;
 	}
