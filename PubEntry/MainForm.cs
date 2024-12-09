@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Printing;
+using System.Text;
 
 using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
@@ -88,8 +89,7 @@ public partial class MainForm : Form
 		PrintDialog printDialog = new PrintDialog();
 		printDialog.Document = printDocument;
 
-		if (printDialog.ShowDialog() == DialogResult.OK)
-			printDocument.Print();
+		printDocument.Print();
 
 		ClearForm();
 	}
@@ -123,5 +123,11 @@ public partial class MainForm : Form
 		g.DrawString($"This coupon is non-transferable to\nany Person or any other outlet\nThis coupon is to be redeemed until\nthe end of the operations of the\nparticular night:\n{transaction.DateTime.ToString()}\nThe hotel does not take liability\nor responsibility if the coupon is\nlost by the guest", new Font("Courier New", 6), Brushes.Black, 10, y += 20);
 
 		e.HasMorePages = false;
+	}
+
+	private void numberTextBox_KeyPress(object sender, KeyPressEventArgs e)
+	{
+		if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+			e.Handled = true;
 	}
 }

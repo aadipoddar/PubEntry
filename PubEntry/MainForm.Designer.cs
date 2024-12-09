@@ -49,6 +49,8 @@ partial class MainForm
 		approvedByLabel = new Label();
 		dateTimeLabel = new Label();
 		printDocument = new System.Drawing.Printing.PrintDocument();
+		richTextBoxFooter = new RichTextBox();
+		brandingLabel = new Label();
 		SuspendLayout();
 		// 
 		// nameTextBox
@@ -89,6 +91,7 @@ partial class MainForm
 		numberTextBox.Size = new Size(271, 34);
 		numberTextBox.TabIndex = 0;
 		numberTextBox.TextChanged += numberTextBox_TextChanged;
+		numberTextBox.KeyPress += numberTextBox_KeyPress;
 		// 
 		// cashLabel
 		// 
@@ -110,6 +113,7 @@ partial class MainForm
 		cashAmountTextBox.Size = new Size(109, 34);
 		cashAmountTextBox.TabIndex = 4;
 		cashAmountTextBox.Text = "0";
+		cashAmountTextBox.KeyPress += numberTextBox_KeyPress;
 		// 
 		// saveButton
 		// 
@@ -142,6 +146,7 @@ partial class MainForm
 		cardAmountTextBox.Size = new Size(109, 34);
 		cardAmountTextBox.TabIndex = 5;
 		cardAmountTextBox.Text = "0";
+		cardAmountTextBox.KeyPress += numberTextBox_KeyPress;
 		// 
 		// upiLabel
 		// 
@@ -163,6 +168,7 @@ partial class MainForm
 		upiAmountTextBox.Size = new Size(109, 34);
 		upiAmountTextBox.TabIndex = 6;
 		upiAmountTextBox.Text = "0";
+		upiAmountTextBox.KeyPress += numberTextBox_KeyPress;
 		// 
 		// femaleLabel
 		// 
@@ -184,6 +190,7 @@ partial class MainForm
 		femaleTextBox.Size = new Size(126, 34);
 		femaleTextBox.TabIndex = 3;
 		femaleTextBox.Text = "0";
+		femaleTextBox.KeyPress += numberTextBox_KeyPress;
 		// 
 		// maleLabel
 		// 
@@ -205,6 +212,7 @@ partial class MainForm
 		maleTextBox.Size = new Size(126, 34);
 		maleTextBox.TabIndex = 2;
 		maleTextBox.Text = "0";
+		maleTextBox.KeyPress += numberTextBox_KeyPress;
 		// 
 		// reservationComboBox
 		// 
@@ -258,11 +266,33 @@ partial class MainForm
 		// 
 		printDocument.PrintPage += printDocument_PrintPage;
 		// 
+		// richTextBoxFooter
+		// 
+		richTextBoxFooter.Dock = DockStyle.Bottom;
+		richTextBoxFooter.Location = new Point(0, 479);
+		richTextBoxFooter.Name = "richTextBoxFooter";
+		richTextBoxFooter.Size = new Size(486, 26);
+		richTextBoxFooter.TabIndex = 27;
+		richTextBoxFooter.Text = "";
+		// 
+		// brandingLabel
+		// 
+		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+		brandingLabel.AutoSize = true;
+		brandingLabel.BackColor = Color.White;
+		brandingLabel.Location = new Point(406, 485);
+		brandingLabel.Name = "brandingLabel";
+		brandingLabel.Size = new Size(75, 15);
+		brandingLabel.TabIndex = 28;
+		brandingLabel.Text = "© AADISOFT";
+		// 
 		// MainForm
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(486, 473);
+		ClientSize = new Size(486, 505);
+		Controls.Add(brandingLabel);
+		Controls.Add(richTextBoxFooter);
 		Controls.Add(dateTimeLabel);
 		Controls.Add(approvedByLabel);
 		Controls.Add(approvedByTextBox);
@@ -314,4 +344,6 @@ partial class MainForm
 	private Label approvedByLabel;
 	private Label dateTimeLabel;
 	private System.Drawing.Printing.PrintDocument printDocument;
+	private RichTextBox richTextBoxFooter;
+	private Label brandingLabel;
 }

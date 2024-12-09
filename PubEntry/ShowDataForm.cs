@@ -1,5 +1,6 @@
 ﻿using System.Drawing.Printing;
 using System.Globalization;
+using System.Text;
 
 using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
@@ -106,6 +107,7 @@ public partial class ShowDataForm : Form
 		g.DrawString($"Card: {grandTotalCard}", font, Brushes.Black, 600, y);
 
 		g.DrawString($"UPI: {grandTotalUPI}", font, Brushes.Black, 600, y += 15);
+
 		return y;
 	}
 
@@ -137,5 +139,7 @@ public partial class ShowDataForm : Form
 	{
 		Graphics g = e.Graphics;
 		int y = MakingGraphics(g);
+
+		e.HasMorePages = false;
 	}
 }

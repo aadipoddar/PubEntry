@@ -25,25 +25,57 @@ public partial class SelectLocation : Form
 
 		employeeComboBox.DataSource = employees;
 		employeeComboBox.DisplayMember = "Name";
+
+		if (DateTime.Now.Hour > 4)
+			fromTimeTextBox.Text = (DateTime.Now.Hour - 3).ToString();
+
+		else fromTimeTextBox.Text = DateTime.Now.Hour.ToString();
+
+		toTimeTextBox.Text = DateTime.Now.Hour.ToString();
+	}
+
+	private bool ValidatePassword()
+	{
+		var employeeId = employeeComboBox.SelectedIndex;
+		if (Task.Run(async () => await DataAccess.GetEmployeePasswordById(employeeId)).Result == passwordTextBox.Text)
+			return true;
+		return false;
+	}
+
+	private bool ValidateTime()
+	{
+		if (Convert.ToInt64(toTimeTextBox.Text) > Convert.ToInt64(fromTimeTextBox.Text))
+			return true;
+
+		else return false;
 	}
 
 	private void goButton_Click(object sender, EventArgs e)
 	{
-		var employeeId = employeeComboBox.SelectedIndex;
-		if (Task.Run(async () => await DataAccess.GetEmployeePasswordById(employeeId)).Result == passwordTextBox.Text)
+		if (ValidatePassword())
 		{
 			MainForm mainForm = new(locationComboBox.SelectedIndex, employeeComboBox.SelectedIndex);
 			mainForm.Show();
 			Hide();
 		}
 
-		else
-			MessageBox.Show("Incorrect Password");
+		else MessageBox.Show("Incorrect Password");
 	}
 
-	private void showDataButton_Click(object sender, EventArgs e)
+	private void fromTimeTextBox_KeyPress(object sender, KeyPressEventArgs e)
 	{
-		ShowDataForm showDataForm = new ShowDataForm(fromDateTimePicker, toDateTimePicker, fromTimeTextBox, toTimeTextBox);
-		showDataForm.ShowDialog();
+		if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+			e.Handled = true;
+	}
+
+	private void summaryReportButton_Click(object sender, EventArgs e)
+	{
+		if (ValidatePassword() && ValidateTime())
+		{
+			ShowDataForm showDataForm = new ShowDataForm(fromDateTimePicker, toDateTimePicker, fromTimeTextBox, toTimeTextBox);
+			showDataForm.ShowDialog();
+		}
+
+		else MessageBox.Show("Incorrect Password or Time");
 	}
 }
