@@ -111,11 +111,13 @@ public partial class SelectLocation : Form
 			g.DrawString($"Total Persons: {totalMale + totalFemale}", font, Brushes.Black, 100, y += 15);
 			g.DrawString($"Total Amount: {totalCash + totalCard + totalUPI}", font, Brushes.Black, 600, y);
 
-			g.DrawString("Male\tFemale", font, Brushes.Black, 100, y += 15);
-			g.DrawString("Cash\tCard\tUPI", font, Brushes.Black, 600, y);
+			g.DrawString($"Male: {totalMale}", font, Brushes.Black, 100, y += 15);
+			g.DrawString($"Cash: {totalCash}", font, Brushes.Black, 600, y);
 
-			g.DrawString($"{totalMale}\t{totalFemale}", font, Brushes.Black, 100, y += 15);
-			g.DrawString($"{totalCash}\t{totalCard}\t{totalUPI}", font, Brushes.Black, 600, y);
+			g.DrawString($"Female: {totalFemale}", font, Brushes.Black, 100, y += 15);
+			g.DrawString($"Card: {totalCard}", font, Brushes.Black, 600, y);
+
+			g.DrawString($"UPI: {totalUPI}", font, Brushes.Black, 600, y+=15);
 
 			grandTotalMale += totalMale;
 			grandTotalFemale += totalFemale;
@@ -131,10 +133,12 @@ public partial class SelectLocation : Form
 		g.DrawString($"Grand Total Persons: {grandTotalMale + grandTotalFemale}", font, Brushes.Black, 100, y += 15);
 		g.DrawString($"Grand Total Amount: {grandTotalCash + grandTotalCard + grandTotalUPI}", font, Brushes.Black, 600, y);
 
-		g.DrawString("Male\tFemale", font, Brushes.Black, 100, y += 15);
-		g.DrawString("Cash\tCard\tUPI", font, Brushes.Black, 600, y);
+		g.DrawString($"Male: {grandTotalMale}", font, Brushes.Black, 100, y += 15);
+		g.DrawString($"Cash: {grandTotalCash}", font, Brushes.Black, 600, y);
 
-		g.DrawString($"{grandTotalMale}\t{grandTotalFemale}", font, Brushes.Black, 100, y += 15);
-		g.DrawString($"{grandTotalCash}\t{grandTotalCard}\t{grandTotalUPI}", font, Brushes.Black, 600, y);
+		g.DrawString($"Female: {grandTotalFemale}", font, Brushes.Black, 100, y += 15);
+		g.DrawString($"Card: {grandTotalCard}", font, Brushes.Black, 600, y);
+
+		g.DrawString($"UPI: {grandTotalUPI}", font, Brushes.Black, 600, y+=15);
 	}
 }
