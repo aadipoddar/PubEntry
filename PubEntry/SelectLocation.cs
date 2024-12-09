@@ -1,4 +1,5 @@
-﻿using System.Drawing.Printing;
+﻿using System;
+using System.Drawing.Printing;
 using System.Globalization;
 
 using PubEntryLibrary.Data;
@@ -53,6 +54,22 @@ public partial class SelectLocation : Form
 		toDateTime = toDateTime + $" {toTimeTextBox.Text}:00:00";
 	}
 
+	private string GetFormatedDate(bool getFromDate = true)
+	{
+		if (getFromDate)
+			return fromDateTimePicker.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) + $" {fromTimeTextBox.Text}:00";
+
+		else
+			return toDateTimePicker.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) + $" {toTimeTextBox.Text}:00";
+	}
+
+	private List<TransactionModel> GetTransactionsByLocationId(int locationId)
+	{
+		string fromDateTime, toDateTime;
+		GetDateTime(out fromDateTime, out toDateTime);
+		return Task.Run(async () => await DataAccess.GetTransactionsByDateRangeAndLocation(fromDateTime, toDateTime, locationId)).Result;
+	}
+
 	private void finalPrintButton_Click(object sender, EventArgs e)
 	{
 		PrintDialog printDialog = new PrintDialog();
@@ -70,15 +87,13 @@ public partial class SelectLocation : Form
 		int y = 0;
 		int grandTotalMale = 0, grandTotalFemale = 0, grandTotalCash = 0, grandTotalCard = 0, grandTotalUPI = 0;
 		var locations = Task.Run(async () => await DataAccess.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
-		string fromDateTime, toDateTime;
 
-		GetDateTime(out fromDateTime, out toDateTime);
-		g.DrawString($"{fromDateTime} - {toDateTime}", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 200	, y += 20);
+		g.DrawString($"{GetFormatedDate()} - {GetFormatedDate(false)}", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 250, y += 20);
 
 		foreach (var location in locations)
 		{
 			int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0;
-			List<TransactionModel> transactions = Task.Run(async () => await DataAccess.GetTransactionsByDateRangeAndLocation(fromDateTime, toDateTime, location.Id)).Result;
+			List<TransactionModel> transactions = GetTransactionsByLocationId(location.Id);
 
 			g.DrawString($"** {location.Name} **", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 350, y += 20);
 
