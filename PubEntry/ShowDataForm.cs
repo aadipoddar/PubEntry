@@ -130,8 +130,7 @@ public partial class ShowDataForm : Form
 		PrintDialog printDialog = new PrintDialog();
 		printDialog.Document = printDocument;
 
-		if (printDialog.ShowDialog() == DialogResult.OK)
-			printDocument.Print();
+		printDocument.Print();
 	}
 
 	private void printDocument_PrintPage(object sender, PrintPageEventArgs e)
