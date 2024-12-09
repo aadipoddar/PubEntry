@@ -8,8 +8,6 @@ namespace PubEntry;
 
 public partial class SelectLocation : Form
 {
-	List<TransactionModel> transactions = new();
-
 	public SelectLocation()
 	{
 		InitializeComponent();
@@ -46,16 +44,13 @@ public partial class SelectLocation : Form
 			MessageBox.Show("Incorrect Password");
 	}
 
-	private void GetTransactionsByDateAndLocation(int locationId)
+	private void GetDateTime(out string fromDateTime, out string toDateTime)
 	{
-		string fromDateTime = fromDateTimePicker.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-		string toDateTime = toDateTimePicker.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+		fromDateTime = fromDateTimePicker.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+		toDateTime = toDateTimePicker.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 
 		fromDateTime = fromDateTime + $" {fromTimeTextBox.Text}:00:00";
 		toDateTime = toDateTime + $" {toTimeTextBox.Text}:00:00";
-
-		transactions.Clear();
-		transactions = Task.Run(async () => await DataAccess.GetTransactionsByDateRangeAndLocation(fromDateTime, toDateTime, locationId)).Result;
 	}
 
 	private void finalPrintButton_Click(object sender, EventArgs e)
@@ -72,15 +67,22 @@ public partial class SelectLocation : Form
 		Graphics g = e.Graphics;
 		Font font = new Font("Courier New", 9);
 
-		var locations = Task.Run(async () => await DataAccess.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
-
 		int y = 0;
+
+		string fromDateTime, toDateTime;
+		GetDateTime(out fromDateTime, out toDateTime);
+
+		g.DrawString($"{fromDateTime} - {toDateTime}", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 200	, y += 20);
+
 		int grandTotalMale = 0, grandTotalFemale = 0, grandTotalCash = 0, grandTotalCard = 0, grandTotalUPI = 0;
+
+		var locations = Task.Run(async () => await DataAccess.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
 
 		foreach (var location in locations)
 		{
 			int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0;
-			GetTransactionsByDateAndLocation(location.Id);
+
+			List<TransactionModel> transactions = Task.Run(async () => await DataAccess.GetTransactionsByDateRangeAndLocation(fromDateTime, toDateTime, location.Id)).Result;
 
 			g.DrawString($"** {location.Name} **", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 350, y += 20);
 
