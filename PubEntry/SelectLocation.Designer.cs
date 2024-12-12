@@ -35,11 +35,12 @@ partial class SelectLocation
 		brandingLabel = new Label();
 		richTextBoxFooter = new RichTextBox();
 		newEmployeeButton = new Button();
-		printingDataButton = new Button();
+		reportsButton = new Button();
 		SuspendLayout();
 		// 
 		// locationComboBox
 		// 
+		locationComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 		locationComboBox.Font = new Font("Segoe UI", 15F);
 		locationComboBox.FormattingEnabled = true;
 		locationComboBox.Location = new Point(29, 33);
@@ -50,6 +51,7 @@ partial class SelectLocation
 		// 
 		// employeeComboBox
 		// 
+		employeeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 		employeeComboBox.Font = new Font("Segoe UI", 15F);
 		employeeComboBox.FormattingEnabled = true;
 		employeeComboBox.Location = new Point(29, 99);
@@ -109,23 +111,23 @@ partial class SelectLocation
 		newEmployeeButton.UseVisualStyleBackColor = true;
 		newEmployeeButton.Click += newEmployeeButton_Click;
 		// 
-		// printingDataButton
+		// reportsButton
 		// 
-		printingDataButton.Font = new Font("Segoe UI", 15F);
-		printingDataButton.Location = new Point(70, 290);
-		printingDataButton.Name = "printingDataButton";
-		printingDataButton.Size = new Size(188, 38);
-		printingDataButton.TabIndex = 14;
-		printingDataButton.Text = "Printing Data";
-		printingDataButton.UseVisualStyleBackColor = true;
-		printingDataButton.Click += printingDataButton_Click;
+		reportsButton.Font = new Font("Segoe UI", 15F);
+		reportsButton.Location = new Point(70, 290);
+		reportsButton.Name = "reportsButton";
+		reportsButton.Size = new Size(188, 38);
+		reportsButton.TabIndex = 14;
+		reportsButton.Text = "Reports";
+		reportsButton.UseVisualStyleBackColor = true;
+		reportsButton.Click += reportsButton_Click;
 		// 
 		// SelectLocation
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(336, 448);
-		Controls.Add(printingDataButton);
+		Controls.Add(reportsButton);
 		Controls.Add(newEmployeeButton);
 		Controls.Add(brandingLabel);
 		Controls.Add(richTextBoxFooter);
@@ -149,5 +151,5 @@ partial class SelectLocation
 	private Label brandingLabel;
 	private RichTextBox richTextBoxFooter;
 	private Button newEmployeeButton;
-	private Button printingDataButton;
+	private Button reportsButton;
 }

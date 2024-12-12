@@ -54,6 +54,7 @@ partial class MainForm
 		printDocumentMerchant = new System.Drawing.Printing.PrintDocument();
 		amexLabel = new Label();
 		amexAmountTextBox = new TextBox();
+		numberComboBox = new ComboBox();
 		SuspendLayout();
 		// 
 		// nameTextBox
@@ -64,7 +65,7 @@ partial class MainForm
 		nameTextBox.PlaceholderText = "Name";
 		nameTextBox.Size = new Size(271, 34);
 		nameTextBox.TabIndex = 1;
-		nameTextBox.KeyDown += nameTextBox_KeyDown;
+		nameTextBox.KeyUp += nameTextBox_KeyUp;
 		// 
 		// nameLabel
 		// 
@@ -94,8 +95,8 @@ partial class MainForm
 		numberTextBox.PlaceholderText = "Mobile Number";
 		numberTextBox.Size = new Size(271, 34);
 		numberTextBox.TabIndex = 0;
-		numberTextBox.KeyDown += numberTextBox_KeyDown;
 		numberTextBox.KeyPress += textBox_KeyPress;
+		numberTextBox.KeyUp += numberTextBox_KeyUp;
 		// 
 		// cashLabel
 		// 
@@ -115,7 +116,7 @@ partial class MainForm
 		cashAmountTextBox.PlaceholderText = "Cash Amount";
 		cashAmountTextBox.RightToLeft = RightToLeft.Yes;
 		cashAmountTextBox.Size = new Size(109, 34);
-		cashAmountTextBox.TabIndex = 4;
+		cashAmountTextBox.TabIndex = 5;
 		cashAmountTextBox.Text = "0";
 		cashAmountTextBox.KeyPress += textBox_KeyPress;
 		// 
@@ -125,7 +126,7 @@ partial class MainForm
 		saveButton.Location = new Point(167, 463);
 		saveButton.Name = "saveButton";
 		saveButton.Size = new Size(135, 44);
-		saveButton.TabIndex = 10;
+		saveButton.TabIndex = 11;
 		saveButton.Text = "SAVE";
 		saveButton.UseVisualStyleBackColor = true;
 		saveButton.Click += insertButton_Click;
@@ -148,7 +149,7 @@ partial class MainForm
 		cardAmountTextBox.PlaceholderText = "Card Amount";
 		cardAmountTextBox.RightToLeft = RightToLeft.Yes;
 		cardAmountTextBox.Size = new Size(109, 34);
-		cardAmountTextBox.TabIndex = 5;
+		cardAmountTextBox.TabIndex = 6;
 		cardAmountTextBox.Text = "0";
 		cardAmountTextBox.KeyPress += textBox_KeyPress;
 		// 
@@ -170,7 +171,7 @@ partial class MainForm
 		upiAmountTextBox.PlaceholderText = "UPI Amount";
 		upiAmountTextBox.RightToLeft = RightToLeft.Yes;
 		upiAmountTextBox.Size = new Size(109, 34);
-		upiAmountTextBox.TabIndex = 6;
+		upiAmountTextBox.TabIndex = 7;
 		upiAmountTextBox.Text = "0";
 		upiAmountTextBox.KeyPress += textBox_KeyPress;
 		// 
@@ -192,7 +193,7 @@ partial class MainForm
 		femaleTextBox.PlaceholderText = "Card Amount";
 		femaleTextBox.RightToLeft = RightToLeft.Yes;
 		femaleTextBox.Size = new Size(126, 34);
-		femaleTextBox.TabIndex = 3;
+		femaleTextBox.TabIndex = 4;
 		femaleTextBox.Text = "0";
 		femaleTextBox.KeyPress += textBox_KeyPress;
 		// 
@@ -214,7 +215,7 @@ partial class MainForm
 		maleTextBox.PlaceholderText = "Cash Amount";
 		maleTextBox.RightToLeft = RightToLeft.Yes;
 		maleTextBox.Size = new Size(126, 34);
-		maleTextBox.TabIndex = 2;
+		maleTextBox.TabIndex = 3;
 		maleTextBox.Text = "0";
 		maleTextBox.KeyPress += textBox_KeyPress;
 		// 
@@ -225,7 +226,7 @@ partial class MainForm
 		reservationComboBox.Location = new Point(185, 365);
 		reservationComboBox.Name = "reservationComboBox";
 		reservationComboBox.Size = new Size(271, 36);
-		reservationComboBox.TabIndex = 8;
+		reservationComboBox.TabIndex = 9;
 		// 
 		// reservationLabel
 		// 
@@ -244,7 +245,7 @@ partial class MainForm
 		approvedByTextBox.Name = "approvedByTextBox";
 		approvedByTextBox.PlaceholderText = "Approved By";
 		approvedByTextBox.Size = new Size(271, 34);
-		approvedByTextBox.TabIndex = 9;
+		approvedByTextBox.TabIndex = 10;
 		// 
 		// approvedByLabel
 		// 
@@ -312,15 +313,27 @@ partial class MainForm
 		amexAmountTextBox.PlaceholderText = "UPI Amount";
 		amexAmountTextBox.RightToLeft = RightToLeft.Yes;
 		amexAmountTextBox.Size = new Size(109, 34);
-		amexAmountTextBox.TabIndex = 7;
+		amexAmountTextBox.TabIndex = 8;
 		amexAmountTextBox.Text = "0";
 		amexAmountTextBox.KeyPress += textBox_KeyPress;
+		// 
+		// numberComboBox
+		// 
+		numberComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+		numberComboBox.Font = new Font("Segoe UI", 15F);
+		numberComboBox.FormattingEnabled = true;
+		numberComboBox.Location = new Point(185, 66);
+		numberComboBox.Name = "numberComboBox";
+		numberComboBox.Size = new Size(271, 36);
+		numberComboBox.TabIndex = 2;
+		numberComboBox.Visible = false;
 		// 
 		// MainForm
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(486, 552);
+		Controls.Add(numberComboBox);
 		Controls.Add(amexLabel);
 		Controls.Add(amexAmountTextBox);
 		Controls.Add(brandingLabel);
@@ -381,4 +394,5 @@ partial class MainForm
 	private System.Drawing.Printing.PrintDocument printDocumentMerchant;
 	private Label amexLabel;
 	private TextBox amexAmountTextBox;
+	private ComboBox numberComboBox;
 }

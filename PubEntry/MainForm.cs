@@ -45,8 +45,10 @@ public partial class MainForm : Form
 		maleTextBox.Text = "0";
 		femaleTextBox.Text = "0";
 		numberTextBox.ReadOnly = false;
+		numberTextBox.Visible = true;
 		nameTextBox.ReadOnly = false;
 		numberTextBox.Focus();
+		numberComboBox.Visible = false;
 	}
 	#endregion
 
@@ -61,49 +63,71 @@ public partial class MainForm : Form
 	#region Events
 	private void MainForm_FormClosed(object sender, FormClosedEventArgs e) => Application.Exit();
 
-	private void numberTextBox_KeyDown(object sender, KeyEventArgs e)
+	private void numberTextBox_KeyUp(object sender, KeyEventArgs e)
 	{
-		if (e.KeyCode == Keys.Enter)
+		foundPerson = Task.Run(async () => await PersonData.GetPersonByNumber(numberTextBox.Text)).Result.FirstOrDefault();
+		if (foundPerson != null)
 		{
-			foundPerson = Task.Run(async () => await PersonData.GetPersonByNumber(numberTextBox.Text)).Result.FirstOrDefault();
-			if (foundPerson != null)
-			{
-				nameTextBox.Text = foundPerson.Name;
-				numberTextBox.Text = foundPerson.Number;
-				personFound = true;
-				nameTextBox.ReadOnly = true;
-				numberTextBox.ReadOnly = false;
-			}
+			nameTextBox.Text = foundPerson.Name;
+			numberTextBox.Text = foundPerson.Number;
+			personFound = true;
+			nameTextBox.ReadOnly = true;
+			numberTextBox.ReadOnly = false;
+		}
 
-			else
-			{
-				personFound = false;
-				nameTextBox.ReadOnly = false;
-				nameTextBox.Text = string.Empty;
-			}
+		else
+		{
+			personFound = false;
+			nameTextBox.ReadOnly = false;
+			nameTextBox.Text = string.Empty;
 		}
 	}
 
-	private void nameTextBox_KeyDown(object sender, KeyEventArgs e)
+	private void nameTextBox_KeyUp(object sender, KeyEventArgs e)
 	{
-		if (e.KeyCode == Keys.Enter)
-		{
-			foundPerson = Task.Run(async () => await PersonData.GetPersonByName(nameTextBox.Text)).Result.FirstOrDefault();
-			if (foundPerson != null)
-			{
-				nameTextBox.Text = foundPerson.Name;
-				numberTextBox.Text = foundPerson.Number;
-				personFound = true;
-				numberTextBox.ReadOnly = true;
-				nameTextBox.ReadOnly = false;
-			}
+		if (numberTextBox.Text != string.Empty && numberTextBox.ReadOnly == false)
+			return;
 
-			else
-			{
-				personFound = false;
-				numberTextBox.ReadOnly = false;
-				numberTextBox.Text = string.Empty;
-			}
+		var foundPeople = Task.Run(async () => await PersonData.GetPersonByName(nameTextBox.Text)).Result;
+		foundPerson = null;
+
+		if (foundPeople.Count > 1)
+		{
+			numberComboBox.Visible = true;
+			numberTextBox.Visible = false;
+
+			numberComboBox.DataSource = foundPeople;
+			numberComboBox.DisplayMember = "Number";
+			numberComboBox.ValueMember = "Number";
+
+			personFound = true;
+		}
+
+		else if (foundPeople.Count == 1)
+		{
+			foundPerson = foundPeople.FirstOrDefault();
+			numberComboBox.Visible = false;
+			numberTextBox.Visible = true;
+
+			personFound = true;
+		}
+
+		if (foundPerson != null)
+		{
+			nameTextBox.Text = foundPerson.Name;
+			numberTextBox.Text = foundPerson.Number;
+			personFound = true;
+			numberTextBox.ReadOnly = true;
+			nameTextBox.ReadOnly = false;
+		}
+
+		else if (foundPerson == null && foundPeople.Count == 0)
+		{
+			personFound = false;
+			numberComboBox.Visible = false;
+			numberTextBox.Visible = true;
+			numberTextBox.ReadOnly = false;
+			numberTextBox.Text = string.Empty;
 		}
 	}
 
@@ -112,7 +136,13 @@ public partial class MainForm : Form
 		if (!personFound)
 			await PersonData.InsertPersonTableData(nameTextBox.Text, numberTextBox.Text);
 
-		foundPerson = Task.Run(async () => await PersonData.GetPersonByNumber(numberTextBox.Text)).Result.FirstOrDefault();
+		if (numberComboBox.Visible == true)
+		{
+			var foundPersonNumber = numberComboBox.SelectedValue.ToString();
+			foundPerson = Task.Run(async () => await PersonData.GetPersonByNumber(foundPersonNumber)).Result.FirstOrDefault();
+		}
+
+		else foundPerson = Task.Run(async () => await PersonData.GetPersonByNumber(numberTextBox.Text)).Result.FirstOrDefault();
 
 		transaction.PersonId = foundPerson.Id;
 		transaction.Male = (int)Convert.ToInt64(maleTextBox.Text);
@@ -152,24 +182,26 @@ public partial class MainForm : Form
 		g.DrawString($"** {Task.Run(async () => await CommonData.GetById<LocationModel>("LocationTable", locationId)).Result.FirstOrDefault().Name} **", new Font("Courier New", 20, FontStyle.Bold), Brushes.Black, 10, y += 10);
 		g.DrawString($"----- {copyOf} Copy -----", font, Brushes.Black, 10, y += 40);
 		g.DrawString($"Slip No.: {Task.Run(async () => await TransactionData.GetTransactionIdbyDate(transaction.DateTime.ToString("yyyy-MM-dd HH:mm:ss"))).Result}", font, Brushes.Black, 10, y += 25);
+		g.DrawString($"DT: {transaction.DateTime.ToString("dd/MM/yy HH:mm")}", font, Brushes.Black, 10, y += 25);
 		g.DrawString($"Name: {foundPerson.Name}", font, Brushes.Black, 10, y += 20);
 		g.DrawString($"Mobile Number: {foundPerson.Number}", font, Brushes.Black, 10, y += 20);
 		g.DrawString($"Reservation Type: {Task.Run(async () => await CommonData.GetById<ReservationTypeModel>("ReservationTypeTable", transaction.ReservationType)).Result.FirstOrDefault().Name}", font, Brushes.Black, 10, y += 20);
 
-		g.DrawString("---------------------------------", font, Brushes.Black, 10, y += 20);
+		g.DrawString("--------------------------", font, Brushes.Black, 10, y += 20);
 		g.DrawString($"Total Persons: {transaction.Male + transaction.Female}", font, Brushes.Black, 10, y += 20);
 		g.DrawString("Male\tFemale", font, Brushes.Black, 10, y += 20);
 		g.DrawString($"{transaction.Male}\t{transaction.Female}", font, Brushes.Black, 10, y += 20);
 
-		g.DrawString("---------------------------------", font, Brushes.Black, 10, y += 20);
-		g.DrawString($"Total Payment: {transaction.Cash + transaction.Card + transaction.UPI + transaction.Amex}", font, Brushes.Black, 10, y += 20);
+		g.DrawString("--------------------------", font, Brushes.Black, 10, y += 20);
+		g.DrawString($"Total Payment: {transaction.Cash + transaction.Card + transaction.UPI + transaction.Amex}", new("Courier New", 15, FontStyle.Bold), Brushes.Black, 10, y += 20);
 		g.DrawString("Cash\tCard\tUPI\tAmex", font, Brushes.Black, 10, y += 20);
 		g.DrawString($"{transaction.Cash}\t{transaction.Card}\t{transaction.UPI}\t{transaction.Amex}", font, Brushes.Black, 10, y += 20);
 
-		g.DrawString("---------------------------------", font, Brushes.Black, 10, y += 20);
-		g.DrawString($"Approved By: {transaction.ApprovedBy}", font, Brushes.Black, 10, y += 20);
+		g.DrawString("--------------------------", font, Brushes.Black, 10, y += 20);
+		if (transaction.ApprovedBy != null) g.DrawString($"Approved By: {transaction.ApprovedBy}", font, Brushes.Black, 10, y += 20);
+		g.DrawString($"Entered By: {Task.Run(async () => await CommonData.GetById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name}", font, Brushes.Black, 10, y += 20);
 
-		g.DrawString($"This coupon is non-transferable to any Person or any other outlet\nThis coupon is to be redeemed until\nthe end of the operations of the particular night:\n{transaction.DateTime.ToString()}\nThe hotel does not take liability or responsibility if the coupon\nis lost by the guest", new Font("Courier New", 6), Brushes.Black, 10, y += 30);
+		g.DrawString($"This coupon is non-transferable to any\nPerson or any other outlet. This coupon\nis to be redeemed until the end of the\noperations of the particular night:\n{transaction.DateTime.ToString("dd/MM/yy HH:mm")}\nThe hotel does not take liability or\nresponsibility if the coupon is lost\nby the guest", new Font("Courier New", 10), Brushes.Black, 10, y += 30);
 
 		PaperSize ps58 = new("58mm Thermal", 220, y += 20);
 		printDocumentCustomer.DefaultPageSettings.PaperSize = ps58;

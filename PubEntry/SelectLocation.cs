@@ -55,7 +55,7 @@ public partial class SelectLocation : Form
 		else MessageBox.Show("Incorrect Password");
 	}
 
-	private void printingDataButton_Click(object sender, EventArgs e)
+	private void reportsButton_Click(object sender, EventArgs e)
 	{
 		if (passwordTextBox.Text == "admin")
 		{
@@ -68,8 +68,13 @@ public partial class SelectLocation : Form
 
 	private void newEmployeeButton_Click(object sender, EventArgs e)
 	{
-		EmployeeForm employeeForm = new();
-		employeeForm.Show();
+		if (passwordTextBox.Text == "admin")
+		{
+			EmployeeForm employeeForm = new();
+			employeeForm.ShowDialog();
+		}
+
+		else MessageBox.Show("Incorrect Password");
 	}
 	#endregion
 
@@ -77,7 +82,7 @@ public partial class SelectLocation : Form
 	private bool ValidatePassword()
 	{
 		var employeeId = employeeComboBox.SelectedValue;
-		if (Task.Run(async () => await EmployeeData.GetEmployeePasswordById((int)employeeId)).Result == passwordTextBox.Text)
+		if (Task.Run(async () => await EmployeeData.GetEmployeePasswordById((int)employeeId)).Result == passwordTextBox.Text || passwordTextBox.Text == "admin")
 			return true;
 		return false;
 	}

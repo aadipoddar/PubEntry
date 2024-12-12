@@ -78,6 +78,8 @@ partial class EmployeeForm
 		// 
 		// locationComboBox
 		// 
+		locationComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+		locationComboBox.FlatStyle = FlatStyle.System;
 		locationComboBox.Font = new Font("Segoe UI", 15F);
 		locationComboBox.FormattingEnabled = true;
 		locationComboBox.Location = new Point(176, 98);
