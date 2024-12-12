@@ -48,9 +48,12 @@ partial class MainForm
 		approvedByTextBox = new TextBox();
 		approvedByLabel = new Label();
 		dateTimeLabel = new Label();
-		printDocument = new System.Drawing.Printing.PrintDocument();
+		printDocumentCustomer = new System.Drawing.Printing.PrintDocument();
 		richTextBoxFooter = new RichTextBox();
 		brandingLabel = new Label();
+		printDocumentMerchant = new System.Drawing.Printing.PrintDocument();
+		amexLabel = new Label();
+		amexAmountTextBox = new TextBox();
 		SuspendLayout();
 		// 
 		// nameTextBox
@@ -61,6 +64,7 @@ partial class MainForm
 		nameTextBox.PlaceholderText = "Name";
 		nameTextBox.Size = new Size(271, 34);
 		nameTextBox.TabIndex = 1;
+		nameTextBox.KeyDown += nameTextBox_KeyDown;
 		// 
 		// nameLabel
 		// 
@@ -90,14 +94,14 @@ partial class MainForm
 		numberTextBox.PlaceholderText = "Mobile Number";
 		numberTextBox.Size = new Size(271, 34);
 		numberTextBox.TabIndex = 0;
-		numberTextBox.TextChanged += numberTextBox_TextChanged;
-		numberTextBox.KeyPress += numberTextBox_KeyPress;
+		numberTextBox.KeyDown += numberTextBox_KeyDown;
+		numberTextBox.KeyPress += textBox_KeyPress;
 		// 
 		// cashLabel
 		// 
 		cashLabel.AutoSize = true;
 		cashLabel.Font = new Font("Segoe UI", 15F);
-		cashLabel.Location = new Point(284, 173);
+		cashLabel.Location = new Point(281, 176);
 		cashLabel.Name = "cashLabel";
 		cashLabel.Size = new Size(53, 28);
 		cashLabel.TabIndex = 5;
@@ -113,15 +117,15 @@ partial class MainForm
 		cashAmountTextBox.Size = new Size(109, 34);
 		cashAmountTextBox.TabIndex = 4;
 		cashAmountTextBox.Text = "0";
-		cashAmountTextBox.KeyPress += numberTextBox_KeyPress;
+		cashAmountTextBox.KeyPress += textBox_KeyPress;
 		// 
 		// saveButton
 		// 
 		saveButton.Font = new Font("Segoe UI", 15F);
-		saveButton.Location = new Point(167, 409);
+		saveButton.Location = new Point(167, 463);
 		saveButton.Name = "saveButton";
 		saveButton.Size = new Size(135, 44);
-		saveButton.TabIndex = 9;
+		saveButton.TabIndex = 10;
 		saveButton.Text = "SAVE";
 		saveButton.UseVisualStyleBackColor = true;
 		saveButton.Click += insertButton_Click;
@@ -130,7 +134,7 @@ partial class MainForm
 		// 
 		cardLabel.AutoSize = true;
 		cardLabel.Font = new Font("Segoe UI", 15F);
-		cardLabel.Location = new Point(284, 213);
+		cardLabel.Location = new Point(281, 216);
 		cardLabel.Name = "cardLabel";
 		cardLabel.Size = new Size(53, 28);
 		cardLabel.TabIndex = 15;
@@ -146,13 +150,13 @@ partial class MainForm
 		cardAmountTextBox.Size = new Size(109, 34);
 		cardAmountTextBox.TabIndex = 5;
 		cardAmountTextBox.Text = "0";
-		cardAmountTextBox.KeyPress += numberTextBox_KeyPress;
+		cardAmountTextBox.KeyPress += textBox_KeyPress;
 		// 
 		// upiLabel
 		// 
 		upiLabel.AutoSize = true;
 		upiLabel.Font = new Font("Segoe UI", 15F);
-		upiLabel.Location = new Point(284, 256);
+		upiLabel.Location = new Point(281, 259);
 		upiLabel.Name = "upiLabel";
 		upiLabel.Size = new Size(42, 28);
 		upiLabel.TabIndex = 17;
@@ -168,7 +172,7 @@ partial class MainForm
 		upiAmountTextBox.Size = new Size(109, 34);
 		upiAmountTextBox.TabIndex = 6;
 		upiAmountTextBox.Text = "0";
-		upiAmountTextBox.KeyPress += numberTextBox_KeyPress;
+		upiAmountTextBox.KeyPress += textBox_KeyPress;
 		// 
 		// femaleLabel
 		// 
@@ -190,7 +194,7 @@ partial class MainForm
 		femaleTextBox.Size = new Size(126, 34);
 		femaleTextBox.TabIndex = 3;
 		femaleTextBox.Text = "0";
-		femaleTextBox.KeyPress += numberTextBox_KeyPress;
+		femaleTextBox.KeyPress += textBox_KeyPress;
 		// 
 		// maleLabel
 		// 
@@ -212,22 +216,22 @@ partial class MainForm
 		maleTextBox.Size = new Size(126, 34);
 		maleTextBox.TabIndex = 2;
 		maleTextBox.Text = "0";
-		maleTextBox.KeyPress += numberTextBox_KeyPress;
+		maleTextBox.KeyPress += textBox_KeyPress;
 		// 
 		// reservationComboBox
 		// 
 		reservationComboBox.Font = new Font("Segoe UI", 15F);
 		reservationComboBox.FormattingEnabled = true;
-		reservationComboBox.Location = new Point(185, 311);
+		reservationComboBox.Location = new Point(185, 365);
 		reservationComboBox.Name = "reservationComboBox";
 		reservationComboBox.Size = new Size(271, 36);
-		reservationComboBox.TabIndex = 7;
+		reservationComboBox.TabIndex = 8;
 		// 
 		// reservationLabel
 		// 
 		reservationLabel.AutoSize = true;
 		reservationLabel.Font = new Font("Segoe UI", 15F);
-		reservationLabel.Location = new Point(22, 314);
+		reservationLabel.Location = new Point(22, 368);
 		reservationLabel.Name = "reservationLabel";
 		reservationLabel.Size = new Size(113, 28);
 		reservationLabel.TabIndex = 23;
@@ -236,17 +240,17 @@ partial class MainForm
 		// approvedByTextBox
 		// 
 		approvedByTextBox.Font = new Font("Segoe UI", 15F);
-		approvedByTextBox.Location = new Point(185, 353);
+		approvedByTextBox.Location = new Point(185, 407);
 		approvedByTextBox.Name = "approvedByTextBox";
 		approvedByTextBox.PlaceholderText = "Approved By";
 		approvedByTextBox.Size = new Size(271, 34);
-		approvedByTextBox.TabIndex = 8;
+		approvedByTextBox.TabIndex = 9;
 		// 
 		// approvedByLabel
 		// 
 		approvedByLabel.AutoSize = true;
 		approvedByLabel.Font = new Font("Segoe UI", 15F);
-		approvedByLabel.Location = new Point(22, 356);
+		approvedByLabel.Location = new Point(22, 410);
 		approvedByLabel.Name = "approvedByLabel";
 		approvedByLabel.Size = new Size(126, 28);
 		approvedByLabel.TabIndex = 25;
@@ -262,14 +266,14 @@ partial class MainForm
 		dateTimeLabel.TabIndex = 26;
 		dateTimeLabel.Text = "23rd December 2024 8:24PM";
 		// 
-		// printDocument
+		// printDocumentCustomer
 		// 
-		printDocument.PrintPage += printDocument_PrintPage;
+		printDocumentCustomer.PrintPage += printDocumentCustomer_PrintPage;
 		// 
 		// richTextBoxFooter
 		// 
 		richTextBoxFooter.Dock = DockStyle.Bottom;
-		richTextBoxFooter.Location = new Point(0, 479);
+		richTextBoxFooter.Location = new Point(0, 526);
 		richTextBoxFooter.Name = "richTextBoxFooter";
 		richTextBoxFooter.Size = new Size(486, 26);
 		richTextBoxFooter.TabIndex = 27;
@@ -280,17 +284,45 @@ partial class MainForm
 		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 		brandingLabel.AutoSize = true;
 		brandingLabel.BackColor = Color.White;
-		brandingLabel.Location = new Point(406, 485);
+		brandingLabel.Location = new Point(406, 532);
 		brandingLabel.Name = "brandingLabel";
 		brandingLabel.Size = new Size(75, 15);
 		brandingLabel.TabIndex = 28;
 		brandingLabel.Text = "© AADISOFT";
 		// 
+		// printDocumentMerchant
+		// 
+		printDocumentMerchant.PrintPage += printDocumentMerchant_PrintPage;
+		// 
+		// amexLabel
+		// 
+		amexLabel.AutoSize = true;
+		amexLabel.Font = new Font("Segoe UI", 15F);
+		amexLabel.Location = new Point(281, 296);
+		amexLabel.Name = "amexLabel";
+		amexLabel.Size = new Size(61, 28);
+		amexLabel.TabIndex = 30;
+		amexLabel.Text = "Amex";
+		// 
+		// amexAmountTextBox
+		// 
+		amexAmountTextBox.Font = new Font("Segoe UI", 15F);
+		amexAmountTextBox.Location = new Point(343, 293);
+		amexAmountTextBox.Name = "amexAmountTextBox";
+		amexAmountTextBox.PlaceholderText = "UPI Amount";
+		amexAmountTextBox.RightToLeft = RightToLeft.Yes;
+		amexAmountTextBox.Size = new Size(109, 34);
+		amexAmountTextBox.TabIndex = 7;
+		amexAmountTextBox.Text = "0";
+		amexAmountTextBox.KeyPress += textBox_KeyPress;
+		// 
 		// MainForm
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(486, 505);
+		ClientSize = new Size(486, 552);
+		Controls.Add(amexLabel);
+		Controls.Add(amexAmountTextBox);
 		Controls.Add(brandingLabel);
 		Controls.Add(richTextBoxFooter);
 		Controls.Add(dateTimeLabel);
@@ -343,7 +375,10 @@ partial class MainForm
 	private TextBox approvedByTextBox;
 	private Label approvedByLabel;
 	private Label dateTimeLabel;
-	private System.Drawing.Printing.PrintDocument printDocument;
+	private System.Drawing.Printing.PrintDocument printDocumentCustomer;
 	private RichTextBox richTextBoxFooter;
 	private Label brandingLabel;
+	private System.Drawing.Printing.PrintDocument printDocumentMerchant;
+	private Label amexLabel;
+	private TextBox amexAmountTextBox;
 }

@@ -5,56 +5,49 @@ namespace PubEntry;
 
 public partial class SelectLocation : Form
 {
+	#region InitialLoading
 	public SelectLocation()
 	{
 		InitializeComponent();
 
-		Task task = LoadComboBox();
+		LoadComboBox();
 	}
 
-	public async Task LoadComboBox()
+	public void LoadComboBox()
 	{
 		locationComboBox.DataSource = null;
-		employeeComboBox.DataSource = null;
 
-		var locations = (await DataAccess.LoadTableData<LocationModel>("LocationTable")).ToList();
-		var employees = (await DataAccess.LoadTableData<EmployeeModel>("EmployeeTable")).ToList();
+		var locations = Task.Run(async () => await CommonData.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
 
 		locationComboBox.DataSource = locations;
+		locationComboBox.ValueMember = "Id";
 		locationComboBox.DisplayMember = "Name";
+
+		LoadEmployeeComboBox();
+	}
+
+	private async void LoadEmployeeComboBox()
+	{
+		if (locationComboBox.ValueMember != "Id") return;
+
+		employeeComboBox.DataSource = null;
+
+		var employees = (await EmployeeData.LoadEmployeeByLocation((int)locationComboBox.SelectedValue)).ToList();
 
 		employeeComboBox.DataSource = employees;
 		employeeComboBox.DisplayMember = "Name";
-
-		if (DateTime.Now.Hour > 4)
-			fromTimeTextBox.Text = (DateTime.Now.Hour - 3).ToString();
-
-		else fromTimeTextBox.Text = DateTime.Now.Hour.ToString();
-
-		toTimeTextBox.Text = DateTime.Now.Hour.ToString();
+		employeeComboBox.ValueMember = "Id";
 	}
 
-	private bool ValidatePassword()
-	{
-		var employeeId = employeeComboBox.SelectedIndex;
-		if (Task.Run(async () => await DataAccess.GetEmployeePasswordById(employeeId)).Result == passwordTextBox.Text)
-			return true;
-		return false;
-	}
+	private void locationComboBox_SelectedIndexChanged(object sender, EventArgs e) => LoadEmployeeComboBox();
+	#endregion
 
-	private bool ValidateTime()
-	{
-		if (Convert.ToInt64(toTimeTextBox.Text) > Convert.ToInt64(fromTimeTextBox.Text))
-			return true;
-
-		else return false;
-	}
-
+	#region ClickEvents
 	private void goButton_Click(object sender, EventArgs e)
 	{
 		if (ValidatePassword())
 		{
-			MainForm mainForm = new(locationComboBox.SelectedIndex, employeeComboBox.SelectedIndex);
+			MainForm mainForm = new((int)locationComboBox.SelectedValue, (int)employeeComboBox.SelectedValue);
 			mainForm.Show();
 			Hide();
 		}
@@ -62,20 +55,31 @@ public partial class SelectLocation : Form
 		else MessageBox.Show("Incorrect Password");
 	}
 
-	private void fromTimeTextBox_KeyPress(object sender, KeyPressEventArgs e)
+	private void printingDataButton_Click(object sender, EventArgs e)
 	{
-		if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
-			e.Handled = true;
-	}
-
-	private void summaryReportButton_Click(object sender, EventArgs e)
-	{
-		if (ValidatePassword() && ValidateTime())
+		if (passwordTextBox.Text == "admin")
 		{
-			ShowDataForm showDataForm = new ShowDataForm(fromDateTimePicker, toDateTimePicker, fromTimeTextBox, toTimeTextBox);
-			showDataForm.ShowDialog();
+			SelectDataForm selectDataForm = new();
+			selectDataForm.Show();
 		}
 
-		else MessageBox.Show("Incorrect Password or Time");
+		else MessageBox.Show("Incorrect Password");
 	}
+
+	private void newEmployeeButton_Click(object sender, EventArgs e)
+	{
+		EmployeeForm employeeForm = new();
+		employeeForm.Show();
+	}
+	#endregion
+
+	#region Validation
+	private bool ValidatePassword()
+	{
+		var employeeId = employeeComboBox.SelectedValue;
+		if (Task.Run(async () => await EmployeeData.GetEmployeePasswordById((int)employeeId)).Result == passwordTextBox.Text)
+			return true;
+		return false;
+	}
+	#endregion
 }

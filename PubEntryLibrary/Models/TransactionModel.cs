@@ -9,6 +9,7 @@ public class TransactionModel
 	public int Cash { get; set; }
 	public int Card { get; set; }
 	public int UPI { get; set; }
+	public int Amex { get; set; }
 	public int ReservationType { get; set; }
 	public DateTime DateTime { get; set; }
 	public string ApprovedBy { get; set; }
