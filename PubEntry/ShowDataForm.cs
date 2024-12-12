@@ -1,8 +1,15 @@
-﻿using System.Drawing.Printing;
+﻿using System.Data.Common;
+using System.Drawing.Printing;
 using System.Globalization;
+using System.Reflection;
+using System.Transactions;
 
 using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
+
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 
 namespace PubEntry;
 
@@ -19,8 +26,10 @@ public partial class ShowDataForm : Form
 		this.fromTimeTextBox = fromTimeTextBox;
 		this.toTimeTextBox = toTimeTextBox;
 		this.detailedReport = detailedReport;
+		AutoScroll = true;
 
 		InitializeComponent();
+		LoadComponents(detailedReport);
 	}
 
 	#region GetData
@@ -50,94 +59,150 @@ public partial class ShowDataForm : Form
 	}
 	#endregion
 
-	private int MakeGraphicsSummary(Graphics g)
+	private void printButton_Click(object sender, EventArgs e)
 	{
-		Font font = new("Courier New", 9);
-
-		int y = 0;
-		int grandTotalMale = 0, grandTotalFemale = 0, grandTotalCash = 0, grandTotalCard = 0, grandTotalUPI = 0, grandTotalAmex = 0;
-		var locations = Task.Run(async () => await CommonData.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
-
-		g.DrawString($"{GetFormatedDate()} - {GetFormatedDate(false)}", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 250, y += 20);
-
-		foreach (var location in locations)
+		Document.Create(container =>
 		{
-			int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
-			List<TransactionModel> transactions = GetTransactionsByLocationId(location.Id);
-
-			g.DrawString($"** {location.Name} **", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 350, y += 20);
-
-			g.DrawString("---------------------------------", font, Brushes.Black, 300, y += 15);
-
-			foreach (var transaction in transactions)
+			container.Page(page =>
 			{
-				totalMale += transaction.Male;
-				totalFemale += transaction.Female;
-				totalCash += transaction.Cash;
-				totalCard += transaction.Card;
-				totalUPI += transaction.UPI;
-				totalAmex += transaction.Amex;
-			}
+				page.Size(PageSizes.A4);
+				page.Margin(2, Unit.Centimetre);
+				page.PageColor(Colors.White);
+				page.DefaultTextStyle(x => x.FontSize(20));
 
-			g.DrawString($"Total Persons: {totalMale + totalFemale}", font, Brushes.Black, 100, y += 15);
-			g.DrawString($"Total Amount: {totalCash + totalCard + totalUPI + totalAmex}", font, Brushes.Black, 600, y);
+				int y = 0;
+				int grandTotalMale = 0, grandTotalFemale = 0, grandTotalCash = 0, grandTotalCard = 0, grandTotalUPI = 0, grandTotalAmex = 0;
+				var locations = Task.Run(async () => await CommonData.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
 
-			g.DrawString($"Male: {totalMale}", font, Brushes.Black, 100, y += 15);
-			g.DrawString($"Cash: {totalCash}", font, Brushes.Black, 600, y);
+				page.Header()
+					.Text($"{GetFormatedDate()} - {GetFormatedDate(false)}")
+					.Bold().FontSize(25).AlignCenter();
 
-			g.DrawString($"Female: {totalFemale}", font, Brushes.Black, 100, y += 15);
-			g.DrawString($"Card: {totalCard}", font, Brushes.Black, 600, y);
+				page.Content()
+					.PaddingVertical(1, Unit.Centimetre)
+					.Column(x =>
+					{
+						x.Spacing(20);
 
-			g.DrawString($"UPI: {totalUPI}", font, Brushes.Black, 600, y += 15);
-			g.DrawString($"Amex: {totalAmex}", font, Brushes.Black, 600, y += 15);
+						foreach (var location in locations)
+						{
+							int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
+							List<TransactionModel> transactions = GetTransactionsByLocationId(location.Id);
 
-			grandTotalMale += totalMale;
-			grandTotalFemale += totalFemale;
-			grandTotalCash += totalCash;
-			grandTotalCard += totalCard;
-			grandTotalUPI += totalUPI;
-			grandTotalAmex += totalAmex;
-		}
+							x.Item().Text($"** {location.Name} **").AlignCenter().FontSize(20).SemiBold();
 
-		g.DrawString("** Grand Total **", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 350, y += 20);
+							if (detailedReport) ComposeTable(x, transactions);
 
-		g.DrawString("---------------------------------", font, Brushes.Black, 300, y += 15);
+							foreach (var transaction in transactions)
+							{
+								totalMale += transaction.Male;
+								totalFemale += transaction.Female;
+								totalCash += transaction.Cash;
+								totalCard += transaction.Card;
+								totalUPI += transaction.UPI;
+								totalAmex += transaction.Amex;
+							}
 
-		g.DrawString($"Grand Total Persons: {grandTotalMale + grandTotalFemale}", font, Brushes.Black, 100, y += 15);
-		g.DrawString($"Grand Total Amount: {grandTotalCash + grandTotalCard + grandTotalUPI + grandTotalAmex}", font, Brushes.Black, 600, y);
+							x.Item().LineHorizontal(1);
 
-		g.DrawString($"Male: {grandTotalMale}", font, Brushes.Black, 100, y += 15);
-		g.DrawString($"Cash: {grandTotalCash}", font, Brushes.Black, 600, y);
+							x.Item().Row(row =>
+							{
+								row.RelativeItem().Column(c =>
+								{
+									c.Item().Text($"Total Persons: {totalMale + totalFemale}").AlignLeft().FontSize(12);
+									c.Item().Text($"Male: {totalMale}").AlignLeft().FontSize(12);
+									c.Item().Text($"Female: {totalFemale}").AlignLeft().FontSize(12);
+								});
 
-		g.DrawString($"Female: {grandTotalFemale}", font, Brushes.Black, 100, y += 15);
-		g.DrawString($"Card: {grandTotalCard}", font, Brushes.Black, 600, y);
+								row.RelativeItem().Column(c =>
+								{
+									c.Item().Text($"Total Amount: {totalCash + totalCard + totalUPI + totalAmex}").AlignRight().FontSize(12);
+									c.Item().Text($"Cash: {totalCash}").AlignRight().FontSize(12);
+									c.Item().Text($"Card: {totalCard}").AlignRight().FontSize(12);
+									c.Item().Text($"UPI: {totalUPI}").AlignRight().FontSize(12);
+									c.Item().Text($"Amex: {totalAmex}").AlignRight().FontSize(12);
+								});
+							});
 
-		g.DrawString($"UPI: {grandTotalUPI}", font, Brushes.Black, 600, y += 15);
-		g.DrawString($"Amex: {grandTotalAmex}", font, Brushes.Black, 600, y += 15);
+							x.Item().LineHorizontal(1);
 
-		return y;
+							grandTotalMale += totalMale;
+							grandTotalFemale += totalFemale;
+							grandTotalCash += totalCash;
+							grandTotalCard += totalCard;
+							grandTotalUPI += totalUPI;
+							grandTotalAmex += totalAmex;
+						}
+
+						x.Item().Text("** Grand Total **").AlignCenter().FontSize(20).SemiBold();
+
+						x.Item().LineHorizontal(1);
+
+						x.Item().Row(row =>
+						{
+							row.RelativeItem().Column(c =>
+							{
+								c.Item().Text($"Grand Total Persons: {grandTotalMale + grandTotalFemale}").AlignLeft().FontSize(12);
+								c.Item().Text($"Male: {grandTotalMale}").AlignLeft().FontSize(12);
+								c.Item().Text($"Female: {grandTotalFemale}").AlignLeft().FontSize(12);
+							});
+
+							row.RelativeItem().Column(c =>
+							{
+								c.Item().Text($"Grand Total Amount: {grandTotalCash + grandTotalCard + grandTotalUPI + grandTotalAmex}").AlignRight().FontSize(12);
+								c.Item().Text($"Cash: {grandTotalCash}").AlignRight().FontSize(12);
+								c.Item().Text($"Card: {grandTotalCard}").AlignRight().FontSize(12);
+								c.Item().Text($"UPI: {grandTotalUPI}").AlignRight().FontSize(12);
+								c.Item().Text($"Amex: {grandTotalAmex}").AlignRight().FontSize(12);
+							});
+						});
+					});
+
+				page.Footer()
+					.AlignCenter()
+					.Text(x =>
+					{
+						x.Span("Page ");
+						x.CurrentPageNumber();
+					});
+			});
+		}).GeneratePdfAndShow();
 	}
 
-	private int MakeGraphicsDetailed(Graphics g)
+	private static void ComposeTable(ColumnDescriptor x, List<TransactionModel> transactions)
 	{
-		Font font = new("Courier New", 9);
-
-		int y = 0;
-		int grandTotalMale = 0, grandTotalFemale = 0, grandTotalCash = 0, grandTotalCard = 0, grandTotalUPI = 0, grandTotalAmex = 0;
-		var locations = Task.Run(async () => await CommonData.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
-
-		g.DrawString($"{GetFormatedDate()} - {GetFormatedDate(false)}", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 250, y += 20);
-
-		foreach (var location in locations)
+		x.Item().Table(table =>
 		{
-			int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
-			List<TransactionModel> transactions = GetTransactionsByLocationId(location.Id);
+			table.ColumnsDefinition(columns =>
+			{
+				columns.RelativeColumn();
+				columns.RelativeColumn();
+				columns.RelativeColumn();
+				columns.RelativeColumn();
+				columns.RelativeColumn();
+				columns.RelativeColumn();
+				columns.RelativeColumn();
+				columns.RelativeColumn();
+				columns.RelativeColumn();
+			});
 
-			g.DrawString($"** {location.Name} **", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 350, y += 20);
+			table.Header(header =>
+			{
+				header.Cell().Element(CellStyle).AlignCenter().Text("Name");
+				header.Cell().Element(CellStyle).AlignCenter().Text("Male");
+				header.Cell().Element(CellStyle).AlignCenter().Text("Female");
+				header.Cell().Element(CellStyle).AlignRight().Text("Cash");
+				header.Cell().Element(CellStyle).AlignRight().Text("Card");
+				header.Cell().Element(CellStyle).AlignRight().Text("UPI");
+				header.Cell().Element(CellStyle).AlignRight().Text("Amex");
+				header.Cell().Element(CellStyle).AlignCenter().Text("Entered By");
+				header.Cell().Element(CellStyle).AlignCenter().Text("Date Time");
 
-			g.DrawString("------------------------------------------------------------------", font, Brushes.Black, 200, y += 15);
-			g.DrawString("Name\tMale\tFemale\tCash\tCard\tUPI\tAmex\tEmployee\tDateTime", font, Brushes.Black, 100, y += 15);
-			g.DrawString("---------------------------------", font, Brushes.Black, 300, y += 15);
+				static IContainer CellStyle(IContainer container)
+				{
+					return container.DefaultTextStyle(x => x.SemiBold().FontSize(13)).PaddingVertical(5).BorderBottom(1).BorderColor(Colors.Black);
+				}
+			});
 
 			foreach (var transaction in transactions)
 			{
@@ -145,7 +210,103 @@ public partial class ShowDataForm : Form
 				string reservationTypeName = Task.Run(async () => await CommonData.GetById<ReservationTypeModel>("ReservationTypeTable", transaction.ReservationType)).Result.FirstOrDefault().Name;
 				string employeeName = Task.Run(async () => await CommonData.GetById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name;
 
-				g.DrawString($"{personName}\t{transaction.Male}\t{transaction.Female}\t{transaction.Cash}\t{transaction.Card}\t{transaction.UPI}\t{transaction.Amex}\t{employeeName}\t{transaction.DateTime}", font, Brushes.Black, 100, y += 15);
+				table.Cell().Element(CellStyle).AlignCenter().Text($"{personName}");
+				table.Cell().Element(CellStyle).AlignCenter().Text($"{transaction.Male}");
+				table.Cell().Element(CellStyle).AlignCenter().Text($"{transaction.Female}");
+				table.Cell().Element(CellStyle).AlignRight().Text($"{transaction.Cash}");
+				table.Cell().Element(CellStyle).AlignRight().Text($"{transaction.Card}");
+				table.Cell().Element(CellStyle).AlignRight().Text($"{transaction.UPI}");
+				table.Cell().Element(CellStyle).AlignRight().Text($"{transaction.Amex}");
+				table.Cell().Element(CellStyle).AlignCenter().Text($"{employeeName}");
+				table.Cell().Element(CellStyle).AlignCenter().Text($"{transaction.DateTime.ToString("HH/mm/yy HH:mm")}");
+
+				static IContainer CellStyle(IContainer container)
+				{
+					return container.DefaultTextStyle(x => x.FontSize(8).NormalWeight()).PaddingVertical(1);
+				}
+			}
+		});
+	}
+
+	private void LoadComponents(bool detailedReport = false)
+	{
+		Font font = new("Courier New", 9);
+		int y = 0;
+		int grandTotalMale = 0, grandTotalFemale = 0, grandTotalCash = 0, grandTotalCard = 0, grandTotalUPI = 0, grandTotalAmex = 0;
+		var locations = Task.Run(async () => await CommonData.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
+
+		Label dateLabel = new()
+		{
+			Text = $"{GetFormatedDate()} - {GetFormatedDate(false)}",
+			Font = new Font("Courier New", 12, FontStyle.Bold),
+			AutoSize = true,
+			Location = new Point(250, y += 20)
+		};
+
+		foreach (var location in locations)
+		{
+			int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
+			List<TransactionModel> transactions = GetTransactionsByLocationId(location.Id);
+
+			Label locationLabel = new()
+			{
+				Text = $"** {location.Name} **",
+				Font = new Font("Courier New", 12, FontStyle.Bold),
+				AutoSize = true,
+				Location = new Point(350, y += 20)
+			};
+
+			Label dashLinesLabel1 = new()
+			{
+				Text = "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+				Font = font,
+				AutoSize = true,
+				Location = new Point(5, y += 20)
+			};
+
+			#region DataGridView
+			DataGridView dataGridView = new DataGridView()
+			{
+				Columns = {
+						new DataGridViewTextBoxColumn { Name = "Name" },
+						new DataGridViewTextBoxColumn { Name = "Male" },
+						new DataGridViewTextBoxColumn { Name = "Female" },
+						new DataGridViewTextBoxColumn { Name = "Cash" },
+						new DataGridViewTextBoxColumn { Name = "Card" },
+						new DataGridViewTextBoxColumn { Name = "UPI" },
+						new DataGridViewTextBoxColumn { Name = "Amex" },
+						new DataGridViewTextBoxColumn { Name = "Entered By" },
+						new DataGridViewTextBoxColumn { Name = "Date Time" },
+					},
+
+				Size = new System.Drawing.Size(1000, 150),
+				AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells,
+				Location = new Point(10, y += 20),
+				ScrollBars = ScrollBars.Both,
+				ReadOnly = true,
+				AutoGenerateColumns = false,
+				AllowUserToAddRows = false,
+				AllowUserToOrderColumns = false,
+				AllowUserToDeleteRows = false,
+			};
+
+			foreach (var transaction in transactions)
+			{
+				string personName = Task.Run(async () => await CommonData.GetById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault().Name;
+				string reservationTypeName = Task.Run(async () => await CommonData.GetById<ReservationTypeModel>("ReservationTypeTable", transaction.ReservationType)).Result.FirstOrDefault().Name;
+				string employeeName = Task.Run(async () => await CommonData.GetById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name;
+
+				dataGridView.Rows.Add(
+					personName,
+					transaction.Male,
+					transaction.Female,
+					transaction.Cash,
+					transaction.Card,
+					transaction.UPI,
+					transaction.Amex,
+					employeeName,
+					transaction.DateTime
+				);
 
 				totalMale += transaction.Male;
 				totalFemale += transaction.Female;
@@ -153,21 +314,75 @@ public partial class ShowDataForm : Form
 				totalCard += transaction.Card;
 				totalUPI += transaction.UPI;
 				totalAmex += transaction.Amex;
-			}
+			};
 
-			g.DrawString("---------------------------------", font, Brushes.Black, 300, y += 15);
+			if (detailedReport) y += dataGridView.Height;
+			#endregion
 
-			g.DrawString($"Total Persons: {totalMale + totalFemale}", font, Brushes.Black, 100, y += 20);
-			g.DrawString($"Total Amount: {totalCash + totalCard + totalUPI + totalAmex}", font, Brushes.Black, 600, y);
+			#region Totals
+			Label totalPersonLabel = new()
+			{
+				Text = $"Total Persons: {totalMale + totalFemale}",
+				Font = font,
+				AutoSize = true,
+				Location = new Point(100, y += 20)
+			};
 
-			g.DrawString($"Male: {totalMale}", font, Brushes.Black, 100, y += 15);
-			g.DrawString($"Cash: {totalCash}", font, Brushes.Black, 600, y);
+			Label totalAmountLabel = new()
+			{
+				Text = $"Total Amount: {totalCash + totalCard + totalUPI + totalAmex}",
+				Font = font,
+				AutoSize = true,
+				Location = new Point(600, y)
+			};
 
-			g.DrawString($"Female: {totalFemale}", font, Brushes.Black, 100, y += 15);
-			g.DrawString($"Card: {totalCard}", font, Brushes.Black, 600, y);
+			Label totalMaleLabel = new()
+			{
+				Text = $"Male: {totalMale}",
+				Font = font,
+				AutoSize = true,
+				Location = new Point(100, y += 15)
+			};
 
-			g.DrawString($"UPI: {totalUPI}", font, Brushes.Black, 600, y += 15);
-			g.DrawString($"Amex: {totalAmex}", font, Brushes.Black, 600, y += 15);
+			Label totalCashLabel = new()
+			{
+				Text = $"Cash: {totalCash}",
+				Font = font,
+				AutoSize = true,
+				Location = new Point(600, y)
+			};
+
+			Label totalFemaleLabel = new()
+			{
+				Text = $"Female: {totalFemale}",
+				Font = font,
+				AutoSize = true,
+				Location = new Point(100, y += 15)
+			};
+
+			Label totalCardLabel = new()
+			{
+				Text = $"Card: {totalCard}",
+				Font = font,
+				AutoSize = true,
+				Location = new Point(600, y)
+			};
+
+			Label totalUPILabel = new()
+			{
+				Text = $"UPI: {totalUPI}",
+				Font = font,
+				AutoSize = true,
+				Location = new Point(600, y += 15)
+			};
+
+			Label totalAmexLabel = new()
+			{
+				Text = $"Amex: {totalAmex}",
+				Font = font,
+				AutoSize = true,
+				Location = new Point(600, y += 15)
+			};
 
 			grandTotalMale += totalMale;
 			grandTotalFemale += totalFemale;
@@ -175,63 +390,126 @@ public partial class ShowDataForm : Form
 			grandTotalCard += totalCard;
 			grandTotalUPI += totalUPI;
 			grandTotalAmex += totalAmex;
+			#endregion
+
+			Controls.Add(locationLabel);
+			Controls.Add(dashLinesLabel1);
+			if (detailedReport) Controls.Add(dataGridView);
+			Controls.Add(totalPersonLabel);
+			Controls.Add(totalAmountLabel);
+			Controls.Add(totalMaleLabel);
+			Controls.Add(totalFemaleLabel);
+			Controls.Add(totalCashLabel);
+			Controls.Add(totalCardLabel);
+			Controls.Add(totalUPILabel);
+			Controls.Add(totalAmexLabel);
 		}
 
-		g.DrawString("** Grand Total **", new Font("Courier New", 12, FontStyle.Bold), Brushes.Black, 350, y += 20);
+		Label grandTotalLabel = new()
+		{
+			Text = "** Grand total **",
+			Font = new Font("Courier New", 12, FontStyle.Bold),
+			AutoSize = true,
+			Location = new Point(350, y += 20)
+		};
 
-		g.DrawString("---------------------------------", font, Brushes.Black, 300, y += 15);
+		Label dashLinesLabel2 = new()
+		{
+			Text = "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+			Font = font,
+			AutoSize = true,
+			Location = new Point(5, y += 20)
+		};
 
-		g.DrawString($"Grand Total Persons: {grandTotalMale + grandTotalFemale}", font, Brushes.Black, 100, y += 15);
-		g.DrawString($"Grand Total Amount: {grandTotalCash + grandTotalCard + grandTotalUPI + grandTotalAmex}", font, Brushes.Black, 600, y);
+		#region GrandTotals
+		Label grandTotalPersonLabel = new()
+		{
+			Text = $"Total Persons: {grandTotalMale + grandTotalFemale}",
+			Font = font,
+			AutoSize = true,
+			Location = new Point(100, y += 20)
+		};
 
-		g.DrawString($"Male: {grandTotalMale}", font, Brushes.Black, 100, y += 15);
-		g.DrawString($"Cash: {grandTotalCash}", font, Brushes.Black, 600, y);
+		Label grandTotalAmountLabel = new()
+		{
+			Text = $"Total Amount: {grandTotalCash + grandTotalCard + grandTotalUPI + grandTotalAmex}",
+			Font = font,
+			AutoSize = true,
+			Location = new Point(600, y)
+		};
 
-		g.DrawString($"Female: {grandTotalFemale}", font, Brushes.Black, 100, y += 15);
-		g.DrawString($"Card: {grandTotalCard}", font, Brushes.Black, 600, y);
+		Label grandTotalMaleLabel = new()
+		{
+			Text = $"Male: {grandTotalMale}",
+			Font = font,
+			AutoSize = true,
+			Location = new Point(100, y += 15)
+		};
 
-		g.DrawString($"UPI: {grandTotalUPI}", font, Brushes.Black, 600, y += 15);
-		g.DrawString($"Amex: {grandTotalAmex}", font, Brushes.Black, 600, y += 15);
+		Label grandTotalCashLabel = new()
+		{
+			Text = $"Cash: {grandTotalCash}",
+			Font = font,
+			AutoSize = true,
+			Location = new Point(600, y)
+		};
 
-		return y;
-	}
+		Label grandTotalFemaleLabel = new()
+		{
+			Text = $"Female: {grandTotalFemale}",
+			Font = font,
+			AutoSize = true,
+			Location = new Point(100, y += 15)
+		};
 
-	private void ShowDataForm_Paint(object sender, PaintEventArgs e)
-	{
-		Graphics g = e.Graphics;
-		int y;
-		if (detailedReport) y = MakeGraphicsDetailed(g);
+		Label grandTotalCardLabel = new()
+		{
+			Text = $"Card: {grandTotalCard}",
+			Font = font,
+			AutoSize = true,
+			Location = new Point(600, y)
+		};
 
-		else y = MakeGraphicsSummary(g);
+		Label grandTotalUPILabel = new()
+		{
+			Text = $"UPI: {grandTotalUPI}",
+			Font = font,
+			AutoSize = true,
+			Location = new Point(600, y += 15)
+		};
 
-		Button button = new();
-		button.Size = new Size(100, 50);
-		button.Location = new Point(300, y += 30);
-		button.Text = "Print";
+		Label grandTotalAmexLabel = new()
+		{
+			Text = $"Amex: {grandTotalAmex}",
+			Font = font,
+			AutoSize = true,
+			Location = new Point(600, y += 15)
+		};
+		#endregion
+
+		Button button = new()
+		{
+			Size = new System.Drawing.Size(100, 50),
+			Location = new Point(300, y += 50),
+			Text = "Print",
+		};
+
 		button.Click += printButton_Click;
 		button.Show();
+
+		Controls.Add(dateLabel);
+		Controls.Add(grandTotalLabel);
+		Controls.Add(dashLinesLabel2);
+		Controls.Add(grandTotalPersonLabel);
+		Controls.Add(grandTotalAmountLabel);
+		Controls.Add(grandTotalMaleLabel);
+		Controls.Add(grandTotalFemaleLabel);
+		Controls.Add(grandTotalCashLabel);
+		Controls.Add(grandTotalCardLabel);
+		Controls.Add(grandTotalUPILabel);
+		Controls.Add(grandTotalAmexLabel);
 		Controls.Add(button);
 
-		Size = new Size(1000, y + 100);
-	}
-
-	private void printButton_Click(object sender, EventArgs e)
-	{
-		PrintDialog printDialog = new();
-		printDialog.Document = printDocument;
-
-		printDocument.Print();
-	}
-
-	private void printDocument_PrintPage(object sender, PrintPageEventArgs e)
-	{
-		Graphics g = e.Graphics;
-		int y;
-
-		if (detailedReport) y = MakeGraphicsDetailed(g);
-
-		else y = MakeGraphicsSummary(g);
-
-		e.HasMorePages = false;
+		Size = new System.Drawing.Size(1000, y + 100);
 	}
 }

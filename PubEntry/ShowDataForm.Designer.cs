@@ -28,12 +28,7 @@ partial class ShowDataForm
 	/// </summary>
 	private void InitializeComponent()
 	{
-		printDocument = new System.Drawing.Printing.PrintDocument();
 		SuspendLayout();
-		// 
-		// printDocument
-		// 
-		printDocument.PrintPage += printDocument_PrintPage;
 		// 
 		// ShowDataForm
 		// 
@@ -42,11 +37,8 @@ partial class ShowDataForm
 		ClientSize = new Size(800, 450);
 		Name = "ShowDataForm";
 		Text = "Show Data";
-		Paint += ShowDataForm_Paint;
 		ResumeLayout(false);
 	}
 
 	#endregion
-
-	private System.Drawing.Printing.PrintDocument printDocument;
 }
