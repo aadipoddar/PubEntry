@@ -2,14 +2,18 @@
 
 public partial class SelectDataForm : Form
 {
-	public SelectDataForm()
+	int locationId;
+
+	public SelectDataForm(int locationId)
 	{
 		InitializeComponent();
 
-		LoadComboBox();
+		this.locationId = locationId;
+
+		LoadTextBoxes();
 	}
 
-	private void LoadComboBox()
+	private void LoadTextBoxes()
 	{
 		if (DateTime.Now.Hour > 4)
 			fromTimeTextBox.Text = (DateTime.Now.Hour - 3).ToString();
@@ -58,7 +62,7 @@ public partial class SelectDataForm : Form
 	{
 		if (ValidateTime())
 		{
-			ShowDataForm showDataForm = new(fromDateTimePicker, toDateTimePicker, fromTimeTextBox, toTimeTextBox, true);
+			ShowDataForm showDataForm = new(fromDateTimePicker, toDateTimePicker, fromTimeTextBox, toTimeTextBox, locationId, true);
 			showDataForm.ShowDialog();
 		}
 

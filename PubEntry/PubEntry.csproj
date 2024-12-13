@@ -7,6 +7,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>d1d5ef43-95ad-42c0-a4cb-f324bfb56f66</UserSecretsId>
+    <StartupObject>PubEntry.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

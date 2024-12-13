@@ -59,7 +59,7 @@ public partial class SelectLocation : Form
 	{
 		if (passwordTextBox.Text == "admin")
 		{
-			SelectDataForm selectDataForm = new();
+			SelectDataForm selectDataForm = new((int)locationComboBox.SelectedValue);
 			selectDataForm.Show();
 		}
 
