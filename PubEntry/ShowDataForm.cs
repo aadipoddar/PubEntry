@@ -1,8 +1,4 @@
-﻿using System.Data.Common;
-using System.Drawing.Printing;
-using System.Globalization;
-using System.Reflection;
-using System.Transactions;
+﻿using System.Globalization;
 
 using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
@@ -61,37 +57,41 @@ public partial class ShowDataForm : Form
 
 	private void printButton_Click(object sender, EventArgs e)
 	{
-		Document.Create(container =>
+		int locationId = 0;
+		SelectLocationDetailPrint selectLocationDetailPrint = new SelectLocationDetailPrint();
+		if (detailedReport)
+			if (selectLocationDetailPrint.ShowDialog() == DialogResult.OK)
+				locationId = selectLocationDetailPrint.SelectedLocationId;
+
+		if (detailedReport)
 		{
-			container.Page(page =>
+			Document.Create(container =>
 			{
-				page.Size(PageSizes.A4);
-				page.Margin(2, Unit.Centimetre);
-				page.PageColor(Colors.White);
-				page.DefaultTextStyle(x => x.FontSize(20));
+				container.Page(page =>
+				{
+					page.Size(PageSizes.A4);
+					page.Margin(2, Unit.Centimetre);
+					page.PageColor(Colors.White);
+					page.DefaultTextStyle(x => x.FontSize(20));
 
-				int y = 0;
-				int grandTotalMale = 0, grandTotalFemale = 0, grandTotalCash = 0, grandTotalCard = 0, grandTotalUPI = 0, grandTotalAmex = 0;
-				var locations = Task.Run(async () => await CommonData.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
+					int y = 0;
 
-				page.Header()
-					.Text($"{GetFormatedDate()} - {GetFormatedDate(false)}")
-					.Bold().FontSize(25).AlignCenter();
+					page.Header()
+						.Text($"{GetFormatedDate()} - {GetFormatedDate(false)}")
+						.Bold().FontSize(25).AlignCenter();
 
-				page.Content()
-					.PaddingVertical(1, Unit.Centimetre)
-					.Column(x =>
-					{
-						x.Spacing(20);
-
-						foreach (var location in locations)
+					page.Content()
+						.PaddingVertical(1, Unit.Centimetre)
+						.Column(x =>
 						{
+							x.Spacing(20);
+
 							int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
-							List<TransactionModel> transactions = GetTransactionsByLocationId(location.Id);
+							List<TransactionModel> transactions = GetTransactionsByLocationId(locationId);
 
-							x.Item().Text($"** {location.Name} **").AlignCenter().FontSize(20).SemiBold();
+							x.Item().Text($"** {Task.Run(async () => await CommonData.GetById<LocationModel>("LocationTable", locationId)).Result.FirstOrDefault().Name} **").AlignCenter().FontSize(20).SemiBold();
 
-							if (detailedReport) ComposeTable(x, transactions);
+							ComposeTable(x, transactions);
 
 							foreach (var transaction in transactions)
 							{
@@ -123,50 +123,108 @@ public partial class ShowDataForm : Form
 									c.Item().Text($"Amex: {totalAmex}").AlignRight().FontSize(12);
 								});
 							});
+						});
+				});
+			}).GeneratePdfAndShow();
+		}
+
+		else
+			Document.Create(container =>
+			{
+				container.Page(page =>
+				{
+					page.Size(PageSizes.A4);
+					page.Margin(2, Unit.Centimetre);
+					page.PageColor(Colors.White);
+					page.DefaultTextStyle(x => x.FontSize(20));
+
+					int y = 0;
+					int grandTotalMale = 0, grandTotalFemale = 0, grandTotalCash = 0, grandTotalCard = 0, grandTotalUPI = 0, grandTotalAmex = 0;
+					var locations = Task.Run(async () => await CommonData.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
+
+					page.Header()
+						.Text($"{GetFormatedDate()} - {GetFormatedDate(false)}")
+						.Bold().FontSize(25).AlignCenter();
+
+					page.Content()
+						.PaddingVertical(1, Unit.Centimetre)
+						.Column(x =>
+						{
+							x.Spacing(20);
+
+							foreach (var location in locations)
+							{
+								int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
+								List<TransactionModel> transactions = GetTransactionsByLocationId(location.Id);
+
+								x.Item().Text($"** {location.Name} **").AlignCenter().FontSize(20).SemiBold();
+
+								foreach (var transaction in transactions)
+								{
+									totalMale += transaction.Male;
+									totalFemale += transaction.Female;
+									totalCash += transaction.Cash;
+									totalCard += transaction.Card;
+									totalUPI += transaction.UPI;
+									totalAmex += transaction.Amex;
+								}
+
+								x.Item().LineHorizontal(1);
+
+								x.Item().Row(row =>
+								{
+									row.RelativeItem().Column(c =>
+									{
+										c.Item().Text($"Total Persons: {totalMale + totalFemale}").AlignLeft().FontSize(12);
+										c.Item().Text($"Male: {totalMale}").AlignLeft().FontSize(12);
+										c.Item().Text($"Female: {totalFemale}").AlignLeft().FontSize(12);
+									});
+
+									row.RelativeItem().Column(c =>
+									{
+										c.Item().Text($"Total Amount: {totalCash + totalCard + totalUPI + totalAmex}").AlignRight().FontSize(12);
+										c.Item().Text($"Cash: {totalCash}").AlignRight().FontSize(12);
+										c.Item().Text($"Card: {totalCard}").AlignRight().FontSize(12);
+										c.Item().Text($"UPI: {totalUPI}").AlignRight().FontSize(12);
+										c.Item().Text($"Amex: {totalAmex}").AlignRight().FontSize(12);
+									});
+								});
+
+								x.Item().LineHorizontal(1);
+
+								grandTotalMale += totalMale;
+								grandTotalFemale += totalFemale;
+								grandTotalCash += totalCash;
+								grandTotalCard += totalCard;
+								grandTotalUPI += totalUPI;
+								grandTotalAmex += totalAmex;
+							}
+
+							x.Item().Text("** Grand Total **").AlignCenter().FontSize(20).SemiBold();
 
 							x.Item().LineHorizontal(1);
 
-							grandTotalMale += totalMale;
-							grandTotalFemale += totalFemale;
-							grandTotalCash += totalCash;
-							grandTotalCard += totalCard;
-							grandTotalUPI += totalUPI;
-							grandTotalAmex += totalAmex;
-						}
-
-						x.Item().Text("** Grand Total **").AlignCenter().FontSize(20).SemiBold();
-
-						x.Item().LineHorizontal(1);
-
-						x.Item().Row(row =>
-						{
-							row.RelativeItem().Column(c =>
+							x.Item().Row(row =>
 							{
-								c.Item().Text($"Grand Total Persons: {grandTotalMale + grandTotalFemale}").AlignLeft().FontSize(12);
-								c.Item().Text($"Male: {grandTotalMale}").AlignLeft().FontSize(12);
-								c.Item().Text($"Female: {grandTotalFemale}").AlignLeft().FontSize(12);
-							});
+								row.RelativeItem().Column(c =>
+								{
+									c.Item().Text($"Grand Total Persons: {grandTotalMale + grandTotalFemale}").AlignLeft().FontSize(12);
+									c.Item().Text($"Male: {grandTotalMale}").AlignLeft().FontSize(12);
+									c.Item().Text($"Female: {grandTotalFemale}").AlignLeft().FontSize(12);
+								});
 
-							row.RelativeItem().Column(c =>
-							{
-								c.Item().Text($"Grand Total Amount: {grandTotalCash + grandTotalCard + grandTotalUPI + grandTotalAmex}").AlignRight().FontSize(12);
-								c.Item().Text($"Cash: {grandTotalCash}").AlignRight().FontSize(12);
-								c.Item().Text($"Card: {grandTotalCard}").AlignRight().FontSize(12);
-								c.Item().Text($"UPI: {grandTotalUPI}").AlignRight().FontSize(12);
-								c.Item().Text($"Amex: {grandTotalAmex}").AlignRight().FontSize(12);
+								row.RelativeItem().Column(c =>
+								{
+									c.Item().Text($"Grand Total Amount: {grandTotalCash + grandTotalCard + grandTotalUPI + grandTotalAmex}").AlignRight().FontSize(12);
+									c.Item().Text($"Cash: {grandTotalCash}").AlignRight().FontSize(12);
+									c.Item().Text($"Card: {grandTotalCard}").AlignRight().FontSize(12);
+									c.Item().Text($"UPI: {grandTotalUPI}").AlignRight().FontSize(12);
+									c.Item().Text($"Amex: {grandTotalAmex}").AlignRight().FontSize(12);
+								});
 							});
 						});
-					});
-
-				page.Footer()
-					.AlignCenter()
-					.Text(x =>
-					{
-						x.Span("Page ");
-						x.CurrentPageNumber();
-					});
-			});
-		}).GeneratePdfAndShow();
+				});
+			}).GeneratePdfAndShow();
 	}
 
 	private static void ComposeTable(ColumnDescriptor x, List<TransactionModel> transactions)
@@ -184,11 +242,13 @@ public partial class ShowDataForm : Form
 				columns.RelativeColumn();
 				columns.RelativeColumn();
 				columns.RelativeColumn();
+				columns.RelativeColumn();
 			});
 
 			table.Header(header =>
 			{
 				header.Cell().Element(CellStyle).AlignCenter().Text("Name");
+				header.Cell().Element(CellStyle).AlignCenter().Text("Number");
 				header.Cell().Element(CellStyle).AlignCenter().Text("Male");
 				header.Cell().Element(CellStyle).AlignCenter().Text("Female");
 				header.Cell().Element(CellStyle).AlignRight().Text("Cash");
@@ -200,17 +260,18 @@ public partial class ShowDataForm : Form
 
 				static IContainer CellStyle(IContainer container)
 				{
-					return container.DefaultTextStyle(x => x.SemiBold().FontSize(13)).PaddingVertical(5).BorderBottom(1).BorderColor(Colors.Black);
+					return container.DefaultTextStyle(x => x.SemiBold().FontSize(10)).PaddingVertical(2).BorderBottom(1).BorderColor(Colors.Black);
 				}
 			});
 
 			foreach (var transaction in transactions)
 			{
-				string personName = Task.Run(async () => await CommonData.GetById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault().Name;
+				var person = Task.Run(async () => await CommonData.GetById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
 				string reservationTypeName = Task.Run(async () => await CommonData.GetById<ReservationTypeModel>("ReservationTypeTable", transaction.ReservationType)).Result.FirstOrDefault().Name;
 				string employeeName = Task.Run(async () => await CommonData.GetById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name;
 
-				table.Cell().Element(CellStyle).AlignCenter().Text($"{personName}");
+				table.Cell().Element(CellStyle).AlignCenter().Text($"{person.Name}");
+				table.Cell().Element(CellStyle).AlignCenter().Text($"{person.Number}");
 				table.Cell().Element(CellStyle).AlignCenter().Text($"{transaction.Male}");
 				table.Cell().Element(CellStyle).AlignCenter().Text($"{transaction.Female}");
 				table.Cell().Element(CellStyle).AlignRight().Text($"{transaction.Cash}");
@@ -222,7 +283,7 @@ public partial class ShowDataForm : Form
 
 				static IContainer CellStyle(IContainer container)
 				{
-					return container.DefaultTextStyle(x => x.FontSize(8).NormalWeight()).PaddingVertical(1);
+					return container.DefaultTextStyle(x => x.FontSize(6).NormalWeight()).PaddingVertical(1);
 				}
 			}
 		});
@@ -258,7 +319,7 @@ public partial class ShowDataForm : Form
 
 			Label dashLinesLabel1 = new()
 			{
-				Text = "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+				Text = "------------------------------------------------------------------------------------------------------------------",
 				Font = font,
 				AutoSize = true,
 				Location = new Point(5, y += 20)
@@ -269,6 +330,7 @@ public partial class ShowDataForm : Form
 			{
 				Columns = {
 						new DataGridViewTextBoxColumn { Name = "Name" },
+						new DataGridViewTextBoxColumn { Name = "Number" },
 						new DataGridViewTextBoxColumn { Name = "Male" },
 						new DataGridViewTextBoxColumn { Name = "Female" },
 						new DataGridViewTextBoxColumn { Name = "Cash" },
@@ -292,12 +354,13 @@ public partial class ShowDataForm : Form
 
 			foreach (var transaction in transactions)
 			{
-				string personName = Task.Run(async () => await CommonData.GetById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault().Name;
+				var person = Task.Run(async () => await CommonData.GetById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
 				string reservationTypeName = Task.Run(async () => await CommonData.GetById<ReservationTypeModel>("ReservationTypeTable", transaction.ReservationType)).Result.FirstOrDefault().Name;
 				string employeeName = Task.Run(async () => await CommonData.GetById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name;
 
 				dataGridView.Rows.Add(
-					personName,
+					person.Name,
+					person.Number,
 					transaction.Male,
 					transaction.Female,
 					transaction.Cash,
@@ -415,7 +478,7 @@ public partial class ShowDataForm : Form
 
 		Label dashLinesLabel2 = new()
 		{
-			Text = "-----------------------------------------------------------------------------------------------------------------------------------------------------------------------",
+			Text = "------------------------------------------------------------------------------------------------------------------",
 			Font = font,
 			AutoSize = true,
 			Location = new Point(5, y += 20)
@@ -490,7 +553,7 @@ public partial class ShowDataForm : Form
 		Button button = new()
 		{
 			Size = new System.Drawing.Size(100, 50),
-			Location = new Point(300, y += 50),
+			Location = new Point(350, y += 50),
 			Text = "Print",
 		};
 
@@ -510,6 +573,6 @@ public partial class ShowDataForm : Form
 		Controls.Add(grandTotalAmexLabel);
 		Controls.Add(button);
 
-		Size = new System.Drawing.Size(1000, y + 100);
+		Size = new System.Drawing.Size(850, 800);
 	}
 }

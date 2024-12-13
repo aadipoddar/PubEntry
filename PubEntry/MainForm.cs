@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing.Printing;
+﻿using System.Drawing.Printing;
 
 using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
@@ -181,7 +180,7 @@ public partial class MainForm : Form
 		int y = 0;
 		g.DrawString($"** {Task.Run(async () => await CommonData.GetById<LocationModel>("LocationTable", locationId)).Result.FirstOrDefault().Name} **", new Font("Courier New", 20, FontStyle.Bold), Brushes.Black, 10, y += 10);
 		g.DrawString($"----- {copyOf} Copy -----", font, Brushes.Black, 10, y += 40);
-		g.DrawString($"Slip No.: {Task.Run(async () => await TransactionData.GetTransactionIdbyDate(transaction.DateTime.ToString("yyyy-MM-dd HH:mm:ss"))).Result}", font, Brushes.Black, 10, y += 25);
+		g.DrawString($"Slip No.: {Task.Run(async () => await TransactionData.GetTransactionIdbyDateAndPersonId(transaction.DateTime.ToString("yyyy-MM-dd HH:mm:ss"), transaction.PersonId)).Result}", font, Brushes.Black, 10, y += 25);
 		g.DrawString($"DT: {transaction.DateTime.ToString("dd/MM/yy HH:mm")}", font, Brushes.Black, 10, y += 25);
 		g.DrawString($"Name: {foundPerson.Name}", font, Brushes.Black, 10, y += 20);
 		g.DrawString($"Mobile Number: {foundPerson.Number}", font, Brushes.Black, 10, y += 20);
