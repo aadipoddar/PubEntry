@@ -333,8 +333,7 @@ public partial class ShowDataForm : Form
 						new DataGridViewTextBoxColumn { Name = "Date Time" },
 					},
 
-				Size = new System.Drawing.Size(500, 400),
-				AutoSize = true,
+				Size = new System.Drawing.Size(1000, 500),
 				AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells,
 				Location = new Point(10, y += 20),
 				ScrollBars = ScrollBars.Both,

@@ -58,6 +58,7 @@ partial class SelectLocation
 		employeeComboBox.Name = "employeeComboBox";
 		employeeComboBox.Size = new Size(271, 36);
 		employeeComboBox.TabIndex = 11;
+		employeeComboBox.SelectedIndexChanged += employeeComboBox_SelectedIndexChanged;
 		// 
 		// goButton
 		// 

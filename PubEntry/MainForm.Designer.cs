@@ -221,6 +221,7 @@ partial class MainForm
 		// 
 		// reservationComboBox
 		// 
+		reservationComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 		reservationComboBox.Font = new Font("Segoe UI", 15F);
 		reservationComboBox.FormattingEnabled = true;
 		reservationComboBox.Location = new Point(185, 365);

@@ -168,23 +168,61 @@ public partial class MainForm : Form
 		ClearForm();
 	}
 
+	string MakeStringHeaderAmount(TransactionModel transaction)
+	{
+		string finalString = "";
+
+		if (transaction.Cash > 0)
+			finalString += "Cash\t";
+
+		if (transaction.Card > 0)
+			finalString += "Card\t";
+
+		if (transaction.UPI > 0)
+			finalString += "UPI\t";
+
+		if (transaction.Amex > 0)
+			finalString += "Amex\t";
+
+		return finalString;
+	}
+
+	string MakeStringAmount(TransactionModel transaction)
+	{
+		string finalString = "";
+
+		if (transaction.Cash > 0)
+			finalString += $"{transaction.Cash}\t";
+
+		if (transaction.Card > 0)
+			finalString += $"{transaction.Card}\t";
+
+		if (transaction.UPI > 0)
+			finalString += $"{transaction.UPI}\t";
+
+		if (transaction.Amex > 0)
+			finalString += $"{transaction.Amex}\t";
+
+		return finalString;
+	}
+
 	private void DrawGraphics(PrintPageEventArgs e, string copyOf)
 	{
 		Graphics g = e.Graphics;
-		Font font = new("Courier New", 15); // Use Courier New for better alignment on thermal printers
+		Font font = new("Courier New", 12, FontStyle.Bold); // Use Courier New for better alignment on thermal printers
 
 		StringFormat center = new(StringFormatFlags.FitBlackBox);
 		center.Alignment = StringAlignment.Center;
 
 		// Receipt Header
 		int y = 0;
-		g.DrawString($"** {Task.Run(async () => await CommonData.GetById<LocationModel>("LocationTable", locationId)).Result.FirstOrDefault().Name} **", new Font("Courier New", 20, FontStyle.Bold), Brushes.Black, 10, y += 10);
+		g.DrawString($"** {Task.Run(async () => await CommonData.GetById<LocationModel>("LocationTable", locationId)).Result.FirstOrDefault().Name} **", new Font("Courier New", 20, FontStyle.Bold), Brushes.Black, 25, y += 10);
 		g.DrawString($"----- {copyOf} Copy -----", font, Brushes.Black, 10, y += 40);
 		g.DrawString($"Slip No.: {Task.Run(async () => await TransactionData.GetTransactionIdbyDateAndPersonId(transaction.DateTime.ToString("yyyy-MM-dd HH:mm:ss"), transaction.PersonId)).Result}", font, Brushes.Black, 10, y += 25);
 		g.DrawString($"DT: {transaction.DateTime.ToString("dd/MM/yy HH:mm")}", font, Brushes.Black, 10, y += 25);
 		g.DrawString($"Name: {foundPerson.Name}", font, Brushes.Black, 10, y += 20);
-		g.DrawString($"Mobile Number: {foundPerson.Number}", font, Brushes.Black, 10, y += 20);
-		g.DrawString($"Reservation Type: {Task.Run(async () => await CommonData.GetById<ReservationTypeModel>("ReservationTypeTable", transaction.ReservationType)).Result.FirstOrDefault().Name}", font, Brushes.Black, 10, y += 20);
+		g.DrawString($"Contact: {foundPerson.Number}", font, Brushes.Black, 10, y += 20);
+		g.DrawString($"Reservation: {Task.Run(async () => await CommonData.GetById<ReservationTypeModel>("ReservationTypeTable", transaction.ReservationType)).Result.FirstOrDefault().Name}", font, Brushes.Black, 10, y += 20);
 
 		g.DrawString("--------------------------", font, Brushes.Black, 10, y += 20);
 		g.DrawString($"Total Persons: {transaction.Male + transaction.Female}", font, Brushes.Black, 10, y += 20);
@@ -192,15 +230,22 @@ public partial class MainForm : Form
 		g.DrawString($"{transaction.Male}\t{transaction.Female}", font, Brushes.Black, 10, y += 20);
 
 		g.DrawString("--------------------------", font, Brushes.Black, 10, y += 20);
-		g.DrawString($"Total Payment: {transaction.Cash + transaction.Card + transaction.UPI + transaction.Amex}", new("Courier New", 15, FontStyle.Bold), Brushes.Black, 10, y += 20);
-		g.DrawString("Cash\tCard\tUPI\tAmex", font, Brushes.Black, 10, y += 20);
-		g.DrawString($"{transaction.Cash}\t{transaction.Card}\t{transaction.UPI}\t{transaction.Amex}", font, Brushes.Black, 10, y += 20);
+		g.DrawString($"Total: {transaction.Cash + transaction.Card + transaction.UPI + transaction.Amex}", new("Courier New", 15, FontStyle.Bold), Brushes.Black, 10, y += 20);
+		g.DrawString($"{MakeStringHeaderAmount(transaction)}", font, Brushes.Black, 10, y += 20);
+		g.DrawString($"{MakeStringAmount(transaction)}", font, Brushes.Black, 10, y += 20);
 
 		g.DrawString("--------------------------", font, Brushes.Black, 10, y += 20);
 		if (transaction.ApprovedBy != null) g.DrawString($"Approved By: {transaction.ApprovedBy}", font, Brushes.Black, 10, y += 20);
 		g.DrawString($"Entered By: {Task.Run(async () => await CommonData.GetById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name}", font, Brushes.Black, 10, y += 20);
 
-		g.DrawString($"This coupon is non-transferable to any\nPerson or any other outlet. This coupon\nis to be redeemed until the end of the\noperations of the particular night:\n{transaction.DateTime.ToString("dd/MM/yy HH:mm")}\nThe hotel does not take liability or\nresponsibility if the coupon is lost\nby the guest", new Font("Courier New", 10), Brushes.Black, 10, y += 30);
+		g.DrawString("This coupon is non-transferable to any", new Font("Courier New", 8, FontStyle.Bold), Brushes.Black, 8, y += 30);
+		g.DrawString("Person or any other outlet. This coupon", new Font("Courier New", 8, FontStyle.Bold), Brushes.Black, 8, y += 10);
+		g.DrawString("is to be redeemed until the end of the", new Font("Courier New", 8, FontStyle.Bold), Brushes.Black, 8, y += 10);
+		g.DrawString("operations of the particular night:", new Font("Courier New", 8, FontStyle.Bold), Brushes.Black, 8, y += 10);
+		g.DrawString($"{transaction.DateTime.ToString("dd/MM/yy HH:mm")}", new Font("Courier New", 8, FontStyle.Bold), Brushes.Black, 8, y += 10);
+		g.DrawString("The hotel does not take liability or", new Font("Courier New", 8, FontStyle.Bold), Brushes.Black, 8, y += 10);
+		g.DrawString("responsibility if the coupon is lost", new Font("Courier New", 8, FontStyle.Bold), Brushes.Black, 8, y += 10);
+		g.DrawString("by the guest", new Font("Courier New", 8, FontStyle.Bold), Brushes.Black, 8, y += 10);
 
 		PaperSize ps58 = new("58mm Thermal", 220, y += 20);
 		printDocumentCustomer.DefaultPageSettings.PaperSize = ps58;
@@ -210,12 +255,12 @@ public partial class MainForm : Form
 
 	private void printDocumentCustomer_PrintPage(object sender, PrintPageEventArgs e)
 	{
-		DrawGraphics(e, "Customer");
+		DrawGraphics(e, "Merchant");
 	}
 
 	private void printDocumentMerchant_PrintPage(object sender, PrintPageEventArgs e)
 	{
-		DrawGraphics(e, "Merchant");
+		DrawGraphics(e, "Customer");
 	}
 	#endregion
 }

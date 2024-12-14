@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubEntryLibrary", "PubEntry
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupProject", "SetupProject\SetupProject.vdproj", "{39A5183F-2502-4430-80C3-A141228A3238}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubReportMobile", "PubReportMobile\PubReportMobile.csproj", "{DEDC84CF-500E-45AC-979A-9DB925E9A4EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,11 @@ Global
 		{A6546985-E248-48C6-B1D6-A28CD4F2875A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{39A5183F-2502-4430-80C3-A141228A3238}.Debug|Any CPU.ActiveCfg = Release
 		{39A5183F-2502-4430-80C3-A141228A3238}.Release|Any CPU.ActiveCfg = Release
+		{DEDC84CF-500E-45AC-979A-9DB925E9A4EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEDC84CF-500E-45AC-979A-9DB925E9A4EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEDC84CF-500E-45AC-979A-9DB925E9A4EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEDC84CF-500E-45AC-979A-9DB925E9A4EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEDC84CF-500E-45AC-979A-9DB925E9A4EA}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

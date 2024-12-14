@@ -39,7 +39,13 @@ public partial class SelectLocation : Form
 		employeeComboBox.ValueMember = "Id";
 	}
 
-	private void locationComboBox_SelectedIndexChanged(object sender, EventArgs e) => LoadEmployeeComboBox();
+	private void locationComboBox_SelectedIndexChanged(object sender, EventArgs e)
+	{
+		LoadEmployeeComboBox();
+		passwordTextBox.Text = string.Empty;
+	}
+
+	private void employeeComboBox_SelectedIndexChanged(object sender, EventArgs e) => passwordTextBox.Text = string.Empty;
 	#endregion
 
 	#region ClickEvents
@@ -57,13 +63,8 @@ public partial class SelectLocation : Form
 
 	private void reportsButton_Click(object sender, EventArgs e)
 	{
-		if (passwordTextBox.Text == "admin")
-		{
-			SelectDataForm selectDataForm = new((int)locationComboBox.SelectedValue);
-			selectDataForm.Show();
-		}
-
-		else MessageBox.Show("Incorrect Password");
+		SelectDataForm selectDataForm = new((int)locationComboBox.SelectedValue);
+		selectDataForm.Show();
 	}
 
 	private void newEmployeeButton_Click(object sender, EventArgs e)

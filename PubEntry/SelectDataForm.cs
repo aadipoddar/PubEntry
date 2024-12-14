@@ -9,29 +9,9 @@ public partial class SelectDataForm : Form
 		InitializeComponent();
 
 		this.locationId = locationId;
-
-		LoadTextBoxes();
-	}
-
-	private void LoadTextBoxes()
-	{
-		if (DateTime.Now.Hour > 4)
-			fromTimeTextBox.Text = (DateTime.Now.Hour - 3).ToString();
-
-		else fromTimeTextBox.Text = DateTime.Now.Hour.ToString();
-
-		toTimeTextBox.Text = DateTime.Now.Hour.ToString();
 	}
 
 	#region Validation
-	private bool ValidateTime()
-	{
-		if (Convert.ToInt64(toTimeTextBox.Text) >= Convert.ToInt64(fromTimeTextBox.Text))
-			return true;
-
-		else return false;
-	}
-
 	private void timeTextBox_KeyPress(object sender, KeyPressEventArgs e)
 	{
 		if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
@@ -49,23 +29,13 @@ public partial class SelectDataForm : Form
 
 	private void summaryReportButton_Click(object sender, EventArgs e)
 	{
-		if (ValidateTime())
-		{
-			ShowDataForm showDataForm = new(fromDateTimePicker, toDateTimePicker, fromTimeTextBox, toTimeTextBox);
-			showDataForm.ShowDialog();
-		}
-
-		else MessageBox.Show("Incorrect Time");
+		ShowDataForm showDataForm = new(fromDateTimePicker, toDateTimePicker, fromTimeTextBox, toTimeTextBox);
+		showDataForm.ShowDialog();
 	}
 
 	private void detailReportButton_Click(object sender, EventArgs e)
 	{
-		if (ValidateTime())
-		{
-			ShowDataForm showDataForm = new(fromDateTimePicker, toDateTimePicker, fromTimeTextBox, toTimeTextBox, locationId, true);
-			showDataForm.ShowDialog();
-		}
-
-		else MessageBox.Show("Incorrect Time");
+		ShowDataForm showDataForm = new(fromDateTimePicker, toDateTimePicker, fromTimeTextBox, toTimeTextBox, locationId, true);
+		showDataForm.ShowDialog();
 	}
 }
