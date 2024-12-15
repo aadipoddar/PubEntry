@@ -13,7 +13,7 @@ public partial class LoadingScreen : Form
 	{
 		if (loadingScreen != null) return;
 		loadingScreen = new LoadingScreen();
-		Thread thread = new Thread(new ThreadStart(LoadingScreen.ShowForm));
+		Thread thread = new Thread(new ThreadStart(ShowForm));
 		thread.IsBackground = true;
 		thread.SetApartmentState(ApartmentState.STA);
 		thread.Start();
@@ -24,7 +24,7 @@ public partial class LoadingScreen : Form
 		if (loadingScreen != null) Application.Run(loadingScreen);
 	}
 
-	public static void CloseForm() => loadingScreen?.Invoke(new CloseDelegate(LoadingScreen.CloseFormInternal));
+	public static void CloseForm() => loadingScreen?.Invoke(new CloseDelegate(CloseFormInternal));
 
 	private static void CloseFormInternal()
 	{

@@ -12,7 +12,10 @@ public partial class SelectLocation : Form
 	{
 		InitializeComponent();
 
+		LoadingScreen.ShowSplashScreen();
 		LoadComboBox();
+		LoadingScreen.CloseForm();
+		Focus();
 	}
 
 	public void LoadComboBox()
