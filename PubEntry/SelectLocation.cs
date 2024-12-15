@@ -1,4 +1,6 @@
-﻿using PubEntryLibrary.Data;
+﻿using PubEntry.Reports;
+
+using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
 
 namespace PubEntry;

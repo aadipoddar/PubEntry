@@ -1,4 +1,4 @@
-﻿namespace PubEntry;
+﻿namespace PubEntry.Reports;
 
 partial class ShowDataForm
 {
@@ -36,6 +36,7 @@ partial class ShowDataForm
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(800, 450);
 		Name = "ShowDataForm";
+		StartPosition = FormStartPosition.CenterScreen;
 		Text = "Show Data";
 		ResumeLayout(false);
 	}

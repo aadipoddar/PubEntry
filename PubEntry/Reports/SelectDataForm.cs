@@ -1,4 +1,6 @@
-﻿namespace PubEntry;
+﻿using Microsoft.IdentityModel.Tokens;
+
+namespace PubEntry.Reports;
 
 public partial class SelectDataForm : Form
 {
@@ -25,17 +27,48 @@ public partial class SelectDataForm : Form
 				if (time > 23)
 					textBox.Text = "23";
 	}
+
+	private bool ValidateTime()
+	{
+		if (string.IsNullOrEmpty(toTimeTextBox.Text)|| string.IsNullOrEmpty(toTimeTextBox.Text)) return false;
+
+		if (fromDateTimePicker.Value > toDateTimePicker.Value) return false;
+
+		if (int.Parse(fromTimeTextBox.Text) > int.Parse(toTimeTextBox.Text))
+			if (fromDateTimePicker.Value == toDateTimePicker.Value)
+				return false;
+
+		return true;
+	}
 	#endregion
 
+	[STAThread]
 	private void summaryReportButton_Click(object sender, EventArgs e)
 	{
+		if (!ValidateTime())
+		{
+			MessageBox.Show("Incorrect Time or Date");
+			return;
+		}
+
+		LoadingScreen.ShowSplashScreen();
 		ShowDataForm showDataForm = new(fromDateTimePicker, toDateTimePicker, fromTimeTextBox, toTimeTextBox);
+		LoadingScreen.CloseForm();
 		showDataForm.ShowDialog();
 	}
 
+	[STAThread]
 	private void detailReportButton_Click(object sender, EventArgs e)
 	{
+		if (!ValidateTime())
+		{
+			MessageBox.Show("Incorrect Time or Date");
+			return;
+		}
+
+		LoadingScreen.ShowSplashScreen();
 		ShowDataForm showDataForm = new(fromDateTimePicker, toDateTimePicker, fromTimeTextBox, toTimeTextBox, locationId, true);
+		LoadingScreen.CloseForm();
 		showDataForm.ShowDialog();
 	}
 }

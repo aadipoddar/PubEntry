@@ -190,7 +190,7 @@ partial class MainForm
 		femaleTextBox.Font = new Font("Segoe UI", 15F);
 		femaleTextBox.Location = new Point(105, 210);
 		femaleTextBox.Name = "femaleTextBox";
-		femaleTextBox.PlaceholderText = "Card Amount";
+		femaleTextBox.PlaceholderText = "Female";
 		femaleTextBox.RightToLeft = RightToLeft.Yes;
 		femaleTextBox.Size = new Size(126, 34);
 		femaleTextBox.TabIndex = 4;
@@ -212,7 +212,7 @@ partial class MainForm
 		maleTextBox.Font = new Font("Segoe UI", 15F);
 		maleTextBox.Location = new Point(105, 170);
 		maleTextBox.Name = "maleTextBox";
-		maleTextBox.PlaceholderText = "Cash Amount";
+		maleTextBox.PlaceholderText = "Male";
 		maleTextBox.RightToLeft = RightToLeft.Yes;
 		maleTextBox.Size = new Size(126, 34);
 		maleTextBox.TabIndex = 3;
@@ -311,7 +311,7 @@ partial class MainForm
 		amexAmountTextBox.Font = new Font("Segoe UI", 15F);
 		amexAmountTextBox.Location = new Point(343, 293);
 		amexAmountTextBox.Name = "amexAmountTextBox";
-		amexAmountTextBox.PlaceholderText = "UPI Amount";
+		amexAmountTextBox.PlaceholderText = "Amex Amount";
 		amexAmountTextBox.RightToLeft = RightToLeft.Yes;
 		amexAmountTextBox.Size = new Size(109, 34);
 		amexAmountTextBox.TabIndex = 8;

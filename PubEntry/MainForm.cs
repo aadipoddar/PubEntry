@@ -57,6 +57,23 @@ public partial class MainForm : Form
 		if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
 			e.Handled = true;
 	}
+
+	private bool ValidateFields()
+	{
+		if (string.IsNullOrEmpty(numberTextBox.Text))
+			if (numberComboBox.Visible == false)
+				return false;
+
+		if (string.IsNullOrEmpty(nameTextBox.Text)) return false;
+		if (string.IsNullOrEmpty(maleTextBox.Text)) maleTextBox.Text = "0";
+		if (string.IsNullOrEmpty(femaleTextBox.Text)) femaleTextBox.Text = "0";
+		if (string.IsNullOrEmpty(cashAmountTextBox.Text)) cashAmountTextBox.Text = "0";
+		if (string.IsNullOrEmpty(cardAmountTextBox.Text)) cardAmountTextBox.Text = "0";
+		if (string.IsNullOrEmpty(upiAmountTextBox.Text)) upiAmountTextBox.Text = "0";
+		if (string.IsNullOrEmpty(amexAmountTextBox.Text)) amexAmountTextBox.Text = "0";
+
+		return true;
+	}
 	#endregion
 
 	#region Events
@@ -84,8 +101,7 @@ public partial class MainForm : Form
 
 	private void nameTextBox_KeyUp(object sender, KeyEventArgs e)
 	{
-		if (numberTextBox.Text != string.Empty && numberTextBox.ReadOnly == false)
-			return;
+		if (numberTextBox.Text != string.Empty && numberTextBox.ReadOnly == false) return;
 
 		var foundPeople = Task.Run(async () => await PersonData.GetPersonByName(nameTextBox.Text)).Result;
 		foundPerson = null;
@@ -132,6 +148,12 @@ public partial class MainForm : Form
 
 	private async void insertButton_Click(object sender, EventArgs e)
 	{
+		if (!ValidateFields())
+		{
+			MessageBox.Show("Enter all Fields");
+			return;
+		}
+
 		if (!personFound)
 			await PersonData.InsertPersonTableData(nameTextBox.Text, numberTextBox.Text);
 
@@ -167,7 +189,9 @@ public partial class MainForm : Form
 
 		ClearForm();
 	}
+	#endregion
 
+	#region Printing
 	string MakeStringHeaderAmount(TransactionModel transaction)
 	{
 		string finalString = "";
@@ -209,12 +233,11 @@ public partial class MainForm : Form
 	private void DrawGraphics(PrintPageEventArgs e, string copyOf)
 	{
 		Graphics g = e.Graphics;
-		Font font = new("Courier New", 12, FontStyle.Bold); // Use Courier New for better alignment on thermal printers
+		Font font = new("Courier New", 12, FontStyle.Bold);
 
 		StringFormat center = new(StringFormatFlags.FitBlackBox);
 		center.Alignment = StringAlignment.Center;
 
-		// Receipt Header
 		int y = 0;
 		g.DrawString($"** {Task.Run(async () => await CommonData.GetById<LocationModel>("LocationTable", locationId)).Result.FirstOrDefault().Name} **", new Font("Courier New", 20, FontStyle.Bold), Brushes.Black, 25, y += 10);
 		g.DrawString($"----- {copyOf} Copy -----", font, Brushes.Black, 10, y += 40);

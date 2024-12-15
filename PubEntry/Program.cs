@@ -1,4 +1,4 @@
-using QuestPDF.Infrastructure;
+using PubEntryLibrary.DataAccess;
 
 namespace PubEntry;
 
@@ -13,7 +13,7 @@ internal static class Program
 		// To customize application configuration such as set high DPI settings or default font,
 		// see https://aka.ms/applicationconfiguration.
 		ApplicationConfiguration.Initialize();
-		QuestPDF.Settings.License = LicenseType.Community;
+		Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Secrets.SyncfusionLicense);
 		Application.Run(new SelectLocation());
 	}
 }

@@ -1,4 +1,4 @@
-﻿namespace PubEntry;
+﻿namespace PubEntry.Reports;
 
 partial class SelectDataForm
 {
@@ -82,6 +82,7 @@ partial class SelectDataForm
 		toTimeTextBox.RightToLeft = RightToLeft.Yes;
 		toTimeTextBox.Size = new Size(53, 39);
 		toTimeTextBox.TabIndex = 28;
+		toTimeTextBox.Text = "1";
 		toTimeTextBox.TextChanged += timeTextBox_TextChanged;
 		toTimeTextBox.KeyPress += timeTextBox_KeyPress;
 		// 
@@ -95,6 +96,7 @@ partial class SelectDataForm
 		fromTimeTextBox.RightToLeft = RightToLeft.Yes;
 		fromTimeTextBox.Size = new Size(53, 39);
 		fromTimeTextBox.TabIndex = 26;
+		fromTimeTextBox.Text = "1";
 		fromTimeTextBox.TextChanged += timeTextBox_TextChanged;
 		fromTimeTextBox.KeyPress += timeTextBox_KeyPress;
 		// 

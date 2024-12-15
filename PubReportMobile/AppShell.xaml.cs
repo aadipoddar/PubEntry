@@ -1,10 +1,9 @@
-﻿namespace PubReportMobile
+﻿namespace PubReportMobile;
+
+public partial class AppShell : Shell
 {
-	public partial class AppShell : Shell
+	public AppShell()
 	{
-		public AppShell()
-		{
-			InitializeComponent();
-		}
+		InitializeComponent();
 	}
 }
