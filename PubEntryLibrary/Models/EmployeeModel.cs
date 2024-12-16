@@ -6,4 +6,5 @@ public class EmployeeModel
 	public string Name { get; set; }
 	public string Password { get; set; }
 	public int LocationId { get; set; }
+	public int ActiveStatus { get; set; }
 }

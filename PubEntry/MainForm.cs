@@ -29,8 +29,6 @@ public partial class MainForm : Form
 		reservationComboBox.DataSource = null;
 		reservationComboBox.DataSource = (await CommonData.LoadTableData<ReservationTypeModel>("ReservationTypeTable")).ToList();
 		reservationComboBox.DisplayMember = "Name";
-
-		dateTimeLabel.Text = DateTime.Now.ToString();
 	}
 
 	private void ClearForm()
@@ -77,6 +75,8 @@ public partial class MainForm : Form
 	#endregion
 
 	#region Events
+	private void dateChangeTimer_Tick(object sender, EventArgs e) => dateTimeLabel.Text = DateTime.Now.ToString();
+
 	private void MainForm_FormClosed(object sender, FormClosedEventArgs e) => Application.Exit();
 
 	private void numberTextBox_KeyUp(object sender, KeyEventArgs e)

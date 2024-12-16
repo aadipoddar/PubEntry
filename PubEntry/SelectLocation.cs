@@ -11,7 +11,10 @@ public partial class SelectLocation : Form
 	public SelectLocation()
 	{
 		InitializeComponent();
+	}
 
+	private void SelectLocation_Load(object sender, EventArgs e)
+	{
 		LoadingScreen.ShowSplashScreen();
 		LoadComboBox();
 		LoadingScreen.CloseForm();
@@ -21,8 +24,17 @@ public partial class SelectLocation : Form
 	public void LoadComboBox()
 	{
 		locationComboBox.DataSource = null;
+		List<LocationModel> locations = new();
 
-		var locations = Task.Run(async () => await CommonData.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
+		try
+		{
+			locations = Task.Run(async () => await CommonData.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
+		}
+		catch (Exception)
+		{
+			MessageBox.Show("DateBase is Starting Please Try after SomeTime");
+			Application.Exit();
+		}
 
 		locationComboBox.DataSource = locations;
 		locationComboBox.ValueMember = "Id";
@@ -34,10 +46,19 @@ public partial class SelectLocation : Form
 	private async void LoadEmployeeComboBox()
 	{
 		if (locationComboBox.ValueMember != "Id") return;
+		List<EmployeeModel> employees = new();
 
 		employeeComboBox.DataSource = null;
 
-		var employees = (await EmployeeData.LoadEmployeeByLocation((int)locationComboBox.SelectedValue)).ToList();
+		try
+		{
+			employees = (await EmployeeData.LoadActiveEmployeeByLocation((int)locationComboBox.SelectedValue)).ToList();
+		}
+		catch (Exception)
+		{
+			MessageBox.Show("DateBase is Starting Please Try after SomeTime");
+			Application.Exit();
+		}
 
 		employeeComboBox.DataSource = employees;
 		employeeComboBox.DisplayMember = "Name";

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 
-using QuestPDF.Infrastructure;
+using PubEntryLibrary.DataAccess;
 
 namespace PubReportMobile;
 
@@ -8,7 +8,7 @@ public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()
 	{
-		QuestPDF.Settings.License = LicenseType.Community;
+		Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Secrets.SyncfusionLicense);
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()

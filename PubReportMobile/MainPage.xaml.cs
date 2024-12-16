@@ -3,9 +3,16 @@
 using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
 
-using QuestPDF.Fluent;
-using QuestPDF.Helpers;
-using QuestPDF.Infrastructure;
+using CreatePdfDemoSample.Services;
+using Syncfusion.Pdf;
+using Syncfusion.Pdf.Graphics;
+using Syncfusion.Pdf.Grid;
+using Syncfusion.Drawing;
+using System.Reflection;
+using System.Xml.Linq;
+using Color = Syncfusion.Drawing.Color;
+using SizeF = Syncfusion.Drawing.SizeF;
+using PointF = Syncfusion.Drawing.PointF;
 
 namespace PubReportMobile;
 
@@ -80,225 +87,304 @@ public partial class MainPage : ContentPage
 
 	private void SummaryReportButtonClicked(object sender, EventArgs e)
 	{
-		Document.Create(container =>
+		//Create a new PDF document.
+		PdfDocument document = new();
+		//Add a page to the document.
+		PdfPage page = document.Pages.Add();
+		//Create PDF graphics for the page.
+		PdfGraphics graphics = page.Graphics;
+
+		RectangleF TotalPriceCellBounds = RectangleF.Empty;
+		RectangleF QuantityCellBounds = RectangleF.Empty;
+
+		//Get the page width and height
+		float pageWidth = page.GetClientSize().Width;
+		float pageHeight = page.GetClientSize().Height;
+
+		//Set the header height
+		float headerHeight = 90;
+		//Create brush with light blue color. 
+		PdfColor lightBlue = Color.FromArgb(255, 91, 126, 215);
+		PdfBrush lightBlueBrush = new PdfSolidBrush(lightBlue);
+		//Create brush with dark blue color. 
+		PdfColor darkBlue = Color.FromArgb(255, 65, 104, 209);
+		PdfBrush darkBlueBrush = new PdfSolidBrush(darkBlue);
+		//Create brush with white color. 
+		PdfBrush whiteBrush = new PdfSolidBrush(Color.FromArgb(255, 255, 255, 255));
+
+		//Get the font file stream from assembly. 
+		Assembly assembly = typeof(MainPage).GetTypeInfo().Assembly;
+		string basePath = "CreatePdfDemoSample.Resources.Pdf.";
+		Stream fontStream = assembly.GetManifestResourceStream(basePath + "arial.ttf");
+
+		//Create PdfTrueTypeFont from stream with different size. 
+		PdfTrueTypeFont headerFont = new(fontStream, 30, PdfFontStyle.Regular);
+		PdfTrueTypeFont arialRegularFont = new(fontStream, 18, PdfFontStyle.Regular);
+		PdfTrueTypeFont arialBoldFont = new(fontStream, 9, PdfFontStyle.Bold);
+
+		//Create string format.
+		PdfStringFormat format = new();
+		format.Alignment = PdfTextAlignment.Center;
+		format.LineAlignment = PdfVerticalAlignment.Middle;
+
+		float y = 0;
+		float x = 0;
+
+		//Set the margins of address.
+		float margin = 30;
+
+		//Set the line space.
+		float lineSpace = 10;
+
+		//Create border pen and draw the border to PDF page. 
+		PdfColor borderColor = Color.FromArgb(255, 142, 170, 219);
+		PdfPen borderPen = new(borderColor, 1f);
+		graphics.DrawRectangle(borderPen, new RectangleF(0, 0, pageWidth, pageHeight));
+
+		//Create a new PdfGrid 
+		PdfGrid grid = new();
+
+		//Add five columns to the grid.
+		grid.Columns.Add(5);
+
+		//Create the header row of the grid.
+		PdfGridRow[] headerRow = grid.Headers.Add(1);
+
+		//Set style to the header row and set value to the header cells. 
+		headerRow[0].Style.BackgroundBrush = new PdfSolidBrush(new PdfColor(68, 114, 196));
+		headerRow[0].Style.TextBrush = PdfBrushes.White;
+		headerRow[0].Cells[0].Value = "Product ID";
+		headerRow[0].Cells[0].StringFormat.Alignment = PdfTextAlignment.Center;
+		headerRow[0].Cells[1].Value = "Product Name";
+		headerRow[0].Cells[2].Value = "Price ($)";
+		headerRow[0].Cells[3].Value = "Quantity";
+		headerRow[0].Cells[4].Value = "Total ($)";
+
+		//Add products to the grid table.
+		AddProducts("CA-1098", "AWC Logo Cap", 8.99, 2, 17.98, grid);
+		AddProducts("LJ-0192", "Long-Sleeve Logo Jersey,M", 49.99, 3, 149.97, grid);
+		AddProducts("So-B909-M", "Mountain Bike Socks,M", 9.50, 2, 19, grid);
+		AddProducts("LJ-0192", "Long-Sleeve Logo Jersey,M", 49.99, 4, 199.96, grid);
+		AddProducts("FK-5136", "ML Fork", 175.49, 6, 1052.94, grid);
+		AddProducts("HL-U509", "Sports-100 Helmet,Black", 34.99, 1, 34.99, grid);
+
+		#region Header         
+
+		//Fill the header with light blue brush 
+		graphics.DrawRectangle(lightBlueBrush, new RectangleF(0, 0, pageWidth, headerHeight));
+
+		string title = "INVOICE";
+
+		//Specificy the bounds for total value. 
+		RectangleF headerTotalBounds = new(400, 0, pageWidth - 400, headerHeight);
+
+		//Measure the string size using font. 
+		SizeF textSize = headerFont.MeasureString(title);
+		graphics.DrawString(title, headerFont, whiteBrush, new RectangleF(0, 0, textSize.Width + 50, headerHeight), format);
+		//Draw rectangle in PDF page. 
+		graphics.DrawRectangle(darkBlueBrush, headerTotalBounds);
+		//Draw the toal value to PDF page. 
+		graphics.DrawString("$" + GetTotalAmount(grid).ToString(), arialRegularFont, whiteBrush, new RectangleF(400, 0, pageWidth - 400, headerHeight + 10), format);
+		//Create font from font stream. 
+		arialRegularFont = new PdfTrueTypeFont(fontStream, 9, PdfFontStyle.Regular);
+		//Set bottom line alignment and draw the text to PDF page. 
+		format.LineAlignment = PdfVerticalAlignment.Bottom;
+		graphics.DrawString("Amount", arialRegularFont, whiteBrush, new RectangleF(400, 0, pageWidth - 400, headerHeight / 2 - arialRegularFont.Height), format);
+		#endregion
+		//Measure the string size using font. 
+		SizeF size = arialRegularFont.MeasureString("Invoice Number: 2058557939");
+		y = headerHeight + margin;
+		x = (pageWidth - margin) - size.Width;
+		//Draw text to PDF page with provided font and location. 
+		graphics.DrawString("Invoice Number: 2058557939", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
+		//Measure the string size using font.
+		size = arialRegularFont.MeasureString("Date :" + DateTime.Now.ToString("dddd dd, MMMM yyyy"));
+		x = (pageWidth - margin) - size.Width;
+		y += arialRegularFont.Height + lineSpace;
+		//Draw text to PDF page with provided font and location. 
+		graphics.DrawString("Date: " + DateTime.Now.ToString("dddd dd, MMMM yyyy"), arialRegularFont, PdfBrushes.Black, new PointF(x, y));
+
+		y = headerHeight + margin;
+		x = margin;
+		//Draw text to PDF page with provided font and location. 
+		graphics.DrawString("Bill To:", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
+		y += arialRegularFont.Height + lineSpace;
+		graphics.DrawString("Abraham Swearegin,", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
+		y += arialRegularFont.Height + lineSpace;
+		graphics.DrawString("United States, California, San Mateo,", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
+		y += arialRegularFont.Height + lineSpace;
+		graphics.DrawString("9920 BridgePointe Parkway,", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
+		y += arialRegularFont.Height + lineSpace;
+		graphics.DrawString("9365550136", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
+
+		#region Grid
+		//Set width to grid columns. 
+		grid.Columns[0].Width = 110;
+		grid.Columns[1].Width = 150;
+		grid.Columns[2].Width = 110;
+		grid.Columns[3].Width = 70;
+		grid.Columns[4].Width = 100;
+
+		for (int i = 0; i < grid.Headers.Count; i++)
 		{
-			container.Page(page =>
+			//Set height to the grid header row. 
+			grid.Headers[i].Height = 20;
+			for (int j = 0; j < grid.Columns.Count; j++)
 			{
-				page.Size(PageSizes.A4);
-				page.Margin(2, Unit.Centimetre);
-				page.PageColor(QuestPDF.Helpers.Colors.White);
-				page.DefaultTextStyle(x => x.FontSize(20));
+				//Create string format for header cell. 
+				PdfStringFormat pdfStringFormat = new();
+				pdfStringFormat.LineAlignment = PdfVerticalAlignment.Middle;
+				pdfStringFormat.Alignment = PdfTextAlignment.Left;
 
-				int grandTotalMale = 0, grandTotalFemale = 0, grandTotalCash = 0, grandTotalCard = 0, grandTotalUPI = 0, grandTotalAmex = 0;
-				var locations = Task.Run(async () => await CommonData.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
+				//Set cell padding for header cell. 
+				if (j == 0 || j == 2)
+					grid.Headers[i].Cells[j].Style.CellPadding = new PdfPaddings(30, 1, 1, 1);
+				//Set string format to grid header cell. 
+				grid.Headers[i].Cells[j].StringFormat = pdfStringFormat;
+				//Set font to the grid header cell. 
+				grid.Headers[i].Cells[j].Style.Font = arialBoldFont;
 
-				page.Header()
-					.Text($"{GetFormatedDate()} - {GetFormatedDate(false)}")
-					.Bold().FontSize(25).AlignCenter();
+			}
+			//Set value to the grid header cell. 
+			grid.Headers[0].Cells[0].Value = "Product ID";
+		}
+		for (int i = 0; i < grid.Rows.Count; i++)
+		{
+			//Set height to the grid row. 
+			grid.Rows[i].Height = 23;
+			for (int j = 0; j < grid.Columns.Count; j++)
+			{
+				//Create string format for grid row. 
+				PdfStringFormat pdfStringFormat = new();
+				pdfStringFormat.LineAlignment = PdfVerticalAlignment.Middle;
+				pdfStringFormat.Alignment = PdfTextAlignment.Left;
 
-				page.Content()
-					.PaddingVertical(1, Unit.Centimetre)
-					.Column(x =>
-					{
-						x.Spacing(20);
+				//Set cell padding for grid row cell. 
+				if (j == 0 || j == 2)
+					grid.Rows[i].Cells[j].Style.CellPadding = new PdfPaddings(30, 1, 1, 1);
 
-						foreach (var location in locations)
-						{
-							int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
-							List<TransactionModel> transactions = GetTransactionsByLocationId(location.Id);
+				//Set string format to grid row cell. 
+				grid.Rows[i].Cells[j].StringFormat = pdfStringFormat;
+				//Set font to the grid row cell. 
+				grid.Rows[i].Cells[j].Style.Font = arialRegularFont;
+			}
+		}
+		//Apply built-in table style to the grid. 
+		grid.ApplyBuiltinStyle(PdfGridBuiltinStyle.ListTable4Accent5);
+		//Subscribing to begin cell layout event.
+		grid.BeginCellLayout += Grid_BeginCellLayout;
+		//Draw the PDF grid to PDF page and get the layout result. 
+		PdfGridLayoutResult result = grid.Draw(page, new PointF(0, y + 40));
 
-							x.Item().Text($"** {location.Name} **").AlignCenter().FontSize(20).SemiBold();
+		//Using the layout result, continue to draw the text. 
+		y = result.Bounds.Bottom + lineSpace;
+		format = new PdfStringFormat
+		{
+			Alignment = PdfTextAlignment.Center
+		};
+		RectangleF bounds = new(QuantityCellBounds.X, y, QuantityCellBounds.Width, QuantityCellBounds.Height);
+		//Draw text to PDF page based on the layout result. 
+		page.Graphics.DrawString("Grand Total:", arialBoldFont, PdfBrushes.Black, bounds, format);
+		//Draw the total amount value to PDF page based on the layout result. 
+		bounds = new RectangleF(TotalPriceCellBounds.X, y, TotalPriceCellBounds.Width, TotalPriceCellBounds.Height);
+		page.Graphics.DrawString("$" + GetTotalAmount(grid).ToString(), arialBoldFont, PdfBrushes.Black, bounds);
+		#endregion
+		//Create border pen with custom dash style and draw the border to page. 
+		borderPen.DashStyle = PdfDashStyle.Custom;
+		borderPen.DashPattern = new float[] { 3, 3 };
+		graphics.DrawLine(borderPen, new PointF(0, pageHeight - 100), new PointF(pageWidth, pageHeight - 100));
 
-							foreach (var transaction in transactions)
-							{
-								totalMale += transaction.Male;
-								totalFemale += transaction.Female;
-								totalCash += transaction.Cash;
-								totalCard += transaction.Card;
-								totalUPI += transaction.UPI;
-								totalAmex += transaction.Amex;
-							}
+		//Get the image file stream from assembly.
+		Stream imageStream = assembly.GetManifestResourceStream(basePath + "AdventureWork.png");
 
-							x.Item().LineHorizontal(1);
+		//Create PDF bitmap image from stream.
+		PdfBitmap bitmap = new(imageStream);
+		//Draw the image to PDF page. 
+		graphics.DrawImage(bitmap, new RectangleF(10, pageHeight - 90, 80, 80));
 
-							x.Item().Row(row =>
-							{
-								row.RelativeItem().Column(c =>
-								{
-									c.Item().Text($"Total Persons: {totalMale + totalFemale}").AlignLeft().FontSize(12);
-									c.Item().Text($"Male: {totalMale}").AlignLeft().FontSize(12);
-									c.Item().Text($"Female: {totalFemale}").AlignLeft().FontSize(12);
-								});
+		//Calculate the text position and draw the text to PDF page. 
+		y = pageHeight - 100 + margin;
+		size = arialRegularFont.MeasureString("800 Interchange Blvd.");
+		x = pageWidth - size.Width - margin;
+		graphics.DrawString("800 Interchange Blvd.", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
 
-								row.RelativeItem().Column(c =>
-								{
-									c.Item().Text($"Total Amount: {totalCash + totalCard + totalUPI + totalAmex}").AlignRight().FontSize(12);
-									c.Item().Text($"Cash: {totalCash}").AlignRight().FontSize(12);
-									c.Item().Text($"Card: {totalCard}").AlignRight().FontSize(12);
-									c.Item().Text($"UPI: {totalUPI}").AlignRight().FontSize(12);
-									c.Item().Text($"Amex: {totalAmex}").AlignRight().FontSize(12);
-								});
-							});
+		//Calculate the text position and draw the text to PDF page. 
+		y += arialRegularFont.Height + lineSpace;
+		size = arialRegularFont.MeasureString("Suite 2501,  Austin, TX 78721");
+		x = pageWidth - size.Width - margin;
+		graphics.DrawString("Suite 2501,  Austin, TX 78721", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
 
-							x.Item().LineHorizontal(1);
+		//Calculate the text position and draw the text to PDF page. 
+		y += arialRegularFont.Height + lineSpace;
+		size = arialRegularFont.MeasureString("Any Questions? support@adventure-works.com");
+		x = pageWidth - size.Width - margin;
+		graphics.DrawString("Any Questions? support@adventure-works.com", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
 
-							grandTotalMale += totalMale;
-							grandTotalFemale += totalFemale;
-							grandTotalCash += totalCash;
-							grandTotalCard += totalCard;
-							grandTotalUPI += totalUPI;
-							grandTotalAmex += totalAmex;
-						}
+		//Add a new blank PDF page.
+		PdfPage page1 = document.Pages.Add();
 
-						x.Item().Text("** Grand Total **").AlignCenter().FontSize(20).SemiBold();
+		//Draw the image to the PDF page.
+		page1.Graphics.DrawImage(bitmap, 0, 0, 200, 200);
 
-						x.Item().LineHorizontal(1);
+		using MemoryStream ms = new();
+		//Save the PDF document to MemoryStream.
+		using (FileStream fs = new FileStream("output.pdf", FileMode.Create))
+		{
+			document.Save(fs);
+		}
+		//document.Save(ms);
+		//Close the PDF document.
+		document.Close(true);
+		ms.Position = 0;
+		//Saves the memory stream as file using the SaveService instance.
+		//SaveService save = new SaveService();
+		//save.SaveAndView("output.pdf", "application/pdf", ms);
 
-						x.Item().Row(row =>
-						{
-							row.RelativeItem().Column(c =>
-							{
-								c.Item().Text($"Grand Total Persons: {grandTotalMale + grandTotalFemale}").AlignLeft().FontSize(12);
-								c.Item().Text($"Male: {grandTotalMale}").AlignLeft().FontSize(12);
-								c.Item().Text($"Female: {grandTotalFemale}").AlignLeft().FontSize(12);
-							});
-
-							row.RelativeItem().Column(c =>
-							{
-								c.Item().Text($"Grand Total Amount: {grandTotalCash + grandTotalCard + grandTotalUPI + grandTotalAmex}").AlignRight().FontSize(12);
-								c.Item().Text($"Cash: {grandTotalCash}").AlignRight().FontSize(12);
-								c.Item().Text($"Card: {grandTotalCard}").AlignRight().FontSize(12);
-								c.Item().Text($"UPI: {grandTotalUPI}").AlignRight().FontSize(12);
-								c.Item().Text($"Amex: {grandTotalAmex}").AlignRight().FontSize(12);
-							});
-						});
-					});
-			});
-		}).GeneratePdfAndShow();
+		void Grid_BeginCellLayout(object sender, PdfGridBeginCellLayoutEventArgs args)
+		{
+			PdfGrid grid = sender as PdfGrid;
+			if (args.CellIndex == grid.Columns.Count - 1)
+			{
+				//Get the bounds of price cell in grid row. 
+				TotalPriceCellBounds = args.Bounds;
+			}
+			else if (args.CellIndex == grid.Columns.Count - 2)
+			{
+				//Get the bounds of quantity cell in grid row. 
+				QuantityCellBounds = args.Bounds;
+			}
+		}
 	}
+	#region Helper Methods
+	//Create and row for the grid.
+	void AddProducts(string productId, string productName, double price, int quantity, double total, PdfGrid grid)
+	{
+		//Add a new row and set the product value to grid row cells. 
+		PdfGridRow row = grid.Rows.Add();
+		row.Cells[0].Value = productId;
+		row.Cells[1].Value = productName;
+		row.Cells[2].Value = price.ToString();
+		row.Cells[3].Value = quantity.ToString();
+		row.Cells[4].Value = total.ToString();
+	}
+	/// <summary>
+	/// Get the Total amount of purcharsed items.
+	/// </summary>
+	private float GetTotalAmount(PdfGrid grid)
+	{
+		float Total = 0f;
+		for (int i = 0; i < grid.Rows.Count; i++)
+		{
+			string cellValue = (grid.Rows[i].Cells[grid.Columns.Count - 1].Value as string)!.ToString();
+			float result = float.Parse(cellValue, System.Globalization.CultureInfo.InvariantCulture);
+			Total += result;
+		}
+		return Total;
+
+	}
+	#endregion
 
 	private void DetailReportButtonClicked(object sender, EventArgs e)
 	{
-		Document.Create(container =>
-		{
-			container.Page(page =>
-			{
-				page.Size(PageSizes.A4);
-				page.Margin(2, Unit.Centimetre);
-				page.PageColor(QuestPDF.Helpers.Colors.White);
-				page.DefaultTextStyle(x => x.FontSize(20));
-
-				page.Header()
-					.Text($"{GetFormatedDate()} - {GetFormatedDate(false)}")
-					.Bold().FontSize(25).AlignCenter();
-
-				page.Content()
-					.PaddingVertical(1, Unit.Centimetre)
-					.Column(x =>
-					{
-						x.Spacing(20);
-
-						int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
-						List<TransactionModel> transactions = GetTransactionsByLocationId(selectedLocationId + 1);
-
-						x.Item().Text($"** {Task.Run(async () => await CommonData.GetById<LocationModel>("LocationTable", selectedLocationId + 1)).Result.FirstOrDefault()?.Name} **").AlignCenter().FontSize(20).SemiBold();
-
-						ComposeTable(x, transactions);
-
-						foreach (var transaction in transactions)
-						{
-							totalMale += transaction.Male;
-							totalFemale += transaction.Female;
-							totalCash += transaction.Cash;
-							totalCard += transaction.Card;
-							totalUPI += transaction.UPI;
-							totalAmex += transaction.Amex;
-						}
-
-						x.Item().LineHorizontal(1);
-
-						x.Item().Row(row =>
-						{
-							row.RelativeItem().Column(c =>
-							{
-								c.Item().Text($"Total Persons: {totalMale + totalFemale}").AlignLeft().FontSize(12);
-								c.Item().Text($"Male: {totalMale}").AlignLeft().FontSize(12);
-								c.Item().Text($"Female: {totalFemale}").AlignLeft().FontSize(12);
-							});
-
-							row.RelativeItem().Column(c =>
-							{
-								c.Item().Text($"Total Amount: {totalCash + totalCard + totalUPI + totalAmex}").AlignRight().FontSize(12);
-								c.Item().Text($"Cash: {totalCash}").AlignRight().FontSize(12);
-								c.Item().Text($"Card: {totalCard}").AlignRight().FontSize(12);
-								c.Item().Text($"UPI: {totalUPI}").AlignRight().FontSize(12);
-								c.Item().Text($"Amex: {totalAmex}").AlignRight().FontSize(12);
-							});
-						});
-					});
-			});
-		}).GeneratePdfAndShow();
-	}
-
-	private static void ComposeTable(ColumnDescriptor x, List<TransactionModel> transactions)
-	{
-		x.Item().Table(table =>
-		{
-			table.ColumnsDefinition(columns =>
-			{
-				columns.RelativeColumn();
-				columns.RelativeColumn();
-				columns.RelativeColumn();
-				columns.RelativeColumn();
-				columns.RelativeColumn();
-				columns.RelativeColumn();
-				columns.RelativeColumn();
-				columns.RelativeColumn();
-				columns.RelativeColumn();
-				columns.RelativeColumn();
-			});
-
-			table.Header(header =>
-			{
-				header.Cell().Element(CellStyle).AlignCenter().Text("Name");
-				header.Cell().Element(CellStyle).AlignCenter().Text("Number");
-				header.Cell().Element(CellStyle).AlignCenter().Text("Male");
-				header.Cell().Element(CellStyle).AlignCenter().Text("Female");
-				header.Cell().Element(CellStyle).AlignRight().Text("Cash");
-				header.Cell().Element(CellStyle).AlignRight().Text("Card");
-				header.Cell().Element(CellStyle).AlignRight().Text("UPI");
-				header.Cell().Element(CellStyle).AlignRight().Text("Amex");
-				header.Cell().Element(CellStyle).AlignCenter().Text("Entered By");
-				header.Cell().Element(CellStyle).AlignCenter().Text("Date Time");
-
-				static QuestPDF.Infrastructure.IContainer CellStyle(QuestPDF.Infrastructure.IContainer container)
-				{
-					return container.DefaultTextStyle(x => x.SemiBold().FontSize(10)).PaddingVertical(2).BorderBottom(1).BorderColor(QuestPDF.Helpers.Colors.Black);
-				}
-			});
-
-			foreach (var transaction in transactions)
-			{
-				var person = Task.Run(async () => await CommonData.GetById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
-				string reservationTypeName = Task.Run(async () => await CommonData.GetById<ReservationTypeModel>("ReservationTypeTable", transaction.ReservationType)).Result.FirstOrDefault().Name;
-				string employeeName = Task.Run(async () => await CommonData.GetById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name;
-
-				table.Cell().Element(CellStyle).AlignCenter().Text($"{person.Name}");
-				table.Cell().Element(CellStyle).AlignCenter().Text($"{person.Number}");
-				table.Cell().Element(CellStyle).AlignCenter().Text($"{transaction.Male}");
-				table.Cell().Element(CellStyle).AlignCenter().Text($"{transaction.Female}");
-				table.Cell().Element(CellStyle).AlignRight().Text($"{transaction.Cash}");
-				table.Cell().Element(CellStyle).AlignRight().Text($"{transaction.Card}");
-				table.Cell().Element(CellStyle).AlignRight().Text($"{transaction.UPI}");
-				table.Cell().Element(CellStyle).AlignRight().Text($"{transaction.Amex}");
-				table.Cell().Element(CellStyle).AlignCenter().Text($"{employeeName}");
-				table.Cell().Element(CellStyle).AlignCenter().Text($"{transaction.DateTime.ToString("HH/mm/yy HH:mm")}");
-
-				static QuestPDF.Infrastructure.IContainer CellStyle(QuestPDF.Infrastructure.IContainer container)
-				{
-					return container.DefaultTextStyle(x => x.FontSize(6).NormalWeight()).PaddingVertical(1);
-				}
-			}
-		});
 	}
 }

@@ -37,15 +37,15 @@ partial class LoadingScreen
 		loadingLabel.Font = new Font("Segoe UI", 20F);
 		loadingLabel.Location = new Point(50, 62);
 		loadingLabel.Name = "loadingLabel";
-		loadingLabel.Size = new Size(429, 37);
+		loadingLabel.Size = new Size(363, 37);
 		loadingLabel.TabIndex = 0;
-		loadingLabel.Text = "Please Wait Data is Being Loaded...";
+		loadingLabel.Text = "Please Wait Data is Loading...";
 		// 
 		// LoadingScreen
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(577, 180);
+		ClientSize = new Size(492, 180);
 		Controls.Add(loadingLabel);
 		Name = "LoadingScreen";
 		StartPosition = FormStartPosition.CenterScreen;

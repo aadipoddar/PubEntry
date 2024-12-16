@@ -28,6 +28,7 @@ partial class MainForm
 	/// </summary>
 	private void InitializeComponent()
 	{
+		components = new System.ComponentModel.Container();
 		nameTextBox = new TextBox();
 		nameLabel = new Label();
 		numberLabel = new Label();
@@ -55,6 +56,7 @@ partial class MainForm
 		amexLabel = new Label();
 		amexAmountTextBox = new TextBox();
 		numberComboBox = new ComboBox();
+		dateChangeTimer = new System.Windows.Forms.Timer(components);
 		SuspendLayout();
 		// 
 		// nameTextBox
@@ -262,11 +264,11 @@ partial class MainForm
 		// 
 		dateTimeLabel.AutoSize = true;
 		dateTimeLabel.Font = new Font("Segoe UI", 15F);
-		dateTimeLabel.Location = new Point(94, 22);
+		dateTimeLabel.Location = new Point(137, 22);
 		dateTimeLabel.Name = "dateTimeLabel";
-		dateTimeLabel.Size = new Size(267, 28);
+		dateTimeLabel.Size = new Size(165, 28);
 		dateTimeLabel.TabIndex = 26;
-		dateTimeLabel.Text = "23rd December 2024 8:24PM";
+		dateTimeLabel.Text = "23-12-24 8:24PM";
 		// 
 		// printDocumentCustomer
 		// 
@@ -288,7 +290,7 @@ partial class MainForm
 		brandingLabel.BackColor = Color.White;
 		brandingLabel.Location = new Point(406, 532);
 		brandingLabel.Name = "brandingLabel";
-		brandingLabel.Size = new Size(75, 15);
+		brandingLabel.Size = new Size(76, 15);
 		brandingLabel.TabIndex = 28;
 		brandingLabel.Text = "© AADISOFT";
 		// 
@@ -328,6 +330,11 @@ partial class MainForm
 		numberComboBox.Size = new Size(271, 36);
 		numberComboBox.TabIndex = 2;
 		numberComboBox.Visible = false;
+		// 
+		// dateChangeTimer
+		// 
+		dateChangeTimer.Enabled = true;
+		dateChangeTimer.Tick += dateChangeTimer_Tick;
 		// 
 		// MainForm
 		// 
@@ -396,4 +403,5 @@ partial class MainForm
 	private Label amexLabel;
 	private TextBox amexAmountTextBox;
 	private ComboBox numberComboBox;
+	private System.Windows.Forms.Timer dateChangeTimer;
 }

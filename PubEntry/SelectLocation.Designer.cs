@@ -88,7 +88,7 @@ partial class SelectLocation
 		brandingLabel.BackColor = Color.White;
 		brandingLabel.Location = new Point(257, 428);
 		brandingLabel.Name = "brandingLabel";
-		brandingLabel.Size = new Size(75, 15);
+		brandingLabel.Size = new Size(76, 15);
 		brandingLabel.TabIndex = 30;
 		brandingLabel.Text = "© AADISOFT";
 		// 
@@ -139,6 +139,7 @@ partial class SelectLocation
 		Name = "SelectLocation";
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "Select Location";
+		Load += SelectLocation_Load;
 		ResumeLayout(false);
 		PerformLayout();
 	}
