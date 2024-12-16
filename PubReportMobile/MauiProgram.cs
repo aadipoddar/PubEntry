@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-
-using PubEntryLibrary.DataAccess;
+﻿using PubEntryLibrary.DataAccess;
 
 namespace PubReportMobile;
 

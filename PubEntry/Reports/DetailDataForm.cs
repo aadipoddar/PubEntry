@@ -9,8 +9,6 @@ using Syncfusion.Pdf.Grid;
 
 using Syncfusion.Pdf;
 
-using Excel = Microsoft.Office.Interop.Excel;
-
 namespace PubEntry.Reports;
 
 public partial class DetailDataForm : Form
@@ -356,91 +354,50 @@ public partial class DetailDataForm : Form
 	}
 	#endregion
 
+	#region Excel
 	private void excelButton_Click(object sender, EventArgs e)
 	{
-		if (dataGridView.Rows.Count > 0)
-		{
-			SaveFileDialog sfd = new SaveFileDialog();
-			sfd.Filter = "Excel (.xlsx)|  *.xlsx";
-			sfd.FileName = "Output.xlsx";
-			bool fileError = false;
-			if (sfd.ShowDialog() == DialogResult.OK)
-			{
-				if (File.Exists(sfd.FileName))
-				{
-					try
-					{
-						File.Delete(sfd.FileName);
-					}
-					catch (IOException ex)
-					{
-						fileError = true;
-						MessageBox.Show("It wasn't possible to write the data to the disk." + ex.Message);
-					}
-				}
-				if (!fileError)
-				{
-					try
-					{
-						Excel.Application XcelApp = new Excel.Application();
-						Excel._Workbook workbook = XcelApp.Workbooks.Add(Type.Missing);
-						Excel._Worksheet worksheet = null;
-
-						worksheet = (Excel._Worksheet)workbook.Sheets["Sheet1"];
-						worksheet = (Excel._Worksheet)workbook.ActiveSheet;
-						worksheet.Name = "Output";
-						worksheet.Application.ActiveWindow.SplitRow = 1;
-						worksheet.Application.ActiveWindow.FreezePanes = true;
-
-						for (int i = 1; i < dataGridView.Columns.Count + 1; i++)
-							worksheet.Cells[1, i] = dataGridView.Columns[i - 1].HeaderText;
-
-						for (int i = 0; i < dataGridView.Rows.Count; i++)
-						{
-							for (int j = 0; j < dataGridView.Columns.Count; j++)
-							{
-								worksheet.Cells[i + 2, j + 1] = dataGridView.Rows[i].Cells[j].Value.ToString();
-							}
-						}
-
-						worksheet.Columns.AutoFit();
-						workbook.SaveAs(sfd.FileName);
-						XcelApp.Quit();
-
-						ReleaseObject(worksheet);
-						ReleaseObject(workbook);
-						ReleaseObject(XcelApp);
-
-						Process.Start(new ProcessStartInfo(sfd.FileName) { UseShellExecute = true });
-					}
-					catch (Exception ex)
-					{
-						MessageBox.Show("Error :" + ex.Message);
-					}
-				}
-			}
-		}
-		else
-		{
-			MessageBox.Show("No Record To Export !!!", "Info");
-		}
+		LoadingScreen.ShowSplashScreen();
+		ExportToExcel();
+		LoadingScreen.CloseForm();
 	}
 
-	private void ReleaseObject(object obj)
+	private void ExportToExcel()
 	{
-		try
+		List<string> lines = new();
+		lines.Add("Id, Name, Number, Loyalty, Male, Female, Cash, Card, UPI, Amex, Entered By, Date Time");
+
+		List<TransactionModel> transactions = GetTransactionsByLocationId(locationId);
+		int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
+		int i = 1;
+
+		foreach (var transaction in transactions)
 		{
-			System.Runtime.InteropServices.Marshal.ReleaseComObject(obj);
-			obj = null;
+			var person = Task.Run(async () => await CommonData.GetById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
+			string employeeName = Task.Run(async () => await CommonData.GetById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name;
+
+			var loyalty = person.Loyalty == 1 ? "Y" : "N";
+			lines.Add($"{i}, {person.Name}, {person.Number}, {loyalty}, {transaction.Male}, {transaction.Female}, {transaction.Cash}, {transaction.Card}, {transaction.UPI}, {transaction.Amex}, {employeeName}, {transaction.DateTime}");
+
+			totalMale += transaction.Male;
+			totalFemale += transaction.Female;
+			totalCash += transaction.Cash;
+			totalCard += transaction.Card;
+			totalUPI += transaction.UPI;
+			totalAmex += transaction.Amex;
+
+			i++;
 		}
-		catch (Exception ex)
-		{
-			obj = null;
-			MessageBox.Show("Exception Occured while releasing object " + ex.Message, "Error");
-		}
-		finally
-		{
-			GC.Collect();
-		}
+
+		lines.Add("");
+		lines.Add($",Total People = , {totalMale + totalFemale}, , , , , , Total Amount = , {totalCash + totalCard + totalUPI + totalAmex}");
+		lines.Add($",Male = , {totalMale}, , , , , , Cash = , {totalCash}");
+		lines.Add($",Female = , {totalFemale}, , , , , , Card = , {totalCard}");
+		lines.Add($", , , , , , , , UPI = , {totalUPI}");
+		lines.Add($", , , , , , , , Amex = , {totalAmex}");
+
+		File.WriteAllLinesAsync($"{Path.GetTempPath()}\\Table.csv", lines);
+		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\Table.csv") { UseShellExecute = true });
 	}
+	#endregion
 }

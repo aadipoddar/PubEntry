@@ -14,21 +14,30 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		DefaultBuild|Any CPU = DefaultBuild|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B1FC61FC-F065-41CA-90E7-89EE8C1DBD42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B1FC61FC-F065-41CA-90E7-89EE8C1DBD42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1FC61FC-F065-41CA-90E7-89EE8C1DBD42}.DefaultBuild|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1FC61FC-F065-41CA-90E7-89EE8C1DBD42}.DefaultBuild|Any CPU.Build.0 = Debug|Any CPU
 		{B1FC61FC-F065-41CA-90E7-89EE8C1DBD42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1FC61FC-F065-41CA-90E7-89EE8C1DBD42}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A6546985-E248-48C6-B1D6-A28CD4F2875A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A6546985-E248-48C6-B1D6-A28CD4F2875A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A6546985-E248-48C6-B1D6-A28CD4F2875A}.DefaultBuild|Any CPU.ActiveCfg = Debug|Any CPU
+		{A6546985-E248-48C6-B1D6-A28CD4F2875A}.DefaultBuild|Any CPU.Build.0 = Debug|Any CPU
 		{A6546985-E248-48C6-B1D6-A28CD4F2875A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A6546985-E248-48C6-B1D6-A28CD4F2875A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{39A5183F-2502-4430-80C3-A141228A3238}.Debug|Any CPU.ActiveCfg = Release
+		{39A5183F-2502-4430-80C3-A141228A3238}.DefaultBuild|Any CPU.ActiveCfg = Debug
+		{39A5183F-2502-4430-80C3-A141228A3238}.DefaultBuild|Any CPU.Build.0 = Debug
 		{39A5183F-2502-4430-80C3-A141228A3238}.Release|Any CPU.ActiveCfg = Release
 		{DEDC84CF-500E-45AC-979A-9DB925E9A4EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DEDC84CF-500E-45AC-979A-9DB925E9A4EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEDC84CF-500E-45AC-979A-9DB925E9A4EA}.DefaultBuild|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEDC84CF-500E-45AC-979A-9DB925E9A4EA}.DefaultBuild|Any CPU.Build.0 = Debug|Any CPU
 		{DEDC84CF-500E-45AC-979A-9DB925E9A4EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEDC84CF-500E-45AC-979A-9DB925E9A4EA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DEDC84CF-500E-45AC-979A-9DB925E9A4EA}.Release|Any CPU.Deploy.0 = Release|Any CPU

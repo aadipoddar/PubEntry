@@ -2,14 +2,11 @@
 
 using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
-
-using CreatePdfDemoSample.Services;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Grid;
 using Syncfusion.Drawing;
 using System.Reflection;
-using System.Xml.Linq;
 using Color = Syncfusion.Drawing.Color;
 using SizeF = Syncfusion.Drawing.SizeF;
 using PointF = Syncfusion.Drawing.PointF;
@@ -85,6 +82,9 @@ public partial class MainPage : ContentPage
 	}
 	#endregion
 
+	#region Events
+	RectangleF TotalPriceCellBounds = RectangleF.Empty;
+	RectangleF QuantityCellBounds = RectangleF.Empty;
 	private void SummaryReportButtonClicked(object sender, EventArgs e)
 	{
 		//Create a new PDF document.
@@ -93,9 +93,6 @@ public partial class MainPage : ContentPage
 		PdfPage page = document.Pages.Add();
 		//Create PDF graphics for the page.
 		PdfGraphics graphics = page.Graphics;
-
-		RectangleF TotalPriceCellBounds = RectangleF.Empty;
-		RectangleF QuantityCellBounds = RectangleF.Empty;
 
 		//Get the page width and height
 		float pageWidth = page.GetClientSize().Width;
@@ -114,13 +111,14 @@ public partial class MainPage : ContentPage
 
 		//Get the font file stream from assembly. 
 		Assembly assembly = typeof(MainPage).GetTypeInfo().Assembly;
-		string basePath = "CreatePdfDemoSample.Resources.Pdf.";
-		Stream fontStream = assembly.GetManifestResourceStream(basePath + "arial.ttf");
+		string basePath = "SampleBrowser.Maui.Resources.Pdf.";
+		if (BaseConfig.IsIndividualSB)
+			basePath = "SampleBrowser.Maui.Pdf.Resources.Pdf.";
 
-		//Create PdfTrueTypeFont from stream with different size. 
-		PdfTrueTypeFont headerFont = new(fontStream, 30, PdfFontStyle.Regular);
-		PdfTrueTypeFont arialRegularFont = new(fontStream, 18, PdfFontStyle.Regular);
-		PdfTrueTypeFont arialBoldFont = new(fontStream, 9, PdfFontStyle.Bold);
+		//Create PdfStandardFont with different size. 
+		PdfStandardFont headerFont = new PdfStandardFont(PdfFontFamily.Helvetica, 30, PdfFontStyle.Regular);
+		PdfStandardFont regularFont = new PdfStandardFont(PdfFontFamily.Helvetica, 18, PdfFontStyle.Regular);
+		PdfStandardFont boldFont = new PdfStandardFont(PdfFontFamily.Helvetica, 9, PdfFontStyle.Bold);
 
 		//Create string format.
 		PdfStringFormat format = new();
@@ -184,38 +182,38 @@ public partial class MainPage : ContentPage
 		//Draw rectangle in PDF page. 
 		graphics.DrawRectangle(darkBlueBrush, headerTotalBounds);
 		//Draw the toal value to PDF page. 
-		graphics.DrawString("$" + GetTotalAmount(grid).ToString(), arialRegularFont, whiteBrush, new RectangleF(400, 0, pageWidth - 400, headerHeight + 10), format);
-		//Create font from font stream. 
-		arialRegularFont = new PdfTrueTypeFont(fontStream, 9, PdfFontStyle.Regular);
+		graphics.DrawString("$" + GetTotalAmount(grid).ToString(), regularFont, whiteBrush, new RectangleF(400, 0, pageWidth - 400, headerHeight + 10), format);
+		//Create font. 
+		regularFont = new PdfStandardFont(PdfFontFamily.Helvetica, 9, PdfFontStyle.Regular);
 		//Set bottom line alignment and draw the text to PDF page. 
 		format.LineAlignment = PdfVerticalAlignment.Bottom;
-		graphics.DrawString("Amount", arialRegularFont, whiteBrush, new RectangleF(400, 0, pageWidth - 400, headerHeight / 2 - arialRegularFont.Height), format);
+		graphics.DrawString("Amount", regularFont, whiteBrush, new RectangleF(400, 0, pageWidth - 400, headerHeight / 2 - regularFont.Height), format);
 		#endregion
 		//Measure the string size using font. 
-		SizeF size = arialRegularFont.MeasureString("Invoice Number: 2058557939");
+		SizeF size = regularFont.MeasureString("Invoice Number: 2058557939");
 		y = headerHeight + margin;
 		x = (pageWidth - margin) - size.Width;
 		//Draw text to PDF page with provided font and location. 
-		graphics.DrawString("Invoice Number: 2058557939", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
+		graphics.DrawString("Invoice Number: 2058557939", regularFont, PdfBrushes.Black, new PointF(x, y));
 		//Measure the string size using font.
-		size = arialRegularFont.MeasureString("Date :" + DateTime.Now.ToString("dddd dd, MMMM yyyy"));
+		size = regularFont.MeasureString("Date :" + DateTime.Now.ToString("dddd dd, MMMM yyyy"));
 		x = (pageWidth - margin) - size.Width;
-		y += arialRegularFont.Height + lineSpace;
+		y += regularFont.Height + lineSpace;
 		//Draw text to PDF page with provided font and location. 
-		graphics.DrawString("Date: " + DateTime.Now.ToString("dddd dd, MMMM yyyy"), arialRegularFont, PdfBrushes.Black, new PointF(x, y));
+		graphics.DrawString("Date: " + DateTime.Now.ToString("dddd dd, MMMM yyyy"), regularFont, PdfBrushes.Black, new PointF(x, y));
 
 		y = headerHeight + margin;
 		x = margin;
 		//Draw text to PDF page with provided font and location. 
-		graphics.DrawString("Bill To:", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
-		y += arialRegularFont.Height + lineSpace;
-		graphics.DrawString("Abraham Swearegin,", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
-		y += arialRegularFont.Height + lineSpace;
-		graphics.DrawString("United States, California, San Mateo,", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
-		y += arialRegularFont.Height + lineSpace;
-		graphics.DrawString("9920 BridgePointe Parkway,", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
-		y += arialRegularFont.Height + lineSpace;
-		graphics.DrawString("9365550136", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
+		graphics.DrawString("Bill To:", regularFont, PdfBrushes.Black, new PointF(x, y));
+		y += regularFont.Height + lineSpace;
+		graphics.DrawString("Abraham Swearegin,", regularFont, PdfBrushes.Black, new PointF(x, y));
+		y += regularFont.Height + lineSpace;
+		graphics.DrawString("United States, California, San Mateo,", regularFont, PdfBrushes.Black, new PointF(x, y));
+		y += regularFont.Height + lineSpace;
+		graphics.DrawString("9920 BridgePointe Parkway,", regularFont, PdfBrushes.Black, new PointF(x, y));
+		y += regularFont.Height + lineSpace;
+		graphics.DrawString("9365550136", regularFont, PdfBrushes.Black, new PointF(x, y));
 
 		#region Grid
 		//Set width to grid columns. 
@@ -242,7 +240,7 @@ public partial class MainPage : ContentPage
 				//Set string format to grid header cell. 
 				grid.Headers[i].Cells[j].StringFormat = pdfStringFormat;
 				//Set font to the grid header cell. 
-				grid.Headers[i].Cells[j].Style.Font = arialBoldFont;
+				grid.Headers[i].Cells[j].Style.Font = boldFont;
 
 			}
 			//Set value to the grid header cell. 
@@ -266,7 +264,7 @@ public partial class MainPage : ContentPage
 				//Set string format to grid row cell. 
 				grid.Rows[i].Cells[j].StringFormat = pdfStringFormat;
 				//Set font to the grid row cell. 
-				grid.Rows[i].Cells[j].Style.Font = arialRegularFont;
+				grid.Rows[i].Cells[j].Style.Font = regularFont;
 			}
 		}
 		//Apply built-in table style to the grid. 
@@ -284,10 +282,10 @@ public partial class MainPage : ContentPage
 		};
 		RectangleF bounds = new(QuantityCellBounds.X, y, QuantityCellBounds.Width, QuantityCellBounds.Height);
 		//Draw text to PDF page based on the layout result. 
-		page.Graphics.DrawString("Grand Total:", arialBoldFont, PdfBrushes.Black, bounds, format);
+		page.Graphics.DrawString("Grand Total:", boldFont, PdfBrushes.Black, bounds, format);
 		//Draw the total amount value to PDF page based on the layout result. 
 		bounds = new RectangleF(TotalPriceCellBounds.X, y, TotalPriceCellBounds.Width, TotalPriceCellBounds.Height);
-		page.Graphics.DrawString("$" + GetTotalAmount(grid).ToString(), arialBoldFont, PdfBrushes.Black, bounds);
+		page.Graphics.DrawString("$" + GetTotalAmount(grid).ToString(), boldFont, PdfBrushes.Black, bounds);
 		#endregion
 		//Create border pen with custom dash style and draw the border to page. 
 		borderPen.DashStyle = PdfDashStyle.Custom;
@@ -295,7 +293,7 @@ public partial class MainPage : ContentPage
 		graphics.DrawLine(borderPen, new PointF(0, pageHeight - 100), new PointF(pageWidth, pageHeight - 100));
 
 		//Get the image file stream from assembly.
-		Stream imageStream = assembly.GetManifestResourceStream(basePath + "AdventureWork.png");
+		Stream? imageStream = assembly.GetManifestResourceStream(basePath + "AdventureWork.png");
 
 		//Create PDF bitmap image from stream.
 		PdfBitmap bitmap = new(imageStream);
@@ -304,57 +302,50 @@ public partial class MainPage : ContentPage
 
 		//Calculate the text position and draw the text to PDF page. 
 		y = pageHeight - 100 + margin;
-		size = arialRegularFont.MeasureString("800 Interchange Blvd.");
+		size = regularFont.MeasureString("800 Interchange Blvd.");
 		x = pageWidth - size.Width - margin;
-		graphics.DrawString("800 Interchange Blvd.", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
+		graphics.DrawString("800 Interchange Blvd.", regularFont, PdfBrushes.Black, new PointF(x, y));
 
 		//Calculate the text position and draw the text to PDF page. 
-		y += arialRegularFont.Height + lineSpace;
-		size = arialRegularFont.MeasureString("Suite 2501,  Austin, TX 78721");
+		y += regularFont.Height + lineSpace;
+		size = regularFont.MeasureString("Suite 2501,  Austin, TX 78721");
 		x = pageWidth - size.Width - margin;
-		graphics.DrawString("Suite 2501,  Austin, TX 78721", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
+		graphics.DrawString("Suite 2501,  Austin, TX 78721", regularFont, PdfBrushes.Black, new PointF(x, y));
 
 		//Calculate the text position and draw the text to PDF page. 
-		y += arialRegularFont.Height + lineSpace;
-		size = arialRegularFont.MeasureString("Any Questions? support@adventure-works.com");
+		y += regularFont.Height + lineSpace;
+		size = regularFont.MeasureString("Any Questions? support@adventure-works.com");
 		x = pageWidth - size.Width - margin;
-		graphics.DrawString("Any Questions? support@adventure-works.com", arialRegularFont, PdfBrushes.Black, new PointF(x, y));
-
-		//Add a new blank PDF page.
-		PdfPage page1 = document.Pages.Add();
-
-		//Draw the image to the PDF page.
-		page1.Graphics.DrawImage(bitmap, 0, 0, 200, 200);
+		graphics.DrawString("Any Questions? support@adventure-works.com", regularFont, PdfBrushes.Black, new PointF(x, y));
 
 		using MemoryStream ms = new();
-		//Save the PDF document to MemoryStream.
-		using (FileStream fs = new FileStream("output.pdf", FileMode.Create))
-		{
-			document.Save(fs);
-		}
-		//document.Save(ms);
-		//Close the PDF document.
+		//Saves the PDF to the memory stream.
+		document.Save(ms);
+		//Close the PDF document
 		document.Close(true);
 		ms.Position = 0;
-		//Saves the memory stream as file using the SaveService instance.
-		//SaveService save = new SaveService();
-		//save.SaveAndView("output.pdf", "application/pdf", ms);
-
-		void Grid_BeginCellLayout(object sender, PdfGridBeginCellLayoutEventArgs args)
-		{
-			PdfGrid grid = sender as PdfGrid;
-			if (args.CellIndex == grid.Columns.Count - 1)
-			{
-				//Get the bounds of price cell in grid row. 
-				TotalPriceCellBounds = args.Bounds;
-			}
-			else if (args.CellIndex == grid.Columns.Count - 2)
-			{
-				//Get the bounds of quantity cell in grid row. 
-				QuantityCellBounds = args.Bounds;
-			}
-		}
+		//Saves the memory stream as file.
+		SaveService saveService = new();
+		saveService.SaveAndView("Invoice.pdf", "application/pdf", ms);
 	}
+
+	private void Grid_BeginCellLayout(object sender, PdfGridBeginCellLayoutEventArgs args)
+	{
+		PdfGrid? grid = sender as PdfGrid;
+		if (args.CellIndex == grid!.Columns.Count - 1)
+		{
+			//Get the bounds of price cell in grid row. 
+			TotalPriceCellBounds = args.Bounds;
+		}
+		else if (args.CellIndex == grid.Columns.Count - 2)
+		{
+			//Get the bounds of quantity cell in grid row. 
+			QuantityCellBounds = args.Bounds;
+		}
+
+	}
+#endregion
+
 	#region Helper Methods
 	//Create and row for the grid.
 	void AddProducts(string productId, string productName, double price, int quantity, double total, PdfGrid grid)
@@ -383,8 +374,4 @@ public partial class MainPage : ContentPage
 
 	}
 	#endregion
-
-	private void DetailReportButtonClicked(object sender, EventArgs e)
-	{
-	}
 }
