@@ -79,6 +79,7 @@ public partial class DetailDataForm : Form
 		dataGridView.Columns.Add("Id", "Id");
 		dataGridView.Columns.Add("Name", "Name");
 		dataGridView.Columns.Add("Number", "Number");
+		dataGridView.Columns.Add("Loyalty", "Loyalty");
 		dataGridView.Columns.Add("Male", "Male");
 		dataGridView.Columns.Add("Female", "Female");
 		dataGridView.Columns.Add("Cash", "Cash");
@@ -89,12 +90,12 @@ public partial class DetailDataForm : Form
 		dataGridView.Columns.Add("Date Time", "Date Time");
 
 		dataGridView.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-		dataGridView.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 		dataGridView.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 		dataGridView.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 		dataGridView.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 		dataGridView.Columns[7].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 		dataGridView.Columns[8].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+		dataGridView.Columns[9].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
 		int i = 1;
 		foreach (var transaction in transactions)
@@ -106,6 +107,7 @@ public partial class DetailDataForm : Form
 					i,
 					person.Name,
 					person.Number,
+					person.Loyalty == 1 ? "Y" : "N",
 					transaction.Male,
 					transaction.Female,
 					transaction.Cash,
@@ -245,6 +247,7 @@ public partial class DetailDataForm : Form
 		dataTable.Columns.Add("Id", typeof(int));
 		dataTable.Columns.Add("Name", typeof(string));
 		dataTable.Columns.Add("Number", typeof(string));
+		dataTable.Columns.Add("Loyalty", typeof(string));
 		dataTable.Columns.Add("Male", typeof(int));
 		dataTable.Columns.Add("Female", typeof(int));
 		dataTable.Columns.Add("Cash", typeof(int));
@@ -260,7 +263,7 @@ public partial class DetailDataForm : Form
 			var person = Task.Run(async () => await CommonData.GetById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
 			string employeeName = Task.Run(async () => await CommonData.GetById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name;
 
-			dataTable.Rows.Add(i, $"{person.Name}", $"{person.Number}", transaction.Male, transaction.Female, transaction.Cash, transaction.Card, transaction.UPI, transaction.Amex, $"{employeeName}", $"{transaction.DateTime}");
+			dataTable.Rows.Add(i, $"{person.Name}", $"{person.Number}", person.Loyalty == 1 ? "Y" : "N", transaction.Male, transaction.Female, transaction.Cash, transaction.Card, transaction.UPI, transaction.Amex, $"{employeeName}", $"{transaction.DateTime}");
 
 			totalMale += transaction.Male;
 			totalFemale += transaction.Female;
@@ -274,10 +277,13 @@ public partial class DetailDataForm : Form
 
 		pdfGrid.DataSource = dataTable;
 
-		pdfGrid.Columns[0].Width = 30;
+		pdfGrid.Columns[0].Width = 20;
+		pdfGrid.Columns[2].Width = 60;
 		pdfGrid.Columns[3].Width = 30;
 		pdfGrid.Columns[4].Width = 30;
-		pdfGrid.Columns[8].Width = 30;
+		pdfGrid.Columns[5].Width = 30;
+		pdfGrid.Columns[9].Width = 30;
+		pdfGrid.Columns[10].Width = 40;
 
 		foreach (PdfGridRow row in pdfGrid.Rows)
 		{

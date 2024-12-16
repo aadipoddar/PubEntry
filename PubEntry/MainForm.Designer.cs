@@ -55,8 +55,8 @@ partial class MainForm
 		printDocumentMerchant = new System.Drawing.Printing.PrintDocument();
 		amexLabel = new Label();
 		amexAmountTextBox = new TextBox();
-		numberComboBox = new ComboBox();
 		dateChangeTimer = new System.Windows.Forms.Timer(components);
+		loyaltyCheckBox = new CheckBox();
 		SuspendLayout();
 		// 
 		// nameTextBox
@@ -67,7 +67,6 @@ partial class MainForm
 		nameTextBox.PlaceholderText = "Name";
 		nameTextBox.Size = new Size(271, 34);
 		nameTextBox.TabIndex = 1;
-		nameTextBox.KeyUp += nameTextBox_KeyUp;
 		// 
 		// nameLabel
 		// 
@@ -104,7 +103,7 @@ partial class MainForm
 		// 
 		cashLabel.AutoSize = true;
 		cashLabel.Font = new Font("Segoe UI", 15F);
-		cashLabel.Location = new Point(281, 176);
+		cashLabel.Location = new Point(272, 240);
 		cashLabel.Name = "cashLabel";
 		cashLabel.Size = new Size(53, 28);
 		cashLabel.TabIndex = 5;
@@ -113,7 +112,7 @@ partial class MainForm
 		// cashAmountTextBox
 		// 
 		cashAmountTextBox.Font = new Font("Segoe UI", 15F);
-		cashAmountTextBox.Location = new Point(343, 170);
+		cashAmountTextBox.Location = new Point(334, 234);
 		cashAmountTextBox.Name = "cashAmountTextBox";
 		cashAmountTextBox.PlaceholderText = "Cash Amount";
 		cashAmountTextBox.RightToLeft = RightToLeft.Yes;
@@ -125,7 +124,7 @@ partial class MainForm
 		// saveButton
 		// 
 		saveButton.Font = new Font("Segoe UI", 15F);
-		saveButton.Location = new Point(167, 463);
+		saveButton.Location = new Point(158, 527);
 		saveButton.Name = "saveButton";
 		saveButton.Size = new Size(135, 44);
 		saveButton.TabIndex = 11;
@@ -137,7 +136,7 @@ partial class MainForm
 		// 
 		cardLabel.AutoSize = true;
 		cardLabel.Font = new Font("Segoe UI", 15F);
-		cardLabel.Location = new Point(281, 216);
+		cardLabel.Location = new Point(272, 280);
 		cardLabel.Name = "cardLabel";
 		cardLabel.Size = new Size(53, 28);
 		cardLabel.TabIndex = 15;
@@ -146,7 +145,7 @@ partial class MainForm
 		// cardAmountTextBox
 		// 
 		cardAmountTextBox.Font = new Font("Segoe UI", 15F);
-		cardAmountTextBox.Location = new Point(343, 213);
+		cardAmountTextBox.Location = new Point(334, 277);
 		cardAmountTextBox.Name = "cardAmountTextBox";
 		cardAmountTextBox.PlaceholderText = "Card Amount";
 		cardAmountTextBox.RightToLeft = RightToLeft.Yes;
@@ -159,7 +158,7 @@ partial class MainForm
 		// 
 		upiLabel.AutoSize = true;
 		upiLabel.Font = new Font("Segoe UI", 15F);
-		upiLabel.Location = new Point(281, 259);
+		upiLabel.Location = new Point(272, 323);
 		upiLabel.Name = "upiLabel";
 		upiLabel.Size = new Size(42, 28);
 		upiLabel.TabIndex = 17;
@@ -168,7 +167,7 @@ partial class MainForm
 		// upiAmountTextBox
 		// 
 		upiAmountTextBox.Font = new Font("Segoe UI", 15F);
-		upiAmountTextBox.Location = new Point(343, 253);
+		upiAmountTextBox.Location = new Point(334, 317);
 		upiAmountTextBox.Name = "upiAmountTextBox";
 		upiAmountTextBox.PlaceholderText = "UPI Amount";
 		upiAmountTextBox.RightToLeft = RightToLeft.Yes;
@@ -181,7 +180,7 @@ partial class MainForm
 		// 
 		femaleLabel.AutoSize = true;
 		femaleLabel.Font = new Font("Segoe UI", 15F);
-		femaleLabel.Location = new Point(22, 213);
+		femaleLabel.Location = new Point(13, 277);
 		femaleLabel.Name = "femaleLabel";
 		femaleLabel.Size = new Size(74, 28);
 		femaleLabel.TabIndex = 21;
@@ -190,7 +189,7 @@ partial class MainForm
 		// femaleTextBox
 		// 
 		femaleTextBox.Font = new Font("Segoe UI", 15F);
-		femaleTextBox.Location = new Point(105, 210);
+		femaleTextBox.Location = new Point(96, 274);
 		femaleTextBox.Name = "femaleTextBox";
 		femaleTextBox.PlaceholderText = "Female";
 		femaleTextBox.RightToLeft = RightToLeft.Yes;
@@ -203,7 +202,7 @@ partial class MainForm
 		// 
 		maleLabel.AutoSize = true;
 		maleLabel.Font = new Font("Segoe UI", 15F);
-		maleLabel.Location = new Point(22, 173);
+		maleLabel.Location = new Point(13, 237);
 		maleLabel.Name = "maleLabel";
 		maleLabel.Size = new Size(55, 28);
 		maleLabel.TabIndex = 19;
@@ -212,7 +211,7 @@ partial class MainForm
 		// maleTextBox
 		// 
 		maleTextBox.Font = new Font("Segoe UI", 15F);
-		maleTextBox.Location = new Point(105, 170);
+		maleTextBox.Location = new Point(96, 234);
 		maleTextBox.Name = "maleTextBox";
 		maleTextBox.PlaceholderText = "Male";
 		maleTextBox.RightToLeft = RightToLeft.Yes;
@@ -226,7 +225,7 @@ partial class MainForm
 		reservationComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 		reservationComboBox.Font = new Font("Segoe UI", 15F);
 		reservationComboBox.FormattingEnabled = true;
-		reservationComboBox.Location = new Point(185, 365);
+		reservationComboBox.Location = new Point(176, 429);
 		reservationComboBox.Name = "reservationComboBox";
 		reservationComboBox.Size = new Size(271, 36);
 		reservationComboBox.TabIndex = 9;
@@ -235,7 +234,7 @@ partial class MainForm
 		// 
 		reservationLabel.AutoSize = true;
 		reservationLabel.Font = new Font("Segoe UI", 15F);
-		reservationLabel.Location = new Point(22, 368);
+		reservationLabel.Location = new Point(13, 432);
 		reservationLabel.Name = "reservationLabel";
 		reservationLabel.Size = new Size(113, 28);
 		reservationLabel.TabIndex = 23;
@@ -244,7 +243,7 @@ partial class MainForm
 		// approvedByTextBox
 		// 
 		approvedByTextBox.Font = new Font("Segoe UI", 15F);
-		approvedByTextBox.Location = new Point(185, 407);
+		approvedByTextBox.Location = new Point(176, 471);
 		approvedByTextBox.Name = "approvedByTextBox";
 		approvedByTextBox.PlaceholderText = "Approved By";
 		approvedByTextBox.Size = new Size(271, 34);
@@ -254,7 +253,7 @@ partial class MainForm
 		// 
 		approvedByLabel.AutoSize = true;
 		approvedByLabel.Font = new Font("Segoe UI", 15F);
-		approvedByLabel.Location = new Point(22, 410);
+		approvedByLabel.Location = new Point(13, 474);
 		approvedByLabel.Name = "approvedByLabel";
 		approvedByLabel.Size = new Size(126, 28);
 		approvedByLabel.TabIndex = 25;
@@ -277,7 +276,7 @@ partial class MainForm
 		// richTextBoxFooter
 		// 
 		richTextBoxFooter.Dock = DockStyle.Bottom;
-		richTextBoxFooter.Location = new Point(0, 526);
+		richTextBoxFooter.Location = new Point(0, 615);
 		richTextBoxFooter.Name = "richTextBoxFooter";
 		richTextBoxFooter.Size = new Size(486, 26);
 		richTextBoxFooter.TabIndex = 27;
@@ -288,7 +287,7 @@ partial class MainForm
 		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 		brandingLabel.AutoSize = true;
 		brandingLabel.BackColor = Color.White;
-		brandingLabel.Location = new Point(406, 532);
+		brandingLabel.Location = new Point(406, 621);
 		brandingLabel.Name = "brandingLabel";
 		brandingLabel.Size = new Size(76, 15);
 		brandingLabel.TabIndex = 28;
@@ -302,7 +301,7 @@ partial class MainForm
 		// 
 		amexLabel.AutoSize = true;
 		amexLabel.Font = new Font("Segoe UI", 15F);
-		amexLabel.Location = new Point(281, 296);
+		amexLabel.Location = new Point(272, 360);
 		amexLabel.Name = "amexLabel";
 		amexLabel.Size = new Size(61, 28);
 		amexLabel.TabIndex = 30;
@@ -311,7 +310,7 @@ partial class MainForm
 		// amexAmountTextBox
 		// 
 		amexAmountTextBox.Font = new Font("Segoe UI", 15F);
-		amexAmountTextBox.Location = new Point(343, 293);
+		amexAmountTextBox.Location = new Point(334, 357);
 		amexAmountTextBox.Name = "amexAmountTextBox";
 		amexAmountTextBox.PlaceholderText = "Amex Amount";
 		amexAmountTextBox.RightToLeft = RightToLeft.Yes;
@@ -320,28 +319,28 @@ partial class MainForm
 		amexAmountTextBox.Text = "0";
 		amexAmountTextBox.KeyPress += textBox_KeyPress;
 		// 
-		// numberComboBox
-		// 
-		numberComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-		numberComboBox.Font = new Font("Segoe UI", 15F);
-		numberComboBox.FormattingEnabled = true;
-		numberComboBox.Location = new Point(185, 66);
-		numberComboBox.Name = "numberComboBox";
-		numberComboBox.Size = new Size(271, 36);
-		numberComboBox.TabIndex = 2;
-		numberComboBox.Visible = false;
-		// 
 		// dateChangeTimer
 		// 
 		dateChangeTimer.Enabled = true;
 		dateChangeTimer.Tick += dateChangeTimer_Tick;
 		// 
+		// loyaltyCheckBox
+		// 
+		loyaltyCheckBox.AutoSize = true;
+		loyaltyCheckBox.Font = new Font("Segoe UI", 15F);
+		loyaltyCheckBox.Location = new Point(176, 174);
+		loyaltyCheckBox.Name = "loyaltyCheckBox";
+		loyaltyCheckBox.Size = new Size(94, 32);
+		loyaltyCheckBox.TabIndex = 2;
+		loyaltyCheckBox.Text = "Loyalty";
+		loyaltyCheckBox.UseVisualStyleBackColor = true;
+		// 
 		// MainForm
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(486, 552);
-		Controls.Add(numberComboBox);
+		ClientSize = new Size(486, 641);
+		Controls.Add(loyaltyCheckBox);
 		Controls.Add(amexLabel);
 		Controls.Add(amexAmountTextBox);
 		Controls.Add(brandingLabel);
@@ -402,6 +401,6 @@ partial class MainForm
 	private System.Drawing.Printing.PrintDocument printDocumentMerchant;
 	private Label amexLabel;
 	private TextBox amexAmountTextBox;
-	private ComboBox numberComboBox;
 	private System.Windows.Forms.Timer dateChangeTimer;
+	private CheckBox loyaltyCheckBox;
 }

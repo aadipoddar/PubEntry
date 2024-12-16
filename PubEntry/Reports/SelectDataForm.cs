@@ -39,7 +39,7 @@ public partial class SelectDataForm : Form
 	{
 		if (string.IsNullOrEmpty(toTimeTextBox.Text) || string.IsNullOrEmpty(toTimeTextBox.Text)) return false;
 
-		if (fromDateTimePicker.Value > toDateTimePicker.Value) return false;
+		if (fromDateTimePicker.Value.Date > toDateTimePicker.Value.Date) return false;
 
 		if (int.Parse(fromTimeTextBox.Text) > int.Parse(toTimeTextBox.Text))
 			if (fromDateTimePicker.Value == toDateTimePicker.Value)

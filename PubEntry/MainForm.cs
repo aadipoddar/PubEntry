@@ -44,8 +44,8 @@ public partial class MainForm : Form
 		numberTextBox.ReadOnly = false;
 		numberTextBox.Visible = true;
 		nameTextBox.ReadOnly = false;
+		loyaltyCheckBox.Checked = false;
 		numberTextBox.Focus();
-		numberComboBox.Visible = false;
 	}
 	#endregion
 
@@ -58,10 +58,7 @@ public partial class MainForm : Form
 
 	private bool ValidateFields()
 	{
-		if (string.IsNullOrEmpty(numberTextBox.Text))
-			if (numberComboBox.Visible == false)
-				return false;
-
+		if (string.IsNullOrEmpty(numberTextBox.Text)) return false;
 		if (string.IsNullOrEmpty(nameTextBox.Text)) return false;
 		if (string.IsNullOrEmpty(maleTextBox.Text)) maleTextBox.Text = "0";
 		if (string.IsNullOrEmpty(femaleTextBox.Text)) femaleTextBox.Text = "0";
@@ -89,6 +86,8 @@ public partial class MainForm : Form
 			personFound = true;
 			nameTextBox.ReadOnly = true;
 			numberTextBox.ReadOnly = false;
+			if (foundPerson.Loyalty == 1) loyaltyCheckBox.Checked = true;
+			else loyaltyCheckBox.Checked = false;
 		}
 
 		else
@@ -96,53 +95,7 @@ public partial class MainForm : Form
 			personFound = false;
 			nameTextBox.ReadOnly = false;
 			nameTextBox.Text = string.Empty;
-		}
-	}
-
-	private void nameTextBox_KeyUp(object sender, KeyEventArgs e)
-	{
-		if (numberTextBox.Text != string.Empty && numberTextBox.ReadOnly == false) return;
-
-		var foundPeople = Task.Run(async () => await PersonData.GetPersonByName(nameTextBox.Text)).Result;
-		foundPerson = null;
-
-		if (foundPeople.Count > 1)
-		{
-			numberComboBox.Visible = true;
-			numberTextBox.Visible = false;
-
-			numberComboBox.DataSource = foundPeople;
-			numberComboBox.DisplayMember = "Number";
-			numberComboBox.ValueMember = "Number";
-
-			personFound = true;
-		}
-
-		else if (foundPeople.Count == 1)
-		{
-			foundPerson = foundPeople.FirstOrDefault();
-			numberComboBox.Visible = false;
-			numberTextBox.Visible = true;
-
-			personFound = true;
-		}
-
-		if (foundPerson != null)
-		{
-			nameTextBox.Text = foundPerson.Name;
-			numberTextBox.Text = foundPerson.Number;
-			personFound = true;
-			numberTextBox.ReadOnly = true;
-			nameTextBox.ReadOnly = false;
-		}
-
-		else if (foundPerson == null && foundPeople.Count == 0)
-		{
-			personFound = false;
-			numberComboBox.Visible = false;
-			numberTextBox.Visible = true;
-			numberTextBox.ReadOnly = false;
-			numberTextBox.Text = string.Empty;
+			loyaltyCheckBox.Checked = false;
 		}
 	}
 
@@ -155,15 +108,11 @@ public partial class MainForm : Form
 		}
 
 		if (!personFound)
-			await PersonData.InsertPersonTableData(nameTextBox.Text, numberTextBox.Text);
-
-		if (numberComboBox.Visible == true)
-		{
-			var foundPersonNumber = numberComboBox.SelectedValue.ToString();
-			foundPerson = Task.Run(async () => await PersonData.GetPersonByNumber(foundPersonNumber)).Result.FirstOrDefault();
-		}
+			await PersonData.InsertPersonTableData(nameTextBox.Text, numberTextBox.Text, loyaltyCheckBox.Checked == true ? 1 : 0);
 
 		else foundPerson = Task.Run(async () => await PersonData.GetPersonByNumber(numberTextBox.Text)).Result.FirstOrDefault();
+
+		await PersonData.UpdatePersonTableData(numberTextBox.Text, loyaltyCheckBox.Checked == true ? 1 : 0);
 
 		transaction.PersonId = foundPerson.Id;
 		transaction.Male = (int)Convert.ToInt64(maleTextBox.Text);
@@ -245,6 +194,7 @@ public partial class MainForm : Form
 		g.DrawString($"DT: {transaction.DateTime.ToString("dd/MM/yy HH:mm")}", font, Brushes.Black, 10, y += 25);
 		g.DrawString($"Name: {foundPerson.Name}", font, Brushes.Black, 10, y += 20);
 		g.DrawString($"Contact: {foundPerson.Number}", font, Brushes.Black, 10, y += 20);
+		if (loyaltyCheckBox.Checked) g.DrawString("Loyalty Member", font, Brushes.Black, 10, y += 20);
 		g.DrawString($"Reservation: {Task.Run(async () => await CommonData.GetById<ReservationTypeModel>("ReservationTypeTable", transaction.ReservationType)).Result.FirstOrDefault().Name}", font, Brushes.Black, 10, y += 20);
 
 		g.DrawString("--------------------------", font, Brushes.Black, 10, y += 20);
