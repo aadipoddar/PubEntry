@@ -1,15 +1,23 @@
-﻿using System.Globalization;
-
-using PubEntryLibrary.Data;
+﻿using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
+
+using SampleBrowser.Maui.Pdf.Services;
+
+#if PDFSB
+using SampleBrowser.Maui.Pdf.Services;
+#else
+#endif
+using Syncfusion.Drawing;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Grid;
-using Syncfusion.Drawing;
+
+using System.Globalization;
 using System.Reflection;
+
 using Color = Syncfusion.Drawing.Color;
-using SizeF = Syncfusion.Drawing.SizeF;
 using PointF = Syncfusion.Drawing.PointF;
+using SizeF = Syncfusion.Drawing.SizeF;
 
 namespace PubReportMobile;
 
@@ -82,10 +90,15 @@ public partial class MainPage : ContentPage
 	}
 	#endregion
 
-	#region Events
+	private void SummaryReportButtonClicked(object sender, EventArgs e)
+	{
+		Print();
+	}
+
+	#region Printing
 	RectangleF TotalPriceCellBounds = RectangleF.Empty;
 	RectangleF QuantityCellBounds = RectangleF.Empty;
-	private void SummaryReportButtonClicked(object sender, EventArgs e)
+	private void Print()
 	{
 		//Create a new PDF document.
 		PdfDocument document = new();
@@ -112,8 +125,8 @@ public partial class MainPage : ContentPage
 		//Get the font file stream from assembly. 
 		Assembly assembly = typeof(MainPage).GetTypeInfo().Assembly;
 		string basePath = "SampleBrowser.Maui.Resources.Pdf.";
-		if (BaseConfig.IsIndividualSB)
-			basePath = "SampleBrowser.Maui.Pdf.Resources.Pdf.";
+		//if (BaseConfig.IsIndividualSB)
+		//	basePath = "SampleBrowser.Maui.Pdf.Resources.Pdf.";
 
 		//Create PdfStandardFont with different size. 
 		PdfStandardFont headerFont = new PdfStandardFont(PdfFontFamily.Helvetica, 30, PdfFontStyle.Regular);
@@ -344,7 +357,7 @@ public partial class MainPage : ContentPage
 		}
 
 	}
-#endregion
+	#endregion
 
 	#region Helper Methods
 	//Create and row for the grid.

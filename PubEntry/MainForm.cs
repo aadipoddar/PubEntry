@@ -81,11 +81,9 @@ public partial class MainForm : Form
 		foundPerson = Task.Run(async () => await PersonData.GetPersonByNumber(numberTextBox.Text)).Result.FirstOrDefault();
 		if (foundPerson != null)
 		{
-			nameTextBox.Text = foundPerson.Name;
-			numberTextBox.Text = foundPerson.Number;
 			personFound = true;
+			nameTextBox.Text = foundPerson.Name;
 			nameTextBox.ReadOnly = true;
-			numberTextBox.ReadOnly = false;
 			if (foundPerson.Loyalty == 1) loyaltyCheckBox.Checked = true;
 			else loyaltyCheckBox.Checked = false;
 		}
@@ -93,8 +91,8 @@ public partial class MainForm : Form
 		else
 		{
 			personFound = false;
-			nameTextBox.ReadOnly = false;
 			nameTextBox.Text = string.Empty;
+			nameTextBox.ReadOnly = false;
 			loyaltyCheckBox.Checked = false;
 		}
 	}
@@ -108,13 +106,11 @@ public partial class MainForm : Form
 		}
 
 		if (!personFound)
-			await PersonData.InsertPersonTableData(nameTextBox.Text, numberTextBox.Text, loyaltyCheckBox.Checked == true ? 1 : 0);
+			await PersonData.InsertPersonTableData(nameTextBox.Text, numberTextBox.Text, loyaltyCheckBox.Checked ? 1 : 0);
 
-		else foundPerson = Task.Run(async () => await PersonData.GetPersonByNumber(numberTextBox.Text)).Result.FirstOrDefault();
+		await PersonData.UpdatePersonTableData(numberTextBox.Text, loyaltyCheckBox.Checked ? 1 : 0);
 
-		await PersonData.UpdatePersonTableData(numberTextBox.Text, loyaltyCheckBox.Checked == true ? 1 : 0);
-
-		transaction.PersonId = foundPerson.Id;
+		transaction.PersonId = Task.Run(async () => await PersonData.GetPersonByNumber(numberTextBox.Text)).Result.FirstOrDefault().Id;
 		transaction.Male = (int)Convert.ToInt64(maleTextBox.Text);
 		transaction.Female = (int)Convert.ToInt64(femaleTextBox.Text);
 		transaction.Cash = (int)Convert.ToInt64(cashAmountTextBox.Text);
