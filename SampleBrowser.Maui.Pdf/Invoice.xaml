@@ -43,7 +43,8 @@
 			<Button Text="Summary Report" Clicked="SummaryReportButtonClicked" />
 			<Picker x:Name="locationPicker" />
 			<Button Text="Detail Report" Clicked="DetailReportButtonClicked" />
-			<popup:SfPopup x:Name="popup" HeaderTitle="Incorrect Time or Date" Message="Incorrect Time or Date" />
+			<popup:SfPopup x:Name="errorPopup" HeaderTitle="Incorrect Time or Date" Message="Incorrect Time or Date" />
+			<popup:SfPopup x:Name="waitPopup" HeaderTitle="Please Wait" Message="Please Wait, Data is Loading..." />
 		</StackLayout>
 	</localCore:SampleView.Content>
 </localCore:SampleView>

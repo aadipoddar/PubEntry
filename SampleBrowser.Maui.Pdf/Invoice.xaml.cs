@@ -8,10 +8,13 @@ using SampleBrowser.Maui.Pdf.Services;
 using SampleBrowser.Maui.Services;
 #endif
 using Syncfusion.Drawing;
+using Syncfusion.Maui.Popup;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Grid;
 
+using System.Data;
+using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
 
@@ -24,7 +27,6 @@ namespace SampleBrowser.Maui.Pdf.Pdf
 	public partial class Invoice : SampleView
 	{
 		#region Constructor
-		LocationModel selectedLocation;
 		int selectedLocationId = 0;
 
 		public DateTime FormDate { get; set; } = DateTime.Now;
@@ -57,10 +59,7 @@ namespace SampleBrowser.Maui.Pdf.Pdf
 			locationPicker.SelectedIndexChanged += (sender, args) =>
 			{
 				if (locationPicker.SelectedIndex != -1)
-				{
-					selectedLocation = locations[locationPicker.SelectedIndex];
-					selectedLocationId = selectedLocation.Id;
-				}
+					selectedLocationId = locationPicker.SelectedIndex;
 			};
 		}
 		#endregion
@@ -80,15 +79,23 @@ namespace SampleBrowser.Maui.Pdf.Pdf
 		private void SummaryReportButtonClicked(object sender, EventArgs e)
 		{
 			if (!ValidateTime())
-				popup.Show();
-			else Print();
+				errorPopup.Show();
+			else
+			{
+				waitPopup.Show();
+				Task.Run(() => PrintSummary());
+			}
 		}
 
 		private void DetailReportButtonClicked(object sender, EventArgs e)
 		{
 			if (!ValidateTime())
-				popup.Show();
-			else Print();
+				errorPopup.Show();
+			else
+			{
+				waitPopup.Show();
+				Task.Run(() => PrintDetail());
+			}
 		}
 		#endregion
 
@@ -119,297 +126,386 @@ namespace SampleBrowser.Maui.Pdf.Pdf
 		}
 		#endregion
 
-		#region Helper Methods
-		//Create and row for the grid.
-		void AddProducts(string productId, string productName, double price, int quantity, double total, PdfGrid grid)
-		{
-			//Add a new row and set the product value to grid row cells. 
-			PdfGridRow row = grid.Rows.Add();
-			row.Cells[0].Value = productId;
-			row.Cells[1].Value = productName;
-			row.Cells[2].Value = price.ToString();
-			row.Cells[3].Value = quantity.ToString();
-			row.Cells[4].Value = total.ToString();
-		}
-		/// <summary>
-		/// Get the Total amount of purcharsed items.
-		/// </summary>
-		private float GetTotalAmount(PdfGrid grid)
-		{
-			float Total = 0f;
-			for (int i = 0; i < grid.Rows.Count; i++)
-			{
-				string cellValue = (grid.Rows[i].Cells[grid.Columns.Count - 1].Value as string)!.ToString();
-				float result = float.Parse(cellValue, System.Globalization.CultureInfo.InvariantCulture);
-				Total += result;
-			}
-			return Total;
-
-		}
-		#endregion
-
 		#region Printing
 		RectangleF TotalPriceCellBounds = RectangleF.Empty;
 		RectangleF QuantityCellBounds = RectangleF.Empty;
 
-		private void Print()
+		public PdfPageTemplateElement AddHeader(PdfDocument doc, string title, string description)
 		{
-			//Create a new PDF document.
-			PdfDocument document = new();
-			//Add a page to the document.
-			PdfPage page = document.Pages.Add();
-			//Create PDF graphics for the page.
-			PdfGraphics graphics = page.Graphics;
+			RectangleF rect = new RectangleF(0, 0, doc.Pages[0].GetClientSize().Width, 50);
 
-			//Get the page width and height
-			float pageWidth = page.GetClientSize().Width;
-			float pageHeight = page.GetClientSize().Height;
+			PdfPageTemplateElement header = new PdfPageTemplateElement(rect);
+			PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 24);
+			float doubleHeight = font.Height * 2;
+			Color activeColor = Color.FromArgb(44, 71, 120);
+			SizeF imageSize = new SizeF(110f, 35f);
 
-			//Set the header height
-			float headerHeight = 90;
-			//Create brush with light blue color. 
-			PdfColor lightBlue = Color.FromArgb(255, 91, 126, 215);
-			PdfBrush lightBlueBrush = new PdfSolidBrush(lightBlue);
-			//Create brush with dark blue color. 
-			PdfColor darkBlue = Color.FromArgb(255, 65, 104, 209);
-			PdfBrush darkBlueBrush = new PdfSolidBrush(darkBlue);
-			//Create brush with white color. 
-			PdfBrush whiteBrush = new PdfSolidBrush(Color.FromArgb(255, 255, 255, 255));
+			PdfSolidBrush brush = new PdfSolidBrush(activeColor);
 
-			//Get the font file stream from assembly. 
-			Assembly assembly = typeof(Invoice).GetTypeInfo().Assembly;
-			string basePath = "SampleBrowser.Maui.Resources.Pdf.";
-			if (BaseConfig.IsIndividualSB)
-				basePath = "SampleBrowser.Maui.Pdf.Resources.Pdf.";
+			PdfPen pen = new PdfPen(Color.DarkBlue, 3f);
+			font = new PdfStandardFont(PdfFontFamily.Helvetica, 16, PdfFontStyle.Bold);
 
-			//Create PdfStandardFont with different size. 
-			PdfStandardFont headerFont = new PdfStandardFont(PdfFontFamily.Helvetica, 30, PdfFontStyle.Regular);
-			PdfStandardFont regularFont = new PdfStandardFont(PdfFontFamily.Helvetica, 18, PdfFontStyle.Regular);
-			PdfStandardFont boldFont = new PdfStandardFont(PdfFontFamily.Helvetica, 9, PdfFontStyle.Bold);
-
-			//Create string format.
-			PdfStringFormat format = new();
+			PdfStringFormat format = new PdfStringFormat();
 			format.Alignment = PdfTextAlignment.Center;
 			format.LineAlignment = PdfVerticalAlignment.Middle;
 
-			float y = 0;
-			float x = 0;
+			header.Graphics.DrawString(title, font, brush, new RectangleF(0, 0, header.Width, header.Height), format);
+			brush = new PdfSolidBrush(Color.Gray);
+			font = new PdfStandardFont(PdfFontFamily.Helvetica, 6, PdfFontStyle.Bold);
 
-			//Set the margins of address.
-			float margin = 30;
-
-			//Set the line space.
-			float lineSpace = 10;
-
-			//Create border pen and draw the border to PDF page. 
-			PdfColor borderColor = Color.FromArgb(255, 142, 170, 219);
-			PdfPen borderPen = new(borderColor, 1f);
-			graphics.DrawRectangle(borderPen, new RectangleF(0, 0, pageWidth, pageHeight));
-
-			//Create a new PdfGrid 
-			PdfGrid grid = new();
-
-			//Add five columns to the grid.
-			grid.Columns.Add(5);
-
-			//Create the header row of the grid.
-			PdfGridRow[] headerRow = grid.Headers.Add(1);
-
-			//Set style to the header row and set value to the header cells. 
-			headerRow[0].Style.BackgroundBrush = new PdfSolidBrush(new PdfColor(68, 114, 196));
-			headerRow[0].Style.TextBrush = PdfBrushes.White;
-			headerRow[0].Cells[0].Value = "Product ID";
-			headerRow[0].Cells[0].StringFormat.Alignment = PdfTextAlignment.Center;
-			headerRow[0].Cells[1].Value = "Product Name";
-			headerRow[0].Cells[2].Value = "Price ($)";
-			headerRow[0].Cells[3].Value = "Quantity";
-			headerRow[0].Cells[4].Value = "Total ($)";
-
-			//Add products to the grid table.
-			AddProducts("CA-1098", "AWC Logo Cap", 8.99, 2, 17.98, grid);
-			AddProducts("LJ-0192", "Long-Sleeve Logo Jersey,M", 49.99, 3, 149.97, grid);
-			AddProducts("So-B909-M", "Mountain Bike Socks,M", 9.50, 2, 19, grid);
-			AddProducts("LJ-0192", "Long-Sleeve Logo Jersey,M", 49.99, 4, 199.96, grid);
-			AddProducts("FK-5136", "ML Fork", 175.49, 6, 1052.94, grid);
-			AddProducts("HL-U509", "Sports-100 Helmet,Black", 34.99, 1, 34.99, grid);
-
-			#region Header         
-
-			//Fill the header with light blue brush 
-			graphics.DrawRectangle(lightBlueBrush, new RectangleF(0, 0, pageWidth, headerHeight));
-
-			string title = "INVOICE";
-
-			//Specificy the bounds for total value. 
-			RectangleF headerTotalBounds = new(400, 0, pageWidth - 400, headerHeight);
-
-			//Measure the string size using font. 
-			SizeF textSize = headerFont.MeasureString(title);
-			graphics.DrawString(title, headerFont, whiteBrush, new RectangleF(0, 0, textSize.Width + 50, headerHeight), format);
-			//Draw rectangle in PDF page. 
-			graphics.DrawRectangle(darkBlueBrush, headerTotalBounds);
-			//Draw the toal value to PDF page. 
-			graphics.DrawString("$" + GetTotalAmount(grid).ToString(), regularFont, whiteBrush, new RectangleF(400, 0, pageWidth - 400, headerHeight + 10), format);
-			//Create font. 
-			regularFont = new PdfStandardFont(PdfFontFamily.Helvetica, 9, PdfFontStyle.Regular);
-			//Set bottom line alignment and draw the text to PDF page. 
+			format = new PdfStringFormat();
+			format.Alignment = PdfTextAlignment.Left;
 			format.LineAlignment = PdfVerticalAlignment.Bottom;
-			graphics.DrawString("Amount", regularFont, whiteBrush, new RectangleF(400, 0, pageWidth - 400, headerHeight / 2 - regularFont.Height), format);
-			#endregion
-			//Measure the string size using font. 
-			SizeF size = regularFont.MeasureString("Invoice Number: 2058557939");
-			y = headerHeight + margin;
-			x = (pageWidth - margin) - size.Width;
-			//Draw text to PDF page with provided font and location. 
-			graphics.DrawString("Invoice Number: 2058557939", regularFont, PdfBrushes.Black, new PointF(x, y));
-			//Measure the string size using font.
-			size = regularFont.MeasureString("Date :" + DateTime.Now.ToString("dddd dd, MMMM yyyy"));
-			x = (pageWidth - margin) - size.Width;
-			y += regularFont.Height + lineSpace;
-			//Draw text to PDF page with provided font and location. 
-			graphics.DrawString("Date: " + DateTime.Now.ToString("dddd dd, MMMM yyyy"), regularFont, PdfBrushes.Black, new PointF(x, y));
 
-			y = headerHeight + margin;
-			x = margin;
-			//Draw text to PDF page with provided font and location. 
-			graphics.DrawString("Bill To:", regularFont, PdfBrushes.Black, new PointF(x, y));
-			y += regularFont.Height + lineSpace;
-			graphics.DrawString("Abraham Swearegin,", regularFont, PdfBrushes.Black, new PointF(x, y));
-			y += regularFont.Height + lineSpace;
-			graphics.DrawString("United States, California, San Mateo,", regularFont, PdfBrushes.Black, new PointF(x, y));
-			y += regularFont.Height + lineSpace;
-			graphics.DrawString("9920 BridgePointe Parkway,", regularFont, PdfBrushes.Black, new PointF(x, y));
-			y += regularFont.Height + lineSpace;
-			graphics.DrawString("9365550136", regularFont, PdfBrushes.Black, new PointF(x, y));
+			header.Graphics.DrawString(description, font, brush, new RectangleF(0, 0, header.Width, header.Height - 8), format);
 
-			#region Grid
-			//Set width to grid columns. 
-			grid.Columns[0].Width = 110;
-			grid.Columns[1].Width = 150;
-			grid.Columns[2].Width = 110;
-			grid.Columns[3].Width = 70;
-			grid.Columns[4].Width = 100;
+			pen = new PdfPen(Color.DarkBlue, 0.7f);
+			header.Graphics.DrawLine(pen, 0, 0, header.Width, 0);
+			pen = new PdfPen(Color.DarkBlue, 2f);
+			header.Graphics.DrawLine(pen, 0, 03, header.Width + 3, 03);
+			pen = new PdfPen(Color.DarkBlue, 2f);
+			header.Graphics.DrawLine(pen, 0, header.Height - 3, header.Width, header.Height - 3);
+			header.Graphics.DrawLine(pen, 0, header.Height, header.Width, header.Height);
 
-			for (int i = 0; i < grid.Headers.Count; i++)
+			return header;
+		}
+
+		public PdfPageTemplateElement AddFooter(PdfDocument doc)
+		{
+			RectangleF rect = new RectangleF(0, 0, doc.Pages[0].GetClientSize().Width, 50);
+
+			PdfPageTemplateElement footer = new PdfPageTemplateElement(rect);
+			PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 7, PdfFontStyle.Bold);
+
+			PdfSolidBrush brush = new PdfSolidBrush(Color.Black);
+
+			PdfPageNumberField pageNumber = new PdfPageNumberField(font, brush);
+
+			PdfPageCountField count = new PdfPageCountField(font, brush);
+
+			PdfCompositeField compositeField = new PdfCompositeField(font, brush, "Page {0} of {1}", pageNumber, count);
+			compositeField.Bounds = footer.Bounds;
+
+			compositeField.Draw(footer.Graphics, new PointF(470, 40));
+
+			return footer;
+		}
+
+		private void PrintSummary()
+		{
+			PdfDocument pdfDocument = new PdfDocument();
+			PdfPage pdfPage = pdfDocument.Pages.Add();
+
+			pdfDocument.Template.Top = AddHeader(pdfDocument, $"{GetFormatedDate()} - {GetFormatedDate(false)}", "Summary Report");
+			pdfDocument.Template.Bottom = AddFooter(pdfDocument);
+
+			PdfLayoutFormat layoutFormat = new PdfLayoutFormat();
+			layoutFormat.Layout = PdfLayoutType.Paginate;
+			layoutFormat.Break = PdfLayoutBreakType.FitPage;
+
+			PdfStandardFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
+
+			PdfLayoutResult result = null;
+			PdfTextElement textElement;
+
+			string text;
+			float textWidth, pageWidth, textX;
+			int grandTotalMale = 0, grandTotalFemale = 0, grandTotalCash = 0, grandTotalCard = 0, grandTotalUPI = 0, grandTotalAmex = 0;
+			var locations = Task.Run(async () => await CommonData.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
+
+			foreach (var location in locations)
 			{
-				//Set height to the grid header row. 
-				grid.Headers[i].Height = 20;
-				for (int j = 0; j < grid.Columns.Count; j++)
+				int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
+				List<TransactionModel> transactions = GetTransactionsByLocationId(location.Id);
+
+				font = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
+
+				text = $"{location.Name}";
+				textWidth = font.MeasureString(text).Width;
+				pageWidth = pdfPage.GetClientSize().Width;
+				textX = (pageWidth - textWidth) / 2f;
+
+				textElement = new PdfTextElement(text, font);
+
+				if (result == null) result = textElement.Draw(pdfPage, new PointF(textX, 20), layoutFormat);
+
+				else result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 20), layoutFormat);
+
+				foreach (var transaction in transactions)
 				{
-					//Create string format for header cell. 
-					PdfStringFormat pdfStringFormat = new();
-					pdfStringFormat.LineAlignment = PdfVerticalAlignment.Middle;
-					pdfStringFormat.Alignment = PdfTextAlignment.Left;
-
-					//Set cell padding for header cell. 
-					if (j == 0 || j == 2)
-						grid.Headers[i].Cells[j].Style.CellPadding = new PdfPaddings(30, 1, 1, 1);
-					//Set string format to grid header cell. 
-					grid.Headers[i].Cells[j].StringFormat = pdfStringFormat;
-					//Set font to the grid header cell. 
-					grid.Headers[i].Cells[j].Style.Font = boldFont;
-
+					totalMale += transaction.Male;
+					totalFemale += transaction.Female;
+					totalCash += transaction.Cash;
+					totalCard += transaction.Card;
+					totalUPI += transaction.UPI;
+					totalAmex += transaction.Amex;
 				}
-				//Set value to the grid header cell. 
-				grid.Headers[0].Cells[0].Value = "Product ID";
+
+				font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+
+				textElement = new PdfTextElement($"Total People: {totalMale + totalFemale}", font);
+				result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
+
+				text = $"Total Amount: {totalCash + totalCard + totalUPI + totalAmex}";
+				textWidth = font.MeasureString(text).Width;
+				pageWidth = pdfPage.GetClientSize().Width;
+				textX = pageWidth - textWidth;
+				textElement = new PdfTextElement(text, font);
+				result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
+
+				textElement = new PdfTextElement($"Male: {totalMale}", font);
+				result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
+
+				text = $"Cash: {totalCash}";
+				textWidth = font.MeasureString(text).Width;
+				pageWidth = pdfPage.GetClientSize().Width;
+				textX = pageWidth - textWidth;
+				textElement = new PdfTextElement(text, font);
+				result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
+
+				textElement = new PdfTextElement($"Female: {totalFemale}", font);
+				result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
+
+				text = $"Card: {totalCard}";
+				textWidth = font.MeasureString(text).Width;
+				pageWidth = pdfPage.GetClientSize().Width;
+				textX = pageWidth - textWidth;
+				textElement = new PdfTextElement(text, font);
+				result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
+
+				text = $"UPI: {totalUPI}";
+				textWidth = font.MeasureString(text).Width;
+				pageWidth = pdfPage.GetClientSize().Width;
+				textX = pageWidth - textWidth;
+				textElement = new PdfTextElement(text, font);
+				result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 10), layoutFormat);
+
+				text = $"Amex: {totalAmex}";
+				textWidth = font.MeasureString(text).Width;
+				pageWidth = pdfPage.GetClientSize().Width;
+				textX = pageWidth - textWidth;
+				textElement = new PdfTextElement(text, font);
+				result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 10), layoutFormat);
+
+				grandTotalMale += totalMale;
+				grandTotalFemale += totalFemale;
+				grandTotalCash += totalCash;
+				grandTotalCard += totalCard;
+				grandTotalUPI += totalUPI;
+				grandTotalAmex += totalAmex;
 			}
-			for (int i = 0; i < grid.Rows.Count; i++)
-			{
-				//Set height to the grid row. 
-				grid.Rows[i].Height = 23;
-				for (int j = 0; j < grid.Columns.Count; j++)
-				{
-					//Create string format for grid row. 
-					PdfStringFormat pdfStringFormat = new();
-					pdfStringFormat.LineAlignment = PdfVerticalAlignment.Middle;
-					pdfStringFormat.Alignment = PdfTextAlignment.Left;
 
-					//Set cell padding for grid row cell. 
-					if (j == 0 || j == 2)
-						grid.Rows[i].Cells[j].Style.CellPadding = new PdfPaddings(30, 1, 1, 1);
+			font = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
+			text = "Grand Total";
+			textWidth = font.MeasureString(text).Width;
+			pageWidth = pdfPage.GetClientSize().Width;
+			textX = (pageWidth - textWidth) / 2f;
+			textElement = new PdfTextElement(text, font);
+			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 20), layoutFormat);
 
-					//Set string format to grid row cell. 
-					grid.Rows[i].Cells[j].StringFormat = pdfStringFormat;
-					//Set font to the grid row cell. 
-					grid.Rows[i].Cells[j].Style.Font = regularFont;
-				}
-			}
-			//Apply built-in table style to the grid. 
-			grid.ApplyBuiltinStyle(PdfGridBuiltinStyle.ListTable4Accent5);
-			//Subscribing to begin cell layout event.
-			grid.BeginCellLayout += Grid_BeginCellLayout;
-			//Draw the PDF grid to PDF page and get the layout result. 
-			PdfGridLayoutResult result = grid.Draw(page, new PointF(0, y + 40));
+			font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
 
-			//Using the layout result, continue to draw the text. 
-			y = result.Bounds.Bottom + lineSpace;
-			format = new PdfStringFormat
-			{
-				Alignment = PdfTextAlignment.Center
-			};
-			RectangleF bounds = new(QuantityCellBounds.X, y, QuantityCellBounds.Width, QuantityCellBounds.Height);
-			//Draw text to PDF page based on the layout result. 
-			page.Graphics.DrawString("Grand Total:", boldFont, PdfBrushes.Black, bounds, format);
-			//Draw the total amount value to PDF page based on the layout result. 
-			bounds = new RectangleF(TotalPriceCellBounds.X, y, TotalPriceCellBounds.Width, TotalPriceCellBounds.Height);
-			page.Graphics.DrawString("$" + GetTotalAmount(grid).ToString(), boldFont, PdfBrushes.Black, bounds);
-			#endregion
-			//Create border pen with custom dash style and draw the border to page. 
-			borderPen.DashStyle = PdfDashStyle.Custom;
-			borderPen.DashPattern = new float[] { 3, 3 };
-			graphics.DrawLine(borderPen, new PointF(0, pageHeight - 100), new PointF(pageWidth, pageHeight - 100));
+			textElement = new PdfTextElement($"Total People: {grandTotalMale + grandTotalFemale}", font);
+			result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-			//Get the image file stream from assembly.
-			Stream imageStream = assembly.GetManifestResourceStream(basePath + "AdventureWork.png");
+			text = $"Total Amount: {grandTotalCash + grandTotalCard + grandTotalUPI + grandTotalAmex}";
+			textWidth = font.MeasureString(text).Width;
+			pageWidth = pdfPage.GetClientSize().Width;
+			textX = pageWidth - textWidth;
+			textElement = new PdfTextElement(text, font);
+			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-			//Create PDF bitmap image from stream.
-			PdfBitmap bitmap = new(imageStream);
-			//Draw the image to PDF page. 
-			graphics.DrawImage(bitmap, new RectangleF(10, pageHeight - 90, 80, 80));
+			textElement = new PdfTextElement($"Male: {grandTotalMale}", font);
+			result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-			//Calculate the text position and draw the text to PDF page. 
-			y = pageHeight - 100 + margin;
-			size = regularFont.MeasureString("800 Interchange Blvd.");
-			x = pageWidth - size.Width - margin;
-			graphics.DrawString("800 Interchange Blvd.", regularFont, PdfBrushes.Black, new PointF(x, y));
+			text = $"Cash: {grandTotalCash}";
+			textWidth = font.MeasureString(text).Width;
+			pageWidth = pdfPage.GetClientSize().Width;
+			textX = pageWidth - textWidth;
+			textElement = new PdfTextElement(text, font);
+			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-			//Calculate the text position and draw the text to PDF page. 
-			y += regularFont.Height + lineSpace;
-			size = regularFont.MeasureString("Suite 2501,  Austin, TX 78721");
-			x = pageWidth - size.Width - margin;
-			graphics.DrawString("Suite 2501,  Austin, TX 78721", regularFont, PdfBrushes.Black, new PointF(x, y));
+			textElement = new PdfTextElement($"Female: {grandTotalFemale}", font);
+			result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-			//Calculate the text position and draw the text to PDF page. 
-			y += regularFont.Height + lineSpace;
-			size = regularFont.MeasureString("Any Questions? support@adventure-works.com");
-			x = pageWidth - size.Width - margin;
-			graphics.DrawString("Any Questions? support@adventure-works.com", regularFont, PdfBrushes.Black, new PointF(x, y));
+			text = $"Card: {grandTotalCard}";
+			textWidth = font.MeasureString(text).Width;
+			pageWidth = pdfPage.GetClientSize().Width;
+			textX = pageWidth - textWidth;
+			textElement = new PdfTextElement(text, font);
+			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
+
+			text = $"UPI: {grandTotalUPI}";
+			textWidth = font.MeasureString(text).Width;
+			pageWidth = pdfPage.GetClientSize().Width;
+			textX = pageWidth - textWidth;
+			textElement = new PdfTextElement(text, font);
+			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 10), layoutFormat);
+
+			text = $"Amex: {grandTotalAmex}";
+			textWidth = font.MeasureString(text).Width;
+			pageWidth = pdfPage.GetClientSize().Width;
+			textX = pageWidth - textWidth;
+			textElement = new PdfTextElement(text, font);
+			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 10), layoutFormat);
 
 			using MemoryStream ms = new();
-			//Saves the PDF to the memory stream.
-			document.Save(ms);
-			//Close the PDF document
-			document.Close(true);
+			pdfDocument.Save(ms);
+			pdfDocument.Close(true);
 			ms.Position = 0;
-			//Saves the memory stream as file.
 			SaveService saveService = new();
 			saveService.SaveAndView("Invoice.pdf", "application/pdf", ms);
 		}
 
-		private void Grid_BeginCellLayout(object sender, PdfGridBeginCellLayoutEventArgs args)
+		private void PrintDetail()
 		{
-			PdfGrid grid = sender as PdfGrid;
-			if (args.CellIndex == grid!.Columns.Count - 1)
+			PdfDocument pdfDocument = new PdfDocument();
+			PdfPage pdfPage = pdfDocument.Pages.Add();
+
+			pdfDocument.Template.Top = AddHeader(pdfDocument, $"{GetFormatedDate()} - {GetFormatedDate(false)}", "Summary Report");
+			pdfDocument.Template.Bottom = AddFooter(pdfDocument);
+
+			PdfLayoutFormat layoutFormat = new PdfLayoutFormat();
+			layoutFormat.Layout = PdfLayoutType.Paginate;
+			layoutFormat.Break = PdfLayoutBreakType.FitPage;
+
+			PdfStandardFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
+
+			PdfLayoutResult result = null;
+			PdfTextElement textElement;
+
+			int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
+			List<TransactionModel> transactions = GetTransactionsByLocationId(selectedLocationId + 1);
+
+			font = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
+
+			string text = $"{Task.Run(async () => await CommonData.GetById<LocationModel>("LocationTable", selectedLocationId + 1)).Result.FirstOrDefault().Name}";
+			float textWidth = font.MeasureString(text).Width;
+			float pageWidth = pdfPage.GetClientSize().Width;
+			float textX = (pageWidth - textWidth) / 2f;
+
+			textElement = new PdfTextElement(text, font);
+
+			if (result == null) result = textElement.Draw(pdfPage, new PointF(textX, 20), layoutFormat);
+
+			else result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 20), layoutFormat);
+
+			PdfGrid pdfGrid = new PdfGrid();
+
+			DataTable dataTable = new DataTable();
+
+			dataTable.Columns.Add("Id", typeof(int));
+			dataTable.Columns.Add("Name", typeof(string));
+			dataTable.Columns.Add("Number", typeof(string));
+			dataTable.Columns.Add("Loyalty", typeof(string));
+			dataTable.Columns.Add("Male", typeof(int));
+			dataTable.Columns.Add("Female", typeof(int));
+			dataTable.Columns.Add("Cash", typeof(int));
+			dataTable.Columns.Add("Card", typeof(int));
+			dataTable.Columns.Add("UPI", typeof(int));
+			dataTable.Columns.Add("Amex", typeof(int));
+			dataTable.Columns.Add("Entered By", typeof(string));
+			dataTable.Columns.Add("Date Time", typeof(DateTime));
+
+			int i = 1;
+			foreach (var transaction in transactions)
 			{
-				//Get the bounds of price cell in grid row. 
-				TotalPriceCellBounds = args.Bounds;
-			}
-			else if (args.CellIndex == grid.Columns.Count - 2)
-			{
-				//Get the bounds of quantity cell in grid row. 
-				QuantityCellBounds = args.Bounds;
+				var person = Task.Run(async () => await CommonData.GetById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
+				string employeeName = Task.Run(async () => await CommonData.GetById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name;
+
+				dataTable.Rows.Add(i, $"{person.Name}", $"{person.Number}", person.Loyalty == 1 ? "Y" : "N", transaction.Male, transaction.Female, transaction.Cash, transaction.Card, transaction.UPI, transaction.Amex, $"{employeeName}", $"{transaction.DateTime}");
+
+				totalMale += transaction.Male;
+				totalFemale += transaction.Female;
+				totalCash += transaction.Cash;
+				totalCard += transaction.Card;
+				totalUPI += transaction.UPI;
+				totalAmex += transaction.Amex;
+
+				i++;
 			}
 
+			pdfGrid.DataSource = dataTable;
+
+			pdfGrid.Columns[0].Width = 20;
+			pdfGrid.Columns[2].Width = 60;
+			pdfGrid.Columns[3].Width = 30;
+			pdfGrid.Columns[4].Width = 30;
+			pdfGrid.Columns[5].Width = 30;
+			pdfGrid.Columns[9].Width = 30;
+			pdfGrid.Columns[10].Width = 40;
+
+			foreach (PdfGridRow row in pdfGrid.Rows)
+			{
+				foreach (PdfGridCell cell in row.Cells)
+				{
+					PdfGridCellStyle cellStyle = new PdfGridCellStyle
+					{
+						CellPadding = new PdfPaddings(5, 5, 5, 5)
+					};
+					cell.Style = cellStyle;
+				}
+			}
+
+			pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent1);
+
+			foreach (PdfGridColumn column in pdfGrid.Columns)
+				column.Format = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
+
+			result = pdfGrid.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 20), layoutFormat);
+
+			font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
+
+			textElement = new PdfTextElement($"Total People: {totalMale + totalFemale}", font);
+			result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
+
+			text = $"Total Amount: {totalCash + totalCard + totalUPI + totalAmex}";
+			textWidth = font.MeasureString(text).Width;
+			pageWidth = pdfPage.GetClientSize().Width;
+			textX = pageWidth - textWidth;
+			textElement = new PdfTextElement(text, font);
+			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
+
+			textElement = new PdfTextElement($"Male: {totalMale}", font);
+			result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
+
+			text = $"Cash: {totalCash}";
+			textWidth = font.MeasureString(text).Width;
+			pageWidth = pdfPage.GetClientSize().Width;
+			textX = pageWidth - textWidth;
+			textElement = new PdfTextElement(text, font);
+			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
+
+			textElement = new PdfTextElement($"Female: {totalFemale}", font);
+			result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
+
+			text = $"Card: {totalCard}";
+			textWidth = font.MeasureString(text).Width;
+			pageWidth = pdfPage.GetClientSize().Width;
+			textX = pageWidth - textWidth;
+			textElement = new PdfTextElement(text, font);
+			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
+
+			text = $"UPI: {totalUPI}";
+			textWidth = font.MeasureString(text).Width;
+			pageWidth = pdfPage.GetClientSize().Width;
+			textX = pageWidth - textWidth;
+			textElement = new PdfTextElement(text, font);
+			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 10), layoutFormat);
+
+			text = $"Amex: {totalAmex}";
+			textWidth = font.MeasureString(text).Width;
+			pageWidth = pdfPage.GetClientSize().Width;
+			textX = pageWidth - textWidth;
+			textElement = new PdfTextElement(text, font);
+			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 10), layoutFormat);
+
+			using MemoryStream ms = new();
+			pdfDocument.Save(ms);
+			pdfDocument.Close(true);
+			ms.Position = 0;
+			SaveService saveService = new();
+			saveService.SaveAndView("Invoice.pdf", "application/pdf", ms);
 		}
 		#endregion
 	}
