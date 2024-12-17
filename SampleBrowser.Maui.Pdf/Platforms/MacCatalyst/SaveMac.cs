@@ -19,10 +19,10 @@ namespace SampleBrowser.Maui.Pdf.Services
             fileStream.Flush();
             fileStream.Dispose();
 
-            UIWindow? window = GetKeyWindow();
+            UIWindow window = GetKeyWindow();
             if (window != null && window.RootViewController != null)
             {
-                UIViewController? uiViewController = window.RootViewController;
+                UIViewController uiViewController = window.RootViewController;
                 if (uiViewController != null)
                 {
                     QLPreviewController qlPreview = new();
@@ -33,7 +33,7 @@ namespace SampleBrowser.Maui.Pdf.Services
             }
 
         }
-        public UIWindow? GetKeyWindow()
+        public UIWindow GetKeyWindow()
         {
             foreach (var scene in UIApplication.SharedApplication.ConnectedScenes)
             {
