@@ -126,7 +126,7 @@ public partial class MainPage : ContentPage
 		Assembly assembly = typeof(MainPage).GetTypeInfo().Assembly;
 		string basePath = "SampleBrowser.Maui.Resources.Pdf.";
 		//if (BaseConfig.IsIndividualSB)
-		//	basePath = "SampleBrowser.Maui.Pdf.Resources.Pdf.";
+			basePath = "SampleBrowser.Maui.Pdf.Resources.Pdf.";
 
 		//Create PdfStandardFont with different size. 
 		PdfStandardFont headerFont = new PdfStandardFont(PdfFontFamily.Helvetica, 30, PdfFontStyle.Regular);
@@ -387,4 +387,9 @@ public partial class MainPage : ContentPage
 
 	}
 	#endregion
+
+	private void DetailReportButtonClicked(object sender, EventArgs e)
+	{
+
+	}
 }

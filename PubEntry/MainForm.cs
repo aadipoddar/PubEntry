@@ -7,11 +7,9 @@ namespace PubEntry;
 
 public partial class MainForm : Form
 {
-
 	#region InitalLoading
 	int employeeId, locationId;
 	bool personFound = false;
-	PersonModel foundPerson = new();
 	TransactionModel transaction = new();
 
 	public MainForm(int locationId, int employeeId)
@@ -78,7 +76,7 @@ public partial class MainForm : Form
 
 	private void numberTextBox_KeyUp(object sender, KeyEventArgs e)
 	{
-		foundPerson = Task.Run(async () => await PersonData.GetPersonByNumber(numberTextBox.Text)).Result.FirstOrDefault();
+		var foundPerson = Task.Run(async () => await PersonData.GetPersonByNumber(numberTextBox.Text)).Result.FirstOrDefault();
 		if (foundPerson != null)
 		{
 			personFound = true;
@@ -188,8 +186,8 @@ public partial class MainForm : Form
 		g.DrawString($"----- {copyOf} Copy -----", font, Brushes.Black, 10, y += 40);
 		g.DrawString($"Slip No.: {Task.Run(async () => await TransactionData.GetTransactionIdbyDateAndPersonId(transaction.DateTime.ToString("yyyy-MM-dd HH:mm:ss"), transaction.PersonId)).Result}", font, Brushes.Black, 10, y += 25);
 		g.DrawString($"DT: {transaction.DateTime.ToString("dd/MM/yy HH:mm")}", font, Brushes.Black, 10, y += 25);
-		g.DrawString($"Name: {foundPerson.Name}", font, Brushes.Black, 10, y += 20);
-		g.DrawString($"Contact: {foundPerson.Number}", font, Brushes.Black, 10, y += 20);
+		g.DrawString($"Name: {Task.Run(async () => await PersonData.GetPersonByNumber(numberTextBox.Text)).Result.FirstOrDefault().Name}", font, Brushes.Black, 10, y += 20);
+		g.DrawString($"Contact: {numberTextBox.Text}", font, Brushes.Black, 10, y += 20);
 		if (loyaltyCheckBox.Checked) g.DrawString("Loyalty Member", font, Brushes.Black, 10, y += 20);
 		g.DrawString($"Reservation: {Task.Run(async () => await CommonData.GetById<ReservationTypeModel>("ReservationTypeTable", transaction.ReservationType)).Result.FirstOrDefault().Name}", font, Brushes.Black, 10, y += 20);
 
