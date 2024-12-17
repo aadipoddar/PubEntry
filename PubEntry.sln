@@ -11,6 +11,8 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupProject", "SetupProjec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubReportMobile", "PubReportMobile\PubReportMobile.csproj", "{DEDC84CF-500E-45AC-979A-9DB925E9A4EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleBrowser.Maui.Pdf", "SampleBrowser.Maui.Pdf\SampleBrowser.Maui.Pdf.csproj", "{EEE6E523-E96F-4DCE-9DF3-4D45DD6055E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,15 @@ Global
 		{DEDC84CF-500E-45AC-979A-9DB925E9A4EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DEDC84CF-500E-45AC-979A-9DB925E9A4EA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DEDC84CF-500E-45AC-979A-9DB925E9A4EA}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{EEE6E523-E96F-4DCE-9DF3-4D45DD6055E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEE6E523-E96F-4DCE-9DF3-4D45DD6055E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEE6E523-E96F-4DCE-9DF3-4D45DD6055E8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{EEE6E523-E96F-4DCE-9DF3-4D45DD6055E8}.DefaultBuild|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEE6E523-E96F-4DCE-9DF3-4D45DD6055E8}.DefaultBuild|Any CPU.Build.0 = Debug|Any CPU
+		{EEE6E523-E96F-4DCE-9DF3-4D45DD6055E8}.DefaultBuild|Any CPU.Deploy.0 = Debug|Any CPU
+		{EEE6E523-E96F-4DCE-9DF3-4D45DD6055E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEE6E523-E96F-4DCE-9DF3-4D45DD6055E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEE6E523-E96F-4DCE-9DF3-4D45DD6055E8}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

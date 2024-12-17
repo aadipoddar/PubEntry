@@ -1,9 +1,5 @@
 ﻿using QuickLook;
 
-using System;
-using System.IO;
-using System.Threading.Tasks;
-
 using UIKit;
 
 namespace SampleBrowser.Maui.Pdf.Services

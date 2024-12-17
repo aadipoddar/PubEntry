@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System.Threading.Tasks;
-
-namespace SampleBrowser.Maui.Pdf.Services
+﻿namespace SampleBrowser.Maui.Pdf.Services
 {
 	public partial class SaveService
 	{
