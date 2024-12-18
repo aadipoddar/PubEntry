@@ -13,7 +13,7 @@ public partial class LoadingScreen : Form
 	{
 		if (loadingScreen != null) return;
 		loadingScreen = new LoadingScreen();
-		Thread thread = new Thread(new ThreadStart(ShowForm));
+		Thread thread = new(new ThreadStart(ShowForm));
 		thread.IsBackground = true;
 		thread.SetApartmentState(ApartmentState.STA);
 		thread.Start();

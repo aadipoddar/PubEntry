@@ -1,27 +1,23 @@
+﻿using System.Data;
+using System.Globalization;
+
 using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
 
-using SampleBrowser.Maui.Base;
-#if PDFSB
-using SampleBrowser.Maui.Pdf.Services;
-#else
-using SampleBrowser.Maui.Services;
-#endif
+using PubReport.Services;
+
 using Syncfusion.Drawing;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 using Syncfusion.Pdf.Grid;
 
-using System.Data;
-using System.Globalization;
-
 using Color = Syncfusion.Drawing.Color;
 using PointF = Syncfusion.Drawing.PointF;
 using SizeF = Syncfusion.Drawing.SizeF;
 
-namespace SampleBrowser.Maui.Pdf.Pdf;
+namespace PubReport;
 
-public partial class Invoice : SampleView
+public partial class MainPage : ContentPage
 {
 	#region Constructor
 	int selectedLocationId = 0;
@@ -31,10 +27,9 @@ public partial class Invoice : SampleView
 	public int FromTime { get; set; } = 5;
 	public int ToTime { get; set; } = 24;
 
-	public Invoice()
+	public MainPage()
 	{
 		InitializeComponent();
-
 		LoadTextBoxes();
 	}
 
@@ -73,25 +68,25 @@ public partial class Invoice : SampleView
 	}
 
 	#region Events
-	private void SummaryReportButtonClicked(object sender, EventArgs e)
+	private async void SummaryReportButtonClicked(object sender, EventArgs e)
 	{
 		if (!ValidateTime())
-			errorPopup.Show();
+			await DisplayAlert("Alert", "Incorrect Time or Date", "OK");
 		else
 		{
-			waitPopup.Show();
-			Task.Run(() => PrintSummary());
+			await DisplayAlert("Please Wait", "Please Wait, Data is will load in Sometime, Click OK to Continue...", "OK");
+			await Task.Run(() => PrintSummary());
 		}
 	}
 
-	private void DetailReportButtonClicked(object sender, EventArgs e)
+	private async void DetailReportButtonClicked(object sender, EventArgs e)
 	{
 		if (!ValidateTime())
-			errorPopup.Show();
+			await DisplayAlert("Alert", "Incorrect Time or Date", "OK");
 		else
 		{
-			waitPopup.Show();
-			Task.Run(() => PrintDetail());
+			await DisplayAlert("Please Wait", "Please Wait, Data is will load in Sometime, Click OK to Continue...", "OK");
+			await Task.Run(() => PrintDetail());
 		}
 	}
 	#endregion
@@ -115,18 +110,15 @@ public partial class Invoice : SampleView
 			return toDatePicker.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) + $" {toTimePicker.Time}";
 	}
 
-	private List<TransactionModel> GetTransactionsByLocationId(int locationId)
+	private async Task<List<TransactionModel>> GetTransactionsByLocationId(int locationId)
 	{
 		string fromDateTime, toDateTime;
 		GetDateTime(out fromDateTime, out toDateTime);
-		return Task.Run(async () => await TransactionData.GetTransactionsByDateRangeAndLocation(fromDateTime, toDateTime, locationId)).Result;
+		return await TransactionData.GetTransactionsByDateRangeAndLocation(fromDateTime, toDateTime, locationId);
 	}
 	#endregion
 
 	#region Printing
-	RectangleF TotalPriceCellBounds = RectangleF.Empty;
-	RectangleF QuantityCellBounds = RectangleF.Empty;
-
 	public PdfPageTemplateElement AddHeader(PdfDocument doc, string title, string description)
 	{
 		RectangleF rect = new(0, 0, doc.Pages[0].GetClientSize().Width, 50);
@@ -188,7 +180,7 @@ public partial class Invoice : SampleView
 		return footer;
 	}
 
-	private void PrintSummary()
+	private async void PrintSummary()
 	{
 		PdfDocument pdfDocument = new();
 		PdfPage pdfPage = pdfDocument.Pages.Add();
@@ -213,7 +205,7 @@ public partial class Invoice : SampleView
 		foreach (var location in locations)
 		{
 			int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
-			List<TransactionModel> transactions = GetTransactionsByLocationId(location.Id);
+			List<TransactionModel> transactions = await GetTransactionsByLocationId(location.Id);
 
 			font = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
 
@@ -351,10 +343,10 @@ public partial class Invoice : SampleView
 		pdfDocument.Close(true);
 		ms.Position = 0;
 		SaveService saveService = new();
-		saveService.SaveAndView("Invoice.pdf", "application/pdf", ms);
+		saveService.SaveAndView("SummaryReport.pdf", "application/pdf", ms);
 	}
 
-	private void PrintDetail()
+	private async void PrintDetail()
 	{
 		PdfDocument pdfDocument = new();
 		PdfPage pdfPage = pdfDocument.Pages.Add();
@@ -372,11 +364,11 @@ public partial class Invoice : SampleView
 		PdfTextElement textElement;
 
 		int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
-		List<TransactionModel> transactions = GetTransactionsByLocationId(selectedLocationId + 1);
+		List<TransactionModel> transactions = await GetTransactionsByLocationId(selectedLocationId + 1);
 
 		font = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
 
-		string text = $"{Task.Run(async () => await CommonData.GetById<LocationModel>("LocationTable", selectedLocationId + 1)).Result.FirstOrDefault().Name}";
+		string text = $"{(await CommonData.GetById<LocationModel>("LocationTable", selectedLocationId + 1)).FirstOrDefault().Name}";
 		float textWidth = font.MeasureString(text).Width;
 		float pageWidth = pdfPage.GetClientSize().Width;
 		float textX = (pageWidth - textWidth) / 2f;
@@ -502,7 +494,7 @@ public partial class Invoice : SampleView
 		pdfDocument.Close(true);
 		ms.Position = 0;
 		SaveService saveService = new();
-		saveService.SaveAndView("Invoice.pdf", "application/pdf", ms);
+		saveService.SaveAndView("DetailReport.pdf", "application/pdf", ms);
 	}
 	#endregion
 }

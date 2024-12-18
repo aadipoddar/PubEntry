@@ -3,9 +3,9 @@ using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Popups;
 
-namespace SampleBrowser.Maui.Pdf.Services
-{
-	public partial class SaveService
+namespace SampleBrowser.Maui.Pdf.Services;
+
+public partial class SaveService
     {
         public async partial void SaveAndView(string filename, string contentType, MemoryStream stream)
         {
@@ -106,4 +106,3 @@ namespace SampleBrowser.Maui.Pdf.Services
             }
         }
     }
-}

@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PubReport.MainPage">
+
+	<ScrollView VerticalOptions="Center" HorizontalOptions="Center">
+		<VerticalStackLayout VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Spacing="20" Padding="10,10,10,10">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+
+				<Label Text="Form Date" Grid.Row="0" Grid.Column="0" Padding="10"/>
+				<DatePicker x:Name="fromDatePicker" Date="{Binding FormDate}" Grid.Row="0" Grid.Column="1" />
+
+				<Label Text="To Date" Grid.Row="1" Grid.Column="0" Padding="10" />
+				<DatePicker x:Name="toDatePicker" Date="{Binding ToDate}" Grid.Row="1" Grid.Column="1" />
+			</Grid>
+
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+
+				<Label Text="From Time" Grid.Row="0" Grid.Column="0" Padding="10" />
+				<TimePicker x:Name="fromTimePicker" Time="{Binding FromTime}" Format="HH" Grid.Row="0" Grid.Column="1" />
+
+				<Label Text="To Time" Grid.Row="1" Grid.Column="0" Padding="10" />
+				<TimePicker x:Name="toTimePicker" Time="{Binding ToTime}" Format="HH" Grid.Row="1" Grid.Column="1" />
+			</Grid>
+
+			<Button Text="Summary Report" Clicked="SummaryReportButtonClicked" />
+			<Picker x:Name="locationPicker" />
+			<Button Text="Detail Report" Clicked="DetailReportButtonClicked" />
+		</VerticalStackLayout>
+	</ScrollView>
+</ContentPage>

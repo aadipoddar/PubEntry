@@ -2,9 +2,9 @@ using QuickLook;
 
 using UIKit;
 
-namespace SampleBrowser.Maui.Pdf.Services
-{
-	public partial class SaveService
+namespace SampleBrowser.Maui.Pdf.Services;
+
+public partial class SaveService
     {
         public partial void SaveAndView(string filename, string contentType, MemoryStream stream)
         {
@@ -58,4 +58,3 @@ namespace SampleBrowser.Maui.Pdf.Services
             return null;
         }
     }
-}

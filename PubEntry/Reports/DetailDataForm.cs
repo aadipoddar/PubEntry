@@ -146,20 +146,20 @@ public partial class DetailDataForm : Form
 
 	public PdfPageTemplateElement AddHeader(PdfDocument doc, string title, string description)
 	{
-		RectangleF rect = new RectangleF(0, 0, doc.Pages[0].GetClientSize().Width, 50);
+		RectangleF rect = new(0, 0, doc.Pages[0].GetClientSize().Width, 50);
 
-		PdfPageTemplateElement header = new PdfPageTemplateElement(rect);
+		PdfPageTemplateElement header = new(rect);
 		PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 24);
 		float doubleHeight = font.Height * 2;
 		Color activeColor = Color.FromArgb(44, 71, 120);
-		SizeF imageSize = new SizeF(110f, 35f);
+		SizeF imageSize = new(110f, 35f);
 
-		PdfSolidBrush brush = new PdfSolidBrush(activeColor);
+		PdfSolidBrush brush = new(activeColor);
 
-		PdfPen pen = new PdfPen(Color.DarkBlue, 3f);
+		PdfPen pen = new(Color.DarkBlue, 3f);
 		font = new PdfStandardFont(PdfFontFamily.Helvetica, 16, PdfFontStyle.Bold);
 
-		PdfStringFormat format = new PdfStringFormat();
+		PdfStringFormat format = new();
 		format.Alignment = PdfTextAlignment.Center;
 		format.LineAlignment = PdfVerticalAlignment.Middle;
 
@@ -186,18 +186,18 @@ public partial class DetailDataForm : Form
 
 	public PdfPageTemplateElement AddFooter(PdfDocument doc)
 	{
-		RectangleF rect = new RectangleF(0, 0, doc.Pages[0].GetClientSize().Width, 50);
+		RectangleF rect = new(0, 0, doc.Pages[0].GetClientSize().Width, 50);
 
-		PdfPageTemplateElement footer = new PdfPageTemplateElement(rect);
+		PdfPageTemplateElement footer = new(rect);
 		PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 7, PdfFontStyle.Bold);
 
-		PdfSolidBrush brush = new PdfSolidBrush(Color.Black);
+		PdfSolidBrush brush = new(Color.Black);
 
-		PdfPageNumberField pageNumber = new PdfPageNumberField(font, brush);
+		PdfPageNumberField pageNumber = new(font, brush);
 
-		PdfPageCountField count = new PdfPageCountField(font, brush);
+		PdfPageCountField count = new(font, brush);
 
-		PdfCompositeField compositeField = new PdfCompositeField(font, brush, "Page {0} of {1}", pageNumber, count);
+		PdfCompositeField compositeField = new(font, brush, "Page {0} of {1}", pageNumber, count);
 		compositeField.Bounds = footer.Bounds;
 
 		compositeField.Draw(footer.Graphics, new PointF(470, 40));
@@ -207,17 +207,17 @@ public partial class DetailDataForm : Form
 
 	private void DetailedReport()
 	{
-		PdfDocument pdfDocument = new PdfDocument();
+		PdfDocument pdfDocument = new();
 		PdfPage pdfPage = pdfDocument.Pages.Add();
 
 		pdfDocument.Template.Top = AddHeader(pdfDocument, $"{GetFormatedDate()} - {GetFormatedDate(false)}", "Summary Report");
 		pdfDocument.Template.Bottom = AddFooter(pdfDocument);
 
-		PdfLayoutFormat layoutFormat = new PdfLayoutFormat();
+		PdfLayoutFormat layoutFormat = new();
 		layoutFormat.Layout = PdfLayoutType.Paginate;
 		layoutFormat.Break = PdfLayoutBreakType.FitPage;
 
-		PdfStandardFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
+		PdfStandardFont font = new(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
 
 		PdfLayoutResult result = null;
 		PdfTextElement textElement;
@@ -238,9 +238,9 @@ public partial class DetailDataForm : Form
 
 		else result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 20), layoutFormat);
 
-		PdfGrid pdfGrid = new PdfGrid();
+		PdfGrid pdfGrid = new();
 
-		DataTable dataTable = new DataTable();
+		DataTable dataTable = new();
 
 		dataTable.Columns.Add("Id", typeof(int));
 		dataTable.Columns.Add("Name", typeof(string));
@@ -287,7 +287,7 @@ public partial class DetailDataForm : Form
 		{
 			foreach (PdfGridCell cell in row.Cells)
 			{
-				PdfGridCellStyle cellStyle = new PdfGridCellStyle
+				PdfGridCellStyle cellStyle = new()
 				{
 					CellPadding = new PdfPaddings(5, 5, 5, 5)
 				};

@@ -3,7 +3,7 @@ using Android.OS;
 
 using Java.IO;
 
-namespace SampleBrowser.Maui.Pdf.Services;
+namespace PubReport.Services;
 
 public partial class SaveService
 {

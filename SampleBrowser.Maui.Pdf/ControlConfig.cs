@@ -1,6 +1,5 @@
-namespace SampleBrowser.Maui.Pdf
-{
+namespace SampleBrowser.Maui.Pdf;
+
     public class ControlConfig
     {
     }
-}
