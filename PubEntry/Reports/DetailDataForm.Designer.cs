@@ -50,6 +50,8 @@ partial class DetailDataForm
 		printButton = new Button();
 		excelButton = new Button();
 		refreshButton = new Button();
+		totalLoyaltyLabel = new Label();
+		label5 = new Label();
 		((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
 		SuspendLayout();
 		// 
@@ -286,11 +288,34 @@ partial class DetailDataForm
 		refreshButton.UseVisualStyleBackColor = true;
 		refreshButton.Click += refreshButton_Click;
 		// 
+		// totalLoyaltyLabel
+		// 
+		totalLoyaltyLabel.AutoSize = true;
+		totalLoyaltyLabel.Font = new Font("Segoe UI", 20F);
+		totalLoyaltyLabel.Location = new Point(188, 711);
+		totalLoyaltyLabel.Name = "totalLoyaltyLabel";
+		totalLoyaltyLabel.RightToLeft = RightToLeft.Yes;
+		totalLoyaltyLabel.Size = new Size(62, 37);
+		totalLoyaltyLabel.TabIndex = 23;
+		totalLoyaltyLabel.Text = "000";
+		// 
+		// label5
+		// 
+		label5.AutoSize = true;
+		label5.Font = new Font("Segoe UI", 20F);
+		label5.Location = new Point(12, 711);
+		label5.Name = "label5";
+		label5.Size = new Size(172, 37);
+		label5.TabIndex = 22;
+		label5.Text = "Total Loyalty:";
+		// 
 		// DetailDataForm
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(1092, 928);
+		Controls.Add(totalLoyaltyLabel);
+		Controls.Add(label5);
 		Controls.Add(refreshButton);
 		Controls.Add(excelButton);
 		Controls.Add(printButton);
@@ -345,4 +370,6 @@ partial class DetailDataForm
 	private Button printButton;
 	private Button excelButton;
 	private Button refreshButton;
+	private Label totalLoyaltyLabel;
+	private Label label5;
 }

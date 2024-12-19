@@ -16,10 +16,10 @@
 				</Grid.RowDefinitions>
 
 				<Label Text="Form Date" Grid.Row="0" Grid.Column="0" Padding="10"/>
-				<DatePicker x:Name="fromDatePicker" Date="{Binding FormDate}" Grid.Row="0" Grid.Column="1" />
+				<DatePicker x:Name="fromDatePicker" Grid.Row="0" Grid.Column="1" />
 
 				<Label Text="To Date" Grid.Row="1" Grid.Column="0" Padding="10" />
-				<DatePicker x:Name="toDatePicker" Date="{Binding ToDate}" Grid.Row="1" Grid.Column="1" />
+				<DatePicker x:Name="toDatePicker" Grid.Row="1" Grid.Column="1" />
 			</Grid>
 
 			<Grid>
@@ -33,10 +33,10 @@
 				</Grid.RowDefinitions>
 
 				<Label Text="From Time" Grid.Row="0" Grid.Column="0" Padding="10" />
-				<TimePicker x:Name="fromTimePicker" Time="{Binding FromTime}" Format="HH" Grid.Row="0" Grid.Column="1" />
+				<TimePicker x:Name="fromTimePicker" Format="HH" Grid.Row="0" Grid.Column="1" />
 
 				<Label Text="To Time" Grid.Row="1" Grid.Column="0" Padding="10" />
-				<TimePicker x:Name="toTimePicker" Time="{Binding ToTime}" Format="HH" Grid.Row="1" Grid.Column="1" />
+				<TimePicker x:Name="toTimePicker" Format="HH" Grid.Row="1" Grid.Column="1" />
 			</Grid>
 
 			<Button Text="Summary Report" Clicked="SummaryReportButtonClicked" />
