@@ -57,23 +57,23 @@ public partial class MainPage : ContentPage
 	#region Events
 	private async void SummaryReportButtonClicked(object sender, EventArgs e)
 	{
-		if (!ValidateTime())
-			await DisplayAlert("Alert", "Incorrect Time or Date", "OK");
+		if (!ValidateTime()) await DisplayAlert("Alert", "Incorrect Time or Date", "OK");
 		else
 		{
-			await DisplayAlert("Please Wait", "Please Wait, Data is will load in Sometime, Click OK to Continue...", "OK");
-			PrintPDF();
+			busyIndicator.IsVisible = true;
+			await Task.Run(() => { PrintPDF(); });
+			busyIndicator.IsVisible = false;
 		}
 	}
 
 	private async void DetailReportButtonClicked(object sender, EventArgs e)
 	{
-		if (!ValidateTime())
-			await DisplayAlert("Alert", "Incorrect Time or Date", "OK");
+		if (!ValidateTime()) await DisplayAlert("Alert", "Incorrect Time or Date", "OK");
 		else
 		{
-			await DisplayAlert("Please Wait", "Please Wait, Data is will load in Sometime, Click OK to Continue...", "OK");
-			PrintPDF(true);
+			busyIndicator.IsVisible = true;
+			await Task.Run(() => { PrintPDF(true); });
+			busyIndicator.IsVisible = false;
 		}
 	}
 	#endregion
@@ -116,7 +116,18 @@ public partial class MainPage : ContentPage
 		else saveService.SaveAndView("SummaryReport.pdf", "application/pdf", ms);
 	}
 
-	private void ExcelDetailReportButtonClicked(object sender, EventArgs e)
+	private async void ExcelDetailReportButtonClicked(object sender, EventArgs e)
+	{
+		if (!ValidateTime()) await DisplayAlert("Alert", "Incorrect Time or Date", "OK");
+		else
+		{
+			busyIndicator.IsVisible = true;
+			await Task.Run(() => { ExportToExcel();  });
+			busyIndicator.IsVisible = false;
+		}
+	}
+
+	private void ExportToExcel()
 	{
 		string dateHeader = $"{GetFormatedDate()} - {GetFormatedDate(false)}";
 		string fromTime = GetFromDateTime();
