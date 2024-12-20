@@ -134,7 +134,7 @@ public partial class MainPage : ContentPage
 		string toTime = GetToDateTime();
 
 		MemoryStream ms = Excel.ExcelExport(dateHeader, fromTime, toTime, selectedLocationId + 1);
-		SaveService saveService = new SaveService();
+		SaveService saveService = new();
 		saveService.SaveAndView("DetailedExcel.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ms);
 	}
 }

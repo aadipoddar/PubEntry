@@ -9,8 +9,8 @@ public static class Excel
 {
 	public static MemoryStream ExcelExport(string dateHeader, string fromTime, string toTime, int selectedLocationId)
 	{
-		MemoryStream ms = new MemoryStream();
-		using (ExcelEngine excelEngine = new ExcelEngine())
+		MemoryStream ms = new();
+		using (ExcelEngine excelEngine = new())
 		{
 			IApplication application = excelEngine.Excel;
 			application.DefaultVersion = ExcelVersion.Xlsx;
