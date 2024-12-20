@@ -1,7 +1,6 @@
-﻿using Syncfusion.Pdf;
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Globalization;
+
 using PubEntryLibrary.Printing;
 
 namespace PubEntry.Reports;
@@ -15,6 +14,17 @@ public partial class SelectDataForm : Form
 		InitializeComponent();
 
 		this.locationId = locationId;
+		LoadTextBoxes();
+	}
+
+	private void LoadTextBoxes()
+	{
+		if (DateTime.Now.Hour > 4)
+			fromTimeTextBox.Text = (int.Parse(DateTime.Now.Hour.ToString()) - 3).ToString();
+
+		else fromTimeTextBox.Text = int.Parse(DateTime.Now.Hour.ToString()).ToString();
+
+		toTimeTextBox.Text = int.Parse(DateTime.Now.Hour.ToString()).ToString();
 	}
 
 	#region Validation
@@ -84,14 +94,11 @@ public partial class SelectDataForm : Form
 		string fromTime = GetFromTime();
 		string toTime = GetToTime();
 
-		PdfDocument pdfDocument = Printing.PrintSummary(dateHeader, fromTime, toTime);
-
+		MemoryStream ms = Printing.PrintSummary(dateHeader, fromTime, toTime);
 		using (FileStream stream = new FileStream(Path.Combine(Path.GetTempPath(), "SummaryReport.pdf"), FileMode.Create, FileAccess.Write))
 		{
-			pdfDocument.Save(stream);
+			ms.CopyTo(stream);
 		}
-
-		pdfDocument.Close(true);
 		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\SummaryReport.pdf") { UseShellExecute = true });
 
 		LoadingScreen.CloseForm();

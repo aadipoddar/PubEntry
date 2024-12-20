@@ -77,7 +77,7 @@ public static class Printing
 		return footer;
 	}
 
-	public static PdfDocument PrintSummary(string dateHeader, string fromTime, string toTime)
+	public static MemoryStream PrintSummary(string dateHeader, string fromTime, string toTime)
 	{
 		PdfDocument pdfDocument = new();
 		PdfPage pdfPage = pdfDocument.Pages.Add();
@@ -97,11 +97,13 @@ public static class Printing
 		string text;
 		float textWidth, pageWidth, textX;
 		int grandTotalMale = 0, grandTotalFemale = 0, grandTotalCash = 0, grandTotalCard = 0, grandTotalUPI = 0, grandTotalAmex = 0;
+		int grandTotalLoyalty = 0;
 		var locations = Task.Run(async () => await CommonData.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
 
 		foreach (var location in locations)
 		{
 			int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
+			int totalLoyalty = 0;
 
 			List<TransactionModel> transactions = Task.Run(async () => await TransactionData.GetTransactionsByDateRangeAndLocation(fromTime, toTime, location.Id)).Result;
 
@@ -120,12 +122,16 @@ public static class Printing
 
 			foreach (var transaction in transactions)
 			{
+				var person = Task.Run(async () => await CommonData.GetById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
+
 				totalMale += transaction.Male;
 				totalFemale += transaction.Female;
 				totalCash += transaction.Cash;
 				totalCard += transaction.Card;
 				totalUPI += transaction.UPI;
 				totalAmex += transaction.Amex;
+
+				if (person.Loyalty == 1) totalLoyalty++;
 			}
 
 			font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
@@ -160,12 +166,15 @@ public static class Printing
 			textElement = new PdfTextElement(text, font);
 			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
+			textElement = new PdfTextElement($"Total Loyalty: {totalLoyalty}", font);
+			result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
+
 			text = $"UPI: {totalUPI}";
 			textWidth = font.MeasureString(text).Width;
 			pageWidth = pdfPage.GetClientSize().Width;
 			textX = pageWidth - textWidth;
 			textElement = new PdfTextElement(text, font);
-			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 10), layoutFormat);
+			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
 			text = $"Amex: {totalAmex}";
 			textWidth = font.MeasureString(text).Width;
@@ -180,6 +189,7 @@ public static class Printing
 			grandTotalCard += totalCard;
 			grandTotalUPI += totalUPI;
 			grandTotalAmex += totalAmex;
+			grandTotalLoyalty += totalLoyalty;
 		}
 
 		font = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
@@ -222,12 +232,15 @@ public static class Printing
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
+		textElement = new PdfTextElement($"Grand Total Loyalty: {grandTotalLoyalty}", font);
+		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
+
 		text = $"UPI: {grandTotalUPI}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
 		textElement = new PdfTextElement(text, font);
-		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 10), layoutFormat);
+		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
 		text = $"Amex: {grandTotalAmex}";
 		textWidth = font.MeasureString(text).Width;
@@ -236,10 +249,15 @@ public static class Printing
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 10), layoutFormat);
 
-		return pdfDocument;
+		MemoryStream ms = new();
+		pdfDocument.Save(ms);
+		pdfDocument.Close(true);
+		ms.Position = 0;
+
+		return ms;
 	}
 
-	public static PdfDocument PrintDetail(string dateHeader, string fromTime, string toTime, int selectedLocationId)
+	public static MemoryStream PrintDetail(string dateHeader, string fromTime, string toTime, int selectedLocationId)
 	{
 		PdfDocument pdfDocument = new();
 		PdfPage pdfPage = pdfDocument.Pages.Add();
@@ -289,6 +307,7 @@ public static class Printing
 		dataTable.Columns.Add("UPI", typeof(int));
 		dataTable.Columns.Add("Amex", typeof(int));
 		dataTable.Columns.Add("Entered By", typeof(string));
+		dataTable.Columns.Add("Approved By", typeof(string));
 		dataTable.Columns.Add("Date Time", typeof(DateTime));
 
 		int i = 1;
@@ -297,7 +316,7 @@ public static class Printing
 			var person = Task.Run(async () => await CommonData.GetById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
 			string employeeName = Task.Run(async () => await CommonData.GetById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name;
 
-			dataTable.Rows.Add(i, $"{person.Name}", $"{person.Number}", person.Loyalty == 1 ? "Y" : "N", transaction.Male, transaction.Female, transaction.Cash, transaction.Card, transaction.UPI, transaction.Amex, $"{employeeName}", $"{transaction.DateTime}");
+			dataTable.Rows.Add(i, $"{person.Name}", $"{person.Number}", person.Loyalty == 1 ? "Y" : "N", transaction.Male, transaction.Female, transaction.Cash, transaction.Card, transaction.UPI, transaction.Amex, employeeName, transaction.ApprovedBy, $"{transaction.DateTime}");
 
 			totalMale += transaction.Male;
 			totalFemale += transaction.Female;
@@ -327,7 +346,8 @@ public static class Printing
 			{
 				PdfGridCellStyle cellStyle = new()
 				{
-					CellPadding = new PdfPaddings(5, 5, 5, 5)
+					CellPadding = new PdfPaddings(5, 5, 5, 5),
+					Font = new PdfStandardFont(PdfFontFamily.Helvetica, 7)
 				};
 				cell.Style = cellStyle;
 			}
@@ -337,6 +357,8 @@ public static class Printing
 
 		foreach (PdfGridColumn column in pdfGrid.Columns)
 			column.Format = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
+
+		pdfGrid.Columns[1].Format = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
 
 		result = pdfGrid.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 20), layoutFormat);
 
@@ -389,6 +411,11 @@ public static class Printing
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 10), layoutFormat);
 
-		return pdfDocument;
+		MemoryStream ms = new();
+		pdfDocument.Save(ms);
+		pdfDocument.Close(true);
+		ms.Position = 0;
+
+		return ms;
 	}
 }

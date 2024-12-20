@@ -6,8 +6,6 @@ using PubEntryLibrary.Printing;
 
 using PubReport.Services;
 
-using Syncfusion.Pdf;
-
 
 namespace PubReport;
 
@@ -109,17 +107,23 @@ public partial class MainPage : ContentPage
 		string fromTime = GetFromDateTime();
 		string toTime = GetToDateTime();
 
-		PdfDocument pdfDocument;
-		if (isDetail) pdfDocument = Printing.PrintDetail(dateHeader, fromTime, toTime, selectedLocationId + 1);
-		else pdfDocument = Printing.PrintSummary(dateHeader, fromTime, toTime);
+		MemoryStream ms;
+		if (isDetail) ms = Printing.PrintDetail(dateHeader, fromTime, toTime, selectedLocationId + 1);
+		else ms = Printing.PrintSummary(dateHeader, fromTime, toTime);
 
-		using MemoryStream ms = new();
-		pdfDocument.Save(ms);
-		pdfDocument.Close(true);
-		ms.Position = 0;
 		SaveService saveService = new();
-
 		if (isDetail) saveService.SaveAndView("DetailReport.pdf", "application/pdf", ms);
 		else saveService.SaveAndView("SummaryReport.pdf", "application/pdf", ms);
+	}
+
+	private void ExcelDetailReportButtonClicked(object sender, EventArgs e)
+	{
+		string dateHeader = $"{GetFormatedDate()} - {GetFormatedDate(false)}";
+		string fromTime = GetFromDateTime();
+		string toTime = GetToDateTime();
+
+		MemoryStream ms = Excel.ExcelExport(dateHeader, fromTime, toTime, selectedLocationId + 1);
+		SaveService saveService = new SaveService();
+		saveService.SaveAndView("DetailedExcel.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ms);
 	}
 }

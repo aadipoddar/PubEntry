@@ -42,6 +42,7 @@
 			<Button Text="Summary Report" Clicked="SummaryReportButtonClicked" />
 			<Picker x:Name="locationPicker" />
 			<Button Text="Detail Report" Clicked="DetailReportButtonClicked" />
+			<Button Text="Excel Detail Report" Clicked="ExcelDetailReportButtonClicked" />
 		</VerticalStackLayout>
 	</ScrollView>
 </ContentPage>

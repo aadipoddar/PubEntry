@@ -3,8 +3,6 @@ using System.Globalization;
 
 using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
-
-using Syncfusion.Pdf;
 using PubEntryLibrary.Printing;
 
 namespace PubEntry.Reports;
@@ -83,6 +81,7 @@ public partial class DetailDataForm : Form
 		dataGridView.Columns.Add("UPI", "UPI");
 		dataGridView.Columns.Add("Amex", "Amex");
 		dataGridView.Columns.Add("Entered By", "Entered By");
+		dataGridView.Columns.Add("Approved By", "Approved By");
 		dataGridView.Columns.Add("Date Time", "Date Time");
 
 		dataGridView.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
@@ -111,6 +110,7 @@ public partial class DetailDataForm : Form
 					transaction.UPI,
 					transaction.Amex,
 					employeeName,
+					transaction.ApprovedBy,
 					transaction.DateTime
 				);
 
@@ -145,14 +145,11 @@ public partial class DetailDataForm : Form
 		string fromTime = GetFromDateTime();
 		string toTime = GetToDateTime();
 
-		PdfDocument pdfDocument = Printing.PrintDetail(dateHeader, fromTime, toTime, locationId);
-
+		MemoryStream ms = Printing.PrintDetail(dateHeader, fromTime, toTime, locationId);
 		using (FileStream stream = new FileStream(Path.Combine(Path.GetTempPath(), "DetailedReport.pdf"), FileMode.Create, FileAccess.Write))
 		{
-			pdfDocument.Save(stream);
+			ms.WriteTo(stream);
 		}
-
-		pdfDocument.Close(true);
 		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\DetailedReport.pdf") { UseShellExecute = true });
 
 		LoadingScreen.CloseForm();
@@ -162,51 +159,19 @@ public partial class DetailDataForm : Form
 	private void excelButton_Click(object sender, EventArgs e)
 	{
 		LoadingScreen.ShowSplashScreen();
+
+		string dateHeader = $"{GetFormatedDate()} - {GetFormatedDate(false)}";
 		string fromTime = GetFromDateTime();
 		string toTime = GetToDateTime();
-		ExportToExcel(fromTime, toTime);
-		LoadingScreen.CloseForm();
-	}
 
-	private void ExportToExcel(string fromTime, string toTime)
-	{
-		List<string> lines = new();
-		lines.Add("Id, Name, Number, Loyalty, Male, Female, Cash, Card, UPI, Amex, Entered By, Approved By,Date Time");
-
-		List<TransactionModel> transactions = Task.Run(async () => await TransactionData.GetTransactionsByDateRangeAndLocation(fromTime, toTime, locationId)).Result;
-		int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
-		int totalLoyalty = 0;
-		int i = 1;
-
-		foreach (var transaction in transactions)
+		MemoryStream ms = Excel.ExcelExport(dateHeader, fromTime, toTime, locationId);
+		using (FileStream stream = new FileStream(Path.Combine(Path.GetTempPath(), "DetailedReportExcel.xlsx"), FileMode.Create, FileAccess.Write))
 		{
-			var person = Task.Run(async () => await CommonData.GetById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
-			string employeeName = Task.Run(async () => await CommonData.GetById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name;
-
-			var loyalty = person.Loyalty == 1 ? "Y" : "N";
-			lines.Add($"{i}, {person.Name}, {person.Number}, {loyalty}, {transaction.Male}, {transaction.Female}, {transaction.Cash}, {transaction.Card}, {transaction.UPI}, {transaction.Amex}, {employeeName}, {transaction.ApprovedBy},{transaction.DateTime}");
-
-			totalMale += transaction.Male;
-			totalFemale += transaction.Female;
-			totalCash += transaction.Cash;
-			totalCard += transaction.Card;
-			totalUPI += transaction.UPI;
-			totalAmex += transaction.Amex;
-
-			if (person.Loyalty == 1) totalLoyalty++;
-
-			i++;
+			ms.WriteTo(stream);
 		}
+		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\DetailedReportExcel.xlsx") { UseShellExecute = true });
 
-		lines.Add("");
-		lines.Add($",Total People = , {totalMale + totalFemale}, , , , , , Total Amount = , {totalCash + totalCard + totalUPI + totalAmex}");
-		lines.Add($",Male = , {totalMale}, , , , , , Cash = , {totalCash}");
-		lines.Add($",Female = , {totalFemale}, , , , , , Card = , {totalCard}");
-		lines.Add($",Total Loyalty = , {totalLoyalty}, , , , , , UPI = , {totalUPI}");
-		lines.Add($", , , , , , , , Amex = , {totalAmex}");
-
-		File.WriteAllLinesAsync($"{Path.GetTempPath()}\\Table.csv", lines);
-		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\Table.csv") { UseShellExecute = true });
+		LoadingScreen.CloseForm();
 	}
 	#endregion
 }
