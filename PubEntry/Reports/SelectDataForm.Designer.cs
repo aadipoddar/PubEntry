@@ -40,6 +40,7 @@ partial class SelectDataForm
 		detailReportButton = new Button();
 		brandingLabel = new Label();
 		richTextBoxFooter = new RichTextBox();
+		versionLabel = new Label();
 		SuspendLayout();
 		// 
 		// toDateLabel
@@ -157,7 +158,7 @@ partial class SelectDataForm
 		brandingLabel.BackColor = Color.White;
 		brandingLabel.Location = new Point(313, 334);
 		brandingLabel.Name = "brandingLabel";
-		brandingLabel.Size = new Size(75, 15);
+		brandingLabel.Size = new Size(76, 15);
 		brandingLabel.TabIndex = 36;
 		brandingLabel.Text = "© AADISOFT";
 		// 
@@ -170,11 +171,23 @@ partial class SelectDataForm
 		richTextBoxFooter.TabIndex = 35;
 		richTextBoxFooter.Text = "";
 		// 
+		// versionLabel
+		// 
+		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+		versionLabel.AutoSize = true;
+		versionLabel.BackColor = Color.White;
+		versionLabel.Location = new Point(5, 334);
+		versionLabel.Name = "versionLabel";
+		versionLabel.Size = new Size(84, 15);
+		versionLabel.TabIndex = 37;
+		versionLabel.Text = "Version: 1.9.3.0";
+		// 
 		// SelectDataForm
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(392, 353);
+		Controls.Add(versionLabel);
 		Controls.Add(brandingLabel);
 		Controls.Add(richTextBoxFooter);
 		Controls.Add(detailReportButton);
@@ -208,4 +221,5 @@ partial class SelectDataForm
 	private Button detailReportButton;
 	private Label brandingLabel;
 	private RichTextBox richTextBoxFooter;
+	private Label versionLabel;
 }

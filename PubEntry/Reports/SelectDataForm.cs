@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
+using System.Reflection;
 
 using PubEntryLibrary.Printing;
 
@@ -25,6 +26,7 @@ public partial class SelectDataForm : Form
 		else fromTimeTextBox.Text = int.Parse(DateTime.Now.Hour.ToString()).ToString();
 
 		toTimeTextBox.Text = int.Parse(DateTime.Now.Hour.ToString()).ToString();
+		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
 	}
 
 	#region Validation
