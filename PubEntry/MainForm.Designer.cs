@@ -57,7 +57,7 @@ partial class MainForm
 		amexAmountTextBox = new TextBox();
 		dateChangeTimer = new System.Windows.Forms.Timer(components);
 		loyaltyCheckBox = new CheckBox();
-		label1 = new Label();
+		versionLabel = new Label();
 		SuspendLayout();
 		// 
 		// nameTextBox
@@ -336,23 +336,23 @@ partial class MainForm
 		loyaltyCheckBox.Text = "Loyalty";
 		loyaltyCheckBox.UseVisualStyleBackColor = true;
 		// 
-		// label1
+		// versionLabel
 		// 
-		label1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-		label1.AutoSize = true;
-		label1.BackColor = Color.White;
-		label1.Location = new Point(5, 621);
-		label1.Name = "label1";
-		label1.Size = new Size(46, 15);
-		label1.TabIndex = 31;
-		label1.Text = "v1.9.1.0";
+		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+		versionLabel.AutoSize = true;
+		versionLabel.BackColor = Color.White;
+		versionLabel.Location = new Point(5, 621);
+		versionLabel.Name = "versionLabel";
+		versionLabel.Size = new Size(46, 15);
+		versionLabel.TabIndex = 31;
+		versionLabel.Text = "v1.9.3.0";
 		// 
 		// MainForm
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(486, 641);
-		Controls.Add(label1);
+		Controls.Add(versionLabel);
 		Controls.Add(loyaltyCheckBox);
 		Controls.Add(amexLabel);
 		Controls.Add(amexAmountTextBox);
@@ -416,5 +416,5 @@ partial class MainForm
 	private TextBox amexAmountTextBox;
 	private System.Windows.Forms.Timer dateChangeTimer;
 	private CheckBox loyaltyCheckBox;
-	private Label label1;
+	private Label versionLabel;
 }
