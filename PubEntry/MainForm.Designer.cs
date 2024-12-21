@@ -343,9 +343,9 @@ partial class MainForm
 		versionLabel.BackColor = Color.White;
 		versionLabel.Location = new Point(5, 621);
 		versionLabel.Name = "versionLabel";
-		versionLabel.Size = new Size(46, 15);
+		versionLabel.Size = new Size(84, 15);
 		versionLabel.TabIndex = 31;
-		versionLabel.Text = "v1.9.3.0";
+		versionLabel.Text = "Version: 1.9.3.0";
 		// 
 		// MainForm
 		// 

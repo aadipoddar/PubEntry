@@ -2,4 +2,4 @@
 
 ## To be Used at the Entry Gate of Discos or Pubs
 
-Latest Version = 1.9.3.0
+Latest Version = 1.9.4.0

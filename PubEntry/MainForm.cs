@@ -1,4 +1,5 @@
 ﻿using System.Drawing.Printing;
+using System.Reflection;
 
 using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
@@ -27,6 +28,7 @@ public partial class MainForm : Form
 		reservationComboBox.DataSource = null;
 		reservationComboBox.DataSource = (await CommonData.LoadTableData<ReservationTypeModel>("ReservationTypeTable")).ToList();
 		reservationComboBox.DisplayMember = "Name";
+		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
 	}
 
 	private void ClearForm()

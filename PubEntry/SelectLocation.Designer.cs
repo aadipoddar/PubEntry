@@ -36,6 +36,7 @@ partial class SelectLocation
 		richTextBoxFooter = new RichTextBox();
 		newEmployeeButton = new Button();
 		reportsButton = new Button();
+		versionLabel = new Label();
 		SuspendLayout();
 		// 
 		// locationComboBox
@@ -123,11 +124,23 @@ partial class SelectLocation
 		reportsButton.UseVisualStyleBackColor = true;
 		reportsButton.Click += reportsButton_Click;
 		// 
+		// versionLabel
+		// 
+		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+		versionLabel.AutoSize = true;
+		versionLabel.BackColor = Color.White;
+		versionLabel.Location = new Point(2, 428);
+		versionLabel.Name = "versionLabel";
+		versionLabel.Size = new Size(84, 15);
+		versionLabel.TabIndex = 32;
+		versionLabel.Text = "Version: 1.9.3.0";
+		// 
 		// SelectLocation
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(336, 448);
+		Controls.Add(versionLabel);
 		Controls.Add(reportsButton);
 		Controls.Add(newEmployeeButton);
 		Controls.Add(brandingLabel);
@@ -154,4 +167,5 @@ partial class SelectLocation
 	private RichTextBox richTextBoxFooter;
 	private Button newEmployeeButton;
 	private Button reportsButton;
+	private Label versionLabel;
 }

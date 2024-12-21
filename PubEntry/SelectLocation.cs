@@ -1,4 +1,6 @@
-﻿using PubEntry.Reports;
+﻿using System.Reflection;
+
+using PubEntry.Reports;
 
 using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
@@ -13,12 +15,12 @@ public partial class SelectLocation : Form
 		InitializeComponent();
 	}
 
-	private void SelectLocation_Load(object sender, EventArgs e)
+	private async void SelectLocation_Load(object sender, EventArgs e)
 	{
 		LoadingScreen.ShowSplashScreen();
 		LoadComboBox();
 		LoadingScreen.CloseForm();
-		UpdateManager.CheckForUpdates();
+		await UpdateManager.CheckForUpdates();
 	}
 
 	public void LoadComboBox()
@@ -39,6 +41,8 @@ public partial class SelectLocation : Form
 		locationComboBox.DataSource = locations;
 		locationComboBox.ValueMember = "Id";
 		locationComboBox.DisplayMember = "Name";
+
+		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
 
 		LoadEmployeeComboBox();
 	}
