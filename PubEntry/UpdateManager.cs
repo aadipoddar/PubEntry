@@ -19,7 +19,19 @@ public static class UpdateManager
 
 	private static void UpdateApp(string filePath)
 	{
-		Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
+		string batchFilePath = Path.Combine(Path.GetTempPath(), "update.bat");
+
+		string batchScript = $@"
+@echo off
+echo Uninstalling program...
+msiexec /x {{477557B4-2908-4106-B360-D2D114F02452}} /qb
+
+echo Starting setup file...
+start """" ""{filePath}""
+";
+
+		File.WriteAllText(batchFilePath, batchScript);
+		Process.Start(new ProcessStartInfo(batchFilePath) { UseShellExecute = true });
 		Environment.Exit(0);
 	}
 
@@ -33,6 +45,7 @@ public static class UpdateManager
 		using (Stream streamToReadFrom = await response.Content.ReadAsStreamAsync())
 		using (Stream streamToWriteTo = File.Open(filePath, FileMode.Create))
 			await streamToReadFrom.CopyToAsync(streamToWriteTo);
+
 
 		UpdateApp(filePath);
 	}
