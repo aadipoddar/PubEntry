@@ -18,7 +18,7 @@ public partial class SelectLocation : Form
 		LoadingScreen.ShowSplashScreen();
 		LoadComboBox();
 		LoadingScreen.CloseForm();
-		Focus();
+		UpdateManager.CheckForUpdates();
 	}
 
 	public void LoadComboBox()
