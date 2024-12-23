@@ -17,10 +17,19 @@ public partial class SelectLocation : Form
 
 	private async void SelectLocation_Load(object sender, EventArgs e)
 	{
+		await UpdateCheck();
 		LoadingScreen.ShowSplashScreen();
 		LoadComboBox();
 		LoadingScreen.CloseForm();
-		await UpdateManager.CheckForUpdates();
+	}
+
+	private async Task UpdateCheck()
+	{
+		bool isUpdateAvailable = await AadiSoftUpdater.AadiSoftUpdater.CheckForUpdates("aadipoddar", "PubEntry", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+
+		if (isUpdateAvailable)
+			if (MessageBox.Show("New Version Available. Do you want to update?", "Update Available", MessageBoxButtons.YesNo) == DialogResult.Yes)
+				await AadiSoftUpdater.AadiSoftUpdater.UpdateApp("aadipoddar", "PubEntry", "PubEntrySetup", "477557B4-2908-4106-B360-D2D114F02452");
 	}
 
 	public void LoadComboBox()
