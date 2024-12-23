@@ -34,10 +34,10 @@
 				</Grid.RowDefinitions>
 
 				<Label Text="From Time" Grid.Row="0" Grid.Column="0" Padding="10" />
-				<TimePicker x:Name="fromTimePicker" Format="HH" Grid.Row="0" Grid.Column="1" />
+				<TimePicker x:Name="fromTimePicker" Format="HH" Grid.Row="0" Grid.Column="1" Time="17:00:00" />
 
 				<Label Text="To Time" Grid.Row="1" Grid.Column="0" Padding="10" />
-				<TimePicker x:Name="toTimePicker" Format="HH" Grid.Row="1" Grid.Column="1" />
+				<TimePicker x:Name="toTimePicker" Format="HH" Grid.Row="1" Grid.Column="1" Time="05:00:00" />
 			</Grid>
 
 			<Button Text="Summary Report" Clicked="SummaryReportButtonClicked" />

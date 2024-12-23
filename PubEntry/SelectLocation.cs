@@ -32,9 +32,9 @@ public partial class SelectLocation : Form
 		{
 			locations = Task.Run(async () => await CommonData.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
 		}
-		catch (Exception)
+		catch (Exception ex)
 		{
-			MessageBox.Show("DateBase is Starting Please Try after SomeTime");
+			MessageBox.Show(ex.Message, "Database Error");
 			Application.Exit();
 		}
 
@@ -58,9 +58,9 @@ public partial class SelectLocation : Form
 		{
 			employees = (await EmployeeData.LoadActiveEmployeeByLocation((int)locationComboBox.SelectedValue)).ToList();
 		}
-		catch (Exception)
+		catch (Exception ex)
 		{
-			MessageBox.Show("DateBase is Starting Please Try after SomeTime");
+			MessageBox.Show(ex.Message, "Database Error");
 			Application.Exit();
 		}
 

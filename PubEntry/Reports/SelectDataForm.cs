@@ -20,12 +20,17 @@ public partial class SelectDataForm : Form
 
 	private void LoadTextBoxes()
 	{
-		if (DateTime.Now.Hour > 4)
-			fromTimeTextBox.Text = (int.Parse(DateTime.Now.Hour.ToString()) - 3).ToString();
+		if (DateTime.Now.Hour >= 17)
+		{
+			toDateTimePicker.Value = DateTime.Now.Date.AddDays(1);
+			fromDateTimePicker.Value = DateTime.Now.Date;
+		}
+		else
+		{
+			toDateTimePicker.Value = DateTime.Now.Date;
+			fromDateTimePicker.Value = DateTime.Now.Date.AddDays(-1);
+		}
 
-		else fromTimeTextBox.Text = int.Parse(DateTime.Now.Hour.ToString()).ToString();
-
-		toTimeTextBox.Text = int.Parse(DateTime.Now.Hour.ToString()).ToString();
 		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
 	}
 

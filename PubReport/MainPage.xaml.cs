@@ -22,12 +22,16 @@ public partial class MainPage : ContentPage
 
 	private void LoadTextBoxes()
 	{
-		if (DateTime.Now.Hour > 4)
-			fromTimePicker.Time = TimeSpan.FromHours(int.Parse(DateTime.Now.Hour.ToString()) - 3);
-
-		else fromTimePicker.Time = TimeSpan.FromHours(int.Parse(DateTime.Now.Hour.ToString()));
-
-		toTimePicker.Time = TimeSpan.FromHours(int.Parse(DateTime.Now.Hour.ToString()));
+		if (DateTime.Now.Hour >= 17)
+		{
+			toDatePicker.Date = DateTime.Now.Date.AddDays(1);
+			fromDatePicker.Date = DateTime.Now.Date;
+		}
+		else
+		{
+			toDatePicker.Date = DateTime.Now.Date;
+			fromDatePicker.Date = DateTime.Now.Date.AddDays(-1);
+		}
 
 		var locations = Task.Run(async () => await CommonData.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
 
@@ -122,7 +126,7 @@ public partial class MainPage : ContentPage
 		else
 		{
 			busyIndicator.IsVisible = true;
-			await Task.Run(() => { ExportToExcel();  });
+			await Task.Run(() => { ExportToExcel(); });
 			busyIndicator.IsVisible = false;
 		}
 	}

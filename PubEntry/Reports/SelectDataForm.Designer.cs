@@ -83,7 +83,7 @@ partial class SelectDataForm
 		toTimeTextBox.RightToLeft = RightToLeft.Yes;
 		toTimeTextBox.Size = new Size(53, 39);
 		toTimeTextBox.TabIndex = 28;
-		toTimeTextBox.Text = "1";
+		toTimeTextBox.Text = "5";
 		toTimeTextBox.TextChanged += timeTextBox_TextChanged;
 		toTimeTextBox.KeyPress += timeTextBox_KeyPress;
 		// 
@@ -97,7 +97,7 @@ partial class SelectDataForm
 		fromTimeTextBox.RightToLeft = RightToLeft.Yes;
 		fromTimeTextBox.Size = new Size(53, 39);
 		fromTimeTextBox.TabIndex = 26;
-		fromTimeTextBox.Text = "1";
+		fromTimeTextBox.Text = "17";
 		fromTimeTextBox.TextChanged += timeTextBox_TextChanged;
 		fromTimeTextBox.KeyPress += timeTextBox_KeyPress;
 		// 
