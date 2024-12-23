@@ -126,11 +126,12 @@ public partial class MainForm : Form
 		await TransactionData.InsertTransactionTableData(transaction);
 
 		PrintDialog printDialog = new();
-		printDialog.Document = printDocumentCustomer;
-		printDocumentCustomer.Print();
-
 		printDialog.Document = printDocumentMerchant;
 		printDocumentMerchant.Print();
+
+		printDialog = new();
+		printDialog.Document = printDocumentCustomer;
+		printDocumentCustomer.Print();
 
 		ClearForm();
 	}
