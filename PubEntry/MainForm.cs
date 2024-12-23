@@ -225,12 +225,12 @@ public partial class MainForm : Form
 
 	private void printDocumentCustomer_PrintPage(object sender, PrintPageEventArgs e)
 	{
-		DrawGraphics(e, "Customer");
+		DrawGraphics(e, "Merchant");
 	}
 
 	private void printDocumentMerchant_PrintPage(object sender, PrintPageEventArgs e)
 	{
-		DrawGraphics(e, "Merchant");
+		DrawGraphics(e, "Customer");
 	}
 	#endregion
 }
