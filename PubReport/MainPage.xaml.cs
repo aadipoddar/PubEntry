@@ -112,8 +112,8 @@ public partial class MainPage : ContentPage
 		string toTime = GetToDateTime();
 
 		MemoryStream ms;
-		if (isDetail) ms = Printing.PrintDetail(dateHeader, fromTime, toTime, selectedLocationId + 1);
-		else ms = Printing.PrintSummary(dateHeader, fromTime, toTime);
+		if (isDetail) ms = PrintReport.PrintDetail(dateHeader, fromTime, toTime, selectedLocationId + 1);
+		else ms = PrintReport.PrintSummary(dateHeader, fromTime, toTime);
 
 		SaveService saveService = new();
 		if (isDetail) saveService.SaveAndView("DetailReport.pdf", "application/pdf", ms);

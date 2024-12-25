@@ -1,6 +1,6 @@
 ﻿namespace PubEntry;
 
-partial class SelectLocation
+partial class Dashboard
 {
 	/// <summary>
 	/// Required designer variable.
@@ -34,9 +34,10 @@ partial class SelectLocation
 		passwordTextBox = new TextBox();
 		brandingLabel = new Label();
 		richTextBoxFooter = new RichTextBox();
-		newEmployeeButton = new Button();
+		manageEmployeeButton = new Button();
 		reportsButton = new Button();
 		versionLabel = new Label();
+		manageLocationButton = new Button();
 		SuspendLayout();
 		// 
 		// locationComboBox
@@ -87,7 +88,7 @@ partial class SelectLocation
 		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 		brandingLabel.AutoSize = true;
 		brandingLabel.BackColor = Color.White;
-		brandingLabel.Location = new Point(257, 428);
+		brandingLabel.Location = new Point(257, 492);
 		brandingLabel.Name = "brandingLabel";
 		brandingLabel.Size = new Size(76, 15);
 		brandingLabel.TabIndex = 30;
@@ -96,22 +97,22 @@ partial class SelectLocation
 		// richTextBoxFooter
 		// 
 		richTextBoxFooter.Dock = DockStyle.Bottom;
-		richTextBoxFooter.Location = new Point(0, 422);
+		richTextBoxFooter.Location = new Point(0, 486);
 		richTextBoxFooter.Name = "richTextBoxFooter";
 		richTextBoxFooter.Size = new Size(336, 26);
 		richTextBoxFooter.TabIndex = 29;
 		richTextBoxFooter.Text = "";
 		// 
-		// newEmployeeButton
+		// manageEmployeeButton
 		// 
-		newEmployeeButton.Font = new Font("Segoe UI", 15F);
-		newEmployeeButton.Location = new Point(70, 355);
-		newEmployeeButton.Name = "newEmployeeButton";
-		newEmployeeButton.Size = new Size(188, 38);
-		newEmployeeButton.TabIndex = 15;
-		newEmployeeButton.Text = "New Employee";
-		newEmployeeButton.UseVisualStyleBackColor = true;
-		newEmployeeButton.Click += newEmployeeButton_Click;
+		manageEmployeeButton.Font = new Font("Segoe UI", 15F);
+		manageEmployeeButton.Location = new Point(56, 389);
+		manageEmployeeButton.Name = "manageEmployeeButton";
+		manageEmployeeButton.Size = new Size(213, 38);
+		manageEmployeeButton.TabIndex = 15;
+		manageEmployeeButton.Text = "Manage Employees";
+		manageEmployeeButton.UseVisualStyleBackColor = true;
+		manageEmployeeButton.Click += manageEmployeeButton_Click;
 		// 
 		// reportsButton
 		// 
@@ -129,29 +130,41 @@ partial class SelectLocation
 		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 		versionLabel.AutoSize = true;
 		versionLabel.BackColor = Color.White;
-		versionLabel.Location = new Point(2, 428);
+		versionLabel.Location = new Point(2, 492);
 		versionLabel.Name = "versionLabel";
 		versionLabel.Size = new Size(84, 15);
 		versionLabel.TabIndex = 32;
 		versionLabel.Text = "Version: 1.9.3.0";
 		// 
-		// SelectLocation
+		// manageLocationButton
+		// 
+		manageLocationButton.Font = new Font("Segoe UI", 15F);
+		manageLocationButton.Location = new Point(56, 433);
+		manageLocationButton.Name = "manageLocationButton";
+		manageLocationButton.Size = new Size(213, 38);
+		manageLocationButton.TabIndex = 33;
+		manageLocationButton.Text = "Manage Locations";
+		manageLocationButton.UseVisualStyleBackColor = true;
+		manageLocationButton.Click += manageLocationButton_Click;
+		// 
+		// Dashboard
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(336, 448);
+		ClientSize = new Size(336, 512);
+		Controls.Add(manageLocationButton);
 		Controls.Add(versionLabel);
 		Controls.Add(reportsButton);
-		Controls.Add(newEmployeeButton);
+		Controls.Add(manageEmployeeButton);
 		Controls.Add(brandingLabel);
 		Controls.Add(richTextBoxFooter);
 		Controls.Add(passwordTextBox);
 		Controls.Add(goButton);
 		Controls.Add(employeeComboBox);
 		Controls.Add(locationComboBox);
-		Name = "SelectLocation";
+		Name = "Dashboard";
 		StartPosition = FormStartPosition.CenterScreen;
-		Text = "Select Location";
+		Text = "Dashboard";
 		Load += SelectLocation_Load;
 		ResumeLayout(false);
 		PerformLayout();
@@ -165,7 +178,8 @@ partial class SelectLocation
 	private TextBox passwordTextBox;
 	private Label brandingLabel;
 	private RichTextBox richTextBoxFooter;
-	private Button newEmployeeButton;
+	private Button manageEmployeeButton;
 	private Button reportsButton;
 	private Label versionLabel;
+	private Button manageLocationButton;
 }

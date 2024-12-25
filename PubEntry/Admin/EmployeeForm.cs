@@ -1,7 +1,7 @@
 ﻿using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
 
-namespace PubEntry;
+namespace PubEntry.Admin;
 
 public partial class EmployeeForm : Form
 {
@@ -47,6 +47,7 @@ public partial class EmployeeForm : Form
 		passwordTextBox.Text = string.Empty;
 		locationComboBox.SelectedIndex = 0;
 		statusComboBox.SelectedIndex = 0;
+		employeeComboBox.SelectedIndex = 0;
 	}
 
 	private async void saveButton_Click(object sender, EventArgs e)
@@ -76,7 +77,6 @@ public partial class EmployeeForm : Form
 		}
 
 		ClearForm();
-		employeeComboBox.SelectedIndex = 0;
 	}
 
 	private void employeeComboBox_SelectedIndexChanged(object sender, EventArgs e)

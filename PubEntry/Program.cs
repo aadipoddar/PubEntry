@@ -14,6 +14,6 @@ internal static class Program
 		// see https://aka.ms/applicationconfiguration.
 		ApplicationConfiguration.Initialize();
 		Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Secrets.SyncfusionLicense);
-		Application.Run(new SelectLocation());
+		Application.Run(new Dashboard());
 	}
 }

@@ -1,4 +1,4 @@
-﻿namespace PubEntry;
+﻿namespace PubEntry.Admin;
 
 partial class EmployeeForm
 {

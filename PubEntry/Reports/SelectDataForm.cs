@@ -101,7 +101,7 @@ public partial class SelectDataForm : Form
 		string fromTime = GetFromTime();
 		string toTime = GetToTime();
 
-		MemoryStream ms = Printing.PrintSummary(dateHeader, fromTime, toTime);
+		MemoryStream ms = PrintReport.PrintSummary(dateHeader, fromTime, toTime);
 		using (FileStream stream = new FileStream(Path.Combine(Path.GetTempPath(), "SummaryReport.pdf"), FileMode.Create, FileAccess.Write))
 		{
 			ms.CopyTo(stream);

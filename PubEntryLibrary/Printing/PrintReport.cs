@@ -14,7 +14,7 @@ using SizeF = Syncfusion.Drawing.SizeF;
 
 namespace PubEntryLibrary.Printing;
 
-public static class Printing
+public static class PrintReport
 {
 	public static PdfPageTemplateElement AddHeader(PdfDocument doc, string title, string description)
 	{

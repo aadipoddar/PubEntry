@@ -1,6 +1,6 @@
 ﻿namespace PubEntry;
 
-partial class MainForm
+partial class EntryForm
 {
 	/// <summary>
 	/// Required designer variable.
@@ -347,7 +347,7 @@ partial class MainForm
 		versionLabel.TabIndex = 31;
 		versionLabel.Text = "Version: 1.9.3.0";
 		// 
-		// MainForm
+		// EntryForm
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
@@ -378,10 +378,9 @@ partial class MainForm
 		Controls.Add(numberTextBox);
 		Controls.Add(nameLabel);
 		Controls.Add(nameTextBox);
-		Name = "MainForm";
+		Name = "EntryForm";
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "Dashboard";
-		FormClosed += MainForm_FormClosed;
 		ResumeLayout(false);
 		PerformLayout();
 	}

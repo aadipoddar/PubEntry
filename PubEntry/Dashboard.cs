@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 
+using PubEntry.Admin;
 using PubEntry.Reports;
 
 using PubEntryLibrary.Data;
@@ -7,10 +8,10 @@ using PubEntryLibrary.Models;
 
 namespace PubEntry;
 
-public partial class SelectLocation : Form
+public partial class Dashboard : Form
 {
 	#region InitialLoading
-	public SelectLocation()
+	public Dashboard()
 	{
 		InitializeComponent();
 	}
@@ -39,7 +40,7 @@ public partial class SelectLocation : Form
 
 		try
 		{
-			locations = Task.Run(async () => await CommonData.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
+			locations = Task.Run(LocationData.LoadActiveLocations).Result.ToList();
 		}
 		catch (Exception ex)
 		{
@@ -92,9 +93,8 @@ public partial class SelectLocation : Form
 	{
 		if (ValidatePassword())
 		{
-			MainForm mainForm = new((int)locationComboBox.SelectedValue, (int)employeeComboBox.SelectedValue);
-			mainForm.Show();
-			Hide();
+			EntryForm mainForm = new((int)locationComboBox.SelectedValue, (int)employeeComboBox.SelectedValue);
+			mainForm.ShowDialog();
 		}
 
 		else MessageBox.Show("Incorrect Password");
@@ -106,12 +106,23 @@ public partial class SelectLocation : Form
 		selectDataForm.Show();
 	}
 
-	private void newEmployeeButton_Click(object sender, EventArgs e)
+	private void manageEmployeeButton_Click(object sender, EventArgs e)
 	{
 		if (passwordTextBox.Text == "admin")
 		{
 			EmployeeForm employeeForm = new();
 			employeeForm.ShowDialog();
+		}
+
+		else MessageBox.Show("Incorrect Password");
+	}
+
+	private void manageLocationButton_Click(object sender, EventArgs e)
+	{
+		if (passwordTextBox.Text == "admin")
+		{
+			LocationForm locationForm = new();
+			locationForm.ShowDialog();
 		}
 
 		else MessageBox.Show("Incorrect Password");
@@ -122,8 +133,14 @@ public partial class SelectLocation : Form
 	private bool ValidatePassword()
 	{
 		var employeeId = employeeComboBox.SelectedValue;
+
 		if (Task.Run(async () => await EmployeeData.GetEmployeePasswordById((int)employeeId)).Result == passwordTextBox.Text || passwordTextBox.Text == "admin")
+		{
+			passwordTextBox.Text = string.Empty;
 			return true;
+		}
+
+		passwordTextBox.Text = string.Empty;
 		return false;
 	}
 	#endregion

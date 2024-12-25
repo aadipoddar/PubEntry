@@ -145,7 +145,7 @@ public partial class DetailDataForm : Form
 		string fromTime = GetFromDateTime();
 		string toTime = GetToDateTime();
 
-		MemoryStream ms = Printing.PrintDetail(dateHeader, fromTime, toTime, locationId);
+		MemoryStream ms = PrintReport.PrintDetail(dateHeader, fromTime, toTime, locationId);
 		using (FileStream stream = new FileStream(Path.Combine(Path.GetTempPath(), "DetailedReport.pdf"), FileMode.Create, FileAccess.Write))
 		{
 			ms.WriteTo(stream);
