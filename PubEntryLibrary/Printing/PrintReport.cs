@@ -98,7 +98,7 @@ public static class PrintReport
 		float textWidth, pageWidth, textX;
 		int grandTotalMale = 0, grandTotalFemale = 0, grandTotalCash = 0, grandTotalCard = 0, grandTotalUPI = 0, grandTotalAmex = 0;
 		int grandTotalLoyalty = 0;
-		var locations = Task.Run(async () => await CommonData.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
+		var locations = Task.Run(LocationData.LoadActiveLocations).Result.ToList();
 
 		foreach (var location in locations)
 		{

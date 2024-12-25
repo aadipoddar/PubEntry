@@ -126,7 +126,7 @@ public partial class MainPage : ContentPage
 		else
 		{
 			busyIndicator.IsVisible = true;
-			await Task.Run(() => { ExportToExcel(); });
+			await Task.Run(ExportToExcel);
 			busyIndicator.IsVisible = false;
 		}
 	}
