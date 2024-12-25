@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_01923CB194EB410DB01A4FE2B315A86A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_B592FADBA1444B61B9734489CFDE2D53"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -121,6 +127,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_01923CB194EB410DB01A4FE2B315A86A"
+            {
+            "SourcePath" = "8:..\\PubEntry\\Resources\\Golder Park.ico"
+            "TargetName" = "8:Golder Park.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_859C644195F945DFB46F59B5F4144EE6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -178,7 +204,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Pub Entry"
         "ProductCode" = "8:{477557B4-2908-4106-B360-D2D114F02452}"
-        "PackageCode" = "8:{082D0557-1E6F-4DA4-88F8-84EB2B9119B0}"
+        "PackageCode" = "8:{C682ADC6-CF70-428A-A9C7-7122C3AFD24F}"
         "UpgradeCode" = "8:{9E79504C-E059-4F8F-8B9C-DF60E844B1EC}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -309,7 +335,7 @@
             "Target" = "8:_B592FADBA1444B61B9734489CFDE2D53"
             "Folder" = "8:_6F27156D86404C9695DEA7D46F0AB49D"
             "WorkingFolder" = "8:_859C644195F945DFB46F59B5F4144EE6"
-            "Icon" = "8:"
+            "Icon" = "8:_01923CB194EB410DB01A4FE2B315A86A"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_C8CED4BF346A4B9586A80B6866E4D5FF"
@@ -323,7 +349,7 @@
             "Target" = "8:_B592FADBA1444B61B9734489CFDE2D53"
             "Folder" = "8:_60CF4C5602FA417DB9944E3B693D9BF6"
             "WorkingFolder" = "8:_859C644195F945DFB46F59B5F4144EE6"
-            "Icon" = "8:"
+            "Icon" = "8:_01923CB194EB410DB01A4FE2B315A86A"
             "Feature" = "8:"
             }
         }

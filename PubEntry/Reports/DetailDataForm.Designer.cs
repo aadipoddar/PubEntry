@@ -28,6 +28,7 @@ partial class DetailDataForm
 	/// </summary>
 	private void InitializeComponent()
 	{
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DetailDataForm));
 		dataGridView = new DataGridView();
 		locationNameLabel = new Label();
 		dateLabel = new Label();
@@ -338,6 +339,7 @@ partial class DetailDataForm
 		Controls.Add(dateLabel);
 		Controls.Add(locationNameLabel);
 		Controls.Add(dataGridView);
+		Icon = (Icon)resources.GetObject("$this.Icon");
 		Name = "DetailDataForm";
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "DetailDataForm";

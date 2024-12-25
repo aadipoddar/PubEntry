@@ -28,6 +28,7 @@ partial class SelectDataForm
 	/// </summary>
 	private void InitializeComponent()
 	{
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectDataForm));
 		toDateLabel = new Label();
 		toTimeLabel = new Label();
 		fromTimeLabel = new Label();
@@ -200,6 +201,7 @@ partial class SelectDataForm
 		Controls.Add(toDateTimePicker);
 		Controls.Add(fromDateTimePicker);
 		Controls.Add(summaryReportButton);
+		Icon = (Icon)resources.GetObject("$this.Icon");
 		Name = "SelectDataForm";
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "SelectDataForm";

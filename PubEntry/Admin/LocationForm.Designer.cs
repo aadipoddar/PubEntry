@@ -28,6 +28,7 @@ partial class LocationForm
 	/// </summary>
 	private void InitializeComponent()
 	{
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LocationForm));
 		statusLabel = new Label();
 		statusComboBox = new ComboBox();
 		locationComboBox = new ComboBox();
@@ -111,7 +112,9 @@ partial class LocationForm
 		Controls.Add(saveButton);
 		Controls.Add(nameLabel);
 		Controls.Add(locationNameTextBox);
+		Icon = (Icon)resources.GetObject("$this.Icon");
 		Name = "LocationForm";
+		StartPosition = FormStartPosition.CenterScreen;
 		Text = "LocationForm";
 		ResumeLayout(false);
 		PerformLayout();

@@ -28,6 +28,7 @@ partial class EmployeeForm
 	/// </summary>
 	private void InitializeComponent()
 	{
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EmployeeForm));
 		nameLabel = new Label();
 		employeeNameTextBox = new TextBox();
 		passwordLabel = new Label();
@@ -160,6 +161,7 @@ partial class EmployeeForm
 		Controls.Add(passwordTextBox);
 		Controls.Add(nameLabel);
 		Controls.Add(employeeNameTextBox);
+		Icon = (Icon)resources.GetObject("$this.Icon");
 		Name = "EmployeeForm";
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "EmployeeForm";

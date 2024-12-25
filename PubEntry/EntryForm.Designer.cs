@@ -29,6 +29,7 @@ partial class EntryForm
 	private void InitializeComponent()
 	{
 		components = new System.ComponentModel.Container();
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EntryForm));
 		nameTextBox = new TextBox();
 		nameLabel = new Label();
 		numberLabel = new Label();
@@ -378,6 +379,7 @@ partial class EntryForm
 		Controls.Add(numberTextBox);
 		Controls.Add(nameLabel);
 		Controls.Add(nameTextBox);
+		Icon = (Icon)resources.GetObject("$this.Icon");
 		Name = "EntryForm";
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "Dashboard";

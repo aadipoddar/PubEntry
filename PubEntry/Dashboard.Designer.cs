@@ -28,6 +28,7 @@ partial class Dashboard
 	/// </summary>
 	private void InitializeComponent()
 	{
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dashboard));
 		locationComboBox = new ComboBox();
 		employeeComboBox = new ComboBox();
 		goButton = new Button();
@@ -162,6 +163,7 @@ partial class Dashboard
 		Controls.Add(goButton);
 		Controls.Add(employeeComboBox);
 		Controls.Add(locationComboBox);
+		Icon = (Icon)resources.GetObject("$this.Icon");
 		Name = "Dashboard";
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "Dashboard";

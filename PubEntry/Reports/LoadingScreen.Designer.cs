@@ -28,6 +28,7 @@ partial class LoadingScreen
 	/// </summary>
 	private void InitializeComponent()
 	{
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoadingScreen));
 		loadingLabel = new Label();
 		SuspendLayout();
 		// 
@@ -47,6 +48,7 @@ partial class LoadingScreen
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(492, 180);
 		Controls.Add(loadingLabel);
+		Icon = (Icon)resources.GetObject("$this.Icon");
 		Name = "LoadingScreen";
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "LoadingScreen";
