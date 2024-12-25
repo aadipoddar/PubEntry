@@ -122,7 +122,7 @@ public static class PrintReport
 
 			foreach (var transaction in transactions)
 			{
-				var person = Task.Run(async () => await CommonData.GetById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
+				var person = Task.Run(async () => await CommonData.LoadTableDataById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
 
 				totalMale += transaction.Male;
 				totalFemale += transaction.Female;
@@ -281,7 +281,7 @@ public static class PrintReport
 
 		font = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
 
-		string text = $"{Task.Run(async () => await CommonData.GetById<LocationModel>("LocationTable", selectedLocationId)).Result.FirstOrDefault().Name}";
+		string text = $"{Task.Run(async () => await CommonData.LoadTableDataById<LocationModel>("LocationTable", selectedLocationId)).Result.FirstOrDefault().Name}";
 		float textWidth = font.MeasureString(text).Width;
 		float pageWidth = pdfPage.GetClientSize().Width;
 		float textX = (pageWidth - textWidth) / 2f;
@@ -296,7 +296,7 @@ public static class PrintReport
 
 		DataTable dataTable = new();
 
-		dataTable.Columns.Add("Id", typeof(int));
+		dataTable.Columns.Add("SlipId", typeof(int));
 		dataTable.Columns.Add("Name", typeof(string));
 		dataTable.Columns.Add("Number", typeof(string));
 		dataTable.Columns.Add("Loyalty", typeof(string));
@@ -310,13 +310,12 @@ public static class PrintReport
 		dataTable.Columns.Add("Approved By", typeof(string));
 		dataTable.Columns.Add("Date Time", typeof(DateTime));
 
-		int i = 1;
 		foreach (var transaction in transactions)
 		{
-			var person = Task.Run(async () => await CommonData.GetById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
-			string employeeName = Task.Run(async () => await CommonData.GetById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name;
+			var person = Task.Run(async () => await CommonData.LoadTableDataById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
+			string employeeName = Task.Run(async () => await CommonData.LoadTableDataById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name;
 
-			dataTable.Rows.Add(i, $"{person.Name}", $"{person.Number}", person.Loyalty == 1 ? "Y" : "N", transaction.Male, transaction.Female, transaction.Cash, transaction.Card, transaction.UPI, transaction.Amex, employeeName, transaction.ApprovedBy, $"{transaction.DateTime}");
+			dataTable.Rows.Add(transaction.Id, $"{person.Name}", $"{person.Number}", person.Loyalty == 1 ? "Y" : "N", transaction.Male, transaction.Female, transaction.Cash, transaction.Card, transaction.UPI, transaction.Amex, employeeName, transaction.ApprovedBy, $"{transaction.DateTime}");
 
 			totalMale += transaction.Male;
 			totalFemale += transaction.Female;
@@ -326,16 +325,14 @@ public static class PrintReport
 			totalAmex += transaction.Amex;
 
 			if (person.Loyalty == 1) totalLoyalty++;
-
-			i++;
 		}
 
 		pdfGrid.DataSource = dataTable;
 
-		pdfGrid.Columns[0].Width = 20;
+		pdfGrid.Columns[0].Width = 30;
 		pdfGrid.Columns[2].Width = 60;
-		pdfGrid.Columns[3].Width = 30;
-		pdfGrid.Columns[4].Width = 30;
+		pdfGrid.Columns[3].Width = 27;
+		pdfGrid.Columns[4].Width = 25;
 		pdfGrid.Columns[5].Width = 30;
 		pdfGrid.Columns[9].Width = 30;
 		pdfGrid.Columns[10].Width = 40;
@@ -358,7 +355,7 @@ public static class PrintReport
 		foreach (PdfGridColumn column in pdfGrid.Columns)
 			column.Format = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
 
-		pdfGrid.Columns[1].Format = new PdfStringFormat(PdfTextAlignment.Left, PdfVerticalAlignment.Middle);
+		pdfGrid.Columns[1].Format = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
 
 		result = pdfGrid.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 20), layoutFormat);
 

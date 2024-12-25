@@ -61,8 +61,9 @@ public partial class EmployeeForm : Form
 			employeeModel.Password = passwordTextBox.Text;
 			employeeModel.LocationId = (int)locationComboBox.SelectedValue;
 			employeeModel.ActiveStatus = statusComboBox.SelectedIndex;
+			employeeModel.Id = (employeeComboBox.SelectedItem as EmployeeModel).Id;
 
-			await EmployeeData.UpdateEmployeeTableData(employeeModel, (employeeComboBox.SelectedItem as EmployeeModel).Id);
+			await EmployeeData.UpdateEmployee(employeeModel);
 		}
 
 		else
@@ -73,10 +74,11 @@ public partial class EmployeeForm : Form
 			employeeModel.LocationId = (int)locationComboBox.SelectedValue;
 			employeeModel.ActiveStatus = statusComboBox.SelectedIndex;
 
-			await EmployeeData.InsertEmployeeTableData(employeeModel);
+			await EmployeeData.InsertEmployee(employeeModel);
 		}
 
 		ClearForm();
+		await LoadComboBox();
 	}
 
 	private void employeeComboBox_SelectedIndexChanged(object sender, EventArgs e)

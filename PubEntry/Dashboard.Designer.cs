@@ -143,7 +143,7 @@ partial class Dashboard
 		manageLocationButton.Location = new Point(56, 433);
 		manageLocationButton.Name = "manageLocationButton";
 		manageLocationButton.Size = new Size(213, 38);
-		manageLocationButton.TabIndex = 33;
+		manageLocationButton.TabIndex = 16;
 		manageLocationButton.Text = "Manage Locations";
 		manageLocationButton.UseVisualStyleBackColor = true;
 		manageLocationButton.Click += manageLocationButton_Click;

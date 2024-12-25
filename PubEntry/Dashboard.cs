@@ -78,7 +78,9 @@ public partial class Dashboard : Form
 		employeeComboBox.DisplayMember = "Name";
 		employeeComboBox.ValueMember = "Id";
 	}
+	#endregion
 
+	#region Events
 	private void locationComboBox_SelectedIndexChanged(object sender, EventArgs e)
 	{
 		LoadEmployeeComboBox();
@@ -86,9 +88,7 @@ public partial class Dashboard : Form
 	}
 
 	private void employeeComboBox_SelectedIndexChanged(object sender, EventArgs e) => passwordTextBox.Text = string.Empty;
-	#endregion
 
-	#region ClickEvents
 	private void goButton_Click(object sender, EventArgs e)
 	{
 		if (ValidatePassword())
@@ -132,9 +132,9 @@ public partial class Dashboard : Form
 	#region Validation
 	private bool ValidatePassword()
 	{
-		var employeeId = employeeComboBox.SelectedValue;
+		EmployeeModel employee = employeeComboBox.SelectedItem as EmployeeModel;
 
-		if (Task.Run(async () => await EmployeeData.GetEmployeePasswordById((int)employeeId)).Result == passwordTextBox.Text || passwordTextBox.Text == "admin")
+		if (employee.Password == passwordTextBox.Text || passwordTextBox.Text == "admin")
 		{
 			passwordTextBox.Text = string.Empty;
 			return true;

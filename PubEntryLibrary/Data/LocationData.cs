@@ -5,12 +5,12 @@ namespace PubEntryLibrary.Data;
 
 public class LocationData
 {
-	public static async Task InsertLocationTableData(LocationModel locationModel) =>
-		await SqlDataAccess.RunSQL($"INSERT INTO LocationTable VALUES ('{locationModel.Name}', {locationModel.ActiveStatus})", Secrets.DatabaseName);
+	public static async Task InsertLocation(LocationModel locationModel) =>
+			await Task.Run(() => SqlDataAccess.SaveData("dbo.spLocation_Insert", locationModel));
 
-	public static async Task UpdateLocationTableData(LocationModel locationModel, int id) =>
-		await SqlDataAccess.RunSQL($"UPDATE LocationTable SET Name = '{locationModel.Name}', ActiveStatus = {locationModel.ActiveStatus} WHERE Id = {id}", Secrets.DatabaseName);
+	public static async Task UpdateLocation(LocationModel locationModel) =>
+			await Task.Run(() => SqlDataAccess.SaveData("dbo.spLocation_Update", locationModel));
 
-	public static async Task<List<LocationModel>> LoadActiveLocations() =>
-		await SqlDataAccess.LoadDataSQL<LocationModel>($"SELECT * FROM LocationTable WHERE ActiveStatus = 0", Secrets.DatabaseName) as List<LocationModel>;
+	public static async Task<IEnumerable<LocationModel>> LoadActiveLocations() =>
+			await Task.Run(() => SqlDataAccess.LoadData<LocationModel, dynamic>("dbo.spLoad_ActiveLocation", new { }));
 }

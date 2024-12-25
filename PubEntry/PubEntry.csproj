@@ -15,7 +15,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/aadipoddar/PubEntry</RepositoryUrl>
     <PackageProjectUrl>aadi.vercel.app</PackageProjectUrl>
-    <AssemblyVersion>1.9.6.2</AssemblyVersion>
+    <AssemblyVersion>1.9.6.3</AssemblyVersion>
     <ApplicationManifest></ApplicationManifest>
     <PackageIcon>Golder Park.jpg</PackageIcon>
     <ApplicationIcon>Resources\Golder Park.ico</ApplicationIcon>

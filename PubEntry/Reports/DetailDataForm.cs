@@ -61,7 +61,7 @@ public partial class DetailDataForm : Form
 	private void LoadComponents()
 	{
 		dateLabel.Text = $"{GetFormatedDate()} - {GetFormatedDate(false)}";
-		locationNameLabel.Text = $"{Task.Run(async () => await CommonData.GetById<LocationModel>("LocationTable", locationId)).Result.FirstOrDefault().Name}";
+		locationNameLabel.Text = $"{Task.Run(async () => await CommonData.LoadTableDataById<LocationModel>("LocationTable", locationId)).Result.FirstOrDefault().Name}";
 
 		int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
 		int totalLoyalty = 0;
@@ -70,7 +70,7 @@ public partial class DetailDataForm : Form
 		string toTime = GetToDateTime();
 		List<TransactionModel> transactions = Task.Run(async () => await TransactionData.GetTransactionsByDateRangeAndLocation(fromTime, toTime, locationId)).Result;
 
-		dataGridView.Columns.Add("Id", "Id");
+		dataGridView.Columns.Add("SlipId", "SlipId");
 		dataGridView.Columns.Add("Name", "Name");
 		dataGridView.Columns.Add("Number", "Number");
 		dataGridView.Columns.Add("Loyalty", "Loyalty");
@@ -92,14 +92,13 @@ public partial class DetailDataForm : Form
 		dataGridView.Columns[8].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 		dataGridView.Columns[9].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-		int i = 1;
 		foreach (var transaction in transactions)
 		{
-			var person = Task.Run(async () => await CommonData.GetById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
-			string employeeName = Task.Run(async () => await CommonData.GetById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name;
+			var person = Task.Run(async () => await CommonData.LoadTableDataById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
+			string employeeName = Task.Run(async () => await CommonData.LoadTableDataById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name;
 
 			dataGridView.Rows.Add(
-					i,
+					transaction.Id,
 					person.Name,
 					person.Number,
 					person.Loyalty == 1 ? "Y" : "N",
@@ -122,8 +121,6 @@ public partial class DetailDataForm : Form
 			totalAmex += transaction.Amex;
 
 			if (person.Loyalty == 1) totalLoyalty++;
-
-			i++;
 		}
 
 		totalPeopleLabel.Text = $"{totalMale + totalFemale}";
@@ -155,7 +152,6 @@ public partial class DetailDataForm : Form
 		LoadingScreen.CloseForm();
 	}
 
-	#region Excel
 	private void excelButton_Click(object sender, EventArgs e)
 	{
 		LoadingScreen.ShowSplashScreen();
@@ -173,5 +169,4 @@ public partial class DetailDataForm : Form
 
 		LoadingScreen.CloseForm();
 	}
-	#endregion
 }

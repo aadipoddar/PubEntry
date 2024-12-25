@@ -61,14 +61,14 @@ public static class PrintReceipt
 		int startPosition = 10;
 		int maxWidth = e.PageBounds.Width - 20;
 
-		g.DrawString($"** {Task.Run(async () => await CommonData.GetById<LocationModel>("LocationTable", locationId)).Result.FirstOrDefault().Name} **", new Font("Arial", 25, FontStyle.Bold), Brushes.Black, new RectangleF(startPosition, lowerSpacing += 10, maxWidth, 40), center);
+		g.DrawString($"** {Task.Run(async () => await CommonData.LoadTableDataById<LocationModel>("LocationTable", locationId)).Result.FirstOrDefault().Name} **", new Font("Arial", 25, FontStyle.Bold), Brushes.Black, new RectangleF(startPosition, lowerSpacing += 10, maxWidth, 40), center);
 		g.DrawString($"--- {copyOf} Copy ---", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += 40, maxWidth, 25), center);
 		g.DrawString($"Slip No.: {slipId}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
 		g.DrawString($"DT: {transaction.DateTime.ToString("dd/MM/yy HH:mm")}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
 		g.DrawString($"Name: {Task.Run(async () => await PersonData.GetPersonByNumber(numberTextBoxText)).Result.FirstOrDefault().Name}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
 		g.DrawString($"Contact: {numberTextBoxText}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
 		if (loyaltyCheckBoxChecked) g.DrawString("Loyalty Member", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
-		g.DrawString($"Reservation: {Task.Run(async () => await CommonData.GetById<ReservationTypeModel>("ReservationTypeTable", transaction.ReservationType)).Result.FirstOrDefault().Name}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
+		g.DrawString($"Reservation: {Task.Run(async () => await CommonData.LoadTableDataById<ReservationTypeModel>("ReservationTypeTable", transaction.ReservationType)).Result.FirstOrDefault().Name}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
 
 		g.DrawString("--------------------------", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25), center);
 		g.DrawString($"Total Persons: {transaction.Male + transaction.Female}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
@@ -84,7 +84,7 @@ public static class PrintReceipt
 
 		g.DrawString("--------------------------", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25), center);
 		if (transaction.ApprovedBy != null) g.DrawString($"Approved By: {transaction.ApprovedBy}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
-		g.DrawString($"Entered By: {Task.Run(async () => await CommonData.GetById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
+		g.DrawString($"Entered By: {Task.Run(async () => await CommonData.LoadTableDataById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
 
 		font = new("Courier New", 9, FontStyle.Bold);
 

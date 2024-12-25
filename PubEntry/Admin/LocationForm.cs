@@ -63,8 +63,9 @@ public partial class LocationForm : Form
 			LocationModel locationModel = new();
 			locationModel.Name = locationNameTextBox.Text;
 			locationModel.ActiveStatus = statusComboBox.SelectedIndex;
+			locationModel.Id = (locationComboBox.SelectedItem as LocationModel).Id;
 
-			await LocationData.UpdateLocationTableData(locationModel, (locationComboBox.SelectedItem as LocationModel).Id);
+			await LocationData.UpdateLocation(locationModel);
 		}
 
 		else
@@ -73,7 +74,7 @@ public partial class LocationForm : Form
 			locationModel.Name = locationNameTextBox.Text;
 			locationModel.ActiveStatus = statusComboBox.SelectedIndex;
 
-			await LocationData.InsertLocationTableData(locationModel);
+			await LocationData.InsertLocation(locationModel);
 		}
 
 		ClearForm();
