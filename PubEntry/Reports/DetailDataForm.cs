@@ -3,6 +3,7 @@ using System.Globalization;
 
 using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
+using PubEntryLibrary.Models.Printing;
 using PubEntryLibrary.Printing;
 
 namespace PubEntry.Reports;
@@ -63,26 +64,9 @@ public partial class DetailDataForm : Form
 		dateLabel.Text = $"{GetFormatedDate()} - {GetFormatedDate(false)}";
 		locationNameLabel.Text = $"{Task.Run(async () => await CommonData.LoadTableDataById<LocationModel>("LocationTable", locationId)).Result.FirstOrDefault().Name}";
 
-		int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
-		int totalLoyalty = 0;
+		List<DetailedPrintModel> detailedPrintModel = Task.Run(async () => await PrintData.LoadDetailedPrint(GetFromDateTime(), GetToDateTime(), locationId)).Result.ToList();
 
-		string fromTime = GetFromDateTime();
-		string toTime = GetToDateTime();
-		List<TransactionModel> transactions = Task.Run(async () => await TransactionData.GetTransactionsByDateRangeAndLocation(fromTime, toTime, locationId)).Result;
-
-		dataGridView.Columns.Add("SlipId", "SlipId");
-		dataGridView.Columns.Add("Name", "Name");
-		dataGridView.Columns.Add("Number", "Number");
-		dataGridView.Columns.Add("Loyalty", "Loyalty");
-		dataGridView.Columns.Add("Male", "Male");
-		dataGridView.Columns.Add("Female", "Female");
-		dataGridView.Columns.Add("Cash", "Cash");
-		dataGridView.Columns.Add("Card", "Card");
-		dataGridView.Columns.Add("UPI", "UPI");
-		dataGridView.Columns.Add("Amex", "Amex");
-		dataGridView.Columns.Add("Entered By", "Entered By");
-		dataGridView.Columns.Add("Approved By", "Approved By");
-		dataGridView.Columns.Add("Date Time", "Date Time");
+		dataGridView.DataSource = detailedPrintModel;
 
 		dataGridView.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 		dataGridView.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
@@ -92,46 +76,15 @@ public partial class DetailDataForm : Form
 		dataGridView.Columns[8].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 		dataGridView.Columns[9].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
-		foreach (var transaction in transactions)
-		{
-			var person = Task.Run(async () => await CommonData.LoadTableDataById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
-			string employeeName = Task.Run(async () => await CommonData.LoadTableDataById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name;
-
-			dataGridView.Rows.Add(
-					transaction.Id,
-					person.Name,
-					person.Number,
-					person.Loyalty == 1 ? "Y" : "N",
-					transaction.Male,
-					transaction.Female,
-					transaction.Cash,
-					transaction.Card,
-					transaction.UPI,
-					transaction.Amex,
-					employeeName,
-					transaction.ApprovedBy,
-					transaction.DateTime
-				);
-
-			totalMale += transaction.Male;
-			totalFemale += transaction.Female;
-			totalCash += transaction.Cash;
-			totalCard += transaction.Card;
-			totalUPI += transaction.UPI;
-			totalAmex += transaction.Amex;
-
-			if (person.Loyalty == 1) totalLoyalty++;
-		}
-
-		totalPeopleLabel.Text = $"{totalMale + totalFemale}";
-		maleLabel.Text = $"{totalMale}";
-		femaleLabel.Text = $"{totalFemale}";
-		totalLoyaltyLabel.Text = $"{totalLoyalty}";
-		totalAmountLabel.Text = $"{totalCash + totalCard + totalUPI + totalAmex}";
-		cashLabel.Text = $"{totalCash}";
-		cardLabel.Text = $"{totalCard}";
-		upiLabel.Text = $"{totalUPI}";
-		amexLabel.Text = $"{totalAmex}";
+		totalPeopleLabel.Text = $"{detailedPrintModel.Sum(x => x.Male) + detailedPrintModel.Sum(x => x.Female)}";
+		maleLabel.Text = $"{detailedPrintModel.Sum(x => x.Male)}";
+		femaleLabel.Text = $"{detailedPrintModel.Sum(x => x.Female)}";
+		totalLoyaltyLabel.Text = $"{detailedPrintModel.Count(x => x.Loyalty == 'L')}";
+		totalAmountLabel.Text = $"{detailedPrintModel.Sum(x => x.Cash) + detailedPrintModel.Sum(x => x.Card) + detailedPrintModel.Sum(x => x.UPI) + detailedPrintModel.Sum(x => x.Amex)}";
+		cashLabel.Text = $"{detailedPrintModel.Sum(x => x.Cash)}";
+		cardLabel.Text = $"{detailedPrintModel.Sum(x => x.Card)}";
+		upiLabel.Text = $"{detailedPrintModel.Sum(x => x.UPI)}";
+		amexLabel.Text = $"{detailedPrintModel.Sum(x => x.Amex)}";
 	}
 
 	private void printButton_Click(object sender, EventArgs e)

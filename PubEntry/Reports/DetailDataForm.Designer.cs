@@ -61,18 +61,19 @@ partial class DetailDataForm
 		dataGridView.AllowUserToAddRows = false;
 		dataGridView.AllowUserToDeleteRows = false;
 		dataGridView.AllowUserToOrderColumns = true;
+		dataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 		dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 		dataGridView.Location = new Point(12, 86);
 		dataGridView.Name = "dataGridView";
 		dataGridView.ReadOnly = true;
-		dataGridView.Size = new Size(1068, 500);
+		dataGridView.Size = new Size(1090, 500);
 		dataGridView.TabIndex = 0;
 		// 
 		// locationNameLabel
 		// 
 		locationNameLabel.AutoSize = true;
 		locationNameLabel.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold);
-		locationNameLabel.Location = new Point(473, 46);
+		locationNameLabel.Location = new Point(486, 46);
 		locationNameLabel.Name = "locationNameLabel";
 		locationNameLabel.Size = new Size(128, 37);
 		locationNameLabel.TabIndex = 1;
@@ -82,7 +83,7 @@ partial class DetailDataForm
 		// 
 		dateLabel.AutoSize = true;
 		dateLabel.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold);
-		dateLabel.Location = new Point(320, 9);
+		dateLabel.Location = new Point(324, 9);
 		dateLabel.Name = "dateLabel";
 		dateLabel.Size = new Size(438, 37);
 		dateLabel.TabIndex = 2;
@@ -155,7 +156,7 @@ partial class DetailDataForm
 		// 
 		cardLabel.AutoSize = true;
 		cardLabel.Font = new Font("Segoe UI", 20F);
-		cardLabel.Location = new Point(939, 674);
+		cardLabel.Location = new Point(973, 674);
 		cardLabel.Name = "cardLabel";
 		cardLabel.RightToLeft = RightToLeft.Yes;
 		cardLabel.Size = new Size(122, 37);
@@ -166,7 +167,7 @@ partial class DetailDataForm
 		// 
 		cashLabel.AutoSize = true;
 		cashLabel.Font = new Font("Segoe UI", 20F);
-		cashLabel.Location = new Point(939, 637);
+		cashLabel.Location = new Point(973, 637);
 		cashLabel.Name = "cashLabel";
 		cashLabel.RightToLeft = RightToLeft.Yes;
 		cashLabel.Size = new Size(122, 37);
@@ -177,7 +178,7 @@ partial class DetailDataForm
 		// 
 		totalAmountLabel.AutoSize = true;
 		totalAmountLabel.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold);
-		totalAmountLabel.Location = new Point(939, 600);
+		totalAmountLabel.Location = new Point(973, 600);
 		totalAmountLabel.Name = "totalAmountLabel";
 		totalAmountLabel.RightToLeft = RightToLeft.Yes;
 		totalAmountLabel.Size = new Size(129, 37);
@@ -188,7 +189,7 @@ partial class DetailDataForm
 		// 
 		label10.AutoSize = true;
 		label10.Font = new Font("Segoe UI", 20F);
-		label10.Location = new Point(854, 674);
+		label10.Location = new Point(888, 674);
 		label10.Name = "label10";
 		label10.Size = new Size(79, 37);
 		label10.TabIndex = 11;
@@ -198,7 +199,7 @@ partial class DetailDataForm
 		// 
 		label11.AutoSize = true;
 		label11.Font = new Font("Segoe UI", 20F);
-		label11.Location = new Point(853, 637);
+		label11.Location = new Point(887, 637);
 		label11.Name = "label11";
 		label11.Size = new Size(80, 37);
 		label11.TabIndex = 10;
@@ -208,7 +209,7 @@ partial class DetailDataForm
 		// 
 		label12.AutoSize = true;
 		label12.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold);
-		label12.Location = new Point(733, 600);
+		label12.Location = new Point(767, 600);
 		label12.Name = "label12";
 		label12.Size = new Size(200, 37);
 		label12.TabIndex = 9;
@@ -218,7 +219,7 @@ partial class DetailDataForm
 		// 
 		amexLabel.AutoSize = true;
 		amexLabel.Font = new Font("Segoe UI", 20F);
-		amexLabel.Location = new Point(939, 748);
+		amexLabel.Location = new Point(973, 748);
 		amexLabel.Name = "amexLabel";
 		amexLabel.RightToLeft = RightToLeft.Yes;
 		amexLabel.Size = new Size(122, 37);
@@ -229,7 +230,7 @@ partial class DetailDataForm
 		// 
 		upiLabel.AutoSize = true;
 		upiLabel.Font = new Font("Segoe UI", 20F);
-		upiLabel.Location = new Point(939, 711);
+		upiLabel.Location = new Point(973, 711);
 		upiLabel.Name = "upiLabel";
 		upiLabel.RightToLeft = RightToLeft.Yes;
 		upiLabel.Size = new Size(122, 37);
@@ -240,7 +241,7 @@ partial class DetailDataForm
 		// 
 		label15.AutoSize = true;
 		label15.Font = new Font("Segoe UI", 20F);
-		label15.Location = new Point(844, 748);
+		label15.Location = new Point(878, 748);
 		label15.Name = "label15";
 		label15.Size = new Size(89, 37);
 		label15.TabIndex = 16;
@@ -250,7 +251,7 @@ partial class DetailDataForm
 		// 
 		label16.AutoSize = true;
 		label16.Font = new Font("Segoe UI", 20F);
-		label16.Location = new Point(869, 711);
+		label16.Location = new Point(903, 711);
 		label16.Name = "label16";
 		label16.Size = new Size(64, 37);
 		label16.TabIndex = 15;
@@ -259,7 +260,7 @@ partial class DetailDataForm
 		// printButton
 		// 
 		printButton.Font = new Font("Segoe UI", 15F);
-		printButton.Location = new Point(504, 853);
+		printButton.Location = new Point(486, 814);
 		printButton.Name = "printButton";
 		printButton.Size = new Size(118, 38);
 		printButton.TabIndex = 19;
@@ -270,7 +271,7 @@ partial class DetailDataForm
 		// excelButton
 		// 
 		excelButton.Font = new Font("Segoe UI", 15F);
-		excelButton.Location = new Point(132, 853);
+		excelButton.Location = new Point(132, 814);
 		excelButton.Name = "excelButton";
 		excelButton.Size = new Size(118, 38);
 		excelButton.TabIndex = 20;
@@ -281,7 +282,7 @@ partial class DetailDataForm
 		// refreshButton
 		// 
 		refreshButton.Font = new Font("Segoe UI", 15F);
-		refreshButton.Location = new Point(939, 853);
+		refreshButton.Location = new Point(887, 814);
 		refreshButton.Name = "refreshButton";
 		refreshButton.Size = new Size(118, 38);
 		refreshButton.TabIndex = 21;
@@ -314,7 +315,7 @@ partial class DetailDataForm
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(1092, 928);
+		ClientSize = new Size(1118, 875);
 		Controls.Add(totalLoyaltyLabel);
 		Controls.Add(label5);
 		Controls.Add(refreshButton);

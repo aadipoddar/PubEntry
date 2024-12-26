@@ -15,9 +15,7 @@ public partial class EntryForm : Form
 	private const int InactivityLimit = 5 * 60 * 1000;
 
 	#region InitalLoading
-	int employeeId, locationId, slipId;
-	bool personFound = false;
-	TransactionModel transaction = new();
+	int transactionId, employeeId, locationId;
 
 	public EntryForm(int locationId, int employeeId)
 	{
@@ -48,6 +46,7 @@ public partial class EntryForm : Form
 		cashAmountTextBox.Text = "0";
 		cardAmountTextBox.Text = "0";
 		upiAmountTextBox.Text = "0";
+		amexAmountTextBox.Text = "0";
 		maleTextBox.Text = "0";
 		femaleTextBox.Text = "0";
 		numberTextBox.ReadOnly = false;
@@ -115,12 +114,11 @@ public partial class EntryForm : Form
 	#region Events
 	private void dateChangeTimer_Tick(object sender, EventArgs e) => dateTimeLabel.Text = DateTime.Now.ToString();
 
-	private void numberTextBox_KeyUp(object sender, KeyEventArgs e)
+	private async void numberTextBox_KeyUp(object sender, KeyEventArgs e)
 	{
-		var foundPerson = Task.Run(async () => await PersonData.GetPersonByNumber(numberTextBox.Text)).Result.FirstOrDefault();
+		var foundPerson = await PersonData.GetPersonByNumber(numberTextBox.Text);
 		if (foundPerson != null)
 		{
-			personFound = true;
 			nameTextBox.Text = foundPerson.Name;
 			nameTextBox.ReadOnly = true;
 			if (foundPerson.Loyalty == 1) loyaltyCheckBox.Checked = true;
@@ -129,7 +127,6 @@ public partial class EntryForm : Form
 
 		else
 		{
-			personFound = false;
 			nameTextBox.Text = string.Empty;
 			nameTextBox.ReadOnly = false;
 			loyaltyCheckBox.Checked = false;
@@ -144,25 +141,33 @@ public partial class EntryForm : Form
 			return;
 		}
 
-		if (!personFound)
-			await PersonData.InsertPersonTableData(nameTextBox.Text, numberTextBox.Text, loyaltyCheckBox.Checked ? 1 : 0);
+		PersonModel personModel = new();
+		personModel.Id = 0;
+		personModel.Name = nameTextBox.Text;
+		personModel.Number = numberTextBox.Text;
+		personModel.Loyalty = loyaltyCheckBox.Checked ? 1 : 0;
 
-		await PersonData.UpdatePersonTableData(numberTextBox.Text, loyaltyCheckBox.Checked ? 1 : 0);
+		if (nameTextBox.ReadOnly == false)
+			personModel.Id = await PersonData.InsertPerson(personModel);
 
-		transaction.PersonId = Task.Run(async () => await PersonData.GetPersonByNumber(numberTextBox.Text)).Result.FirstOrDefault().Id;
-		transaction.Male = (int)Convert.ToInt64(maleTextBox.Text);
-		transaction.Female = (int)Convert.ToInt64(femaleTextBox.Text);
-		transaction.Cash = (int)Convert.ToInt64(cashAmountTextBox.Text);
-		transaction.Card = (int)Convert.ToInt64(cardAmountTextBox.Text);
-		transaction.UPI = (int)Convert.ToInt64(upiAmountTextBox.Text);
-		transaction.Amex = (int)Convert.ToInt64(amexAmountTextBox.Text);
-		transaction.ReservationType = reservationComboBox.SelectedIndex;
-		transaction.DateTime = DateTime.Now;
-		transaction.ApprovedBy = approvedByTextBox.Text == "" ? null : approvedByTextBox.Text;
-		transaction.LocationId = locationId;
-		transaction.EmployeeId = employeeId;
+		personModel.Id = await PersonData.UpdatePerson(personModel);
 
-		slipId = await TransactionData.InsertTransactionTableData(transaction);
+		TransactionModel transactionModel = new();
+		transactionModel.Id = 0;
+		transactionModel.PersonId = personModel.Id;
+		transactionModel.Male = (int)Convert.ToInt64(maleTextBox.Text);
+		transactionModel.Female = (int)Convert.ToInt64(femaleTextBox.Text);
+		transactionModel.Cash = (int)Convert.ToInt64(cashAmountTextBox.Text);
+		transactionModel.Card = (int)Convert.ToInt64(cardAmountTextBox.Text);
+		transactionModel.UPI = (int)Convert.ToInt64(upiAmountTextBox.Text);
+		transactionModel.Amex = (int)Convert.ToInt64(amexAmountTextBox.Text);
+		transactionModel.ReservationType = reservationComboBox.SelectedIndex;
+		transactionModel.DateTime = DateTime.Now;
+		transactionModel.ApprovedBy = approvedByTextBox.Text == "" ? null : approvedByTextBox.Text;
+		transactionModel.LocationId = locationId;
+		transactionModel.EmployeeId = employeeId;
+
+		transactionId = Task.Run(async () => await TransactionData.InsertTransaction(transactionModel)).Result;
 
 		PrintDialog printDialog = new();
 		printDialog.Document = printDocumentCustomer;
@@ -176,9 +181,9 @@ public partial class EntryForm : Form
 	}
 
 	private void printDocumentCustomer_PrintPage(object sender, PrintPageEventArgs e) =>
-		PrintReceipt.DrawGraphics(e, "Customer", locationId, transaction, slipId, numberTextBox.Text, loyaltyCheckBox.Checked);
+		PrintReceipt.DrawGraphics(e, "Customer", transactionId);
 
 	private void printDocumentMerchant_PrintPage(object sender, PrintPageEventArgs e) =>
-		PrintReceipt.DrawGraphics(e, "Merchant", locationId, transaction, slipId, numberTextBox.Text, loyaltyCheckBox.Checked);
+		PrintReceipt.DrawGraphics(e, "Merchant", transactionId);
 	#endregion
 }

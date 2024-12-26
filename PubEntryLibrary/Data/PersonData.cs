@@ -5,18 +5,12 @@ namespace PubEntryLibrary.Data;
 
 public class PersonData
 {
-	public static async Task InsertPersonTableData(string personName, string personNumber, int loyalty) =>
-			await SqlDataAccess.RunSQL($"INSERT INTO PersonTable VALUES ('{personName}', {personNumber}, {loyalty})");
+	public static async Task<int> InsertPerson(PersonModel personModel) =>
+			(await Task.Run(() => SqlDataAccess.LoadData<int, dynamic>("dbo.spPerson_Insert", personModel))).FirstOrDefault();
 
-	public static async Task UpdatePersonTableData(string personNumber, int loyalty) =>
-		await SqlDataAccess.RunSQL($"UPDATE PersonTable SET Loyalty = {loyalty} WHERE Number = '{personNumber}'");
+	public static async Task<int> UpdatePerson(PersonModel personModel) =>
+			(await Task.Run(() => SqlDataAccess.LoadData<int, dynamic>("dbo.spPerson_Update", personModel))).FirstOrDefault();
 
-	public static async Task<List<PersonModel>> GetPersonByNumber(string number) =>
-		await SqlDataAccess.LoadDataSQL<PersonModel>($"SELECT * FROM PersonTable WHERE Number = '{number}'") as List<PersonModel>;
-
-	public static async Task<List<PersonModel>> GetPersonByName(string name) =>
-		await SqlDataAccess.LoadDataSQL<PersonModel>($"SELECT * FROM PersonTable WHERE Name = '{name}'") as List<PersonModel>;
-
-	public static async Task<List<PersonModel>> GetPersonById(string name) =>
-		await SqlDataAccess.LoadDataSQL<PersonModel>($"SELECT * FROM PersonTable WHERE Name = '{name}'") as List<PersonModel>;
+	public static async Task<PersonModel> GetPersonByNumber(string number) =>
+			(await Task.Run(() => SqlDataAccess.LoadData<PersonModel, dynamic>("dbo.spLoad_Person_ByNumber", new { Number = number }))).FirstOrDefault();
 }

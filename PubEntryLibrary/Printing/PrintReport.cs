@@ -1,7 +1,6 @@
-﻿using System.Data;
-
-using PubEntryLibrary.Data;
+﻿using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
+using PubEntryLibrary.Models.Printing;
 
 using Syncfusion.Drawing;
 using Syncfusion.Pdf;
@@ -93,103 +92,74 @@ public static class PrintReport
 
 		PdfLayoutResult result = null;
 		PdfTextElement textElement;
+		List<TransactionTotalsModel> transactionTotalsModel = new();
 
 		string text;
 		float textWidth, pageWidth, textX;
-		int grandTotalMale = 0, grandTotalFemale = 0, grandTotalCash = 0, grandTotalCard = 0, grandTotalUPI = 0, grandTotalAmex = 0;
-		int grandTotalLoyalty = 0;
 		var locations = Task.Run(LocationData.LoadActiveLocations).Result.ToList();
 
 		foreach (var location in locations)
 		{
-			int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
-			int totalLoyalty = 0;
-
-			List<TransactionModel> transactions = Task.Run(async () => await TransactionData.GetTransactionsByDateRangeAndLocation(fromTime, toTime, location.Id)).Result;
-
 			font = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
 
 			text = $"{location.Name}";
 			textWidth = font.MeasureString(text).Width;
 			pageWidth = pdfPage.GetClientSize().Width;
 			textX = (pageWidth - textWidth) / 2f;
-
 			textElement = new PdfTextElement(text, font);
-
 			if (result == null) result = textElement.Draw(pdfPage, new PointF(textX, 20), layoutFormat);
-
 			else result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 20), layoutFormat);
 
-			foreach (var transaction in transactions)
-			{
-				var person = Task.Run(async () => await CommonData.LoadTableDataById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
-
-				totalMale += transaction.Male;
-				totalFemale += transaction.Female;
-				totalCash += transaction.Cash;
-				totalCard += transaction.Card;
-				totalUPI += transaction.UPI;
-				totalAmex += transaction.Amex;
-
-				if (person.Loyalty == 1) totalLoyalty++;
-			}
+			transactionTotalsModel.Add(Task.Run(async () => await PrintData.LoadTransactionTotals(fromTime, toTime, location.Id)).Result.FirstOrDefault());
 
 			font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
 
-			textElement = new PdfTextElement($"Total People: {totalMale + totalFemale}", font);
+			textElement = new PdfTextElement($"Total People: {transactionTotalsModel.Last().TotalMale + transactionTotalsModel.Last().TotalFemale}", font);
 			result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-			text = $"Total Amount: {totalCash + totalCard + totalUPI + totalAmex}";
+			text = $"Total Amount: {transactionTotalsModel.Last().TotalCash + transactionTotalsModel.Last().TotalCard + transactionTotalsModel.Last().TotalUPI + transactionTotalsModel.Last().TotalAmex}";
 			textWidth = font.MeasureString(text).Width;
 			pageWidth = pdfPage.GetClientSize().Width;
 			textX = pageWidth - textWidth;
 			textElement = new PdfTextElement(text, font);
 			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-			textElement = new PdfTextElement($"Male: {totalMale}", font);
+			textElement = new PdfTextElement($"Male: {transactionTotalsModel.Last().TotalMale}", font);
 			result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-			text = $"Cash: {totalCash}";
+			text = $"Cash: {transactionTotalsModel.Last().TotalCash}";
 			textWidth = font.MeasureString(text).Width;
 			pageWidth = pdfPage.GetClientSize().Width;
 			textX = pageWidth - textWidth;
 			textElement = new PdfTextElement(text, font);
 			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-			textElement = new PdfTextElement($"Female: {totalFemale}", font);
+			textElement = new PdfTextElement($"Female: {transactionTotalsModel.Last().TotalFemale}", font);
 			result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-			text = $"Card: {totalCard}";
+			text = $"Card: {transactionTotalsModel.Last().TotalCard}";
 			textWidth = font.MeasureString(text).Width;
 			pageWidth = pdfPage.GetClientSize().Width;
 			textX = pageWidth - textWidth;
 			textElement = new PdfTextElement(text, font);
 			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-			textElement = new PdfTextElement($"Total Loyalty: {totalLoyalty}", font);
+			textElement = new PdfTextElement($"Total Loyalty: {transactionTotalsModel.Last().TotalLoyalty}", font);
 			result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-			text = $"UPI: {totalUPI}";
+			text = $"UPI: {transactionTotalsModel.Last().TotalUPI}";
 			textWidth = font.MeasureString(text).Width;
 			pageWidth = pdfPage.GetClientSize().Width;
 			textX = pageWidth - textWidth;
 			textElement = new PdfTextElement(text, font);
 			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-			text = $"Amex: {totalAmex}";
+			text = $"Amex: {transactionTotalsModel.Last().TotalAmex}";
 			textWidth = font.MeasureString(text).Width;
 			pageWidth = pdfPage.GetClientSize().Width;
 			textX = pageWidth - textWidth;
 			textElement = new PdfTextElement(text, font);
 			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 10), layoutFormat);
-
-			grandTotalMale += totalMale;
-			grandTotalFemale += totalFemale;
-			grandTotalCash += totalCash;
-			grandTotalCard += totalCard;
-			grandTotalUPI += totalUPI;
-			grandTotalAmex += totalAmex;
-			grandTotalLoyalty += totalLoyalty;
 		}
 
 		font = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
@@ -202,47 +172,47 @@ public static class PrintReport
 
 		font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
 
-		textElement = new PdfTextElement($"Total People: {grandTotalMale + grandTotalFemale}", font);
+		textElement = new PdfTextElement($"Total People: {transactionTotalsModel.Sum(x => x.TotalMale) + transactionTotalsModel.Sum(x => x.TotalFemale)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-		text = $"Total Amount: {grandTotalCash + grandTotalCard + grandTotalUPI + grandTotalAmex}";
+		text = $"Total Amount: {transactionTotalsModel.Sum(x => x.TotalCash) + transactionTotalsModel.Sum(x => x.TotalCard) + transactionTotalsModel.Sum(x => x.TotalUPI) + transactionTotalsModel.Sum(x => x.TotalAmex)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		textElement = new PdfTextElement($"Male: {grandTotalMale}", font);
+		textElement = new PdfTextElement($"Male: {transactionTotalsModel.Sum(x => x.TotalMale)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-		text = $"Cash: {grandTotalCash}";
+		text = $"Cash: {transactionTotalsModel.Sum(x => x.TotalCash)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		textElement = new PdfTextElement($"Female: {grandTotalFemale}", font);
+		textElement = new PdfTextElement($"Female: {transactionTotalsModel.Sum(x => x.TotalFemale)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-		text = $"Card: {grandTotalCard}";
+		text = $"Card: {transactionTotalsModel.Sum(x => x.TotalCard)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		textElement = new PdfTextElement($"Grand Total Loyalty: {grandTotalLoyalty}", font);
+		textElement = new PdfTextElement($"Grand Total Loyalty: {transactionTotalsModel.Sum(x => x.TotalLoyalty)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-		text = $"UPI: {grandTotalUPI}";
+		text = $"UPI: {transactionTotalsModel.Sum(x => x.TotalUPI)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		text = $"Amex: {grandTotalAmex}";
+		text = $"Amex: {transactionTotalsModel.Sum(x => x.TotalAmex)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
@@ -274,11 +244,6 @@ public static class PrintReport
 		PdfLayoutResult result = null;
 		PdfTextElement textElement;
 
-		int totalMale = 0, totalFemale = 0, totalCash = 0, totalCard = 0, totalUPI = 0, totalAmex = 0;
-		int totalLoyalty = 0;
-
-		List<TransactionModel> transactions = Task.Run(async () => await TransactionData.GetTransactionsByDateRangeAndLocation(fromTime, toTime, selectedLocationId)).Result;
-
 		font = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
 
 		string text = $"{Task.Run(async () => await CommonData.LoadTableDataById<LocationModel>("LocationTable", selectedLocationId)).Result.FirstOrDefault().Name}";
@@ -294,40 +259,9 @@ public static class PrintReport
 
 		PdfGrid pdfGrid = new();
 
-		DataTable dataTable = new();
+		List<DetailedPrintModel> detailedPrintModel = Task.Run(async () => await PrintData.LoadDetailedPrint(fromTime, toTime, selectedLocationId)).Result.ToList();
 
-		dataTable.Columns.Add("SlipId", typeof(int));
-		dataTable.Columns.Add("Name", typeof(string));
-		dataTable.Columns.Add("Number", typeof(string));
-		dataTable.Columns.Add("Loyalty", typeof(string));
-		dataTable.Columns.Add("Male", typeof(int));
-		dataTable.Columns.Add("Female", typeof(int));
-		dataTable.Columns.Add("Cash", typeof(int));
-		dataTable.Columns.Add("Card", typeof(int));
-		dataTable.Columns.Add("UPI", typeof(int));
-		dataTable.Columns.Add("Amex", typeof(int));
-		dataTable.Columns.Add("Entered By", typeof(string));
-		dataTable.Columns.Add("Approved By", typeof(string));
-		dataTable.Columns.Add("Date Time", typeof(DateTime));
-
-		foreach (var transaction in transactions)
-		{
-			var person = Task.Run(async () => await CommonData.LoadTableDataById<PersonModel>("PersonTable", transaction.PersonId)).Result.FirstOrDefault();
-			string employeeName = Task.Run(async () => await CommonData.LoadTableDataById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name;
-
-			dataTable.Rows.Add(transaction.Id, $"{person.Name}", $"{person.Number}", person.Loyalty == 1 ? "Y" : "N", transaction.Male, transaction.Female, transaction.Cash, transaction.Card, transaction.UPI, transaction.Amex, employeeName, transaction.ApprovedBy, $"{transaction.DateTime}");
-
-			totalMale += transaction.Male;
-			totalFemale += transaction.Female;
-			totalCash += transaction.Cash;
-			totalCard += transaction.Card;
-			totalUPI += transaction.UPI;
-			totalAmex += transaction.Amex;
-
-			if (person.Loyalty == 1) totalLoyalty++;
-		}
-
-		pdfGrid.DataSource = dataTable;
+		pdfGrid.DataSource = detailedPrintModel;
 
 		pdfGrid.Columns[0].Width = 30;
 		pdfGrid.Columns[2].Width = 60;
@@ -361,47 +295,47 @@ public static class PrintReport
 
 		font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
 
-		textElement = new PdfTextElement($"Total People: {totalMale + totalFemale}", font);
+		textElement = new PdfTextElement($"Total People: {detailedPrintModel.Sum(x => x.Male) + detailedPrintModel.Sum(x => x.Female)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-		text = $"Total Amount: {totalCash + totalCard + totalUPI + totalAmex}";
+		text = $"Total Amount: {detailedPrintModel.Sum(x => x.Cash) + detailedPrintModel.Sum(x => x.Card) + detailedPrintModel.Sum(x => x.UPI) + detailedPrintModel.Sum(x => x.Amex)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		textElement = new PdfTextElement($"Male: {totalMale}", font);
+		textElement = new PdfTextElement($"Male: {detailedPrintModel.Sum(x => x.Male)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-		text = $"Cash: {totalCash}";
+		text = $"Cash: {detailedPrintModel.Sum(x => x.Cash)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		textElement = new PdfTextElement($"Female: {totalFemale}", font);
+		textElement = new PdfTextElement($"Female: {detailedPrintModel.Sum(x => x.Female)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-		text = $"Card: {totalCard}";
+		text = $"Card: {detailedPrintModel.Sum(x => x.Card)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		textElement = new PdfTextElement($"Total Loyalty: {totalLoyalty}", font);
+		textElement = new PdfTextElement($"Total Loyalty: {detailedPrintModel.Count(x => x.Loyalty == 'L')}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-		text = $"UPI: {totalUPI}";
+		text = $"UPI: {detailedPrintModel.Sum(x => x.UPI)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		text = $"Amex: {totalAmex}";
+		text = $"Amex: {detailedPrintModel.Sum(x => x.Amex)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;

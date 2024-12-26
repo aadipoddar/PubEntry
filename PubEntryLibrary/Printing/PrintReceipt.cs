@@ -3,106 +3,106 @@ using System.Drawing.Printing;
 using System.Runtime.Versioning;
 
 using PubEntryLibrary.Data;
-using PubEntryLibrary.Models;
+using PubEntryLibrary.Models.Printing;
 
 namespace PubEntryLibrary.Printing;
 
+[SupportedOSPlatform("windows6.1")]
 public static class PrintReceipt
 {
-	private static string MakeStringHeaderAmount(TransactionModel transaction)
+	private static readonly Font headerFont = new("Arial", 25, FontStyle.Bold);
+	private static readonly Font subHeaderFont = new("Arial", 15, FontStyle.Bold);
+	private static readonly Font regularFont = new("Courier New", 12, FontStyle.Bold);
+	private static readonly Font footerFont = new("Courier New", 8, FontStyle.Bold);
+	private static Font font = regularFont;
+
+	private static readonly StringFormat center = new(StringFormatFlags.FitBlackBox) { Alignment = StringAlignment.Center };
+	private static readonly StringFormat tabbedFormat = new();
+	private static int startPosition = 10;
+	private static int lowerSpacing = 0;
+	private static int maxWidth;
+
+	static PrintReceipt() => tabbedFormat.SetTabStops(0, [100]);
+
+	private static void DrawString(Graphics g, string content, bool isCenter = false, bool useTabs = false)
 	{
-		string finalString = "";
-
-		if (transaction.Cash > 0)
-			finalString += "Cash\t";
-
-		if (transaction.Card > 0)
-			finalString += "Card\t";
-
-		if (transaction.UPI > 0)
-			finalString += "UPI\t";
-
-		if (transaction.Amex > 0)
-			finalString += "Amex\t";
-
-		return finalString;
+		StringFormat format = isCenter ? center : (useTabs ? tabbedFormat : new StringFormat());
+		SizeF size = g.MeasureString(content, font, maxWidth, format);
+		g.DrawString(content, font, Brushes.Black, new RectangleF(startPosition, lowerSpacing, maxWidth, size.Height), format);
+		lowerSpacing += (int)size.Height;
 	}
 
-	private static string MakeStringAmount(TransactionModel transaction)
+	private static void DrawHeader(Graphics g, string locationName, string copyOf)
 	{
-		string finalString = "";
+		font = headerFont;
+		DrawString(g, $"** {locationName} **", true);
 
-		if (transaction.Cash > 0)
-			finalString += $"{transaction.Cash}\t";
-
-		if (transaction.Card > 0)
-			finalString += $"{transaction.Card}\t";
-
-		if (transaction.UPI > 0)
-			finalString += $"{transaction.UPI}\t";
-
-		if (transaction.Amex > 0)
-			finalString += $"{transaction.Amex}\t";
-
-		return finalString;
+		font = subHeaderFont;
+		DrawString(g, $"--- {copyOf} Copy ---", true);
 	}
 
-	[SupportedOSPlatform("windows6.1")]
-	public static void DrawGraphics(PrintPageEventArgs e, string copyOf, int locationId, TransactionModel transaction, int slipId, string numberTextBoxText, bool loyaltyCheckBoxChecked)
+	private static void DrawReceiptDetails(Graphics g, ReceiptModel receiptModel)
 	{
+		font = regularFont;
+		DrawString(g, $"Receipt No.: {receiptModel.ReceiptId}");
+		DrawString(g, $"DT: {receiptModel.ReceiptDate:dd/MM/yy HH:mm}");
+		DrawString(g, $"Name: {receiptModel.PersonName}");
+		DrawString(g, $"Contact: {receiptModel.PersonNumber}");
+		if (receiptModel.PersonLoyalty == 1) DrawString(g, "Loyalty Member");
+		DrawString(g, $"Reservation: {receiptModel.Reservation}");
+		DrawString(g, "------------------------", true);
+
+		DrawString(g, $"Total Persons: {receiptModel.TotalPerson}");
+		DrawString(g, "Male\tFemale", false, true);
+		DrawString(g, $"{receiptModel.Male}\t{receiptModel.Female}", false, true);
+		DrawString(g, "------------------------", true);
+	}
+
+	private static void DrawPaymentDetails(Graphics g, ReceiptModel receiptModel)
+	{
+		font = subHeaderFont;
+		DrawString(g, $"Total: {receiptModel.TotalAmount}");
+
+		font = regularFont;
+		if (receiptModel.Cash > 0) DrawString(g, $"Cash: {receiptModel.Cash}");
+		if (receiptModel.Card > 0) DrawString(g, $"Card: {receiptModel.Card}");
+		if (receiptModel.UPI > 0) DrawString(g, $"UPI: {receiptModel.UPI}");
+		if (receiptModel.Amex > 0) DrawString(g, $"Amex: {receiptModel.Amex}");
+		DrawString(g, "------------------------", true);
+	}
+
+	private static void DrawFooter(Graphics g, ReceiptModel receiptModel)
+	{
+		if (receiptModel.ApprovedBy != null) DrawString(g, $"Approved By: {receiptModel.ApprovedBy}");
+		DrawString(g, $"Entered By: {receiptModel.EnteredBy}");
+
+		font = footerFont;
+		DrawString(g, "This coupon is non-transferable");
+		DrawString(g, "to any person or any other outlet.");
+		DrawString(g, "This coupon is to be redeemed");
+		DrawString(g, "until the end of the operations");
+		DrawString(g, "of the particular night:");
+		DrawString(g, $"{receiptModel.ReceiptDate:dd/MM/yy HH:mm}");
+		DrawString(g, "The hotel does not take liability");
+		DrawString(g, "or responsibility if the coupon");
+		DrawString(g, "is lost by the guest");
+	}
+
+	public static void DrawGraphics(PrintPageEventArgs e, string copyOf, int transactionId)
+	{
+		ReceiptModel receiptModel = Task.Run(async () => await PrintData.LoadReceiptDetails(transactionId)).Result.FirstOrDefault();
+
 		Graphics g = e.Graphics;
-		Font font = new("Courier New", 12, FontStyle.Bold);
+		maxWidth = e.PageBounds.Width - 20;
+		startPosition = 10;
+		lowerSpacing = 0;
 
-		StringFormat center = new(StringFormatFlags.FitBlackBox);
-		center.Alignment = StringAlignment.Center;
+		DrawHeader(g, receiptModel.LocationName, copyOf);
+		DrawReceiptDetails(g, receiptModel);
+		DrawPaymentDetails(g, receiptModel);
+		DrawFooter(g, receiptModel);
 
-		int lowerSpacing = 0;
-		int lowerSpacingIncrement = 15;
-		int startPosition = 10;
-		int maxWidth = e.PageBounds.Width - 20;
-
-		g.DrawString($"** {Task.Run(async () => await CommonData.LoadTableDataById<LocationModel>("LocationTable", locationId)).Result.FirstOrDefault().Name} **", new Font("Arial", 25, FontStyle.Bold), Brushes.Black, new RectangleF(startPosition, lowerSpacing += 10, maxWidth, 40), center);
-		g.DrawString($"--- {copyOf} Copy ---", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += 40, maxWidth, 25), center);
-		g.DrawString($"Slip No.: {slipId}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
-		g.DrawString($"DT: {transaction.DateTime.ToString("dd/MM/yy HH:mm")}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
-		g.DrawString($"Name: {Task.Run(async () => await PersonData.GetPersonByNumber(numberTextBoxText)).Result.FirstOrDefault().Name}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
-		g.DrawString($"Contact: {numberTextBoxText}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
-		if (loyaltyCheckBoxChecked) g.DrawString("Loyalty Member", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
-		g.DrawString($"Reservation: {Task.Run(async () => await CommonData.LoadTableDataById<ReservationTypeModel>("ReservationTypeTable", transaction.ReservationType)).Result.FirstOrDefault().Name}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
-
-		g.DrawString("--------------------------", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25), center);
-		g.DrawString($"Total Persons: {transaction.Male + transaction.Female}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
-		g.DrawString("Male\tFemale", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
-		g.DrawString($"{transaction.Male}\t{transaction.Female}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
-
-		g.DrawString("--------------------------", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25), center);
-		font = new Font("Arial", 20, FontStyle.Bold);
-		g.DrawString($"Total: {transaction.Cash + transaction.Card + transaction.UPI + transaction.Amex}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 35));
-		font = new("Courier New", 12, FontStyle.Bold);
-		g.DrawString($"{MakeStringHeaderAmount(transaction)}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += 20, maxWidth, 25));
-		g.DrawString($"{MakeStringAmount(transaction)}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
-
-		g.DrawString("--------------------------", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25), center);
-		if (transaction.ApprovedBy != null) g.DrawString($"Approved By: {transaction.ApprovedBy}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
-		g.DrawString($"Entered By: {Task.Run(async () => await CommonData.LoadTableDataById<EmployeeModel>("EmployeeTable", transaction.EmployeeId)).Result.FirstOrDefault().Name}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 25));
-
-		font = new("Courier New", 9, FontStyle.Bold);
-
-		lowerSpacingIncrement = 13;
-
-		startPosition = 8;
-
-		g.DrawString("This coupon is non-transferable", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += 30, maxWidth, 14));
-		g.DrawString("to any person or any other outlet.", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 14));
-		g.DrawString("This coupon is to be redeemed", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 14));
-		g.DrawString("until the end of the operations", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 14));
-		g.DrawString("of the particular night:", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 14));
-		g.DrawString($"{transaction.DateTime.ToString("dd/MM/yy HH:mm")}", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 14));
-		g.DrawString("The hotel does not take liability", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 14));
-		g.DrawString("or responsibility if the coupon", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 14));
-		g.DrawString("is lost by the guest", font, Brushes.Black, new RectangleF(startPosition, lowerSpacing += lowerSpacingIncrement, maxWidth, 14));
-
-		PaperSize ps58 = new PaperSize("58mm Thermal", 220, lowerSpacing += 20);
+		PaperSize ps58 = new PaperSize("58mm Thermal", 220, lowerSpacing + 20);
 		e.PageSettings.PaperSize = ps58;
 
 		e.HasMorePages = false;
