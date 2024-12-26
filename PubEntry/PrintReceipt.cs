@@ -1,13 +1,10 @@
-﻿using System.Drawing;
-using System.Drawing.Printing;
-using System.Runtime.Versioning;
+﻿using System.Drawing.Printing;
 
 using PubEntryLibrary.Data;
 using PubEntryLibrary.Models.Printing;
 
-namespace PubEntryLibrary.Printing;
+namespace PubEntry;
 
-[SupportedOSPlatform("windows6.1")]
 public static class PrintReceipt
 {
 	private static readonly Font headerFont = new("Arial", 25, FontStyle.Bold);

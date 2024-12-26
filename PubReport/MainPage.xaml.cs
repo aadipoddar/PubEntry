@@ -33,7 +33,7 @@ public partial class MainPage : ContentPage
 			fromDatePicker.Date = DateTime.Now.Date.AddDays(-1);
 		}
 
-		var locations = Task.Run(async () => await CommonData.LoadTableData<LocationModel>("LocationTable")).Result.ToList();
+		var locations = Task.Run(LocationData.LoadActiveLocations).Result.ToList();
 
 		locationPicker.ItemsSource = locations;
 		locationPicker.ItemDisplayBinding = new Binding(nameof(LocationModel.Name));
@@ -62,23 +62,19 @@ public partial class MainPage : ContentPage
 	private async void SummaryReportButtonClicked(object sender, EventArgs e)
 	{
 		if (!ValidateTime()) await DisplayAlert("Alert", "Incorrect Time or Date", "OK");
-		else
-		{
-			busyIndicator.IsVisible = true;
-			await Task.Run(() => { PrintPDF(); });
-			busyIndicator.IsVisible = false;
-		}
+		else await Task.Run(() => { PrintPDF(); });
 	}
 
 	private async void DetailReportButtonClicked(object sender, EventArgs e)
 	{
 		if (!ValidateTime()) await DisplayAlert("Alert", "Incorrect Time or Date", "OK");
-		else
-		{
-			busyIndicator.IsVisible = true;
-			await Task.Run(() => { PrintPDF(true); });
-			busyIndicator.IsVisible = false;
-		}
+		else await Task.Run(() => { PrintPDF(true); });
+	}
+
+	private async void ExcelDetailReportButtonClicked(object sender, EventArgs e)
+	{
+		if (!ValidateTime()) await DisplayAlert("Alert", "Incorrect Time or Date", "OK");
+		else await Task.Run(ExportToExcel);
 	}
 	#endregion
 
@@ -118,17 +114,6 @@ public partial class MainPage : ContentPage
 		SaveService saveService = new();
 		if (isDetail) saveService.SaveAndView("DetailReport.pdf", "application/pdf", ms);
 		else saveService.SaveAndView("SummaryReport.pdf", "application/pdf", ms);
-	}
-
-	private async void ExcelDetailReportButtonClicked(object sender, EventArgs e)
-	{
-		if (!ValidateTime()) await DisplayAlert("Alert", "Incorrect Time or Date", "OK");
-		else
-		{
-			busyIndicator.IsVisible = true;
-			await Task.Run(ExportToExcel);
-			busyIndicator.IsVisible = false;
-		}
 	}
 
 	private void ExportToExcel()

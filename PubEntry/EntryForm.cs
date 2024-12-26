@@ -3,7 +3,6 @@ using System.Reflection;
 
 using PubEntryLibrary.Data;
 using PubEntryLibrary.Models;
-using PubEntryLibrary.Printing;
 
 using Timer = System.Windows.Forms.Timer;
 

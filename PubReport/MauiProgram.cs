@@ -4,8 +4,6 @@
 
 using PubEntryLibrary.DataAccess;
 
-using Syncfusion.Maui.Core.Hosting;
-
 namespace PubReport;
 
 public static class MauiProgram
@@ -16,7 +14,6 @@ public static class MauiProgram
 		var builder = MauiApp.CreateBuilder();
 		builder
 			.UseMauiApp<App>()
-			.ConfigureSyncfusionCore()
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
