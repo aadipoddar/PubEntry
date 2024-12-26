@@ -43,7 +43,6 @@ public partial class SaveService
 		}
 		if (file.Exists())
 		{
-
 			if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.N)
 			{
 				var fileUri = AndroidX.Core.Content.FileProvider.GetUriForFile(Android.App.Application.Context, Android.App.Application.Context.PackageName + ".provider", file);
