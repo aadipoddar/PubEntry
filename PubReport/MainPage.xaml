@@ -15,7 +15,7 @@
 					<RowDefinition Height="Auto" />
 				</Grid.RowDefinitions>
 
-				<Label Text="Form Date" Grid.Row="0" Grid.Column="0" Padding="10"/>
+				<Label Text="Form Data" Grid.Row="0" Grid.Column="0" Padding="10"/>
 				<DatePicker x:Name="fromDatePicker" Grid.Row="0" Grid.Column="1" />
 
 				<Label Text="To Date" Grid.Row="1" Grid.Column="0" Padding="10" />
