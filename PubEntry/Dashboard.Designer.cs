@@ -35,10 +35,9 @@ partial class Dashboard
 		passwordTextBox = new TextBox();
 		brandingLabel = new Label();
 		richTextBoxFooter = new RichTextBox();
-		manageEmployeeButton = new Button();
 		reportsButton = new Button();
 		versionLabel = new Label();
-		manageLocationButton = new Button();
+		adminButton = new Button();
 		SuspendLayout();
 		// 
 		// locationComboBox
@@ -89,7 +88,7 @@ partial class Dashboard
 		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 		brandingLabel.AutoSize = true;
 		brandingLabel.BackColor = Color.White;
-		brandingLabel.Location = new Point(257, 492);
+		brandingLabel.Location = new Point(257, 451);
 		brandingLabel.Name = "brandingLabel";
 		brandingLabel.Size = new Size(76, 15);
 		brandingLabel.TabIndex = 30;
@@ -98,22 +97,11 @@ partial class Dashboard
 		// richTextBoxFooter
 		// 
 		richTextBoxFooter.Dock = DockStyle.Bottom;
-		richTextBoxFooter.Location = new Point(0, 486);
+		richTextBoxFooter.Location = new Point(0, 445);
 		richTextBoxFooter.Name = "richTextBoxFooter";
 		richTextBoxFooter.Size = new Size(336, 26);
 		richTextBoxFooter.TabIndex = 29;
 		richTextBoxFooter.Text = "";
-		// 
-		// manageEmployeeButton
-		// 
-		manageEmployeeButton.Font = new Font("Segoe UI", 15F);
-		manageEmployeeButton.Location = new Point(56, 389);
-		manageEmployeeButton.Name = "manageEmployeeButton";
-		manageEmployeeButton.Size = new Size(213, 38);
-		manageEmployeeButton.TabIndex = 15;
-		manageEmployeeButton.Text = "Manage Employees";
-		manageEmployeeButton.UseVisualStyleBackColor = true;
-		manageEmployeeButton.Click += manageEmployeeButton_Click;
 		// 
 		// reportsButton
 		// 
@@ -131,32 +119,31 @@ partial class Dashboard
 		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 		versionLabel.AutoSize = true;
 		versionLabel.BackColor = Color.White;
-		versionLabel.Location = new Point(2, 492);
+		versionLabel.Location = new Point(2, 451);
 		versionLabel.Name = "versionLabel";
 		versionLabel.Size = new Size(84, 15);
 		versionLabel.TabIndex = 32;
 		versionLabel.Text = "Version: 1.9.3.0";
 		// 
-		// manageLocationButton
+		// adminButton
 		// 
-		manageLocationButton.Font = new Font("Segoe UI", 15F);
-		manageLocationButton.Location = new Point(56, 433);
-		manageLocationButton.Name = "manageLocationButton";
-		manageLocationButton.Size = new Size(213, 38);
-		manageLocationButton.TabIndex = 16;
-		manageLocationButton.Text = "Manage Locations";
-		manageLocationButton.UseVisualStyleBackColor = true;
-		manageLocationButton.Click += manageLocationButton_Click;
+		adminButton.Font = new Font("Segoe UI", 15F);
+		adminButton.Location = new Point(70, 387);
+		adminButton.Name = "adminButton";
+		adminButton.Size = new Size(188, 38);
+		adminButton.TabIndex = 15;
+		adminButton.Text = "Admin Panel";
+		adminButton.UseVisualStyleBackColor = true;
+		adminButton.Click += adminButton_Click;
 		// 
 		// Dashboard
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(336, 512);
-		Controls.Add(manageLocationButton);
+		ClientSize = new Size(336, 471);
+		Controls.Add(adminButton);
 		Controls.Add(versionLabel);
 		Controls.Add(reportsButton);
-		Controls.Add(manageEmployeeButton);
 		Controls.Add(brandingLabel);
 		Controls.Add(richTextBoxFooter);
 		Controls.Add(passwordTextBox);
@@ -180,8 +167,7 @@ partial class Dashboard
 	private TextBox passwordTextBox;
 	private Label brandingLabel;
 	private RichTextBox richTextBoxFooter;
-	private Button manageEmployeeButton;
 	private Button reportsButton;
 	private Label versionLabel;
-	private Button manageLocationButton;
+	private Button adminButton;
 }

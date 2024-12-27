@@ -106,23 +106,12 @@ public partial class Dashboard : Form
 		selectDataForm.Show();
 	}
 
-	private void manageEmployeeButton_Click(object sender, EventArgs e)
+	private void adminButton_Click(object sender, EventArgs e)
 	{
 		if (passwordTextBox.Text == "admin")
 		{
-			EmployeeForm employeeForm = new();
-			employeeForm.ShowDialog();
-		}
-
-		else MessageBox.Show("Incorrect Password");
-	}
-
-	private void manageLocationButton_Click(object sender, EventArgs e)
-	{
-		if (passwordTextBox.Text == "admin")
-		{
-			LocationForm locationForm = new();
-			locationForm.ShowDialog();
+			AdminPanel adminPanel = new();
+			adminPanel.ShowDialog();
 		}
 
 		else MessageBox.Show("Incorrect Password");
