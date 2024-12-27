@@ -1,6 +1,6 @@
 ﻿namespace PubEntry.Admin;
 
-partial class TransactionForm
+partial class SlipIdForm
 {
 	/// <summary>
 	/// Required designer variable.
@@ -28,29 +28,30 @@ partial class TransactionForm
 	/// </summary>
 	private void InitializeComponent()
 	{
-		numberLabel = new Label();
-		numberTextBox = new TextBox();
+		slipIdLabel = new Label();
+		slipIdTextBox = new TextBox();
 		goButton = new Button();
 		SuspendLayout();
 		// 
-		// numberLabel
+		// slipIdLabel
 		// 
-		numberLabel.AutoSize = true;
-		numberLabel.Font = new Font("Segoe UI", 15F);
-		numberLabel.Location = new Point(21, 33);
-		numberLabel.Name = "numberLabel";
-		numberLabel.Size = new Size(67, 28);
-		numberLabel.TabIndex = 37;
-		numberLabel.Text = "Slip Id";
+		slipIdLabel.AutoSize = true;
+		slipIdLabel.Font = new Font("Segoe UI", 15F);
+		slipIdLabel.Location = new Point(21, 33);
+		slipIdLabel.Name = "slipIdLabel";
+		slipIdLabel.Size = new Size(67, 28);
+		slipIdLabel.TabIndex = 37;
+		slipIdLabel.Text = "Slip Id";
 		// 
-		// numberTextBox
+		// slipIdTextBox
 		// 
-		numberTextBox.Font = new Font("Segoe UI", 15F);
-		numberTextBox.Location = new Point(126, 30);
-		numberTextBox.Name = "numberTextBox";
-		numberTextBox.PlaceholderText = "Slip ID";
-		numberTextBox.Size = new Size(134, 34);
-		numberTextBox.TabIndex = 36;
+		slipIdTextBox.Font = new Font("Segoe UI", 15F);
+		slipIdTextBox.Location = new Point(126, 30);
+		slipIdTextBox.Name = "slipIdTextBox";
+		slipIdTextBox.PlaceholderText = "Slip ID";
+		slipIdTextBox.Size = new Size(134, 34);
+		slipIdTextBox.TabIndex = 1;
+		slipIdTextBox.KeyPress += slipIdTextBox_KeyPress;
 		// 
 		// goButton
 		// 
@@ -58,20 +59,22 @@ partial class TransactionForm
 		goButton.Location = new Point(65, 88);
 		goButton.Name = "goButton";
 		goButton.Size = new Size(118, 38);
-		goButton.TabIndex = 32;
+		goButton.TabIndex = 2;
 		goButton.Text = "GO";
 		goButton.UseVisualStyleBackColor = true;
 		goButton.Click += goButton_Click;
 		// 
-		// TransactionForm
+		// SlipIdForm
 		// 
+		AcceptButton = goButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(291, 158);
-		Controls.Add(numberLabel);
-		Controls.Add(numberTextBox);
+		Controls.Add(slipIdLabel);
+		Controls.Add(slipIdTextBox);
 		Controls.Add(goButton);
-		Name = "TransactionForm";
+		Name = "SlipIdForm";
+		StartPosition = FormStartPosition.CenterScreen;
 		Text = "TransactionForm";
 		ResumeLayout(false);
 		PerformLayout();
@@ -79,8 +82,8 @@ partial class TransactionForm
 
 	#endregion
 
-	private Label numberLabel;
-	private TextBox numberTextBox;
+	private Label slipIdLabel;
+	private TextBox slipIdTextBox;
 	private Label loyaltyLabel;
 	private ComboBox loyaltyComboBox;
 	private Button goButton;

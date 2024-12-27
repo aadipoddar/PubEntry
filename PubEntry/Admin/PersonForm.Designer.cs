@@ -30,11 +30,10 @@ partial class PersonForm
 	{
 		saveButton = new Button();
 		nameLabel = new Label();
-		employeeNameTextBox = new TextBox();
-		loyaltyComboBox = new ComboBox();
-		loyaltyLabel = new Label();
+		nameTextBox = new TextBox();
 		numberLabel = new Label();
 		numberTextBox = new TextBox();
+		loyaltyCheckBox = new CheckBox();
 		SuspendLayout();
 		// 
 		// saveButton
@@ -43,9 +42,10 @@ partial class PersonForm
 		saveButton.Location = new Point(192, 170);
 		saveButton.Name = "saveButton";
 		saveButton.Size = new Size(118, 38);
-		saveButton.TabIndex = 22;
+		saveButton.TabIndex = 4;
 		saveButton.Text = "SAVE";
 		saveButton.UseVisualStyleBackColor = true;
+		saveButton.Click += saveButton_Click;
 		// 
 		// nameLabel
 		// 
@@ -57,36 +57,14 @@ partial class PersonForm
 		nameLabel.TabIndex = 23;
 		nameLabel.Text = "Name";
 		// 
-		// employeeNameTextBox
+		// nameTextBox
 		// 
-		employeeNameTextBox.Font = new Font("Segoe UI", 15F);
-		employeeNameTextBox.Location = new Point(201, 69);
-		employeeNameTextBox.Name = "employeeNameTextBox";
-		employeeNameTextBox.PlaceholderText = "Name";
-		employeeNameTextBox.Size = new Size(271, 34);
-		employeeNameTextBox.TabIndex = 18;
-		// 
-		// loyaltyComboBox
-		// 
-		loyaltyComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-		loyaltyComboBox.FlatStyle = FlatStyle.System;
-		loyaltyComboBox.Font = new Font("Segoe UI", 15F);
-		loyaltyComboBox.FormattingEnabled = true;
-		loyaltyComboBox.Items.AddRange(new object[] { "Active", "Inactive" });
-		loyaltyComboBox.Location = new Point(201, 109);
-		loyaltyComboBox.Name = "loyaltyComboBox";
-		loyaltyComboBox.Size = new Size(271, 36);
-		loyaltyComboBox.TabIndex = 21;
-		// 
-		// loyaltyLabel
-		// 
-		loyaltyLabel.AutoSize = true;
-		loyaltyLabel.Font = new Font("Segoe UI", 15F);
-		loyaltyLabel.Location = new Point(32, 112);
-		loyaltyLabel.Name = "loyaltyLabel";
-		loyaltyLabel.Size = new Size(75, 28);
-		loyaltyLabel.TabIndex = 27;
-		loyaltyLabel.Text = "Loyalty";
+		nameTextBox.Font = new Font("Segoe UI", 15F);
+		nameTextBox.Location = new Point(201, 69);
+		nameTextBox.Name = "nameTextBox";
+		nameTextBox.PlaceholderText = "Name";
+		nameTextBox.Size = new Size(271, 34);
+		nameTextBox.TabIndex = 2;
 		// 
 		// numberLabel
 		// 
@@ -105,21 +83,34 @@ partial class PersonForm
 		numberTextBox.Name = "numberTextBox";
 		numberTextBox.PlaceholderText = "Number";
 		numberTextBox.Size = new Size(271, 34);
-		numberTextBox.TabIndex = 28;
+		numberTextBox.TabIndex = 1;
+		numberTextBox.TextChanged += numberTextBox_TextChanged;
+		numberTextBox.KeyPress += textBox_KeyPress;
+		// 
+		// loyaltyCheckBox
+		// 
+		loyaltyCheckBox.AutoSize = true;
+		loyaltyCheckBox.Font = new Font("Segoe UI", 15F);
+		loyaltyCheckBox.Location = new Point(201, 123);
+		loyaltyCheckBox.Name = "loyaltyCheckBox";
+		loyaltyCheckBox.Size = new Size(94, 32);
+		loyaltyCheckBox.TabIndex = 3;
+		loyaltyCheckBox.Text = "Loyalty";
+		loyaltyCheckBox.UseVisualStyleBackColor = true;
 		// 
 		// PersonForm
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(524, 232);
+		Controls.Add(loyaltyCheckBox);
 		Controls.Add(numberLabel);
 		Controls.Add(numberTextBox);
-		Controls.Add(loyaltyLabel);
-		Controls.Add(loyaltyComboBox);
 		Controls.Add(saveButton);
 		Controls.Add(nameLabel);
-		Controls.Add(employeeNameTextBox);
+		Controls.Add(nameTextBox);
 		Name = "PersonForm";
+		StartPosition = FormStartPosition.CenterScreen;
 		Text = "PersonForm";
 		ResumeLayout(false);
 		PerformLayout();
@@ -128,9 +119,8 @@ partial class PersonForm
 	#endregion
 	private Button saveButton;
 	private Label nameLabel;
-	private TextBox employeeNameTextBox;
-	private ComboBox loyaltyComboBox;
-	private Label loyaltyLabel;
+	private TextBox nameTextBox;
 	private Label numberLabel;
 	private TextBox numberTextBox;
+	private CheckBox loyaltyCheckBox;
 }

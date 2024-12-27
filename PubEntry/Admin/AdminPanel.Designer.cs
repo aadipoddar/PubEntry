@@ -66,6 +66,7 @@ partial class AdminPanel
 		manageTransactionsButton.TabIndex = 20;
 		manageTransactionsButton.Text = "Manage Transactions";
 		manageTransactionsButton.UseVisualStyleBackColor = true;
+		manageTransactionsButton.Click += manageTransactionsButton_Click;
 		// 
 		// managePersonsButton
 		// 
@@ -76,6 +77,7 @@ partial class AdminPanel
 		managePersonsButton.TabIndex = 19;
 		managePersonsButton.Text = "Manage Persons";
 		managePersonsButton.UseVisualStyleBackColor = true;
+		managePersonsButton.Click += managePersonsButton_Click;
 		// 
 		// settingsButton
 		// 

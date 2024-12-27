@@ -14,7 +14,8 @@ public partial class EntryForm : Form
 	private const int InactivityLimit = 5 * 60 * 1000;
 
 	#region InitalLoading
-	int transactionId, employeeId, locationId;
+	int transactionId, employeeId, locationId, slipId;
+	TransactionModel updateTransactionModel;
 
 	public EntryForm(int locationId, int employeeId)
 	{
@@ -22,8 +23,41 @@ public partial class EntryForm : Form
 
 		this.employeeId = employeeId;
 		this.locationId = locationId;
+	}
 
-		Task task = LoadComboBox();
+	public EntryForm(TransactionModel updateTransactionModel)
+	{
+		InitializeComponent();
+
+		this.updateTransactionModel = updateTransactionModel;
+	}
+
+	private async void EntryForm_Load(object sender, EventArgs e)
+	{
+		await LoadComboBox();
+
+		if (updateTransactionModel != null)
+		{
+			PersonModel personModel = (await CommonData.LoadTableDataById<PersonModel>("PersonTable", updateTransactionModel.PersonId)).FirstOrDefault();
+			if (personModel != null)
+			{
+				numberTextBox.Text = personModel.Number;
+				nameTextBox.Text = personModel.Name;
+
+				loyaltyCheckBox.Checked = personModel.Loyalty == 1;
+
+				maleTextBox.Text = updateTransactionModel.Male.ToString();
+				femaleTextBox.Text = updateTransactionModel.Female.ToString();
+				cashAmountTextBox.Text = updateTransactionModel.Cash.ToString();
+				cardAmountTextBox.Text = updateTransactionModel.Card.ToString();
+				upiAmountTextBox.Text = updateTransactionModel.UPI.ToString();
+				amexAmountTextBox.Text = updateTransactionModel.Amex.ToString();
+				reservationComboBox.SelectedIndex = updateTransactionModel.ReservationType;
+				approvedByTextBox.Text = updateTransactionModel.ApprovedBy;
+				employeeId = updateTransactionModel.EmployeeId;
+				locationId = updateTransactionModel.LocationId;
+			}
+		}
 
 		InitializeInactivityTimer();
 		SubscribeToTextChangedEvents();
@@ -113,7 +147,7 @@ public partial class EntryForm : Form
 	#region Events
 	private void dateChangeTimer_Tick(object sender, EventArgs e) => dateTimeLabel.Text = DateTime.Now.ToString();
 
-	private async void numberTextBox_KeyUp(object sender, KeyEventArgs e)
+	private async void numberTextBox_TextChanged(object sender, EventArgs e)
 	{
 		var foundPerson = await PersonData.GetPersonByNumber(numberTextBox.Text);
 		if (foundPerson != null)
@@ -152,7 +186,10 @@ public partial class EntryForm : Form
 		personModel.Id = await PersonData.UpdatePerson(personModel);
 
 		TransactionModel transactionModel = new();
-		transactionModel.Id = 0;
+
+		if (updateTransactionModel == null) transactionModel.Id = 0;
+		else transactionModel.Id = updateTransactionModel.Id;
+
 		transactionModel.PersonId = personModel.Id;
 		transactionModel.Male = (int)Convert.ToInt64(maleTextBox.Text);
 		transactionModel.Female = (int)Convert.ToInt64(femaleTextBox.Text);
@@ -166,7 +203,10 @@ public partial class EntryForm : Form
 		transactionModel.LocationId = locationId;
 		transactionModel.EmployeeId = employeeId;
 
-		transactionId = Task.Run(async () => await TransactionData.InsertTransaction(transactionModel)).Result;
+		if (updateTransactionModel == null)
+			transactionId = await TransactionData.InsertTransaction(transactionModel);
+
+		else transactionId = await TransactionData.UpdateTransaction(transactionModel);
 
 		PrintDialog printDialog = new();
 		printDialog.Document = printDocumentCustomer;

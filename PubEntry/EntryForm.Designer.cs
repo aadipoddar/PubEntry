@@ -98,8 +98,8 @@ partial class EntryForm
 		numberTextBox.PlaceholderText = "Mobile Number";
 		numberTextBox.Size = new Size(271, 34);
 		numberTextBox.TabIndex = 0;
+		numberTextBox.TextChanged += numberTextBox_TextChanged;
 		numberTextBox.KeyPress += textBox_KeyPress;
-		numberTextBox.KeyUp += numberTextBox_KeyUp;
 		// 
 		// cashLabel
 		// 
@@ -383,6 +383,7 @@ partial class EntryForm
 		Name = "EntryForm";
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "Dashboard";
+		Load += EntryForm_Load;
 		ResumeLayout(false);
 		PerformLayout();
 	}
