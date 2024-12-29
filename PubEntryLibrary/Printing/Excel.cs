@@ -39,7 +39,7 @@ public static class Excel
 			worksheet.Range["H2"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
 			worksheet.Range["H2"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
 
-			var detailedPrintModels = await PrintData.LoadTransactionsByDateAndLocation(fromTime, toTime, selectedLocationId);
+			var detailedPrintModel = await PrintData.LoadTransactionsByDateAndLocation(fromTime, toTime, selectedLocationId);
 
 			worksheet.Range["A4"].Text = "SlipId";
 			worksheet.Range["B4"].Text = "Name";
@@ -78,7 +78,7 @@ public static class Excel
 			worksheet.Range["A4"].RowHeight = 15;
 
 			int rowCount = 1;
-			foreach (var transaction in detailedPrintModels)
+			foreach (var transaction in detailedPrintModel)
 			{
 				worksheet.Range[$"A{rowCount + 4}"].Number = transaction.SlipId;
 				worksheet.Range[$"B{rowCount + 4}"].Text = transaction.PersonName;
@@ -133,22 +133,22 @@ public static class Excel
 			worksheet.Range[$"B{rowCount + 10}"].CellStyle.Font.Bold = true;
 			worksheet.Range[$"B{rowCount + 10}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
 
-			worksheet.Range[$"C{rowCount + 7}"].Number = detailedPrintModels.Sum(x => x.Male) + detailedPrintModels.Sum(x => x.Female);
+			worksheet.Range[$"C{rowCount + 7}"].Number = detailedPrintModel.Sum(x => x.Male) + detailedPrintModel.Sum(x => x.Female);
 			worksheet.Range[$"C{rowCount + 7}"].CellStyle.Font.Size = 20;
 			worksheet.Range[$"C{rowCount + 7}"].CellStyle.Font.Bold = true;
 			worksheet.Range[$"C{rowCount + 7}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
 
-			worksheet.Range[$"C{rowCount + 8}"].Number = detailedPrintModels.Sum(x => x.Male);
+			worksheet.Range[$"C{rowCount + 8}"].Number = detailedPrintModel.Sum(x => x.Male);
 			worksheet.Range[$"C{rowCount + 8}"].CellStyle.Font.Size = 15;
 			worksheet.Range[$"C{rowCount + 8}"].CellStyle.Font.Bold = true;
 			worksheet.Range[$"C{rowCount + 8}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
 
-			worksheet.Range[$"C{rowCount + 9}"].Number = detailedPrintModels.Sum(x => x.Female);
+			worksheet.Range[$"C{rowCount + 9}"].Number = detailedPrintModel.Sum(x => x.Female);
 			worksheet.Range[$"C{rowCount + 9}"].CellStyle.Font.Size = 15;
 			worksheet.Range[$"C{rowCount + 9}"].CellStyle.Font.Bold = true;
 			worksheet.Range[$"C{rowCount + 9}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
 
-			worksheet.Range[$"C{rowCount + 10}"].Number = detailedPrintModels.Sum(x => x.Loyalty);
+			worksheet.Range[$"C{rowCount + 10}"].Number = detailedPrintModel.Count(x => x.Loyalty == 'L');
 			worksheet.Range[$"C{rowCount + 10}"].CellStyle.Font.Size = 15;
 			worksheet.Range[$"C{rowCount + 10}"].CellStyle.Font.Bold = true;
 			worksheet.Range[$"C{rowCount + 10}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
@@ -178,27 +178,27 @@ public static class Excel
 			worksheet.Range[$"I{rowCount + 11}"].CellStyle.Font.Bold = true;
 			worksheet.Range[$"I{rowCount + 11}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
 
-			worksheet.Range[$"K{rowCount + 7}"].Number = detailedPrintModels.Sum(x => x.Cash) + detailedPrintModels.Sum(x => x.Card) + detailedPrintModels.Sum(x => x.UPI) + detailedPrintModels.Sum(x => x.Amex);
+			worksheet.Range[$"K{rowCount + 7}"].Number = detailedPrintModel.Sum(x => x.Cash) + detailedPrintModel.Sum(x => x.Card) + detailedPrintModel.Sum(x => x.UPI) + detailedPrintModel.Sum(x => x.Amex);
 			worksheet.Range[$"K{rowCount + 7}"].CellStyle.Font.Size = 20;
 			worksheet.Range[$"K{rowCount + 7}"].CellStyle.Font.Bold = true;
 			worksheet.Range[$"K{rowCount + 7}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
 
-			worksheet.Range[$"K{rowCount + 8}"].Number = detailedPrintModels.Sum(x => x.Cash);
+			worksheet.Range[$"K{rowCount + 8}"].Number = detailedPrintModel.Sum(x => x.Cash);
 			worksheet.Range[$"K{rowCount + 8}"].CellStyle.Font.Size = 15;
 			worksheet.Range[$"K{rowCount + 8}"].CellStyle.Font.Bold = true;
 			worksheet.Range[$"K{rowCount + 8}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
 
-			worksheet.Range[$"K{rowCount + 9}"].Number = detailedPrintModels.Sum(x => x.Card);
+			worksheet.Range[$"K{rowCount + 9}"].Number = detailedPrintModel.Sum(x => x.Card);
 			worksheet.Range[$"K{rowCount + 9}"].CellStyle.Font.Size = 15;
 			worksheet.Range[$"K{rowCount + 9}"].CellStyle.Font.Bold = true;
 			worksheet.Range[$"K{rowCount + 9}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
 
-			worksheet.Range[$"K{rowCount + 10}"].Number = detailedPrintModels.Sum(x => x.UPI);
+			worksheet.Range[$"K{rowCount + 10}"].Number = detailedPrintModel.Sum(x => x.UPI);
 			worksheet.Range[$"K{rowCount + 10}"].CellStyle.Font.Size = 15;
 			worksheet.Range[$"K{rowCount + 10}"].CellStyle.Font.Bold = true;
 			worksheet.Range[$"K{rowCount + 10}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
 
-			worksheet.Range[$"K{rowCount + 11}"].Number = detailedPrintModels.Sum(x => x.Amex);
+			worksheet.Range[$"K{rowCount + 11}"].Number = detailedPrintModel.Sum(x => x.Amex);
 			worksheet.Range[$"K{rowCount + 11}"].CellStyle.Font.Size = 15;
 			worksheet.Range[$"K{rowCount + 11}"].CellStyle.Font.Bold = true;
 			worksheet.Range[$"K{rowCount + 11}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
