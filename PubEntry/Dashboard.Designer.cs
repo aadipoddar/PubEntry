@@ -42,6 +42,8 @@ partial class Dashboard
 		// 
 		// locationComboBox
 		// 
+		locationComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+		locationComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
 		locationComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 		locationComboBox.Font = new Font("Segoe UI", 15F);
 		locationComboBox.FormattingEnabled = true;
@@ -53,6 +55,8 @@ partial class Dashboard
 		// 
 		// userComboBox
 		// 
+		userComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+		userComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
 		userComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 		userComboBox.Font = new Font("Segoe UI", 15F);
 		userComboBox.FormattingEnabled = true;

@@ -111,13 +111,13 @@ public partial class MainPage : ContentPage
 		else saveService.SaveAndView("SummaryReport.pdf", "application/pdf", ms);
 	}
 
-	private void ExportToExcel()
+	private async void ExportToExcel()
 	{
 		string dateHeader = $"{GetFormatedDate()} - {GetFormatedDate(false)}";
 		string fromTime = GetFromDateTime();
 		string toTime = GetToDateTime();
 
-		MemoryStream ms = Excel.ExcelExport(dateHeader, fromTime, toTime, selectedLocationId + 1);
+		MemoryStream ms = await Excel.ExcelExport(dateHeader, fromTime, toTime, selectedLocationId + 1);
 		SaveService saveService = new();
 		saveService.SaveAndView("DetailedExcel.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ms);
 	}

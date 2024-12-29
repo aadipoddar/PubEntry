@@ -224,6 +224,8 @@ partial class EntryForm
 		// 
 		// reservationComboBox
 		// 
+		reservationComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+		reservationComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
 		reservationComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 		reservationComboBox.Font = new Font("Segoe UI", 15F);
 		reservationComboBox.FormattingEnabled = true;

@@ -84,11 +84,5 @@ partial class SlipIdForm
 
 	private Label slipIdLabel;
 	private TextBox slipIdTextBox;
-	private Label loyaltyLabel;
-	private ComboBox loyaltyComboBox;
 	private Button goButton;
-	private Label nameLabel;
-	private TextBox employeeNameTextBox;
-	private Label label1;
-	private TextBox textBox1;
 }
