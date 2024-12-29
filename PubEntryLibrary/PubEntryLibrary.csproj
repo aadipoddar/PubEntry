@@ -13,4 +13,9 @@
     <PackageReference Include="Syncfusion.XlsIO.NET" Version="28.1.36" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Using Include="PubEntryLibrary.DataAccess" />
+    <Using Include="PubEntryLibrary.Models" />
+  </ItemGroup>
+
 </Project>

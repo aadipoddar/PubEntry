@@ -181,7 +181,7 @@ partial class SelectDataForm
 		versionLabel.Name = "versionLabel";
 		versionLabel.Size = new Size(84, 15);
 		versionLabel.TabIndex = 37;
-		versionLabel.Text = "Version: 1.9.3.0";
+		versionLabel.Text = "Version: 0.0.0.0";
 		// 
 		// SelectDataForm
 		// 
@@ -204,7 +204,8 @@ partial class SelectDataForm
 		Icon = (Icon)resources.GetObject("$this.Icon");
 		Name = "SelectDataForm";
 		StartPosition = FormStartPosition.CenterScreen;
-		Text = "SelectDataForm";
+		Text = "Select Data";
+		Load += SelectDataForm_Load;
 		ResumeLayout(false);
 		PerformLayout();
 	}

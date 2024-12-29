@@ -1,13 +1,10 @@
-﻿using PubEntryLibrary.DataAccess;
-using PubEntryLibrary.Models;
-
-namespace PubEntryLibrary.Data;
+﻿namespace PubEntryLibrary.Data;
 
 public class TransactionData
 {
-	public static async Task<int> InsertTransaction(TransactionModel transactionModel) =>
-			(await Task.Run(() => SqlDataAccess.LoadData<int, dynamic>("dbo.spTransaction_Insert", transactionModel))).FirstOrDefault();
+	public static async Task<int> TransactionInsert(TransactionModel transactionModel) =>
+			(await SqlDataAccess.LoadData<int, dynamic>("TransactionInsert", transactionModel)).FirstOrDefault();
 
-	public static async Task<int> UpdateTransaction(TransactionModel transactionModel) =>
-			(await Task.Run(() => SqlDataAccess.LoadData<int, dynamic>("dbo.spTransaction_Update", transactionModel))).FirstOrDefault();
+	public static async Task<int> TransactionUpdate(TransactionModel transactionModel) =>
+			(await SqlDataAccess.LoadData<int, dynamic>("TransactionUpdate", transactionModel)).FirstOrDefault();
 }

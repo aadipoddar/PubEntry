@@ -29,7 +29,7 @@ partial class AdminPanel
 	private void InitializeComponent()
 	{
 		manageLocationButton = new Button();
-		manageEmployeeButton = new Button();
+		manageUsersButton = new Button();
 		manageTransactionsButton = new Button();
 		managePersonsButton = new Button();
 		settingsButton = new Button();
@@ -46,16 +46,16 @@ partial class AdminPanel
 		manageLocationButton.UseVisualStyleBackColor = true;
 		manageLocationButton.Click += manageLocationButton_Click;
 		// 
-		// manageEmployeeButton
+		// manageUsersButton
 		// 
-		manageEmployeeButton.Font = new Font("Segoe UI", 15F);
-		manageEmployeeButton.Location = new Point(38, 31);
-		manageEmployeeButton.Name = "manageEmployeeButton";
-		manageEmployeeButton.Size = new Size(213, 52);
-		manageEmployeeButton.TabIndex = 17;
-		manageEmployeeButton.Text = "Manage Employees";
-		manageEmployeeButton.UseVisualStyleBackColor = true;
-		manageEmployeeButton.Click += manageEmployeeButton_Click;
+		manageUsersButton.Font = new Font("Segoe UI", 15F);
+		manageUsersButton.Location = new Point(38, 31);
+		manageUsersButton.Name = "manageUsersButton";
+		manageUsersButton.Size = new Size(213, 52);
+		manageUsersButton.TabIndex = 17;
+		manageUsersButton.Text = "Manage Users";
+		manageUsersButton.UseVisualStyleBackColor = true;
+		manageUsersButton.Click += manageUsersButton_Click;
 		// 
 		// manageTransactionsButton
 		// 
@@ -98,7 +98,7 @@ partial class AdminPanel
 		Controls.Add(manageTransactionsButton);
 		Controls.Add(managePersonsButton);
 		Controls.Add(manageLocationButton);
-		Controls.Add(manageEmployeeButton);
+		Controls.Add(manageUsersButton);
 		Name = "AdminPanel";
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "AdminPanel";
@@ -108,7 +108,7 @@ partial class AdminPanel
 	#endregion
 
 	private Button manageLocationButton;
-	private Button manageEmployeeButton;
+	private Button manageUsersButton;
 	private Button manageTransactionsButton;
 	private Button managePersonsButton;
 	private Button settingsButton;

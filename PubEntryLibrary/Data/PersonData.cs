@@ -1,16 +1,13 @@
-﻿using PubEntryLibrary.DataAccess;
-using PubEntryLibrary.Models;
-
-namespace PubEntryLibrary.Data;
+﻿namespace PubEntryLibrary.Data;
 
 public class PersonData
 {
-	public static async Task<int> InsertPerson(PersonModel personModel) =>
-			(await Task.Run(() => SqlDataAccess.LoadData<int, dynamic>("dbo.spPerson_Insert", personModel))).FirstOrDefault();
+	public static async Task<int> PersonInsert(PersonModel personModel) =>
+			(await SqlDataAccess.LoadData<int, dynamic>("PersonInsert", personModel)).FirstOrDefault();
 
-	public static async Task<int> UpdatePerson(PersonModel personModel) =>
-			(await Task.Run(() => SqlDataAccess.LoadData<int, dynamic>("dbo.spPerson_Update", personModel))).FirstOrDefault();
+	public static async Task<int> PersonUpdate(PersonModel personModel) =>
+			(await SqlDataAccess.LoadData<int, dynamic>("PersonUpdate", personModel)).FirstOrDefault();
 
-	public static async Task<PersonModel> GetPersonByNumber(string number) =>
-			(await Task.Run(() => SqlDataAccess.LoadData<PersonModel, dynamic>("dbo.spLoad_Person_ByNumber", new { Number = number }))).FirstOrDefault();
+	public static async Task<PersonModel> LoadPersonByNumber(string number) =>
+			(await SqlDataAccess.LoadData<PersonModel, dynamic>("LoadPersonByNumber", new { Number = number })).FirstOrDefault();
 }

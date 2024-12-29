@@ -1,10 +1,10 @@
 ﻿namespace PubEntryLibrary.Models;
 
-public class EmployeeModel
+public class UserModel
 {
 	public int Id { get; set; }
 	public string Name { get; set; }
 	public string Password { get; set; }
 	public int LocationId { get; set; }
-	public int ActiveStatus { get; set; }
+	public bool Status { get; set; }
 }

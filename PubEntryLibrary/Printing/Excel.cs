@@ -1,6 +1,4 @@
 ﻿using PubEntryLibrary.Data;
-using PubEntryLibrary.Models;
-using PubEntryLibrary.Models.Printing;
 
 using Syncfusion.XlsIO;
 
@@ -8,7 +6,7 @@ namespace PubEntryLibrary.Printing;
 
 public static class Excel
 {
-	public static MemoryStream ExcelExport(string dateHeader, string fromTime, string toTime, int selectedLocationId)
+	public static async Task<MemoryStream> ExcelExport(string dateHeader, string fromTime, string toTime, int selectedLocationId)
 	{
 		MemoryStream ms = new();
 		using (ExcelEngine excelEngine = new())
@@ -33,7 +31,7 @@ public static class Excel
 
 			worksheet.Range["H2:I2"].Merge();
 
-			worksheet.Range["H2"].Text = $"{Task.Run(async () => await CommonData.LoadTableDataById<LocationModel>("LocationTable", selectedLocationId)).Result.FirstOrDefault().Name}";
+			worksheet.Range["H2"].Text = $"{(await CommonData.LoadTableDataById<LocationModel>("LocationTable", selectedLocationId)).FirstOrDefault().Name}";
 			worksheet.Range["H2"].CellStyle.Font.Bold = true;
 			worksheet.Range["H2"].CellStyle.Font.RGBColor = Syncfusion.Drawing.Color.FromArgb(0, 42, 118, 189);
 			worksheet.Range["H2"].CellStyle.Font.Size = 25;
@@ -41,7 +39,7 @@ public static class Excel
 			worksheet.Range["H2"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
 			worksheet.Range["H2"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
 
-			List<DetailedPrintModel> detailedPrintModels = Task.Run(async () => await PrintData.LoadDetailedPrint(fromTime, toTime, selectedLocationId)).Result.ToList();
+			var detailedPrintModels = await PrintData.LoadTransactionsByDateAndLocation(fromTime, toTime, selectedLocationId);
 
 			worksheet.Range["A4"].Text = "SlipId";
 			worksheet.Range["B4"].Text = "Name";

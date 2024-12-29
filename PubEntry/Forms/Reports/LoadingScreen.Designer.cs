@@ -51,7 +51,7 @@ partial class LoadingScreen
 		Icon = (Icon)resources.GetObject("$this.Icon");
 		Name = "LoadingScreen";
 		StartPosition = FormStartPosition.CenterScreen;
-		Text = "LoadingScreen";
+		Text = "Loading...";
 		ResumeLayout(false);
 		PerformLayout();
 	}

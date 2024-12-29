@@ -2,5 +2,5 @@
 
 ## To be Used at the Entry Gate of Discos or Pubs
 
-Latest Version = 1.9.6.6
-Android Latest Version = 1.0.0.2
+Latest Version = 2.0.0.0
+Android Latest Version = 2.0.0.0

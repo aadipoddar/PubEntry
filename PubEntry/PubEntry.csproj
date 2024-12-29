@@ -15,7 +15,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/aadipoddar/PubEntry</RepositoryUrl>
     <PackageProjectUrl>aadi.vercel.app</PackageProjectUrl>
-    <AssemblyVersion>1.9.6.6</AssemblyVersion>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
     <ApplicationManifest></ApplicationManifest>
     <PackageIcon>Golder Park.jpg</PackageIcon>
     <ApplicationIcon>Resources\Golder Park.ico</ApplicationIcon>
@@ -42,13 +42,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\README.md">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="AadiSoft.Updater" Version="1.0.3" />
   </ItemGroup>
 
@@ -67,6 +60,11 @@
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="PubEntryLibrary.Data" />
+    <Using Include="PubEntryLibrary.Models" />
   </ItemGroup>
 
 </Project>

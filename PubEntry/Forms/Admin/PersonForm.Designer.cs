@@ -100,6 +100,7 @@ partial class PersonForm
 		// 
 		// PersonForm
 		// 
+		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(524, 232);

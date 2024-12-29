@@ -1,5 +1,4 @@
 ﻿using PubEntryLibrary.Data;
-using PubEntryLibrary.Models;
 using PubEntryLibrary.Models.Printing;
 
 using Syncfusion.Drawing;
@@ -76,7 +75,7 @@ public static class PrintReport
 		return footer;
 	}
 
-	public static MemoryStream PrintSummary(string dateHeader, string fromTime, string toTime)
+	public static async Task<MemoryStream> PrintSummary(string dateHeader, string fromTime, string toTime)
 	{
 		PdfDocument pdfDocument = new();
 		PdfPage pdfPage = pdfDocument.Pages.Add();
@@ -96,7 +95,7 @@ public static class PrintReport
 
 		string text;
 		float textWidth, pageWidth, textX;
-		var locations = Task.Run(LocationData.LoadActiveLocations).Result.ToList();
+		var locations = await LocationData.LoadActiveLocations();
 
 		foreach (var location in locations)
 		{
@@ -110,7 +109,7 @@ public static class PrintReport
 			if (result == null) result = textElement.Draw(pdfPage, new PointF(textX, 20), layoutFormat);
 			else result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 20), layoutFormat);
 
-			transactionTotalsModel.Add(Task.Run(async () => await PrintData.LoadTransactionTotals(fromTime, toTime, location.Id)).Result.FirstOrDefault());
+			transactionTotalsModel.Add((await PrintData.LoadTransactionTotals(fromTime, toTime, location.Id)).FirstOrDefault());
 
 			font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
 
@@ -227,7 +226,7 @@ public static class PrintReport
 		return ms;
 	}
 
-	public static MemoryStream PrintDetail(string dateHeader, string fromTime, string toTime, int selectedLocationId)
+	public static async Task<MemoryStream> PrintDetail(string dateHeader, string fromTime, string toTime, int selectedLocationId)
 	{
 		PdfDocument pdfDocument = new();
 		PdfPage pdfPage = pdfDocument.Pages.Add();
@@ -246,7 +245,7 @@ public static class PrintReport
 
 		font = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
 
-		string text = $"{Task.Run(async () => await CommonData.LoadTableDataById<LocationModel>("LocationTable", selectedLocationId)).Result.FirstOrDefault().Name}";
+		string text = $"{(await CommonData.LoadTableDataById<LocationModel>("LocationTable", selectedLocationId)).FirstOrDefault().Name}";
 		float textWidth = font.MeasureString(text).Width;
 		float pageWidth = pdfPage.GetClientSize().Width;
 		float textX = (pageWidth - textWidth) / 2f;
@@ -259,7 +258,7 @@ public static class PrintReport
 
 		PdfGrid pdfGrid = new();
 
-		List<DetailedPrintModel> detailedPrintModel = Task.Run(async () => await PrintData.LoadDetailedPrint(fromTime, toTime, selectedLocationId)).Result.ToList();
+		var detailedPrintModel = await PrintData.LoadTransactionsByDateAndLocation(fromTime, toTime, selectedLocationId);
 
 		pdfGrid.DataSource = detailedPrintModel;
 

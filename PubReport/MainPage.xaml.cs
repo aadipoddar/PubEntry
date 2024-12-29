@@ -20,7 +20,7 @@ public partial class MainPage : ContentPage
 		LoadTextBoxes();
 	}
 
-	private void LoadTextBoxes()
+	private async void LoadTextBoxes()
 	{
 		if (DateTime.Now.Hour >= 17)
 		{
@@ -33,9 +33,7 @@ public partial class MainPage : ContentPage
 			fromDatePicker.Date = DateTime.Now.Date.AddDays(-1);
 		}
 
-		var locations = Task.Run(LocationData.LoadActiveLocations).Result.ToList();
-
-		locationPicker.ItemsSource = locations;
+		locationPicker.ItemsSource = (await LocationData.LoadActiveLocations()).ToList();
 		locationPicker.ItemDisplayBinding = new Binding(nameof(LocationModel.Name));
 		locationPicker.SelectedIndex = 0;
 
@@ -62,19 +60,19 @@ public partial class MainPage : ContentPage
 	private async void SummaryReportButtonClicked(object sender, EventArgs e)
 	{
 		if (!ValidateTime()) await DisplayAlert("Alert", "Incorrect Time or Date", "OK");
-		else await Task.Run(() => { PrintPDF(); });
+		else PrintPDF();
 	}
 
 	private async void DetailReportButtonClicked(object sender, EventArgs e)
 	{
 		if (!ValidateTime()) await DisplayAlert("Alert", "Incorrect Time or Date", "OK");
-		else await Task.Run(() => { PrintPDF(true); });
+		else PrintPDF(true);
 	}
 
 	private async void ExcelDetailReportButtonClicked(object sender, EventArgs e)
 	{
 		if (!ValidateTime()) await DisplayAlert("Alert", "Incorrect Time or Date", "OK");
-		else await Task.Run(ExportToExcel);
+		else ExportToExcel();
 	}
 	#endregion
 
@@ -93,23 +91,20 @@ public partial class MainPage : ContentPage
 
 	private string GetFormatedDate(bool getFromDate = true)
 	{
-		if (getFromDate)
-			return fromDatePicker.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) + $" {fromTimePicker.Time}";
-
-		else
-			return toDatePicker.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) + $" {toTimePicker.Time}";
+		if (getFromDate) return fromDatePicker.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) + $" {fromTimePicker.Time}";
+		else return toDatePicker.Date.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) + $" {toTimePicker.Time}";
 	}
 	#endregion
 
-	void PrintPDF(bool isDetail = false)
+	private async void PrintPDF(bool isDetail = false)
 	{
 		string dateHeader = $"{GetFormatedDate()} - {GetFormatedDate(false)}";
 		string fromTime = GetFromDateTime();
 		string toTime = GetToDateTime();
 
 		MemoryStream ms;
-		if (isDetail) ms = PrintReport.PrintDetail(dateHeader, fromTime, toTime, selectedLocationId + 1);
-		else ms = PrintReport.PrintSummary(dateHeader, fromTime, toTime);
+		if (isDetail) ms = await PrintReport.PrintDetail(dateHeader, fromTime, toTime, selectedLocationId + 1);
+		else ms = await PrintReport.PrintSummary(dateHeader, fromTime, toTime);
 
 		SaveService saveService = new();
 		if (isDetail) saveService.SaveAndView("DetailReport.pdf", "application/pdf", ms);

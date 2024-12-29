@@ -7,7 +7,7 @@ public class ReceiptModel
 	public DateTime ReceiptDate { get; set; }
 	public string PersonName { get; set; }
 	public string PersonNumber { get; set; }
-	public int PersonLoyalty { get; set; }
+	public bool PersonLoyalty { get; set; }
 	public string Reservation { get; set; }
 	public int TotalPerson { get; set; }
 	public int Male { get; set; }

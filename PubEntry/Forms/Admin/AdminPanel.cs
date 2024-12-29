@@ -2,15 +2,12 @@
 
 public partial class AdminPanel : Form
 {
-	public AdminPanel()
-	{
-		InitializeComponent();
-	}
+	public AdminPanel() => InitializeComponent();
 
-	private void manageEmployeeButton_Click(object sender, EventArgs e)
+	private void manageUsersButton_Click(object sender, EventArgs e)
 	{
-		EmployeeForm employeeForm = new();
-		employeeForm.ShowDialog();
+		UserForm userForm = new();
+		userForm.ShowDialog();
 	}
 
 	private void manageLocationButton_Click(object sender, EventArgs e)

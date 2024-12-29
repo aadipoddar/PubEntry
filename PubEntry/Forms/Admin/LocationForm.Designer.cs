@@ -29,35 +29,12 @@ partial class LocationForm
 	private void InitializeComponent()
 	{
 		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LocationForm));
-		statusLabel = new Label();
-		statusComboBox = new ComboBox();
 		locationComboBox = new ComboBox();
 		saveButton = new Button();
 		nameLabel = new Label();
 		locationNameTextBox = new TextBox();
+		statusCheckBox = new CheckBox();
 		SuspendLayout();
-		// 
-		// statusLabel
-		// 
-		statusLabel.AutoSize = true;
-		statusLabel.Font = new Font("Segoe UI", 15F);
-		statusLabel.Location = new Point(19, 123);
-		statusLabel.Name = "statusLabel";
-		statusLabel.Size = new Size(65, 28);
-		statusLabel.TabIndex = 27;
-		statusLabel.Text = "Status";
-		// 
-		// statusComboBox
-		// 
-		statusComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-		statusComboBox.FlatStyle = FlatStyle.System;
-		statusComboBox.Font = new Font("Segoe UI", 15F);
-		statusComboBox.FormattingEnabled = true;
-		statusComboBox.Items.AddRange(new object[] { "Active", "Inactive" });
-		statusComboBox.Location = new Point(188, 120);
-		statusComboBox.Name = "statusComboBox";
-		statusComboBox.Size = new Size(271, 36);
-		statusComboBox.TabIndex = 21;
 		// 
 		// locationComboBox
 		// 
@@ -68,16 +45,16 @@ partial class LocationForm
 		locationComboBox.Location = new Point(96, 23);
 		locationComboBox.Name = "locationComboBox";
 		locationComboBox.Size = new Size(271, 36);
-		locationComboBox.TabIndex = 24;
+		locationComboBox.TabIndex = 4;
 		locationComboBox.SelectedIndexChanged += locationComboBox_SelectedIndexChanged;
 		// 
 		// saveButton
 		// 
 		saveButton.Font = new Font("Segoe UI", 15F);
-		saveButton.Location = new Point(179, 181);
+		saveButton.Location = new Point(179, 188);
 		saveButton.Name = "saveButton";
 		saveButton.Size = new Size(118, 38);
-		saveButton.TabIndex = 22;
+		saveButton.TabIndex = 3;
 		saveButton.Text = "SAVE";
 		saveButton.UseVisualStyleBackColor = true;
 		saveButton.Click += saveButton_Click;
@@ -99,15 +76,26 @@ partial class LocationForm
 		locationNameTextBox.Name = "locationNameTextBox";
 		locationNameTextBox.PlaceholderText = "Location Name";
 		locationNameTextBox.Size = new Size(271, 34);
-		locationNameTextBox.TabIndex = 18;
+		locationNameTextBox.TabIndex = 1;
+		// 
+		// statusCheckBox
+		// 
+		statusCheckBox.AutoSize = true;
+		statusCheckBox.Font = new Font("Segoe UI", 15F);
+		statusCheckBox.Location = new Point(197, 133);
+		statusCheckBox.Name = "statusCheckBox";
+		statusCheckBox.Size = new Size(84, 32);
+		statusCheckBox.TabIndex = 2;
+		statusCheckBox.Text = "Status";
+		statusCheckBox.UseVisualStyleBackColor = true;
 		// 
 		// LocationForm
 		// 
+		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(499, 255);
-		Controls.Add(statusLabel);
-		Controls.Add(statusComboBox);
+		Controls.Add(statusCheckBox);
 		Controls.Add(locationComboBox);
 		Controls.Add(saveButton);
 		Controls.Add(nameLabel);
@@ -116,16 +104,15 @@ partial class LocationForm
 		Name = "LocationForm";
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "LocationForm";
+		Load += LocationForm_Load;
 		ResumeLayout(false);
 		PerformLayout();
 	}
 
 	#endregion
-
-	private Label statusLabel;
-	private ComboBox statusComboBox;
 	private ComboBox locationComboBox;
 	private Button saveButton;
 	private Label nameLabel;
 	private TextBox locationNameTextBox;
+	private CheckBox statusCheckBox;
 }

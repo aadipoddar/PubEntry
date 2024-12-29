@@ -3,24 +3,20 @@
 using PubEntry.Admin;
 using PubEntry.Reports;
 
-using PubEntryLibrary.Data;
-using PubEntryLibrary.Models;
-
 namespace PubEntry;
 
 public partial class Dashboard : Form
 {
 	#region InitialLoading
-	public Dashboard()
-	{
-		InitializeComponent();
-	}
+	public Dashboard() => InitializeComponent();
 
+	[STAThread]
 	private async void SelectLocation_Load(object sender, EventArgs e)
 	{
 		await UpdateCheck();
 		LoadingScreen.ShowSplashScreen();
-		LoadComboBox();
+		await LoadComboBox();
+		await LoadUserComboBox();
 		LoadingScreen.CloseForm();
 	}
 
@@ -33,77 +29,61 @@ public partial class Dashboard : Form
 				await AadiSoftUpdater.AadiSoftUpdater.UpdateApp("aadipoddar", "PubEntry", "PubEntrySetup", "477557B4-2908-4106-B360-D2D114F02452");
 	}
 
-	public void LoadComboBox()
+	public async Task LoadComboBox()
 	{
-		locationComboBox.DataSource = null;
-		List<LocationModel> locations = new();
-
-		try
-		{
-			locations = Task.Run(LocationData.LoadActiveLocations).Result.ToList();
-		}
-		catch (Exception ex)
-		{
-			MessageBox.Show(ex.Message, "Database Error");
-			Application.Exit();
-		}
-
-		locationComboBox.DataSource = locations;
-		locationComboBox.ValueMember = "Id";
-		locationComboBox.DisplayMember = "Name";
+		locationComboBox.DataSource = await LocationData.LoadActiveLocations();
+		locationComboBox.DisplayMember = nameof(LocationModel.Name);
+		locationComboBox.ValueMember = nameof(LocationModel.Id);
 
 		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
-
-		LoadEmployeeComboBox();
 	}
 
-	private async void LoadEmployeeComboBox()
+	private async Task LoadUserComboBox()
 	{
-		if (locationComboBox.ValueMember != "Id") return;
-		List<EmployeeModel> employees = new();
+		userComboBox.DataSource = await UserData.LoadActiveUserByLocationId((locationComboBox.SelectedItem as LocationModel).Id);
+		userComboBox.DisplayMember = nameof(UserModel.Name);
+		userComboBox.ValueMember = nameof(UserModel.Id);
+	}
+	#endregion
 
-		employeeComboBox.DataSource = null;
-
-		try
+	#region Validation
+	private bool ValidatePassword()
+	{
+		if ((userComboBox.SelectedItem as UserModel).Password == passwordTextBox.Text || passwordTextBox.Text == "admin")
 		{
-			employees = (await EmployeeData.LoadActiveEmployeeByLocation((int)locationComboBox.SelectedValue)).ToList();
-		}
-		catch (Exception ex)
-		{
-			MessageBox.Show(ex.Message, "Database Error");
-			Application.Exit();
+			passwordTextBox.Text = string.Empty;
+			return true;
 		}
 
-		employeeComboBox.DataSource = employees;
-		employeeComboBox.DisplayMember = "Name";
-		employeeComboBox.ValueMember = "Id";
+		passwordTextBox.Text = string.Empty;
+		return false;
 	}
 	#endregion
 
 	#region Events
-	private void locationComboBox_SelectedIndexChanged(object sender, EventArgs e)
-	{
-		LoadEmployeeComboBox();
-		passwordTextBox.Text = string.Empty;
-	}
+	private async void locationComboBox_SelectedIndexChanged(object sender, EventArgs e) => await LoadUserComboBox();
 
-	private void employeeComboBox_SelectedIndexChanged(object sender, EventArgs e) => passwordTextBox.Text = string.Empty;
+	private void userComboBox_SelectedIndexChanged(object sender, EventArgs e) => passwordTextBox.Text = string.Empty;
 
 	private void goButton_Click(object sender, EventArgs e)
 	{
-		if (ValidatePassword())
+		if (!ValidatePassword())
 		{
-			EntryForm mainForm = new((int)locationComboBox.SelectedValue, (int)employeeComboBox.SelectedValue);
-			mainForm.ShowDialog();
+			MessageBox.Show("Incorrect Password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			return;
 		}
 
-		else MessageBox.Show("Incorrect Password");
+		else
+		{
+			EntryForm entryForm = new((locationComboBox.SelectedItem as LocationModel).Id, (userComboBox.SelectedItem as UserModel).Id);
+			entryForm.ShowDialog();
+		}
 	}
 
 	private void reportsButton_Click(object sender, EventArgs e)
 	{
-		SelectDataForm selectDataForm = new((int)locationComboBox.SelectedValue);
-		selectDataForm.Show();
+		SelectDataForm selectDataForm = new((locationComboBox.SelectedItem as LocationModel).Id);
+		selectDataForm.ShowDialog();
 	}
 
 	private void adminButton_Click(object sender, EventArgs e)
@@ -114,23 +94,7 @@ public partial class Dashboard : Form
 			adminPanel.ShowDialog();
 		}
 
-		else MessageBox.Show("Incorrect Password");
-	}
-	#endregion
-
-	#region Validation
-	private bool ValidatePassword()
-	{
-		EmployeeModel employee = employeeComboBox.SelectedItem as EmployeeModel;
-
-		if (employee.Password == passwordTextBox.Text || passwordTextBox.Text == "admin")
-		{
-			passwordTextBox.Text = string.Empty;
-			return true;
-		}
-
-		passwordTextBox.Text = string.Empty;
-		return false;
+		else MessageBox.Show("Incorrect Password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 	}
 	#endregion
 }

@@ -1,6 +1,6 @@
 ﻿namespace PubEntry.Admin;
 
-partial class EmployeeForm
+partial class UserForm
 {
 	/// <summary>
 	/// Required designer variable.
@@ -28,17 +28,16 @@ partial class EmployeeForm
 	/// </summary>
 	private void InitializeComponent()
 	{
-		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EmployeeForm));
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserForm));
 		nameLabel = new Label();
-		employeeNameTextBox = new TextBox();
+		nameTextBox = new TextBox();
 		passwordLabel = new Label();
 		passwordTextBox = new TextBox();
 		locationComboBox = new ComboBox();
 		locationLabel = new Label();
 		saveButton = new Button();
-		employeeComboBox = new ComboBox();
-		statusLabel = new Label();
-		statusComboBox = new ComboBox();
+		userComboBox = new ComboBox();
+		statusCheckBox = new CheckBox();
 		SuspendLayout();
 		// 
 		// nameLabel
@@ -51,14 +50,14 @@ partial class EmployeeForm
 		nameLabel.TabIndex = 5;
 		nameLabel.Text = "Name";
 		// 
-		// employeeNameTextBox
+		// nameTextBox
 		// 
-		employeeNameTextBox.Font = new Font("Segoe UI", 15F);
-		employeeNameTextBox.Location = new Point(185, 69);
-		employeeNameTextBox.Name = "employeeNameTextBox";
-		employeeNameTextBox.PlaceholderText = "Employee Name";
-		employeeNameTextBox.Size = new Size(271, 34);
-		employeeNameTextBox.TabIndex = 1;
+		nameTextBox.Font = new Font("Segoe UI", 15F);
+		nameTextBox.Location = new Point(185, 69);
+		nameTextBox.Name = "nameTextBox";
+		nameTextBox.PlaceholderText = "Name";
+		nameTextBox.Size = new Size(271, 34);
+		nameTextBox.TabIndex = 1;
 		// 
 		// passwordLabel
 		// 
@@ -112,59 +111,51 @@ partial class EmployeeForm
 		saveButton.UseVisualStyleBackColor = true;
 		saveButton.Click += saveButton_Click;
 		// 
-		// employeeComboBox
+		// userComboBox
 		// 
-		employeeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-		employeeComboBox.FlatStyle = FlatStyle.System;
-		employeeComboBox.Font = new Font("Segoe UI", 15F);
-		employeeComboBox.FormattingEnabled = true;
-		employeeComboBox.Location = new Point(93, 12);
-		employeeComboBox.Name = "employeeComboBox";
-		employeeComboBox.Size = new Size(271, 36);
-		employeeComboBox.TabIndex = 6;
-		employeeComboBox.SelectedIndexChanged += employeeComboBox_SelectedIndexChanged;
+		userComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+		userComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+		userComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+		userComboBox.FlatStyle = FlatStyle.System;
+		userComboBox.Font = new Font("Segoe UI", 15F);
+		userComboBox.FormattingEnabled = true;
+		userComboBox.Location = new Point(93, 12);
+		userComboBox.Name = "userComboBox";
+		userComboBox.Size = new Size(271, 36);
+		userComboBox.TabIndex = 6;
+		userComboBox.SelectedIndexChanged += userComboBox_SelectedIndexChanged;
 		// 
-		// statusLabel
+		// statusCheckBox
 		// 
-		statusLabel.AutoSize = true;
-		statusLabel.Font = new Font("Segoe UI", 15F);
-		statusLabel.Location = new Point(16, 194);
-		statusLabel.Name = "statusLabel";
-		statusLabel.Size = new Size(65, 28);
-		statusLabel.TabIndex = 17;
-		statusLabel.Text = "Status";
+		statusCheckBox.AutoSize = true;
+		statusCheckBox.Font = new Font("Segoe UI", 15F);
+		statusCheckBox.Location = new Point(194, 205);
+		statusCheckBox.Name = "statusCheckBox";
+		statusCheckBox.Size = new Size(84, 32);
+		statusCheckBox.TabIndex = 4;
+		statusCheckBox.Text = "Status";
+		statusCheckBox.UseVisualStyleBackColor = true;
 		// 
-		// statusComboBox
+		// UserForm
 		// 
-		statusComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-		statusComboBox.FlatStyle = FlatStyle.System;
-		statusComboBox.Font = new Font("Segoe UI", 15F);
-		statusComboBox.FormattingEnabled = true;
-		statusComboBox.Items.AddRange(new object[] { "Active", "Inactive" });
-		statusComboBox.Location = new Point(185, 191);
-		statusComboBox.Name = "statusComboBox";
-		statusComboBox.Size = new Size(271, 36);
-		statusComboBox.TabIndex = 4;
-		// 
-		// EmployeeForm
-		// 
+		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(477, 305);
-		Controls.Add(statusLabel);
-		Controls.Add(statusComboBox);
-		Controls.Add(employeeComboBox);
+		Controls.Add(statusCheckBox);
+		Controls.Add(userComboBox);
 		Controls.Add(saveButton);
 		Controls.Add(locationLabel);
 		Controls.Add(locationComboBox);
 		Controls.Add(passwordLabel);
 		Controls.Add(passwordTextBox);
 		Controls.Add(nameLabel);
-		Controls.Add(employeeNameTextBox);
+		Controls.Add(nameTextBox);
 		Icon = (Icon)resources.GetObject("$this.Icon");
-		Name = "EmployeeForm";
+		Name = "UserForm";
 		StartPosition = FormStartPosition.CenterScreen;
-		Text = "EmployeeForm";
+		Text = "User Form";
+		Load += UserForm_Load;
 		ResumeLayout(false);
 		PerformLayout();
 	}
@@ -172,13 +163,12 @@ partial class EmployeeForm
 	#endregion
 
 	private Label nameLabel;
-	private TextBox employeeNameTextBox;
+	private TextBox nameTextBox;
 	private Label passwordLabel;
 	private TextBox passwordTextBox;
 	private ComboBox locationComboBox;
 	private Label locationLabel;
 	private Button saveButton;
-	private ComboBox employeeComboBox;
-	private Label statusLabel;
-	private ComboBox statusComboBox;
+	private ComboBox userComboBox;
+	private CheckBox statusCheckBox;
 }

@@ -1,27 +1,24 @@
 ﻿using System.Drawing.Printing;
 using System.Reflection;
 
-using PubEntryLibrary.Data;
-using PubEntryLibrary.Models;
-
 using Timer = System.Windows.Forms.Timer;
 
 namespace PubEntry;
 
 public partial class EntryForm : Form
 {
+	#region InitalLoading
 	private Timer inactivityTimer;
 	private const int InactivityLimit = 5 * 60 * 1000;
 
-	#region InitalLoading
-	int transactionId, employeeId, locationId, slipId;
+	private int transactionId, userId, locationId;
 	TransactionModel updateTransactionModel;
 
-	public EntryForm(int locationId, int employeeId)
+	public EntryForm(int locationId, int userId)
 	{
 		InitializeComponent();
 
-		this.employeeId = employeeId;
+		this.userId = userId;
 		this.locationId = locationId;
 	}
 
@@ -34,41 +31,39 @@ public partial class EntryForm : Form
 
 	private async void EntryForm_Load(object sender, EventArgs e)
 	{
-		await LoadComboBox();
-
-		if (updateTransactionModel != null)
-		{
-			PersonModel personModel = (await CommonData.LoadTableDataById<PersonModel>("PersonTable", updateTransactionModel.PersonId)).FirstOrDefault();
-			if (personModel != null)
-			{
-				numberTextBox.Text = personModel.Number;
-				nameTextBox.Text = personModel.Name;
-
-				loyaltyCheckBox.Checked = personModel.Loyalty == 1;
-
-				maleTextBox.Text = updateTransactionModel.Male.ToString();
-				femaleTextBox.Text = updateTransactionModel.Female.ToString();
-				cashAmountTextBox.Text = updateTransactionModel.Cash.ToString();
-				cardAmountTextBox.Text = updateTransactionModel.Card.ToString();
-				upiAmountTextBox.Text = updateTransactionModel.UPI.ToString();
-				amexAmountTextBox.Text = updateTransactionModel.Amex.ToString();
-				reservationComboBox.SelectedIndex = updateTransactionModel.ReservationType;
-				approvedByTextBox.Text = updateTransactionModel.ApprovedBy;
-				employeeId = updateTransactionModel.EmployeeId;
-				locationId = updateTransactionModel.LocationId;
-			}
-		}
-
+		await LoadComboBox(updateTransactionModel);
 		InitializeInactivityTimer();
 		SubscribeToTextChangedEvents();
 	}
 
-	private async Task LoadComboBox()
+	private async Task LoadComboBox(TransactionModel updateTransactionModel)
 	{
-		reservationComboBox.DataSource = null;
-		reservationComboBox.DataSource = (await CommonData.LoadTableData<ReservationTypeModel>("ReservationTypeTable")).ToList();
-		reservationComboBox.DisplayMember = "Name";
+		reservationComboBox.DataSource = await CommonData.LoadTableData<ReservationTypeModel>("ReservationTypeTable");
+		reservationComboBox.DisplayMember = nameof(ReservationTypeModel.Name);
+		reservationComboBox.ValueMember = nameof(ReservationTypeModel.Id);
+
 		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
+
+		if (updateTransactionModel == null)
+			return;
+
+		PersonModel personModel = (await CommonData.LoadTableDataById<PersonModel>("PersonTable", updateTransactionModel.PersonId)).FirstOrDefault();
+		if (personModel != null)
+		{
+			numberTextBox.Text = personModel.Number;
+			nameTextBox.Text = personModel.Name;
+			loyaltyCheckBox.Checked = personModel.Loyalty;
+			maleTextBox.Text = updateTransactionModel.Male.ToString();
+			femaleTextBox.Text = updateTransactionModel.Female.ToString();
+			cashAmountTextBox.Text = updateTransactionModel.Cash.ToString();
+			cardAmountTextBox.Text = updateTransactionModel.Card.ToString();
+			upiAmountTextBox.Text = updateTransactionModel.UPI.ToString();
+			amexAmountTextBox.Text = updateTransactionModel.Amex.ToString();
+			reservationComboBox.SelectedIndex = updateTransactionModel.ReservationType;
+			approvedByTextBox.Text = updateTransactionModel.ApprovedBy;
+			userId = updateTransactionModel.UserId;
+			locationId = updateTransactionModel.LocationId;
+		}
 	}
 
 	private void ClearForm()
@@ -82,8 +77,6 @@ public partial class EntryForm : Form
 		amexAmountTextBox.Text = "0";
 		maleTextBox.Text = "0";
 		femaleTextBox.Text = "0";
-		numberTextBox.ReadOnly = false;
-		numberTextBox.Visible = true;
 		nameTextBox.ReadOnly = false;
 		loyaltyCheckBox.Checked = false;
 		numberTextBox.Focus();
@@ -111,6 +104,7 @@ public partial class EntryForm : Form
 	{
 		nameTextBox.TextChanged += ResetInactivityTimer;
 		numberTextBox.TextChanged += ResetInactivityTimer;
+		loyaltyCheckBox.CheckedChanged += ResetInactivityTimer;
 		maleTextBox.TextChanged += ResetInactivityTimer;
 		femaleTextBox.TextChanged += ResetInactivityTimer;
 		cashAmountTextBox.TextChanged += ResetInactivityTimer;
@@ -118,6 +112,7 @@ public partial class EntryForm : Form
 		upiAmountTextBox.TextChanged += ResetInactivityTimer;
 		amexAmountTextBox.TextChanged += ResetInactivityTimer;
 		approvedByTextBox.TextChanged += ResetInactivityTimer;
+		reservationComboBox.SelectedIndexChanged += ResetInactivityTimer;
 		saveButton.Click += ResetInactivityTimer;
 	}
 	#endregion
@@ -149,13 +144,12 @@ public partial class EntryForm : Form
 
 	private async void numberTextBox_TextChanged(object sender, EventArgs e)
 	{
-		var foundPerson = await PersonData.GetPersonByNumber(numberTextBox.Text);
+		var foundPerson = await PersonData.LoadPersonByNumber(numberTextBox.Text);
 		if (foundPerson != null)
 		{
 			nameTextBox.Text = foundPerson.Name;
 			nameTextBox.ReadOnly = true;
-			if (foundPerson.Loyalty == 1) loyaltyCheckBox.Checked = true;
-			else loyaltyCheckBox.Checked = false;
+			loyaltyCheckBox.Checked = foundPerson.Loyalty;
 		}
 
 		else
@@ -170,43 +164,41 @@ public partial class EntryForm : Form
 	{
 		if (!ValidateFields())
 		{
-			MessageBox.Show("Enter all Fields");
+			MessageBox.Show("Please all Fields", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			return;
 		}
 
-		PersonModel personModel = new();
-		personModel.Id = 0;
-		personModel.Name = nameTextBox.Text;
-		personModel.Number = numberTextBox.Text;
-		personModel.Loyalty = loyaltyCheckBox.Checked ? 1 : 0;
+		PersonModel personModel = new()
+		{
+			Id = 0,
+			Name = nameTextBox.Text,
+			Number = numberTextBox.Text,
+			Loyalty = loyaltyCheckBox.Checked
+		};
 
-		if (nameTextBox.ReadOnly == false)
-			personModel.Id = await PersonData.InsertPerson(personModel);
+		if (nameTextBox.ReadOnly == false) personModel.Id = await PersonData.PersonInsert(personModel);
+		personModel.Id = await PersonData.PersonUpdate(personModel);
 
-		personModel.Id = await PersonData.UpdatePerson(personModel);
+		TransactionModel transactionModel = new()
+		{
+			Id = updateTransactionModel == null ? 0 : updateTransactionModel.Id,
+			PersonId = personModel.Id,
+			Male = (int)Convert.ToInt64(maleTextBox.Text),
+			Female = (int)Convert.ToInt64(femaleTextBox.Text),
+			Cash = (int)Convert.ToInt64(cashAmountTextBox.Text),
+			Card = (int)Convert.ToInt64(cardAmountTextBox.Text),
+			UPI = (int)Convert.ToInt64(upiAmountTextBox.Text),
+			Amex = (int)Convert.ToInt64(amexAmountTextBox.Text),
+			ReservationType = (reservationComboBox.SelectedItem as ReservationTypeModel).Id,
+			DateTime = DateTime.Now,
+			ApprovedBy = approvedByTextBox.Text,
+			LocationId = locationId,
+			UserId = userId
+		};
 
-		TransactionModel transactionModel = new();
-
-		if (updateTransactionModel == null) transactionModel.Id = 0;
-		else transactionModel.Id = updateTransactionModel.Id;
-
-		transactionModel.PersonId = personModel.Id;
-		transactionModel.Male = (int)Convert.ToInt64(maleTextBox.Text);
-		transactionModel.Female = (int)Convert.ToInt64(femaleTextBox.Text);
-		transactionModel.Cash = (int)Convert.ToInt64(cashAmountTextBox.Text);
-		transactionModel.Card = (int)Convert.ToInt64(cardAmountTextBox.Text);
-		transactionModel.UPI = (int)Convert.ToInt64(upiAmountTextBox.Text);
-		transactionModel.Amex = (int)Convert.ToInt64(amexAmountTextBox.Text);
-		transactionModel.ReservationType = reservationComboBox.SelectedIndex;
-		transactionModel.DateTime = DateTime.Now;
-		transactionModel.ApprovedBy = approvedByTextBox.Text == "" ? null : approvedByTextBox.Text;
-		transactionModel.LocationId = locationId;
-		transactionModel.EmployeeId = employeeId;
-
-		if (updateTransactionModel == null)
-			transactionId = await TransactionData.InsertTransaction(transactionModel);
-
-		else transactionId = await TransactionData.UpdateTransaction(transactionModel);
+		transactionId = updateTransactionModel == null
+			? await TransactionData.TransactionInsert(transactionModel)
+			: await TransactionData.TransactionUpdate(transactionModel);
 
 		PrintDialog printDialog = new();
 		printDialog.Document = printDocumentCustomer;
@@ -219,10 +211,8 @@ public partial class EntryForm : Form
 		ClearForm();
 	}
 
-	private void printDocumentCustomer_PrintPage(object sender, PrintPageEventArgs e) =>
-		PrintReceipt.DrawGraphics(e, "Customer", transactionId);
+	private void printDocumentCustomer_PrintPage(object sender, PrintPageEventArgs e) => PrintReceipt.DrawGraphics(e, "Customer", transactionId);
 
-	private void printDocumentMerchant_PrintPage(object sender, PrintPageEventArgs e) =>
-		PrintReceipt.DrawGraphics(e, "Merchant", transactionId);
+	private void printDocumentMerchant_PrintPage(object sender, PrintPageEventArgs e) => PrintReceipt.DrawGraphics(e, "Merchant", transactionId);
 	#endregion
 }

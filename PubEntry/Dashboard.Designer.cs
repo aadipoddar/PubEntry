@@ -30,7 +30,7 @@ partial class Dashboard
 	{
 		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dashboard));
 		locationComboBox = new ComboBox();
-		employeeComboBox = new ComboBox();
+		userComboBox = new ComboBox();
 		goButton = new Button();
 		passwordTextBox = new TextBox();
 		brandingLabel = new Label();
@@ -48,19 +48,19 @@ partial class Dashboard
 		locationComboBox.Location = new Point(29, 33);
 		locationComboBox.Name = "locationComboBox";
 		locationComboBox.Size = new Size(271, 36);
-		locationComboBox.TabIndex = 10;
+		locationComboBox.TabIndex = 1;
 		locationComboBox.SelectedIndexChanged += locationComboBox_SelectedIndexChanged;
 		// 
-		// employeeComboBox
+		// userComboBox
 		// 
-		employeeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-		employeeComboBox.Font = new Font("Segoe UI", 15F);
-		employeeComboBox.FormattingEnabled = true;
-		employeeComboBox.Location = new Point(29, 99);
-		employeeComboBox.Name = "employeeComboBox";
-		employeeComboBox.Size = new Size(271, 36);
-		employeeComboBox.TabIndex = 11;
-		employeeComboBox.SelectedIndexChanged += employeeComboBox_SelectedIndexChanged;
+		userComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+		userComboBox.Font = new Font("Segoe UI", 15F);
+		userComboBox.FormattingEnabled = true;
+		userComboBox.Location = new Point(29, 99);
+		userComboBox.Name = "userComboBox";
+		userComboBox.Size = new Size(271, 36);
+		userComboBox.TabIndex = 2;
+		userComboBox.SelectedIndexChanged += userComboBox_SelectedIndexChanged;
 		// 
 		// goButton
 		// 
@@ -68,7 +68,7 @@ partial class Dashboard
 		goButton.Location = new Point(99, 225);
 		goButton.Name = "goButton";
 		goButton.Size = new Size(118, 38);
-		goButton.TabIndex = 13;
+		goButton.TabIndex = 4;
 		goButton.Text = "GO";
 		goButton.UseVisualStyleBackColor = true;
 		goButton.Click += goButton_Click;
@@ -81,7 +81,7 @@ partial class Dashboard
 		passwordTextBox.PasswordChar = '*';
 		passwordTextBox.PlaceholderText = "Password";
 		passwordTextBox.Size = new Size(271, 39);
-		passwordTextBox.TabIndex = 12;
+		passwordTextBox.TabIndex = 3;
 		// 
 		// brandingLabel
 		// 
@@ -109,7 +109,7 @@ partial class Dashboard
 		reportsButton.Location = new Point(70, 290);
 		reportsButton.Name = "reportsButton";
 		reportsButton.Size = new Size(188, 38);
-		reportsButton.TabIndex = 14;
+		reportsButton.TabIndex = 5;
 		reportsButton.Text = "Reports";
 		reportsButton.UseVisualStyleBackColor = true;
 		reportsButton.Click += reportsButton_Click;
@@ -123,7 +123,7 @@ partial class Dashboard
 		versionLabel.Name = "versionLabel";
 		versionLabel.Size = new Size(84, 15);
 		versionLabel.TabIndex = 32;
-		versionLabel.Text = "Version: 1.9.3.0";
+		versionLabel.Text = "Version: 0.0.0.0";
 		// 
 		// adminButton
 		// 
@@ -131,13 +131,14 @@ partial class Dashboard
 		adminButton.Location = new Point(70, 387);
 		adminButton.Name = "adminButton";
 		adminButton.Size = new Size(188, 38);
-		adminButton.TabIndex = 15;
+		adminButton.TabIndex = 6;
 		adminButton.Text = "Admin Panel";
 		adminButton.UseVisualStyleBackColor = true;
 		adminButton.Click += adminButton_Click;
 		// 
 		// Dashboard
 		// 
+		AcceptButton = goButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(336, 471);
@@ -148,7 +149,7 @@ partial class Dashboard
 		Controls.Add(richTextBoxFooter);
 		Controls.Add(passwordTextBox);
 		Controls.Add(goButton);
-		Controls.Add(employeeComboBox);
+		Controls.Add(userComboBox);
 		Controls.Add(locationComboBox);
 		Icon = (Icon)resources.GetObject("$this.Icon");
 		Name = "Dashboard";
@@ -162,7 +163,7 @@ partial class Dashboard
 	#endregion
 
 	private ComboBox locationComboBox;
-	private ComboBox employeeComboBox;
+	private ComboBox userComboBox;
 	private Button goButton;
 	private TextBox passwordTextBox;
 	private Label brandingLabel;

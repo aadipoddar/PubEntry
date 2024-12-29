@@ -1,14 +1,8 @@
-﻿using PubEntryLibrary.Data;
-using PubEntryLibrary.Models;
-
-namespace PubEntry.Admin;
+﻿namespace PubEntry.Admin;
 
 public partial class SlipIdForm : Form
 {
-	public SlipIdForm()
-	{
-		InitializeComponent();
-	}
+	public SlipIdForm() => InitializeComponent();
 
 	private void slipIdTextBox_KeyPress(object sender, KeyPressEventArgs e)
 	{
@@ -41,6 +35,4 @@ public partial class SlipIdForm : Form
 		EntryForm entryForm = new(transaction);
 		entryForm.ShowDialog();
 	}
-
-
 }

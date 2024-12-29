@@ -15,8 +15,9 @@ public partial class SelectDataForm : Form
 		InitializeComponent();
 
 		this.locationId = locationId;
-		LoadTextBoxes();
 	}
+
+	private void SelectDataForm_Load(object sender, EventArgs e) => LoadTextBoxes();
 
 	private void LoadTextBoxes()
 	{
@@ -87,11 +88,11 @@ public partial class SelectDataForm : Form
 	#endregion
 
 	[STAThread]
-	private void summaryReportButton_Click(object sender, EventArgs e)
+	private async void summaryReportButton_Click(object sender, EventArgs e)
 	{
 		if (!ValidateTime())
 		{
-			MessageBox.Show("Incorrect Time or Date");
+			MessageBox.Show("Incorrect Time or Date", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			return;
 		}
 
@@ -101,11 +102,10 @@ public partial class SelectDataForm : Form
 		string fromTime = GetFromTime();
 		string toTime = GetToTime();
 
-		MemoryStream ms = PrintReport.PrintSummary(dateHeader, fromTime, toTime);
-		using (FileStream stream = new FileStream(Path.Combine(Path.GetTempPath(), "SummaryReport.pdf"), FileMode.Create, FileAccess.Write))
-		{
-			ms.CopyTo(stream);
-		}
+		MemoryStream ms = await PrintReport.PrintSummary(dateHeader, fromTime, toTime);
+
+		using (FileStream stream = new FileStream(Path.Combine(Path.GetTempPath(), "SummaryReport.pdf"), FileMode.Create, FileAccess.Write)) ms.CopyTo(stream);
+
 		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\SummaryReport.pdf") { UseShellExecute = true });
 
 		LoadingScreen.CloseForm();
@@ -116,7 +116,7 @@ public partial class SelectDataForm : Form
 	{
 		if (!ValidateTime())
 		{
-			MessageBox.Show("Incorrect Time or Date");
+			MessageBox.Show("Incorrect Time or Date", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			return;
 		}
 

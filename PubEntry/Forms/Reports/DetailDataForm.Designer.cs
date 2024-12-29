@@ -343,7 +343,8 @@ partial class DetailDataForm
 		Icon = (Icon)resources.GetObject("$this.Icon");
 		Name = "DetailDataForm";
 		StartPosition = FormStartPosition.CenterScreen;
-		Text = "DetailDataForm";
+		Text = "Detail Data";
+		Load += DetailDataForm_Load;
 		((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
 		ResumeLayout(false);
 		PerformLayout();

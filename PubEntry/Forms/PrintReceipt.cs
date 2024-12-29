@@ -1,6 +1,5 @@
 ﻿using System.Drawing.Printing;
 
-using PubEntryLibrary.Data;
 using PubEntryLibrary.Models.Printing;
 
 namespace PubEntry;
@@ -45,7 +44,7 @@ public static class PrintReceipt
 		DrawString(g, $"DT: {receiptModel.ReceiptDate:dd/MM/yy HH:mm}");
 		DrawString(g, $"Name: {receiptModel.PersonName}");
 		DrawString(g, $"Contact: {receiptModel.PersonNumber}");
-		if (receiptModel.PersonLoyalty == 1) DrawString(g, "Loyalty Member");
+		if (receiptModel.PersonLoyalty) DrawString(g, "Loyalty Member");
 		DrawString(g, $"Reservation: {receiptModel.Reservation}");
 		DrawString(g, "------------------------", true);
 
@@ -70,7 +69,7 @@ public static class PrintReceipt
 
 	private static void DrawFooter(Graphics g, ReceiptModel receiptModel)
 	{
-		if (receiptModel.ApprovedBy != null) DrawString(g, $"Approved By: {receiptModel.ApprovedBy}");
+		if (receiptModel.ApprovedBy != string.Empty) DrawString(g, $"Approved By: {receiptModel.ApprovedBy}");
 		DrawString(g, $"Entered By: {receiptModel.EnteredBy}");
 
 		font = footerFont;

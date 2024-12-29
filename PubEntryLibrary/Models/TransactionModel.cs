@@ -14,5 +14,5 @@ public class TransactionModel
 	public DateTime DateTime { get; set; }
 	public string ApprovedBy { get; set; }
 	public int LocationId { get; set; }
-	public int EmployeeId { get; set; }
+	public int UserId { get; set; }
 }

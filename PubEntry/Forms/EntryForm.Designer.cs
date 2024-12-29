@@ -126,7 +126,7 @@ partial class EntryForm
 		// saveButton
 		// 
 		saveButton.Font = new Font("Segoe UI", 15F);
-		saveButton.Location = new Point(158, 527);
+		saveButton.Location = new Point(158, 539);
 		saveButton.Name = "saveButton";
 		saveButton.Size = new Size(135, 44);
 		saveButton.TabIndex = 11;
@@ -346,10 +346,11 @@ partial class EntryForm
 		versionLabel.Name = "versionLabel";
 		versionLabel.Size = new Size(84, 15);
 		versionLabel.TabIndex = 31;
-		versionLabel.Text = "Version: 1.9.3.0";
+		versionLabel.Text = "Version: 0.0.0.0";
 		// 
 		// EntryForm
 		// 
+		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(486, 641);
