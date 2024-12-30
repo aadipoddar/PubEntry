@@ -33,15 +33,16 @@ partial class AdminPanel
 		manageTransactionsButton = new Button();
 		managePersonsButton = new Button();
 		settingsButton = new Button();
+		advanceButton = new Button();
 		SuspendLayout();
 		// 
 		// manageLocationButton
 		// 
 		manageLocationButton.Font = new Font("Segoe UI", 15F);
-		manageLocationButton.Location = new Point(38, 89);
+		manageLocationButton.Location = new Point(39, 136);
 		manageLocationButton.Name = "manageLocationButton";
 		manageLocationButton.Size = new Size(213, 52);
-		manageLocationButton.TabIndex = 18;
+		manageLocationButton.TabIndex = 3;
 		manageLocationButton.Text = "Manage Locations";
 		manageLocationButton.UseVisualStyleBackColor = true;
 		manageLocationButton.Click += manageLocationButton_Click;
@@ -49,10 +50,10 @@ partial class AdminPanel
 		// manageUsersButton
 		// 
 		manageUsersButton.Font = new Font("Segoe UI", 15F);
-		manageUsersButton.Location = new Point(38, 31);
+		manageUsersButton.Location = new Point(39, 78);
 		manageUsersButton.Name = "manageUsersButton";
 		manageUsersButton.Size = new Size(213, 52);
-		manageUsersButton.TabIndex = 17;
+		manageUsersButton.TabIndex = 2;
 		manageUsersButton.Text = "Manage Users";
 		manageUsersButton.UseVisualStyleBackColor = true;
 		manageUsersButton.Click += manageUsersButton_Click;
@@ -60,10 +61,10 @@ partial class AdminPanel
 		// manageTransactionsButton
 		// 
 		manageTransactionsButton.Font = new Font("Segoe UI", 15F);
-		manageTransactionsButton.Location = new Point(38, 205);
+		manageTransactionsButton.Location = new Point(39, 252);
 		manageTransactionsButton.Name = "manageTransactionsButton";
 		manageTransactionsButton.Size = new Size(213, 52);
-		manageTransactionsButton.TabIndex = 20;
+		manageTransactionsButton.TabIndex = 5;
 		manageTransactionsButton.Text = "Manage Transactions";
 		manageTransactionsButton.UseVisualStyleBackColor = true;
 		manageTransactionsButton.Click += manageTransactionsButton_Click;
@@ -71,10 +72,10 @@ partial class AdminPanel
 		// managePersonsButton
 		// 
 		managePersonsButton.Font = new Font("Segoe UI", 15F);
-		managePersonsButton.Location = new Point(38, 147);
+		managePersonsButton.Location = new Point(39, 194);
 		managePersonsButton.Name = "managePersonsButton";
 		managePersonsButton.Size = new Size(213, 52);
-		managePersonsButton.TabIndex = 19;
+		managePersonsButton.TabIndex = 4;
 		managePersonsButton.Text = "Manage Persons";
 		managePersonsButton.UseVisualStyleBackColor = true;
 		managePersonsButton.Click += managePersonsButton_Click;
@@ -82,18 +83,30 @@ partial class AdminPanel
 		// settingsButton
 		// 
 		settingsButton.Font = new Font("Segoe UI", 15F);
-		settingsButton.Location = new Point(38, 263);
+		settingsButton.Location = new Point(39, 310);
 		settingsButton.Name = "settingsButton";
 		settingsButton.Size = new Size(213, 52);
-		settingsButton.TabIndex = 21;
+		settingsButton.TabIndex = 6;
 		settingsButton.Text = "Settings";
 		settingsButton.UseVisualStyleBackColor = true;
+		// 
+		// advanceButton
+		// 
+		advanceButton.Font = new Font("Segoe UI", 15F);
+		advanceButton.Location = new Point(39, 20);
+		advanceButton.Name = "advanceButton";
+		advanceButton.Size = new Size(213, 52);
+		advanceButton.TabIndex = 1;
+		advanceButton.Text = "Advance Entry";
+		advanceButton.UseVisualStyleBackColor = true;
+		advanceButton.Click += advanceButton_Click;
 		// 
 		// AdminPanel
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(292, 366);
+		ClientSize = new Size(292, 390);
+		Controls.Add(advanceButton);
 		Controls.Add(settingsButton);
 		Controls.Add(manageTransactionsButton);
 		Controls.Add(managePersonsButton);
@@ -112,4 +125,5 @@ partial class AdminPanel
 	private Button manageTransactionsButton;
 	private Button managePersonsButton;
 	private Button settingsButton;
+	private Button advanceButton;
 }

@@ -13,6 +13,7 @@ public partial class EntryForm : Form
 
 	private int transactionId, userId, locationId;
 	TransactionModel updateTransactionModel;
+	AdvanceModel advanceModel;
 
 	public EntryForm(int locationId, int userId)
 	{
@@ -44,15 +45,12 @@ public partial class EntryForm : Form
 
 		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
 
-		if (updateTransactionModel == null)
-			return;
+		if (updateTransactionModel == null) return;
 
 		PersonModel personModel = (await CommonData.LoadTableDataById<PersonModel>("PersonTable", updateTransactionModel.PersonId)).FirstOrDefault();
 		if (personModel != null)
 		{
 			numberTextBox.Text = personModel.Number;
-			nameTextBox.Text = personModel.Name;
-			loyaltyCheckBox.Checked = personModel.Loyalty;
 			maleTextBox.Text = updateTransactionModel.Male.ToString();
 			femaleTextBox.Text = updateTransactionModel.Female.ToString();
 			cashAmountTextBox.Text = updateTransactionModel.Cash.ToString();
@@ -126,14 +124,14 @@ public partial class EntryForm : Form
 
 	private bool ValidateFields()
 	{
-		if (string.IsNullOrEmpty(numberTextBox.Text)) return false;
-		if (string.IsNullOrEmpty(nameTextBox.Text)) return false;
-		if (string.IsNullOrEmpty(maleTextBox.Text)) maleTextBox.Text = "0";
-		if (string.IsNullOrEmpty(femaleTextBox.Text)) femaleTextBox.Text = "0";
-		if (string.IsNullOrEmpty(cashAmountTextBox.Text)) cashAmountTextBox.Text = "0";
-		if (string.IsNullOrEmpty(cardAmountTextBox.Text)) cardAmountTextBox.Text = "0";
-		if (string.IsNullOrEmpty(upiAmountTextBox.Text)) upiAmountTextBox.Text = "0";
-		if (string.IsNullOrEmpty(amexAmountTextBox.Text)) amexAmountTextBox.Text = "0";
+		if (string.IsNullOrWhiteSpace(numberTextBox.Text)) return false;
+		if (string.IsNullOrWhiteSpace(nameTextBox.Text)) return false;
+		if (string.IsNullOrWhiteSpace(maleTextBox.Text)) maleTextBox.Text = "0";
+		if (string.IsNullOrWhiteSpace(femaleTextBox.Text)) femaleTextBox.Text = "0";
+		if (string.IsNullOrWhiteSpace(cashAmountTextBox.Text)) cashAmountTextBox.Text = "0";
+		if (string.IsNullOrWhiteSpace(cardAmountTextBox.Text)) cardAmountTextBox.Text = "0";
+		if (string.IsNullOrWhiteSpace(upiAmountTextBox.Text)) upiAmountTextBox.Text = "0";
+		if (string.IsNullOrWhiteSpace(amexAmountTextBox.Text)) amexAmountTextBox.Text = "0";
 
 		return true;
 	}
@@ -145,11 +143,27 @@ public partial class EntryForm : Form
 	private async void numberTextBox_TextChanged(object sender, EventArgs e)
 	{
 		var foundPerson = await PersonData.LoadPersonByNumber(numberTextBox.Text);
+
 		if (foundPerson != null)
 		{
 			nameTextBox.Text = foundPerson.Name;
 			nameTextBox.ReadOnly = true;
 			loyaltyCheckBox.Checked = foundPerson.Loyalty;
+
+			advanceModel = await TransactionData.LoadAdvanceByDateLocationPerson(locationId, foundPerson.Id);
+			if (advanceModel != null)
+			{
+				advanceAmountTextBox.Text = advanceModel.Amount.ToString();
+				advanceAmountTextBox.Visible = true;
+				advanceLabel.Visible = true;
+			}
+
+			else
+			{
+				advanceAmountTextBox.Text = "0";
+				advanceAmountTextBox.Visible = false;
+				advanceLabel.Visible = false;
+			}
 		}
 
 		else
@@ -157,6 +171,9 @@ public partial class EntryForm : Form
 			nameTextBox.Text = string.Empty;
 			nameTextBox.ReadOnly = false;
 			loyaltyCheckBox.Checked = false;
+			advanceAmountTextBox.Text = "0";
+			advanceAmountTextBox.Visible = false;
+			advanceLabel.Visible = false;
 		}
 	}
 
@@ -200,6 +217,9 @@ public partial class EntryForm : Form
 			? await TransactionData.TransactionInsert(transactionModel)
 			: await TransactionData.TransactionUpdate(transactionModel);
 
+		if (advanceAmountTextBox.Visible)
+			await TransactionData.ClearAdvance(advanceModel.Id);
+
 		PrintDialog printDialog = new();
 		printDialog.Document = printDocumentCustomer;
 		printDocumentCustomer.Print();
@@ -211,8 +231,10 @@ public partial class EntryForm : Form
 		ClearForm();
 	}
 
-	private void printDocumentCustomer_PrintPage(object sender, PrintPageEventArgs e) => PrintReceipt.DrawGraphics(e, "Customer", transactionId);
+	private void printDocumentCustomer_PrintPage(object sender, PrintPageEventArgs e)
+		=> PrintReceipt.DrawGraphics(e, "Customer", transactionId, advanceModel != null ? advanceModel : null);
 
-	private void printDocumentMerchant_PrintPage(object sender, PrintPageEventArgs e) => PrintReceipt.DrawGraphics(e, "Merchant", transactionId);
+	private void printDocumentMerchant_PrintPage(object sender, PrintPageEventArgs e)
+		=> PrintReceipt.DrawGraphics(e, "Merchant", transactionId, advanceModel != null ? advanceModel : null);
 	#endregion
 }

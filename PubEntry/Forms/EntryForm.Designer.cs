@@ -59,6 +59,8 @@ partial class EntryForm
 		dateChangeTimer = new System.Windows.Forms.Timer(components);
 		loyaltyCheckBox = new CheckBox();
 		versionLabel = new Label();
+		advanceLabel = new Label();
+		advanceAmountTextBox = new TextBox();
 		SuspendLayout();
 		// 
 		// nameTextBox
@@ -332,7 +334,7 @@ partial class EntryForm
 		// 
 		loyaltyCheckBox.AutoSize = true;
 		loyaltyCheckBox.Font = new Font("Segoe UI", 15F);
-		loyaltyCheckBox.Location = new Point(176, 174);
+		loyaltyCheckBox.Location = new Point(137, 158);
 		loyaltyCheckBox.Name = "loyaltyCheckBox";
 		loyaltyCheckBox.Size = new Size(94, 32);
 		loyaltyCheckBox.TabIndex = 2;
@@ -350,12 +352,36 @@ partial class EntryForm
 		versionLabel.TabIndex = 31;
 		versionLabel.Text = "Version: 0.0.0.0";
 		// 
+		// advanceLabel
+		// 
+		advanceLabel.AutoSize = true;
+		advanceLabel.Font = new Font("Segoe UI", 15F);
+		advanceLabel.Location = new Point(241, 197);
+		advanceLabel.Name = "advanceLabel";
+		advanceLabel.Size = new Size(87, 28);
+		advanceLabel.TabIndex = 32;
+		advanceLabel.Text = "Advance";
+		// 
+		// advanceAmountTextBox
+		// 
+		advanceAmountTextBox.Font = new Font("Segoe UI", 15F);
+		advanceAmountTextBox.Location = new Point(334, 194);
+		advanceAmountTextBox.Name = "advanceAmountTextBox";
+		advanceAmountTextBox.PlaceholderText = "Cash Amount";
+		advanceAmountTextBox.ReadOnly = true;
+		advanceAmountTextBox.RightToLeft = RightToLeft.Yes;
+		advanceAmountTextBox.Size = new Size(109, 34);
+		advanceAmountTextBox.TabIndex = 33;
+		advanceAmountTextBox.Text = "0";
+		// 
 		// EntryForm
 		// 
 		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(486, 641);
+		Controls.Add(advanceLabel);
+		Controls.Add(advanceAmountTextBox);
 		Controls.Add(versionLabel);
 		Controls.Add(loyaltyCheckBox);
 		Controls.Add(amexLabel);
@@ -422,4 +448,6 @@ partial class EntryForm
 	private System.Windows.Forms.Timer dateChangeTimer;
 	private CheckBox loyaltyCheckBox;
 	private Label versionLabel;
+	private Label advanceLabel;
+	private TextBox advanceAmountTextBox;
 }

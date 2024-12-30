@@ -4,6 +4,12 @@ public partial class AdminPanel : Form
 {
 	public AdminPanel() => InitializeComponent();
 
+	private void advanceButton_Click(object sender, EventArgs e)
+	{
+		AdvanceEntryForm advanceForm = new();
+		advanceForm.ShowDialog();
+	}
+
 	private void manageUsersButton_Click(object sender, EventArgs e)
 	{
 		UserForm userForm = new();
