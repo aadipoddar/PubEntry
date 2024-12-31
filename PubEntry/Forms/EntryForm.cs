@@ -12,7 +12,6 @@ public partial class EntryForm : Form
 	private const int InactivityLimit = 5 * 60 * 1000;
 
 	private int transactionId, userId, locationId;
-	TransactionModel updateTransactionModel;
 	AdvanceModel advanceModel;
 
 	public EntryForm(int locationId, int userId)
@@ -26,18 +25,16 @@ public partial class EntryForm : Form
 	public EntryForm(TransactionModel updateTransactionModel)
 	{
 		InitializeComponent();
-
-		this.updateTransactionModel = updateTransactionModel;
 	}
 
 	private async void EntryForm_Load(object sender, EventArgs e)
 	{
-		await LoadComboBox(updateTransactionModel);
+		await LoadComboBox();
 		InitializeInactivityTimer();
 		SubscribeToTextChangedEvents();
 	}
 
-	private async Task LoadComboBox(TransactionModel updateTransactionModel)
+	private async Task LoadComboBox()
 	{
 		reservationComboBox.DataSource = await CommonData.LoadTableData<ReservationTypeModel>("ReservationTypeTable");
 		reservationComboBox.DisplayMember = nameof(ReservationTypeModel.Name);
@@ -45,38 +42,23 @@ public partial class EntryForm : Form
 
 		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
 
-		if (updateTransactionModel == null) return;
-
-		PersonModel personModel = (await CommonData.LoadTableDataById<PersonModel>("PersonTable", updateTransactionModel.PersonId)).FirstOrDefault();
-		if (personModel != null)
-		{
-			numberTextBox.Text = personModel.Number;
-			maleTextBox.Text = updateTransactionModel.Male.ToString();
-			femaleTextBox.Text = updateTransactionModel.Female.ToString();
-			cashAmountTextBox.Text = updateTransactionModel.Cash.ToString();
-			cardAmountTextBox.Text = updateTransactionModel.Card.ToString();
-			upiAmountTextBox.Text = updateTransactionModel.UPI.ToString();
-			amexAmountTextBox.Text = updateTransactionModel.Amex.ToString();
-			reservationComboBox.SelectedIndex = updateTransactionModel.ReservationType;
-			approvedByTextBox.Text = updateTransactionModel.ApprovedBy;
-			userId = updateTransactionModel.UserId;
-			locationId = updateTransactionModel.LocationId;
-		}
+		paymentModeComboBox.DataSource = await CommonData.LoadTableData<PaymentModeModel>("PaymentModeTable");
+		paymentModeComboBox.DisplayMember = nameof(PaymentModeModel.Name);
+		paymentModeComboBox.ValueMember = nameof(PaymentModeModel.Id);
 	}
 
 	private void ClearForm()
 	{
 		nameTextBox.Text = string.Empty;
 		numberTextBox.Text = string.Empty;
-		approvedByTextBox.Text = string.Empty;
-		cashAmountTextBox.Text = "0";
-		cardAmountTextBox.Text = "0";
-		upiAmountTextBox.Text = "0";
-		amexAmountTextBox.Text = "0";
 		maleTextBox.Text = "0";
 		femaleTextBox.Text = "0";
+		amountTextBox.Text = "0";
+		amountDataGridView.Rows.Clear();
+		advancePanel.Visible = false;
 		nameTextBox.ReadOnly = false;
 		loyaltyCheckBox.Checked = false;
+		approvedByTextBox.Text = string.Empty;
 		numberTextBox.Focus();
 	}
 	#endregion
@@ -105,10 +87,6 @@ public partial class EntryForm : Form
 		loyaltyCheckBox.CheckedChanged += ResetInactivityTimer;
 		maleTextBox.TextChanged += ResetInactivityTimer;
 		femaleTextBox.TextChanged += ResetInactivityTimer;
-		cashAmountTextBox.TextChanged += ResetInactivityTimer;
-		cardAmountTextBox.TextChanged += ResetInactivityTimer;
-		upiAmountTextBox.TextChanged += ResetInactivityTimer;
-		amexAmountTextBox.TextChanged += ResetInactivityTimer;
 		approvedByTextBox.TextChanged += ResetInactivityTimer;
 		reservationComboBox.SelectedIndexChanged += ResetInactivityTimer;
 		saveButton.Click += ResetInactivityTimer;
@@ -128,10 +106,6 @@ public partial class EntryForm : Form
 		if (string.IsNullOrWhiteSpace(nameTextBox.Text)) return false;
 		if (string.IsNullOrWhiteSpace(maleTextBox.Text)) maleTextBox.Text = "0";
 		if (string.IsNullOrWhiteSpace(femaleTextBox.Text)) femaleTextBox.Text = "0";
-		if (string.IsNullOrWhiteSpace(cashAmountTextBox.Text)) cashAmountTextBox.Text = "0";
-		if (string.IsNullOrWhiteSpace(cardAmountTextBox.Text)) cardAmountTextBox.Text = "0";
-		if (string.IsNullOrWhiteSpace(upiAmountTextBox.Text)) upiAmountTextBox.Text = "0";
-		if (string.IsNullOrWhiteSpace(amexAmountTextBox.Text)) amexAmountTextBox.Text = "0";
 
 		return true;
 	}
@@ -153,17 +127,12 @@ public partial class EntryForm : Form
 			advanceModel = await TransactionData.LoadAdvanceByDateLocationPerson(locationId, foundPerson.Id);
 			if (advanceModel != null)
 			{
-				advanceAmountTextBox.Text = advanceModel.Amount.ToString();
-				advanceAmountTextBox.Visible = true;
-				advanceLabel.Visible = true;
+				advancePanel.Visible = true;
+				advanceAmountTextBox.Text = (await TransactionData.GetTotalAdvanceAmountById(advanceModel.Id)).ToString();
+				bookingAmountTextBox.Text = advanceModel.BookingAmount.ToString();
 			}
 
-			else
-			{
-				advanceAmountTextBox.Text = "0";
-				advanceAmountTextBox.Visible = false;
-				advanceLabel.Visible = false;
-			}
+			else advancePanel.Visible = false;
 		}
 
 		else
@@ -171,10 +140,20 @@ public partial class EntryForm : Form
 			nameTextBox.Text = string.Empty;
 			nameTextBox.ReadOnly = false;
 			loyaltyCheckBox.Checked = false;
-			advanceAmountTextBox.Text = "0";
-			advanceAmountTextBox.Visible = false;
-			advanceLabel.Visible = false;
+			advancePanel.Visible = false;
 		}
+	}
+
+	private void addButton_Click(object sender, EventArgs e)
+	{
+		if (string.IsNullOrWhiteSpace(amountTextBox.Text))
+		{
+			MessageBox.Show("Please enter Amount", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			return;
+		}
+
+		amountDataGridView.Rows.Add((paymentModeComboBox.SelectedItem as PaymentModeModel).Id, (paymentModeComboBox.SelectedItem as PaymentModeModel).Name, amountTextBox.Text);
+		amountTextBox.Text = "0";
 	}
 
 	private async void insertButton_Click(object sender, EventArgs e)
@@ -198,27 +177,33 @@ public partial class EntryForm : Form
 
 		TransactionModel transactionModel = new()
 		{
-			Id = updateTransactionModel == null ? 0 : updateTransactionModel.Id,
+			Id = 0,
+			LocationId = locationId,
+			UserId = userId,
+			DateTime = DateTime.Now,
 			PersonId = personModel.Id,
 			Male = (int)Convert.ToInt64(maleTextBox.Text),
 			Female = (int)Convert.ToInt64(femaleTextBox.Text),
-			Cash = (int)Convert.ToInt64(cashAmountTextBox.Text),
-			Card = (int)Convert.ToInt64(cardAmountTextBox.Text),
-			UPI = (int)Convert.ToInt64(upiAmountTextBox.Text),
-			Amex = (int)Convert.ToInt64(amexAmountTextBox.Text),
 			ReservationType = (reservationComboBox.SelectedItem as ReservationTypeModel).Id,
-			DateTime = DateTime.Now,
-			ApprovedBy = approvedByTextBox.Text,
-			LocationId = locationId,
-			UserId = userId
+			ApprovedBy = approvedByTextBox.Text
 		};
 
-		transactionId = updateTransactionModel == null
-			? await TransactionData.TransactionInsert(transactionModel)
-			: await TransactionData.TransactionUpdate(transactionModel);
+		transactionId = await TransactionData.TransactionInsert(transactionModel);
+
+		foreach (DataGridViewRow row in amountDataGridView.Rows)
+		{
+			await PaymentData.PaymentInsert(new PaymentModel
+			{
+				Id = 0,
+				TransactionId = transactionId,
+				AdvanceId = 0,
+				PaymentModeId = int.Parse(row.Cells[0].Value.ToString()),
+				Amount = int.Parse(row.Cells[2].Value.ToString())
+			});
+		}
 
 		if (advanceAmountTextBox.Visible)
-			await TransactionData.ClearAdvance(advanceModel.Id);
+			await TransactionData.ClearAdvance(advanceModel.Id, transactionId);
 
 		PrintDialog printDialog = new();
 		printDialog.Document = printDocumentCustomer;
@@ -232,9 +217,9 @@ public partial class EntryForm : Form
 	}
 
 	private void printDocumentCustomer_PrintPage(object sender, PrintPageEventArgs e)
-		=> PrintReceipt.DrawGraphics(e, "Customer", transactionId, advanceModel != null ? advanceModel : null);
+		=> PrintReceipt.DrawGraphics(e, "Customer", transactionId, advanceModel != null ? advanceModel.Id : 0);
 
 	private void printDocumentMerchant_PrintPage(object sender, PrintPageEventArgs e)
-		=> PrintReceipt.DrawGraphics(e, "Merchant", transactionId, advanceModel != null ? advanceModel : null);
+		=> PrintReceipt.DrawGraphics(e, "Merchant", transactionId, advanceModel != null ? advanceModel.Id : 0);
 	#endregion
 }

@@ -40,6 +40,8 @@ public partial class Dashboard : Form
 
 	private async Task LoadUserComboBox()
 	{
+		if (locationComboBox.SelectedItem == null) return;
+
 		userComboBox.DataSource = await UserData.LoadActiveUserByLocationId((locationComboBox.SelectedItem as LocationModel).Id);
 		userComboBox.DisplayMember = nameof(UserModel.Name);
 		userComboBox.ValueMember = nameof(UserModel.Id);

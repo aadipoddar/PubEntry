@@ -54,17 +54,16 @@ public static class PrintReceipt
 		DrawString(g, "------------------------", true);
 	}
 
-	private static void DrawPaymentDetails(Graphics g, ReceiptModel receiptModel, AdvanceModel advanceModel = null)
+	private static void DrawPaymentDetails(Graphics g, ReceiptModel receiptModel, List<ReceiptPaymentModel> transactionReceiptPayments, List<ReceiptPaymentModel> advanceReceiptPayments)
 	{
 		font = subHeaderFont;
-		DrawString(g, $"Total: {receiptModel.TotalAmount + advanceModel.Amount}");
+		int totalPaymentAmount = transactionReceiptPayments.Sum(payment => payment.Amount) + advanceReceiptPayments.Sum(payment => payment.Amount);
+		DrawString(g, $"Total: {totalPaymentAmount}");
 
 		font = regularFont;
-		if (advanceModel.Amount > 0) DrawString(g, $"Advance: {advanceModel.Amount}");
-		if (receiptModel.Cash > 0) DrawString(g, $"Cash: {receiptModel.Cash}");
-		if (receiptModel.Card > 0) DrawString(g, $"Card: {receiptModel.Card}");
-		if (receiptModel.UPI > 0) DrawString(g, $"UPI: {receiptModel.UPI}");
-		if (receiptModel.Amex > 0) DrawString(g, $"Amex: {receiptModel.Amex}");
+		if (advanceReceiptPayments.Count > 0) DrawString(g, $"Advance: {advanceReceiptPayments.Sum(payment => payment.Amount)}");
+		transactionReceiptPayments.ForEach(payment => DrawString(g, $"{payment.PaymentMode}: {payment.Amount}"));
+
 		DrawString(g, "------------------------", true);
 	}
 
@@ -85,9 +84,11 @@ public static class PrintReceipt
 		DrawString(g, "is lost by the guest");
 	}
 
-	public static void DrawGraphics(PrintPageEventArgs e, string copyOf, int transactionId, AdvanceModel advanceModel = null)
+	public static void DrawGraphics(PrintPageEventArgs e, string copyOf, int transactionId, int advanceId)
 	{
 		ReceiptModel receiptModel = Task.Run(async () => await PrintData.LoadReceiptDetails(transactionId)).Result.FirstOrDefault();
+		List<ReceiptPaymentModel> transactionReceiptPayments = Task.Run(async () => await PaymentData.LoadPaymentsById(transactionId)).Result;
+		List<ReceiptPaymentModel> advanceReceiptPayments = Task.Run(async () => await PaymentData.LoadPaymentsById(0, advanceId)).Result;
 
 		Graphics g = e.Graphics;
 		maxWidth = e.PageBounds.Width - 20;
@@ -96,7 +97,7 @@ public static class PrintReceipt
 
 		DrawHeader(g, receiptModel.LocationName, copyOf);
 		DrawReceiptDetails(g, receiptModel);
-		DrawPaymentDetails(g, receiptModel, advanceModel);
+		DrawPaymentDetails(g, receiptModel, transactionReceiptPayments, advanceReceiptPayments);
 		DrawFooter(g, receiptModel);
 
 		PaperSize ps58 = new PaperSize("58mm Thermal", 220, lowerSpacing + 20);

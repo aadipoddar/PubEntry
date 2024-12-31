@@ -4,15 +4,22 @@ public partial class AdvanceEntryForm : Form
 {
 	public AdvanceEntryForm() => InitializeComponent();
 
-	private void AdvanceEntryForm_Load(object sender, EventArgs e) => LoadComboBox();
+	private void AdvanceEntryForm_Load(object sender, EventArgs e) => LoadData();
 
-	public async Task LoadComboBox()
+	public async void LoadData()
 	{
 		locationComboBox.DataSource = await LocationData.LoadActiveLocations();
 		locationComboBox.DisplayMember = nameof(LocationModel.Name);
 		locationComboBox.ValueMember = nameof(LocationModel.Id);
 
 		advanceDateTimePicker.MinDate = DateTime.Now;
+
+		paymentModeComboBox.DataSource = await PaymentModeData.LoadActivePaymentModes();
+		paymentModeComboBox.DisplayMember = nameof(PaymentModeModel.Name);
+		paymentModeComboBox.ValueMember = nameof(PaymentModeModel.Id);
+		paymentModeComboBox.SelectedIndex = 0;
+
+		amountDataGridView.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 	}
 
 	private async void numberTextBox_TextChanged(object sender, EventArgs e)
@@ -42,7 +49,11 @@ public partial class AdvanceEntryForm : Form
 	{
 		if (string.IsNullOrWhiteSpace(numberTextBox.Text)) return false;
 		if (string.IsNullOrWhiteSpace(nameTextBox.Text)) return false;
-		if (string.IsNullOrWhiteSpace(amountTextBox.Text)) amountTextBox.Text = "0";
+		if (string.IsNullOrWhiteSpace(bookingAmountTextBox.Text)) return false;
+		if (amountDataGridView.Rows.Count == 0) return false;
+
+		int totalAmount = amountDataGridView.Rows.Cast<DataGridViewRow>().Sum(row => int.Parse(row.Cells["Amount"].Value.ToString()));
+		if (totalAmount > int.Parse(bookingAmountTextBox.Text)) return false;
 
 		return true;
 	}
@@ -52,9 +63,11 @@ public partial class AdvanceEntryForm : Form
 		numberTextBox.Text = string.Empty;
 		nameTextBox.Text = string.Empty;
 		loyaltyCheckBox.Checked = false;
-		amountTextBox.Text = "0";
+		bookingAmountTextBox.Text = "0";
 		locationComboBox.SelectedIndex = 0;
 		advanceDateTimePicker.MinDate = DateTime.Now;
+		paymentModeComboBox.SelectedIndex = 0;
+		amountDataGridView.Rows.Clear();
 		numberTextBox.Focus();
 	}
 
@@ -77,16 +90,40 @@ public partial class AdvanceEntryForm : Form
 		if (nameTextBox.ReadOnly == false) personModel.Id = await PersonData.PersonInsert(personModel);
 		personModel.Id = await PersonData.PersonUpdate(personModel);
 
-		await TransactionData.AdvanceInsert(new AdvanceModel
+		int advanceId = await TransactionData.AdvanceInsert(new AdvanceModel
 		{
 			Id = 0,
+			TransactionId = 0,
 			LocationId = (locationComboBox.SelectedItem as LocationModel).Id,
 			PersonId = personModel.Id,
-			Amount = int.Parse(amountTextBox.Text),
+			DateTime = DateTime.Now,
 			AdvanceDate = advanceDateTimePicker.Value,
+			BookingAmount = int.Parse(bookingAmountTextBox.Text),
 			Cleared = false
 		});
 
+		foreach (DataGridViewRow row in amountDataGridView.Rows)
+		{
+			await PaymentData.PaymentInsert(new PaymentModel
+			{
+				Id = 0,
+				TransactionId = 0,
+				AdvanceId = advanceId,
+				PaymentModeId = int.Parse(row.Cells[0].Value.ToString()),
+				Amount = int.Parse(row.Cells[2].Value.ToString())
+			});
+		}
+
 		ClearForm();
+	}
+
+	private void addButton_Click(object sender, EventArgs e)
+	{
+		amountDataGridView.Rows.Add
+			((paymentModeComboBox.SelectedItem as PaymentModeModel).Id,
+			(paymentModeComboBox.SelectedItem as PaymentModeModel).Name,
+			amountTextBox.Text);
+
+		amountTextBox.Text = "0";
 	}
 }

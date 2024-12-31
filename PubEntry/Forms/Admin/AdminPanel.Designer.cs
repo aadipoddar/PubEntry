@@ -34,6 +34,7 @@ partial class AdminPanel
 		managePersonsButton = new Button();
 		settingsButton = new Button();
 		advanceButton = new Button();
+		paymentModesButton = new Button();
 		SuspendLayout();
 		// 
 		// manageLocationButton
@@ -83,7 +84,7 @@ partial class AdminPanel
 		// settingsButton
 		// 
 		settingsButton.Font = new Font("Segoe UI", 15F);
-		settingsButton.Location = new Point(39, 310);
+		settingsButton.Location = new Point(39, 368);
 		settingsButton.Name = "settingsButton";
 		settingsButton.Size = new Size(213, 52);
 		settingsButton.TabIndex = 6;
@@ -101,11 +102,23 @@ partial class AdminPanel
 		advanceButton.UseVisualStyleBackColor = true;
 		advanceButton.Click += advanceButton_Click;
 		// 
+		// paymentModesButton
+		// 
+		paymentModesButton.Font = new Font("Segoe UI", 15F);
+		paymentModesButton.Location = new Point(39, 310);
+		paymentModesButton.Name = "paymentModesButton";
+		paymentModesButton.Size = new Size(213, 52);
+		paymentModesButton.TabIndex = 7;
+		paymentModesButton.Text = "Payment Modes";
+		paymentModesButton.UseVisualStyleBackColor = true;
+		paymentModesButton.Click += paymentModesButton_Click;
+		// 
 		// AdminPanel
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(292, 390);
+		ClientSize = new Size(292, 461);
+		Controls.Add(paymentModesButton);
 		Controls.Add(advanceButton);
 		Controls.Add(settingsButton);
 		Controls.Add(manageTransactionsButton);
@@ -126,4 +139,5 @@ partial class AdminPanel
 	private Button managePersonsButton;
 	private Button settingsButton;
 	private Button advanceButton;
+	private Button paymentModesButton;
 }

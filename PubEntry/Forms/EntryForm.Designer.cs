@@ -34,13 +34,7 @@ partial class EntryForm
 		nameLabel = new Label();
 		numberLabel = new Label();
 		numberTextBox = new TextBox();
-		cashLabel = new Label();
-		cashAmountTextBox = new TextBox();
 		saveButton = new Button();
-		cardLabel = new Label();
-		cardAmountTextBox = new TextBox();
-		upiLabel = new Label();
-		upiAmountTextBox = new TextBox();
 		femaleLabel = new Label();
 		femaleTextBox = new TextBox();
 		maleLabel = new Label();
@@ -54,13 +48,23 @@ partial class EntryForm
 		richTextBoxFooter = new RichTextBox();
 		brandingLabel = new Label();
 		printDocumentMerchant = new System.Drawing.Printing.PrintDocument();
-		amexLabel = new Label();
-		amexAmountTextBox = new TextBox();
 		dateChangeTimer = new System.Windows.Forms.Timer(components);
 		loyaltyCheckBox = new CheckBox();
 		versionLabel = new Label();
 		advanceLabel = new Label();
 		advanceAmountTextBox = new TextBox();
+		label1 = new Label();
+		bookingAmountTextBox = new TextBox();
+		addButton = new Button();
+		amountTextBox = new TextBox();
+		paymentModeComboBox = new ComboBox();
+		amountDataGridView = new DataGridView();
+		PaymentId = new DataGridViewTextBoxColumn();
+		PaymentMode = new DataGridViewTextBoxColumn();
+		Amount = new DataGridViewTextBoxColumn();
+		advancePanel = new Panel();
+		((System.ComponentModel.ISupportInitialize)amountDataGridView).BeginInit();
+		advancePanel.SuspendLayout();
 		SuspendLayout();
 		// 
 		// nameTextBox
@@ -103,88 +107,22 @@ partial class EntryForm
 		numberTextBox.TextChanged += numberTextBox_TextChanged;
 		numberTextBox.KeyPress += textBox_KeyPress;
 		// 
-		// cashLabel
-		// 
-		cashLabel.AutoSize = true;
-		cashLabel.Font = new Font("Segoe UI", 15F);
-		cashLabel.Location = new Point(272, 240);
-		cashLabel.Name = "cashLabel";
-		cashLabel.Size = new Size(53, 28);
-		cashLabel.TabIndex = 5;
-		cashLabel.Text = "Cash";
-		// 
-		// cashAmountTextBox
-		// 
-		cashAmountTextBox.Font = new Font("Segoe UI", 15F);
-		cashAmountTextBox.Location = new Point(334, 234);
-		cashAmountTextBox.Name = "cashAmountTextBox";
-		cashAmountTextBox.PlaceholderText = "Cash Amount";
-		cashAmountTextBox.RightToLeft = RightToLeft.Yes;
-		cashAmountTextBox.Size = new Size(109, 34);
-		cashAmountTextBox.TabIndex = 5;
-		cashAmountTextBox.Text = "0";
-		cashAmountTextBox.KeyPress += textBox_KeyPress;
-		// 
 		// saveButton
 		// 
 		saveButton.Font = new Font("Segoe UI", 15F);
-		saveButton.Location = new Point(158, 539);
+		saveButton.Location = new Point(122, 408);
 		saveButton.Name = "saveButton";
-		saveButton.Size = new Size(135, 44);
+		saveButton.Size = new Size(253, 70);
 		saveButton.TabIndex = 11;
 		saveButton.Text = "SAVE";
 		saveButton.UseVisualStyleBackColor = true;
 		saveButton.Click += insertButton_Click;
 		// 
-		// cardLabel
-		// 
-		cardLabel.AutoSize = true;
-		cardLabel.Font = new Font("Segoe UI", 15F);
-		cardLabel.Location = new Point(272, 280);
-		cardLabel.Name = "cardLabel";
-		cardLabel.Size = new Size(53, 28);
-		cardLabel.TabIndex = 15;
-		cardLabel.Text = "Card";
-		// 
-		// cardAmountTextBox
-		// 
-		cardAmountTextBox.Font = new Font("Segoe UI", 15F);
-		cardAmountTextBox.Location = new Point(334, 277);
-		cardAmountTextBox.Name = "cardAmountTextBox";
-		cardAmountTextBox.PlaceholderText = "Card Amount";
-		cardAmountTextBox.RightToLeft = RightToLeft.Yes;
-		cardAmountTextBox.Size = new Size(109, 34);
-		cardAmountTextBox.TabIndex = 6;
-		cardAmountTextBox.Text = "0";
-		cardAmountTextBox.KeyPress += textBox_KeyPress;
-		// 
-		// upiLabel
-		// 
-		upiLabel.AutoSize = true;
-		upiLabel.Font = new Font("Segoe UI", 15F);
-		upiLabel.Location = new Point(272, 323);
-		upiLabel.Name = "upiLabel";
-		upiLabel.Size = new Size(42, 28);
-		upiLabel.TabIndex = 17;
-		upiLabel.Text = "UPI";
-		// 
-		// upiAmountTextBox
-		// 
-		upiAmountTextBox.Font = new Font("Segoe UI", 15F);
-		upiAmountTextBox.Location = new Point(334, 317);
-		upiAmountTextBox.Name = "upiAmountTextBox";
-		upiAmountTextBox.PlaceholderText = "UPI Amount";
-		upiAmountTextBox.RightToLeft = RightToLeft.Yes;
-		upiAmountTextBox.Size = new Size(109, 34);
-		upiAmountTextBox.TabIndex = 7;
-		upiAmountTextBox.Text = "0";
-		upiAmountTextBox.KeyPress += textBox_KeyPress;
-		// 
 		// femaleLabel
 		// 
 		femaleLabel.AutoSize = true;
 		femaleLabel.Font = new Font("Segoe UI", 15F);
-		femaleLabel.Location = new Point(13, 277);
+		femaleLabel.Location = new Point(194, 199);
 		femaleLabel.Name = "femaleLabel";
 		femaleLabel.Size = new Size(74, 28);
 		femaleLabel.TabIndex = 21;
@@ -193,11 +131,11 @@ partial class EntryForm
 		// femaleTextBox
 		// 
 		femaleTextBox.Font = new Font("Segoe UI", 15F);
-		femaleTextBox.Location = new Point(96, 274);
+		femaleTextBox.Location = new Point(185, 230);
 		femaleTextBox.Name = "femaleTextBox";
 		femaleTextBox.PlaceholderText = "Female";
 		femaleTextBox.RightToLeft = RightToLeft.Yes;
-		femaleTextBox.Size = new Size(126, 34);
+		femaleTextBox.Size = new Size(92, 34);
 		femaleTextBox.TabIndex = 4;
 		femaleTextBox.Text = "0";
 		femaleTextBox.KeyPress += textBox_KeyPress;
@@ -206,7 +144,7 @@ partial class EntryForm
 		// 
 		maleLabel.AutoSize = true;
 		maleLabel.Font = new Font("Segoe UI", 15F);
-		maleLabel.Location = new Point(13, 237);
+		maleLabel.Location = new Point(71, 199);
 		maleLabel.Name = "maleLabel";
 		maleLabel.Size = new Size(55, 28);
 		maleLabel.TabIndex = 19;
@@ -215,11 +153,11 @@ partial class EntryForm
 		// maleTextBox
 		// 
 		maleTextBox.Font = new Font("Segoe UI", 15F);
-		maleTextBox.Location = new Point(96, 234);
+		maleTextBox.Location = new Point(50, 230);
 		maleTextBox.Name = "maleTextBox";
 		maleTextBox.PlaceholderText = "Male";
 		maleTextBox.RightToLeft = RightToLeft.Yes;
-		maleTextBox.Size = new Size(126, 34);
+		maleTextBox.Size = new Size(92, 34);
 		maleTextBox.TabIndex = 3;
 		maleTextBox.Text = "0";
 		maleTextBox.KeyPress += textBox_KeyPress;
@@ -231,16 +169,16 @@ partial class EntryForm
 		reservationComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 		reservationComboBox.Font = new Font("Segoe UI", 15F);
 		reservationComboBox.FormattingEnabled = true;
-		reservationComboBox.Location = new Point(176, 429);
+		reservationComboBox.Location = new Point(185, 285);
 		reservationComboBox.Name = "reservationComboBox";
 		reservationComboBox.Size = new Size(271, 36);
-		reservationComboBox.TabIndex = 9;
+		reservationComboBox.TabIndex = 8;
 		// 
 		// reservationLabel
 		// 
 		reservationLabel.AutoSize = true;
 		reservationLabel.Font = new Font("Segoe UI", 15F);
-		reservationLabel.Location = new Point(13, 432);
+		reservationLabel.Location = new Point(22, 288);
 		reservationLabel.Name = "reservationLabel";
 		reservationLabel.Size = new Size(113, 28);
 		reservationLabel.TabIndex = 23;
@@ -249,17 +187,17 @@ partial class EntryForm
 		// approvedByTextBox
 		// 
 		approvedByTextBox.Font = new Font("Segoe UI", 15F);
-		approvedByTextBox.Location = new Point(176, 471);
+		approvedByTextBox.Location = new Point(185, 327);
 		approvedByTextBox.Name = "approvedByTextBox";
 		approvedByTextBox.PlaceholderText = "Approved By";
 		approvedByTextBox.Size = new Size(271, 34);
-		approvedByTextBox.TabIndex = 10;
+		approvedByTextBox.TabIndex = 9;
 		// 
 		// approvedByLabel
 		// 
 		approvedByLabel.AutoSize = true;
 		approvedByLabel.Font = new Font("Segoe UI", 15F);
-		approvedByLabel.Location = new Point(13, 474);
+		approvedByLabel.Location = new Point(22, 330);
 		approvedByLabel.Name = "approvedByLabel";
 		approvedByLabel.Size = new Size(126, 28);
 		approvedByLabel.TabIndex = 25;
@@ -282,9 +220,9 @@ partial class EntryForm
 		// richTextBoxFooter
 		// 
 		richTextBoxFooter.Dock = DockStyle.Bottom;
-		richTextBoxFooter.Location = new Point(0, 615);
+		richTextBoxFooter.Location = new Point(0, 484);
 		richTextBoxFooter.Name = "richTextBoxFooter";
-		richTextBoxFooter.Size = new Size(486, 26);
+		richTextBoxFooter.Size = new Size(855, 26);
 		richTextBoxFooter.TabIndex = 27;
 		richTextBoxFooter.Text = "";
 		// 
@@ -293,7 +231,7 @@ partial class EntryForm
 		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 		brandingLabel.AutoSize = true;
 		brandingLabel.BackColor = Color.White;
-		brandingLabel.Location = new Point(406, 621);
+		brandingLabel.Location = new Point(775, 490);
 		brandingLabel.Name = "brandingLabel";
 		brandingLabel.Size = new Size(76, 15);
 		brandingLabel.TabIndex = 28;
@@ -302,28 +240,6 @@ partial class EntryForm
 		// printDocumentMerchant
 		// 
 		printDocumentMerchant.PrintPage += printDocumentMerchant_PrintPage;
-		// 
-		// amexLabel
-		// 
-		amexLabel.AutoSize = true;
-		amexLabel.Font = new Font("Segoe UI", 15F);
-		amexLabel.Location = new Point(272, 360);
-		amexLabel.Name = "amexLabel";
-		amexLabel.Size = new Size(61, 28);
-		amexLabel.TabIndex = 30;
-		amexLabel.Text = "Amex";
-		// 
-		// amexAmountTextBox
-		// 
-		amexAmountTextBox.Font = new Font("Segoe UI", 15F);
-		amexAmountTextBox.Location = new Point(334, 357);
-		amexAmountTextBox.Name = "amexAmountTextBox";
-		amexAmountTextBox.PlaceholderText = "Amex Amount";
-		amexAmountTextBox.RightToLeft = RightToLeft.Yes;
-		amexAmountTextBox.Size = new Size(109, 34);
-		amexAmountTextBox.TabIndex = 8;
-		amexAmountTextBox.Text = "0";
-		amexAmountTextBox.KeyPress += textBox_KeyPress;
 		// 
 		// dateChangeTimer
 		// 
@@ -346,7 +262,7 @@ partial class EntryForm
 		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 		versionLabel.AutoSize = true;
 		versionLabel.BackColor = Color.White;
-		versionLabel.Location = new Point(5, 621);
+		versionLabel.Location = new Point(5, 490);
 		versionLabel.Name = "versionLabel";
 		versionLabel.Size = new Size(84, 15);
 		versionLabel.TabIndex = 31;
@@ -356,7 +272,7 @@ partial class EntryForm
 		// 
 		advanceLabel.AutoSize = true;
 		advanceLabel.Font = new Font("Segoe UI", 15F);
-		advanceLabel.Location = new Point(241, 197);
+		advanceLabel.Location = new Point(28, 22);
 		advanceLabel.Name = "advanceLabel";
 		advanceLabel.Size = new Size(87, 28);
 		advanceLabel.TabIndex = 32;
@@ -365,7 +281,7 @@ partial class EntryForm
 		// advanceAmountTextBox
 		// 
 		advanceAmountTextBox.Font = new Font("Segoe UI", 15F);
-		advanceAmountTextBox.Location = new Point(334, 194);
+		advanceAmountTextBox.Location = new Point(17, 53);
 		advanceAmountTextBox.Name = "advanceAmountTextBox";
 		advanceAmountTextBox.PlaceholderText = "Cash Amount";
 		advanceAmountTextBox.ReadOnly = true;
@@ -374,18 +290,121 @@ partial class EntryForm
 		advanceAmountTextBox.TabIndex = 33;
 		advanceAmountTextBox.Text = "0";
 		// 
+		// label1
+		// 
+		label1.AutoSize = true;
+		label1.Font = new Font("Segoe UI", 15F);
+		label1.Location = new Point(233, 22);
+		label1.Name = "label1";
+		label1.Size = new Size(85, 28);
+		label1.TabIndex = 34;
+		label1.Text = "Booking";
+		// 
+		// bookingAmountTextBox
+		// 
+		bookingAmountTextBox.Font = new Font("Segoe UI", 15F);
+		bookingAmountTextBox.Location = new Point(219, 53);
+		bookingAmountTextBox.Name = "bookingAmountTextBox";
+		bookingAmountTextBox.PlaceholderText = "Cash Amount";
+		bookingAmountTextBox.ReadOnly = true;
+		bookingAmountTextBox.RightToLeft = RightToLeft.Yes;
+		bookingAmountTextBox.Size = new Size(109, 34);
+		bookingAmountTextBox.TabIndex = 35;
+		bookingAmountTextBox.Text = "0";
+		// 
+		// addButton
+		// 
+		addButton.Font = new Font("Segoe UI", 15F);
+		addButton.Location = new Point(572, 200);
+		addButton.Name = "addButton";
+		addButton.Size = new Size(176, 50);
+		addButton.TabIndex = 7;
+		addButton.Text = "ADD";
+		addButton.UseVisualStyleBackColor = true;
+		addButton.Click += addButton_Click;
+		// 
+		// amountTextBox
+		// 
+		amountTextBox.Font = new Font("Segoe UI", 15F);
+		amountTextBox.Location = new Point(642, 153);
+		amountTextBox.Name = "amountTextBox";
+		amountTextBox.PlaceholderText = "Amount";
+		amountTextBox.RightToLeft = RightToLeft.Yes;
+		amountTextBox.Size = new Size(195, 34);
+		amountTextBox.TabIndex = 6;
+		amountTextBox.Text = "0";
+		// 
+		// paymentModeComboBox
+		// 
+		paymentModeComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
+		paymentModeComboBox.AutoCompleteSource = AutoCompleteSource.ListItems;
+		paymentModeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+		paymentModeComboBox.Font = new Font("Segoe UI", 15F);
+		paymentModeComboBox.FormattingEnabled = true;
+		paymentModeComboBox.Location = new Point(475, 153);
+		paymentModeComboBox.Name = "paymentModeComboBox";
+		paymentModeComboBox.Size = new Size(161, 36);
+		paymentModeComboBox.TabIndex = 5;
+		// 
+		// amountDataGridView
+		// 
+		amountDataGridView.AllowUserToAddRows = false;
+		amountDataGridView.AllowUserToOrderColumns = true;
+		amountDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+		amountDataGridView.Columns.AddRange(new DataGridViewColumn[] { PaymentId, PaymentMode, Amount });
+		amountDataGridView.Location = new Point(475, 276);
+		amountDataGridView.Name = "amountDataGridView";
+		amountDataGridView.ReadOnly = true;
+		amountDataGridView.Size = new Size(362, 202);
+		amountDataGridView.TabIndex = 36;
+		// 
+		// PaymentId
+		// 
+		PaymentId.HeaderText = "Id";
+		PaymentId.Name = "PaymentId";
+		PaymentId.ReadOnly = true;
+		PaymentId.Visible = false;
+		// 
+		// PaymentMode
+		// 
+		PaymentMode.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+		PaymentMode.HeaderText = "Payment Mode";
+		PaymentMode.Name = "PaymentMode";
+		PaymentMode.ReadOnly = true;
+		PaymentMode.Width = 113;
+		// 
+		// Amount
+		// 
+		Amount.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+		Amount.HeaderText = "Amount";
+		Amount.Name = "Amount";
+		Amount.ReadOnly = true;
+		// 
+		// advancePanel
+		// 
+		advancePanel.Controls.Add(advanceLabel);
+		advancePanel.Controls.Add(advanceAmountTextBox);
+		advancePanel.Controls.Add(label1);
+		advancePanel.Controls.Add(bookingAmountTextBox);
+		advancePanel.Location = new Point(475, 22);
+		advancePanel.Name = "advancePanel";
+		advancePanel.Size = new Size(362, 115);
+		advancePanel.TabIndex = 40;
+		advancePanel.Visible = false;
+		// 
 		// EntryForm
 		// 
 		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(486, 641);
-		Controls.Add(advanceLabel);
-		Controls.Add(advanceAmountTextBox);
+		ClientSize = new Size(855, 510);
+		Controls.Add(advancePanel);
+		Controls.Add(addButton);
+		Controls.Add(amountTextBox);
+		Controls.Add(paymentModeComboBox);
+		Controls.Add(amountDataGridView);
 		Controls.Add(versionLabel);
 		Controls.Add(loyaltyCheckBox);
-		Controls.Add(amexLabel);
-		Controls.Add(amexAmountTextBox);
 		Controls.Add(brandingLabel);
 		Controls.Add(richTextBoxFooter);
 		Controls.Add(dateTimeLabel);
@@ -397,13 +416,7 @@ partial class EntryForm
 		Controls.Add(femaleTextBox);
 		Controls.Add(maleLabel);
 		Controls.Add(maleTextBox);
-		Controls.Add(upiLabel);
-		Controls.Add(upiAmountTextBox);
-		Controls.Add(cardLabel);
-		Controls.Add(cardAmountTextBox);
 		Controls.Add(saveButton);
-		Controls.Add(cashLabel);
-		Controls.Add(cashAmountTextBox);
 		Controls.Add(numberLabel);
 		Controls.Add(numberTextBox);
 		Controls.Add(nameLabel);
@@ -413,6 +426,9 @@ partial class EntryForm
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "Dashboard";
 		Load += EntryForm_Load;
+		((System.ComponentModel.ISupportInitialize)amountDataGridView).EndInit();
+		advancePanel.ResumeLayout(false);
+		advancePanel.PerformLayout();
 		ResumeLayout(false);
 		PerformLayout();
 	}
@@ -423,13 +439,7 @@ partial class EntryForm
 	private Label nameLabel;
 	private Label numberLabel;
 	private TextBox numberTextBox;
-	private Label cashLabel;
-	private TextBox cashAmountTextBox;
 	private Button saveButton;
-	private Label cardLabel;
-	private TextBox cardAmountTextBox;
-	private Label upiLabel;
-	private TextBox upiAmountTextBox;
 	private Label femaleLabel;
 	private TextBox femaleTextBox;
 	private Label maleLabel;
@@ -443,11 +453,19 @@ partial class EntryForm
 	private RichTextBox richTextBoxFooter;
 	private Label brandingLabel;
 	private System.Drawing.Printing.PrintDocument printDocumentMerchant;
-	private Label amexLabel;
-	private TextBox amexAmountTextBox;
 	private System.Windows.Forms.Timer dateChangeTimer;
 	private CheckBox loyaltyCheckBox;
 	private Label versionLabel;
 	private Label advanceLabel;
 	private TextBox advanceAmountTextBox;
+	private Label label1;
+	private TextBox bookingAmountTextBox;
+	private Button addButton;
+	private TextBox amountTextBox;
+	private ComboBox paymentModeComboBox;
+	private DataGridView amountDataGridView;
+	private DataGridViewTextBoxColumn PaymentId;
+	private DataGridViewTextBoxColumn PaymentMode;
+	private DataGridViewTextBoxColumn Amount;
+	private Panel advancePanel;
 }
