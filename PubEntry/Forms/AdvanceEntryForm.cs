@@ -20,7 +20,7 @@ public partial class AdvanceEntryForm : Form
 		paymentModeComboBox.SelectedIndex = 0;
 
 		amountDataGridView.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-		amountDataGridView.DefaultCellStyle.Font = new Font("Arial", 25);
+		amountDataGridView.DefaultCellStyle.Font = new Font("Arial", 20);
 	}
 
 	private async void numberTextBox_TextChanged(object sender, EventArgs e)

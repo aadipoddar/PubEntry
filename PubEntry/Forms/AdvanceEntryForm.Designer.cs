@@ -45,6 +45,7 @@ partial class AdvanceEntryForm
 		paymentModeComboBox = new ComboBox();
 		amountTextBox = new TextBox();
 		addButton = new Button();
+		label2 = new Label();
 		((System.ComponentModel.ISupportInitialize)amountDataGridView).BeginInit();
 		SuspendLayout();
 		// 
@@ -53,7 +54,7 @@ partial class AdvanceEntryForm
 		advanceDateTimePicker.CalendarFont = new Font("Segoe UI", 15F);
 		advanceDateTimePicker.Font = new Font("Segoe UI", 15F);
 		advanceDateTimePicker.Format = DateTimePickerFormat.Short;
-		advanceDateTimePicker.Location = new Point(132, 239);
+		advanceDateTimePicker.Location = new Point(132, 265);
 		advanceDateTimePicker.Name = "advanceDateTimePicker";
 		advanceDateTimePicker.Size = new Size(136, 34);
 		advanceDateTimePicker.TabIndex = 6;
@@ -61,7 +62,7 @@ partial class AdvanceEntryForm
 		// saveButton
 		// 
 		saveButton.Font = new Font("Segoe UI", 15F);
-		saveButton.Location = new Point(69, 305);
+		saveButton.Location = new Point(69, 342);
 		saveButton.Name = "saveButton";
 		saveButton.Size = new Size(287, 61);
 		saveButton.TabIndex = 7;
@@ -73,7 +74,7 @@ partial class AdvanceEntryForm
 		// 
 		loyaltyCheckBox.AutoSize = true;
 		loyaltyCheckBox.Font = new Font("Segoe UI", 15F);
-		loyaltyCheckBox.Location = new Point(144, 174);
+		loyaltyCheckBox.Location = new Point(152, 174);
 		loyaltyCheckBox.Name = "loyaltyCheckBox";
 		loyaltyCheckBox.Size = new Size(94, 32);
 		loyaltyCheckBox.TabIndex = 4;
@@ -160,7 +161,7 @@ partial class AdvanceEntryForm
 		amountDataGridView.AllowUserToOrderColumns = true;
 		amountDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 		amountDataGridView.Columns.AddRange(new DataGridViewColumn[] { PaymentId, PaymentMode, Amount });
-		amountDataGridView.Location = new Point(438, 202);
+		amountDataGridView.Location = new Point(438, 239);
 		amountDataGridView.Name = "amountDataGridView";
 		amountDataGridView.ReadOnly = true;
 		amountDataGridView.RowTemplate.Height = 40;
@@ -196,7 +197,7 @@ partial class AdvanceEntryForm
 		paymentModeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 		paymentModeComboBox.Font = new Font("Segoe UI", 15F);
 		paymentModeComboBox.FormattingEnabled = true;
-		paymentModeComboBox.Location = new Point(438, 79);
+		paymentModeComboBox.Location = new Point(438, 127);
 		paymentModeComboBox.Name = "paymentModeComboBox";
 		paymentModeComboBox.Size = new Size(161, 36);
 		paymentModeComboBox.TabIndex = 20;
@@ -204,7 +205,7 @@ partial class AdvanceEntryForm
 		// amountTextBox
 		// 
 		amountTextBox.Font = new Font("Segoe UI", 15F);
-		amountTextBox.Location = new Point(605, 79);
+		amountTextBox.Location = new Point(605, 127);
 		amountTextBox.Name = "amountTextBox";
 		amountTextBox.PlaceholderText = "Amount";
 		amountTextBox.RightToLeft = RightToLeft.Yes;
@@ -215,7 +216,7 @@ partial class AdvanceEntryForm
 		// addButton
 		// 
 		addButton.Font = new Font("Segoe UI", 15F);
-		addButton.Location = new Point(535, 126);
+		addButton.Location = new Point(535, 174);
 		addButton.Name = "addButton";
 		addButton.Size = new Size(176, 50);
 		addButton.TabIndex = 22;
@@ -223,12 +224,23 @@ partial class AdvanceEntryForm
 		addButton.UseVisualStyleBackColor = true;
 		addButton.Click += addButton_Click;
 		// 
+		// label2
+		// 
+		label2.AutoSize = true;
+		label2.Font = new Font("Segoe UI", 15F);
+		label2.Location = new Point(535, 96);
+		label2.Name = "label2";
+		label2.Size = new Size(165, 28);
+		label2.TabIndex = 37;
+		label2.Text = "Amount Received";
+		// 
 		// AdvanceEntryForm
 		// 
 		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(826, 378);
+		ClientSize = new Size(826, 417);
+		Controls.Add(label2);
 		Controls.Add(addButton);
 		Controls.Add(amountTextBox);
 		Controls.Add(paymentModeComboBox);
@@ -271,4 +283,5 @@ partial class AdvanceEntryForm
 	private DataGridViewTextBoxColumn PaymentId;
 	private DataGridViewTextBoxColumn PaymentMode;
 	private DataGridViewTextBoxColumn Amount;
+	private Label label2;
 }
