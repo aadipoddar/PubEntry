@@ -22,4 +22,7 @@ public class TransactionData
 
 	public static async Task<AdvanceModel> GetAdvanceByTransactionId(int transactionId) =>
 			(await SqlDataAccess.LoadData<AdvanceModel, dynamic>("GetAdvanceByTransactionId", new { TransactionId = transactionId })).FirstOrDefault();
+
+	public static async Task<List<PaymentModel>> LoadPaymentsByTransactionId(int transactionId) =>
+			(await SqlDataAccess.LoadData<List<PaymentModel>, dynamic>("LoadPaymentsByTransactionId", new { TransactionId = transactionId })).FirstOrDefault();
 }

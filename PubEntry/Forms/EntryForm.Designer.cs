@@ -392,7 +392,6 @@ partial class EntryForm
 		advancePanel.Name = "advancePanel";
 		advancePanel.Size = new Size(362, 89);
 		advancePanel.TabIndex = 40;
-		advancePanel.Visible = false;
 		// 
 		// label2
 		// 

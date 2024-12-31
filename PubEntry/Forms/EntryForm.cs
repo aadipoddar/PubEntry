@@ -28,6 +28,8 @@ public partial class EntryForm : Form
 		InitializeComponent();
 
 		this.updateTransactionModel = updateTransactionModel;
+		userId = updateTransactionModel.UserId;
+		locationId = updateTransactionModel.LocationId;
 	}
 
 	private async void EntryForm_Load(object sender, EventArgs e)
@@ -55,6 +57,8 @@ public partial class EntryForm : Form
 		{
 			PersonModel personModel = (await CommonData.LoadTableDataById<PersonModel>("PersonTable", updateTransactionModel.Id)).FirstOrDefault();
 			numberTextBox.Text = personModel.Number;
+			nameTextBox.Text = personModel.Name;
+			loyaltyCheckBox.Checked = personModel.Loyalty;
 			maleTextBox.Text = updateTransactionModel.Male.ToString();
 			femaleTextBox.Text = updateTransactionModel.Female.ToString();
 			reservationComboBox.SelectedValue = updateTransactionModel.ReservationType;
@@ -65,9 +69,13 @@ public partial class EntryForm : Form
 			if (advanceModel != null)
 			{
 				advancePanel.Visible = true;
+				advanceAmountTextBox.Visible = true;
+				bookingAmountTextBox.Visible = true;
 				bookingAmountTextBox.Text = advanceModel.BookingAmount.ToString();
 				advanceAmountTextBox.Text = (await TransactionData.GetTotalAdvanceAmountById(advanceModel.Id)).ToString();
 			}
+
+			//List<PaymentModel> paymentModels = await TransactionData.LoadPaymentsByTransactionId(updateTransactionModel.Id);
 
 			else advancePanel.Visible = false;
 		}
@@ -142,6 +150,7 @@ public partial class EntryForm : Form
 
 	private async void numberTextBox_TextChanged(object sender, EventArgs e)
 	{
+		if (updateTransactionModel != null) return;
 		var foundPerson = await PersonData.LoadPersonByNumber(numberTextBox.Text);
 
 		if (foundPerson != null)
@@ -149,8 +158,6 @@ public partial class EntryForm : Form
 			nameTextBox.Text = foundPerson.Name;
 			nameTextBox.ReadOnly = true;
 			loyaltyCheckBox.Checked = foundPerson.Loyalty;
-
-			if (updateTransactionModel == null) return;
 
 			advanceModel = await TransactionData.LoadAdvanceByDateLocationPerson(locationId, foundPerson.Id);
 			if (advanceModel != null)
