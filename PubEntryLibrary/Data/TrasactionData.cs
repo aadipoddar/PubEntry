@@ -19,4 +19,7 @@ public class TransactionData
 
 	public static async Task ClearAdvance(int advanceId, int transactionId) =>
 			await SqlDataAccess.SaveData("ClearAdvance", new { Id = advanceId, TransactionId = transactionId });
+
+	public static async Task<AdvanceModel> GetAdvanceByTransactionId(int transactionId) =>
+			(await SqlDataAccess.LoadData<AdvanceModel, dynamic>("GetAdvanceByTransactionId", new { TransactionId = transactionId })).FirstOrDefault();
 }

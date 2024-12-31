@@ -13,6 +13,7 @@ public partial class EntryForm : Form
 
 	private int transactionId, userId, locationId;
 	AdvanceModel advanceModel;
+	TransactionModel updateTransactionModel;
 
 	public EntryForm(int locationId, int userId)
 	{
@@ -25,6 +26,8 @@ public partial class EntryForm : Form
 	public EntryForm(TransactionModel updateTransactionModel)
 	{
 		InitializeComponent();
+
+		this.updateTransactionModel = updateTransactionModel;
 	}
 
 	private async void EntryForm_Load(object sender, EventArgs e)
@@ -46,8 +49,28 @@ public partial class EntryForm : Form
 		paymentModeComboBox.DisplayMember = nameof(PaymentModeModel.Name);
 		paymentModeComboBox.ValueMember = nameof(PaymentModeModel.Id);
 
-
 		amountDataGridView.DefaultCellStyle.Font = new Font("Arial", 20);
+
+		if (updateTransactionModel != null)
+		{
+			PersonModel personModel = (await CommonData.LoadTableDataById<PersonModel>("PersonTable", updateTransactionModel.Id)).FirstOrDefault();
+			numberTextBox.Text = personModel.Number;
+			maleTextBox.Text = updateTransactionModel.Male.ToString();
+			femaleTextBox.Text = updateTransactionModel.Female.ToString();
+			reservationComboBox.SelectedValue = updateTransactionModel.ReservationType;
+			approvedByTextBox.Text = updateTransactionModel.ApprovedBy;
+
+			AdvanceModel advanceModel = await TransactionData.GetAdvanceByTransactionId(updateTransactionModel.Id);
+
+			if (advanceModel != null)
+			{
+				advancePanel.Visible = true;
+				bookingAmountTextBox.Text = advanceModel.BookingAmount.ToString();
+				advanceAmountTextBox.Text = (await TransactionData.GetTotalAdvanceAmountById(advanceModel.Id)).ToString();
+			}
+
+			else advancePanel.Visible = false;
+		}
 	}
 
 	private void ClearForm()
@@ -127,6 +150,8 @@ public partial class EntryForm : Form
 			nameTextBox.ReadOnly = true;
 			loyaltyCheckBox.Checked = foundPerson.Loyalty;
 
+			if (updateTransactionModel == null) return;
+
 			advanceModel = await TransactionData.LoadAdvanceByDateLocationPerson(locationId, foundPerson.Id);
 			if (advanceModel != null)
 			{
@@ -205,7 +230,7 @@ public partial class EntryForm : Form
 			});
 		}
 
-		if (advanceAmountTextBox.Visible)
+		if (advancePanel.Visible)
 			await TransactionData.ClearAdvance(advanceModel.Id, transactionId);
 
 		PrintDialog printDialog = new();
@@ -220,9 +245,9 @@ public partial class EntryForm : Form
 	}
 
 	private void printDocumentCustomer_PrintPage(object sender, PrintPageEventArgs e)
-		=> PrintReceipt.DrawGraphics(e, "Customer", transactionId, advanceModel != null ? advanceModel.Id : 0);
+		=> PrintReceipt.DrawGraphics(e, "Customer", transactionId, advancePanel.Visible == true ? advanceModel.Id : 0);
 
 	private void printDocumentMerchant_PrintPage(object sender, PrintPageEventArgs e)
-		=> PrintReceipt.DrawGraphics(e, "Merchant", transactionId, advanceModel != null ? advanceModel.Id : 0);
+		=> PrintReceipt.DrawGraphics(e, "Merchant", transactionId, advancePanel.Visible == true ? advanceModel.Id : 0);
 	#endregion
 }
