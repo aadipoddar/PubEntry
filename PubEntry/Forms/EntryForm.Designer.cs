@@ -63,6 +63,7 @@ partial class EntryForm
 		PaymentMode = new DataGridViewTextBoxColumn();
 		Amount = new DataGridViewTextBoxColumn();
 		advancePanel = new Panel();
+		label2 = new Label();
 		((System.ComponentModel.ISupportInitialize)amountDataGridView).BeginInit();
 		advancePanel.SuspendLayout();
 		SuspendLayout();
@@ -272,7 +273,7 @@ partial class EntryForm
 		// 
 		advanceLabel.AutoSize = true;
 		advanceLabel.Font = new Font("Segoe UI", 15F);
-		advanceLabel.Location = new Point(28, 22);
+		advanceLabel.Location = new Point(239, 12);
 		advanceLabel.Name = "advanceLabel";
 		advanceLabel.Size = new Size(87, 28);
 		advanceLabel.TabIndex = 32;
@@ -281,7 +282,7 @@ partial class EntryForm
 		// advanceAmountTextBox
 		// 
 		advanceAmountTextBox.Font = new Font("Segoe UI", 15F);
-		advanceAmountTextBox.Location = new Point(17, 53);
+		advanceAmountTextBox.Location = new Point(228, 43);
 		advanceAmountTextBox.Name = "advanceAmountTextBox";
 		advanceAmountTextBox.PlaceholderText = "Cash Amount";
 		advanceAmountTextBox.ReadOnly = true;
@@ -294,7 +295,7 @@ partial class EntryForm
 		// 
 		label1.AutoSize = true;
 		label1.Font = new Font("Segoe UI", 15F);
-		label1.Location = new Point(233, 22);
+		label1.Location = new Point(35, 12);
 		label1.Name = "label1";
 		label1.Size = new Size(85, 28);
 		label1.TabIndex = 34;
@@ -303,7 +304,7 @@ partial class EntryForm
 		// bookingAmountTextBox
 		// 
 		bookingAmountTextBox.Font = new Font("Segoe UI", 15F);
-		bookingAmountTextBox.Location = new Point(219, 53);
+		bookingAmountTextBox.Location = new Point(21, 43);
 		bookingAmountTextBox.Name = "bookingAmountTextBox";
 		bookingAmountTextBox.PlaceholderText = "Cash Amount";
 		bookingAmountTextBox.ReadOnly = true;
@@ -315,7 +316,7 @@ partial class EntryForm
 		// addButton
 		// 
 		addButton.Font = new Font("Segoe UI", 15F);
-		addButton.Location = new Point(572, 200);
+		addButton.Location = new Point(572, 216);
 		addButton.Name = "addButton";
 		addButton.Size = new Size(176, 50);
 		addButton.TabIndex = 7;
@@ -326,7 +327,7 @@ partial class EntryForm
 		// amountTextBox
 		// 
 		amountTextBox.Font = new Font("Segoe UI", 15F);
-		amountTextBox.Location = new Point(642, 153);
+		amountTextBox.Location = new Point(642, 169);
 		amountTextBox.Name = "amountTextBox";
 		amountTextBox.PlaceholderText = "Amount";
 		amountTextBox.RightToLeft = RightToLeft.Yes;
@@ -341,7 +342,7 @@ partial class EntryForm
 		paymentModeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 		paymentModeComboBox.Font = new Font("Segoe UI", 15F);
 		paymentModeComboBox.FormattingEnabled = true;
-		paymentModeComboBox.Location = new Point(475, 153);
+		paymentModeComboBox.Location = new Point(475, 169);
 		paymentModeComboBox.Name = "paymentModeComboBox";
 		paymentModeComboBox.Size = new Size(161, 36);
 		paymentModeComboBox.TabIndex = 5;
@@ -355,6 +356,7 @@ partial class EntryForm
 		amountDataGridView.Location = new Point(475, 276);
 		amountDataGridView.Name = "amountDataGridView";
 		amountDataGridView.ReadOnly = true;
+		amountDataGridView.RowTemplate.Height = 40;
 		amountDataGridView.Size = new Size(362, 202);
 		amountDataGridView.TabIndex = 36;
 		// 
@@ -388,9 +390,19 @@ partial class EntryForm
 		advancePanel.Controls.Add(bookingAmountTextBox);
 		advancePanel.Location = new Point(475, 22);
 		advancePanel.Name = "advancePanel";
-		advancePanel.Size = new Size(362, 115);
+		advancePanel.Size = new Size(362, 89);
 		advancePanel.TabIndex = 40;
 		advancePanel.Visible = false;
+		// 
+		// label2
+		// 
+		label2.AutoSize = true;
+		label2.Font = new Font("Segoe UI", 15F);
+		label2.Location = new Point(572, 127);
+		label2.Name = "label2";
+		label2.Size = new Size(165, 28);
+		label2.TabIndex = 36;
+		label2.Text = "Amount Received";
 		// 
 		// EntryForm
 		// 
@@ -398,6 +410,7 @@ partial class EntryForm
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(855, 510);
+		Controls.Add(label2);
 		Controls.Add(advancePanel);
 		Controls.Add(addButton);
 		Controls.Add(amountTextBox);
@@ -468,4 +481,5 @@ partial class EntryForm
 	private DataGridViewTextBoxColumn PaymentMode;
 	private DataGridViewTextBoxColumn Amount;
 	private Panel advancePanel;
+	private Label label2;
 }

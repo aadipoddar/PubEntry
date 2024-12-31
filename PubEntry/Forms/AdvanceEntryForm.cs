@@ -20,6 +20,7 @@ public partial class AdvanceEntryForm : Form
 		paymentModeComboBox.SelectedIndex = 0;
 
 		amountDataGridView.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+		amountDataGridView.DefaultCellStyle.Font = new Font("Arial", 25);
 	}
 
 	private async void numberTextBox_TextChanged(object sender, EventArgs e)
@@ -113,6 +114,8 @@ public partial class AdvanceEntryForm : Form
 				Amount = int.Parse(row.Cells[2].Value.ToString())
 			});
 		}
+
+		MessageBox.Show("Advacne Entered");
 
 		ClearForm();
 	}

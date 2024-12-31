@@ -163,6 +163,7 @@ partial class AdvanceEntryForm
 		amountDataGridView.Location = new Point(438, 202);
 		amountDataGridView.Name = "amountDataGridView";
 		amountDataGridView.ReadOnly = true;
+		amountDataGridView.RowTemplate.Height = 40;
 		amountDataGridView.Size = new Size(362, 164);
 		amountDataGridView.TabIndex = 19;
 		// 

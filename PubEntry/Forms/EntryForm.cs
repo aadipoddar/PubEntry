@@ -45,6 +45,9 @@ public partial class EntryForm : Form
 		paymentModeComboBox.DataSource = await CommonData.LoadTableData<PaymentModeModel>("PaymentModeTable");
 		paymentModeComboBox.DisplayMember = nameof(PaymentModeModel.Name);
 		paymentModeComboBox.ValueMember = nameof(PaymentModeModel.Id);
+
+
+		amountDataGridView.DefaultCellStyle.Font = new Font("Arial", 25);
 	}
 
 	private void ClearForm()
