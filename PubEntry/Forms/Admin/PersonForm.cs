@@ -1,4 +1,4 @@
-﻿namespace PubEntry.Admin;
+﻿namespace PubEntry.Forms.Admin;
 
 public partial class PersonForm : Form
 {

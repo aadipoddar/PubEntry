@@ -2,7 +2,7 @@
 
 using PubEntryLibrary.Models.Printing;
 
-namespace PubEntry;
+namespace PubEntry.Forms.Transaction;
 
 public static class PrintReceipt
 {
@@ -22,7 +22,7 @@ public static class PrintReceipt
 
 	private static void DrawString(Graphics g, string content, bool isCenter = false, bool useTabs = false)
 	{
-		StringFormat format = isCenter ? center : (useTabs ? tabbedFormat : new StringFormat());
+		StringFormat format = isCenter ? center : useTabs ? tabbedFormat : new StringFormat();
 		SizeF size = g.MeasureString(content, font, maxWidth, format);
 		g.DrawString(content, font, Brushes.Black, new RectangleF(startPosition, lowerSpacing, maxWidth, size.Height), format);
 		lowerSpacing += (int)size.Height;

@@ -1,4 +1,6 @@
-﻿namespace PubEntry.Admin;
+﻿using PubEntry.Forms.Transaction.Advance;
+
+namespace PubEntry.Forms.Admin;
 
 public partial class AdminPanel : Form
 {
@@ -26,5 +28,17 @@ public partial class AdminPanel : Form
 	{
 		SlipIdForm slipIdForm = new();
 		slipIdForm.ShowDialog();
+	}
+
+	private void paymentModeButton_Click(object sender, EventArgs e)
+	{
+		PaymentMode paymentModeForm = new();
+		paymentModeForm.ShowDialog();
+	}
+
+	private void advanceButton_Click(object sender, EventArgs e)
+	{
+		AdvanceForm advanceForm = new();
+		advanceForm.ShowDialog();
 	}
 }

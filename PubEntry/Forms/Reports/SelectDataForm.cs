@@ -4,7 +4,7 @@ using System.Reflection;
 
 using PubEntryLibrary.Printing;
 
-namespace PubEntry.Reports;
+namespace PubEntry.Forms.Reports;
 
 public partial class SelectDataForm : Form
 {

@@ -1,4 +1,4 @@
-﻿namespace PubEntry.Reports;
+﻿namespace PubEntry.Forms.Reports;
 
 public partial class LoadingScreen : Form
 {

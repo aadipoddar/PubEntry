@@ -1,7 +1,8 @@
 ﻿using System.Reflection;
 
-using PubEntry.Admin;
-using PubEntry.Reports;
+using PubEntry.Forms.Admin;
+using PubEntry.Forms.Reports;
+using PubEntry.Forms.Transaction;
 
 namespace PubEntry;
 
@@ -10,14 +11,10 @@ public partial class Dashboard : Form
 	#region InitialLoading
 	public Dashboard() => InitializeComponent();
 
-	[STAThread]
 	private async void SelectLocation_Load(object sender, EventArgs e)
 	{
 		await UpdateCheck();
-		LoadingScreen.ShowSplashScreen();
-		await LoadComboBox();
-		await LoadUserComboBox();
-		LoadingScreen.CloseForm();
+		await LoadLocationComboBox();
 	}
 
 	private async Task UpdateCheck()
@@ -29,9 +26,9 @@ public partial class Dashboard : Form
 				await AadiSoftUpdater.AadiSoftUpdater.UpdateApp("aadipoddar", "PubEntry", "PubEntrySetup", "477557B4-2908-4106-B360-D2D114F02452");
 	}
 
-	public async Task LoadComboBox()
+	public async Task LoadLocationComboBox()
 	{
-		locationComboBox.DataSource = await LocationData.LoadActiveLocations();
+		locationComboBox.DataSource = await CommonData.LoadTableDataByStatus<LocationModel>("LocationTable", true);
 		locationComboBox.DisplayMember = nameof(LocationModel.Name);
 		locationComboBox.ValueMember = nameof(LocationModel.Id);
 

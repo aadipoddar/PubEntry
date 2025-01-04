@@ -1,12 +1,12 @@
-﻿namespace PubEntry.Admin;
+﻿namespace PubEntry.Forms.Admin;
 
 public partial class LocationForm : Form
 {
 	public LocationForm() => InitializeComponent();
 
-	private void LocationForm_Load(object sender, EventArgs e) => LoadComboBox();
+	private void LocationForm_Load(object sender, EventArgs e) => LoadData();
 
-	private async void LoadComboBox()
+	private async void LoadData()
 	{
 		locationComboBox.DataSource = await CommonData.LoadTableData<LocationModel>("LocationTable");
 		locationComboBox.DisplayMember = nameof(LocationModel.Name);
@@ -19,20 +19,20 @@ public partial class LocationForm : Form
 	{
 		if (locationComboBox.SelectedItem is LocationModel selectedLocation)
 		{
-			locationNameTextBox.Text = selectedLocation.Name;
+			nameTextBox.Text = selectedLocation.Name;
 			statusCheckBox.Checked = selectedLocation.Status;
 		}
 
 		else
 		{
-			locationNameTextBox.Text = string.Empty;
+			nameTextBox.Text = string.Empty;
 			statusCheckBox.Checked = true;
 		}
 	}
 
 	private bool ValidateForm()
 	{
-		if (locationNameTextBox.Text == string.Empty) return false;
+		if (nameTextBox.Text == string.Empty) return false;
 
 		return true;
 	}
@@ -47,7 +47,7 @@ public partial class LocationForm : Form
 
 		LocationModel locationModel = new()
 		{
-			Name = locationNameTextBox.Text,
+			Name = nameTextBox.Text,
 			Status = statusCheckBox.Checked
 		};
 
@@ -58,6 +58,6 @@ public partial class LocationForm : Form
 			await LocationData.LocationUpdate(locationModel);
 		}
 
-		LoadComboBox();
+		LoadData();
 	}
 }

@@ -1,4 +1,4 @@
-﻿namespace PubEntry.Admin;
+﻿namespace PubEntry.Forms.Admin;
 
 partial class UserForm
 {
@@ -103,7 +103,7 @@ partial class UserForm
 		// saveButton
 		// 
 		saveButton.Font = new Font("Segoe UI", 15F);
-		saveButton.Location = new Point(176, 252);
+		saveButton.Location = new Point(185, 200);
 		saveButton.Name = "saveButton";
 		saveButton.Size = new Size(118, 38);
 		saveButton.TabIndex = 5;
@@ -129,7 +129,7 @@ partial class UserForm
 		// 
 		statusCheckBox.AutoSize = true;
 		statusCheckBox.Font = new Font("Segoe UI", 15F);
-		statusCheckBox.Location = new Point(194, 205);
+		statusCheckBox.Location = new Point(25, 200);
 		statusCheckBox.Name = "statusCheckBox";
 		statusCheckBox.Size = new Size(84, 32);
 		statusCheckBox.TabIndex = 4;
@@ -141,7 +141,7 @@ partial class UserForm
 		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(477, 305);
+		ClientSize = new Size(477, 254);
 		Controls.Add(statusCheckBox);
 		Controls.Add(userComboBox);
 		Controls.Add(saveButton);

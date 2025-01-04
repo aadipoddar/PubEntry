@@ -4,7 +4,7 @@ using System.Globalization;
 using PubEntryLibrary.Models.Printing;
 using PubEntryLibrary.Printing;
 
-namespace PubEntry.Reports;
+namespace PubEntry.Forms.Reports;
 
 public partial class DetailDataForm : Form
 {

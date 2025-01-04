@@ -67,4 +67,13 @@
     <Using Include="PubEntryLibrary.Models" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Forms\Transaction\Advance\UpdateAdvanceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Transaction\UpdateEntryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

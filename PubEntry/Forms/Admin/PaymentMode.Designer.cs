@@ -1,6 +1,6 @@
 ﻿namespace PubEntry.Forms.Admin;
 
-partial class LocationForm
+partial class PaymentMode
 {
 	/// <summary>
 	/// Required designer variable.
@@ -28,9 +28,8 @@ partial class LocationForm
 	/// </summary>
 	private void InitializeComponent()
 	{
-		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LocationForm));
 		statusCheckBox = new CheckBox();
-		locationComboBox = new ComboBox();
+		paymentComboBox = new ComboBox();
 		saveButton = new Button();
 		nameLabel = new Label();
 		nameTextBox = new TextBox();
@@ -40,32 +39,32 @@ partial class LocationForm
 		// 
 		statusCheckBox.AutoSize = true;
 		statusCheckBox.Font = new Font("Segoe UI", 15F);
-		statusCheckBox.Location = new Point(30, 122);
+		statusCheckBox.Location = new Point(33, 134);
 		statusCheckBox.Name = "statusCheckBox";
 		statusCheckBox.Size = new Size(84, 32);
-		statusCheckBox.TabIndex = 30;
+		statusCheckBox.TabIndex = 25;
 		statusCheckBox.Text = "Status";
 		statusCheckBox.UseVisualStyleBackColor = true;
 		// 
-		// locationComboBox
+		// paymentComboBox
 		// 
-		locationComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-		locationComboBox.FlatStyle = FlatStyle.System;
-		locationComboBox.Font = new Font("Segoe UI", 15F);
-		locationComboBox.FormattingEnabled = true;
-		locationComboBox.Location = new Point(67, 12);
-		locationComboBox.Name = "locationComboBox";
-		locationComboBox.Size = new Size(271, 36);
-		locationComboBox.TabIndex = 32;
-		locationComboBox.SelectedIndexChanged += locationComboBox_SelectedIndexChanged;
+		paymentComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+		paymentComboBox.FlatStyle = FlatStyle.System;
+		paymentComboBox.Font = new Font("Segoe UI", 15F);
+		paymentComboBox.FormattingEnabled = true;
+		paymentComboBox.Location = new Point(70, 24);
+		paymentComboBox.Name = "paymentComboBox";
+		paymentComboBox.Size = new Size(271, 36);
+		paymentComboBox.TabIndex = 27;
+		paymentComboBox.SelectedIndexChanged += paymentComboBox_SelectedIndexChanged;
 		// 
 		// saveButton
 		// 
 		saveButton.Font = new Font("Segoe UI", 15F);
-		saveButton.Location = new Point(167, 122);
+		saveButton.Location = new Point(170, 134);
 		saveButton.Name = "saveButton";
 		saveButton.Size = new Size(118, 38);
-		saveButton.TabIndex = 31;
+		saveButton.TabIndex = 26;
 		saveButton.Text = "SAVE";
 		saveButton.UseVisualStyleBackColor = true;
 		saveButton.Click += saveButton_Click;
@@ -74,37 +73,37 @@ partial class LocationForm
 		// 
 		nameLabel.AutoSize = true;
 		nameLabel.Font = new Font("Segoe UI", 15F);
-		nameLabel.Location = new Point(10, 72);
+		nameLabel.Location = new Point(13, 84);
 		nameLabel.Name = "nameLabel";
 		nameLabel.Size = new Size(64, 28);
-		nameLabel.TabIndex = 33;
+		nameLabel.TabIndex = 28;
 		nameLabel.Text = "Name";
 		// 
 		// nameTextBox
 		// 
 		nameTextBox.Font = new Font("Segoe UI", 15F);
-		nameTextBox.Location = new Point(92, 69);
+		nameTextBox.Location = new Point(95, 81);
 		nameTextBox.MaxLength = 20;
 		nameTextBox.Name = "nameTextBox";
 		nameTextBox.PlaceholderText = "Name";
 		nameTextBox.Size = new Size(271, 34);
-		nameTextBox.TabIndex = 29;
+		nameTextBox.TabIndex = 24;
 		// 
-		// LocationForm
+		// PaymentMode
 		// 
+		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(392, 170);
+		ClientSize = new Size(404, 190);
 		Controls.Add(statusCheckBox);
-		Controls.Add(locationComboBox);
+		Controls.Add(paymentComboBox);
 		Controls.Add(saveButton);
 		Controls.Add(nameLabel);
 		Controls.Add(nameTextBox);
-		Icon = (Icon)resources.GetObject("$this.Icon");
-		Name = "LocationForm";
+		Name = "PaymentMode";
 		StartPosition = FormStartPosition.CenterScreen;
-		Text = "LocationForm";
-		Load += LocationForm_Load;
+		Text = "PaymentMode";
+		Load += PaymentMode_Load;
 		ResumeLayout(false);
 		PerformLayout();
 	}
@@ -112,7 +111,7 @@ partial class LocationForm
 	#endregion
 
 	private CheckBox statusCheckBox;
-	private ComboBox locationComboBox;
+	private ComboBox paymentComboBox;
 	private Button saveButton;
 	private Label nameLabel;
 	private TextBox nameTextBox;

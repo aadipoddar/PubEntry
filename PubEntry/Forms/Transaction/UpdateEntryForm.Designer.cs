@@ -1,6 +1,6 @@
-﻿namespace PubEntry;
+﻿namespace PubEntry.Forms.Transaction;
 
-partial class EntryForm
+partial class UpdateEntryForm
 {
 	/// <summary>
 	/// Required designer variable.
@@ -29,7 +29,7 @@ partial class EntryForm
 	private void InitializeComponent()
 	{
 		components = new System.ComponentModel.Container();
-		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EntryForm));
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UpdateEntryForm));
 		nameTextBox = new TextBox();
 		nameLabel = new Label();
 		numberLabel = new Label();
@@ -105,7 +105,7 @@ partial class EntryForm
 		// 
 		cashLabel.AutoSize = true;
 		cashLabel.Font = new Font("Segoe UI", 15F);
-		cashLabel.Location = new Point(272, 240);
+		cashLabel.Location = new Point(536, 180);
 		cashLabel.Name = "cashLabel";
 		cashLabel.Size = new Size(53, 28);
 		cashLabel.TabIndex = 5;
@@ -114,7 +114,7 @@ partial class EntryForm
 		// cashAmountTextBox
 		// 
 		cashAmountTextBox.Font = new Font("Segoe UI", 15F);
-		cashAmountTextBox.Location = new Point(334, 234);
+		cashAmountTextBox.Location = new Point(598, 174);
 		cashAmountTextBox.Name = "cashAmountTextBox";
 		cashAmountTextBox.PlaceholderText = "Cash Amount";
 		cashAmountTextBox.RightToLeft = RightToLeft.Yes;
@@ -126,7 +126,7 @@ partial class EntryForm
 		// saveButton
 		// 
 		saveButton.Font = new Font("Segoe UI", 15F);
-		saveButton.Location = new Point(158, 539);
+		saveButton.Location = new Point(158, 440);
 		saveButton.Name = "saveButton";
 		saveButton.Size = new Size(135, 44);
 		saveButton.TabIndex = 11;
@@ -138,7 +138,7 @@ partial class EntryForm
 		// 
 		cardLabel.AutoSize = true;
 		cardLabel.Font = new Font("Segoe UI", 15F);
-		cardLabel.Location = new Point(272, 280);
+		cardLabel.Location = new Point(536, 220);
 		cardLabel.Name = "cardLabel";
 		cardLabel.Size = new Size(53, 28);
 		cardLabel.TabIndex = 15;
@@ -147,7 +147,7 @@ partial class EntryForm
 		// cardAmountTextBox
 		// 
 		cardAmountTextBox.Font = new Font("Segoe UI", 15F);
-		cardAmountTextBox.Location = new Point(334, 277);
+		cardAmountTextBox.Location = new Point(598, 217);
 		cardAmountTextBox.Name = "cardAmountTextBox";
 		cardAmountTextBox.PlaceholderText = "Card Amount";
 		cardAmountTextBox.RightToLeft = RightToLeft.Yes;
@@ -160,7 +160,7 @@ partial class EntryForm
 		// 
 		upiLabel.AutoSize = true;
 		upiLabel.Font = new Font("Segoe UI", 15F);
-		upiLabel.Location = new Point(272, 323);
+		upiLabel.Location = new Point(536, 263);
 		upiLabel.Name = "upiLabel";
 		upiLabel.Size = new Size(42, 28);
 		upiLabel.TabIndex = 17;
@@ -169,7 +169,7 @@ partial class EntryForm
 		// upiAmountTextBox
 		// 
 		upiAmountTextBox.Font = new Font("Segoe UI", 15F);
-		upiAmountTextBox.Location = new Point(334, 317);
+		upiAmountTextBox.Location = new Point(598, 257);
 		upiAmountTextBox.Name = "upiAmountTextBox";
 		upiAmountTextBox.PlaceholderText = "UPI Amount";
 		upiAmountTextBox.RightToLeft = RightToLeft.Yes;
@@ -182,7 +182,7 @@ partial class EntryForm
 		// 
 		femaleLabel.AutoSize = true;
 		femaleLabel.Font = new Font("Segoe UI", 15F);
-		femaleLabel.Location = new Point(13, 277);
+		femaleLabel.Location = new Point(248, 229);
 		femaleLabel.Name = "femaleLabel";
 		femaleLabel.Size = new Size(74, 28);
 		femaleLabel.TabIndex = 21;
@@ -191,7 +191,7 @@ partial class EntryForm
 		// femaleTextBox
 		// 
 		femaleTextBox.Font = new Font("Segoe UI", 15F);
-		femaleTextBox.Location = new Point(96, 274);
+		femaleTextBox.Location = new Point(226, 260);
 		femaleTextBox.Name = "femaleTextBox";
 		femaleTextBox.PlaceholderText = "Female";
 		femaleTextBox.RightToLeft = RightToLeft.Yes;
@@ -204,7 +204,7 @@ partial class EntryForm
 		// 
 		maleLabel.AutoSize = true;
 		maleLabel.Font = new Font("Segoe UI", 15F);
-		maleLabel.Location = new Point(13, 237);
+		maleLabel.Location = new Point(71, 229);
 		maleLabel.Name = "maleLabel";
 		maleLabel.Size = new Size(55, 28);
 		maleLabel.TabIndex = 19;
@@ -213,7 +213,7 @@ partial class EntryForm
 		// maleTextBox
 		// 
 		maleTextBox.Font = new Font("Segoe UI", 15F);
-		maleTextBox.Location = new Point(96, 234);
+		maleTextBox.Location = new Point(37, 260);
 		maleTextBox.Name = "maleTextBox";
 		maleTextBox.PlaceholderText = "Male";
 		maleTextBox.RightToLeft = RightToLeft.Yes;
@@ -229,7 +229,7 @@ partial class EntryForm
 		reservationComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 		reservationComboBox.Font = new Font("Segoe UI", 15F);
 		reservationComboBox.FormattingEnabled = true;
-		reservationComboBox.Location = new Point(176, 429);
+		reservationComboBox.Location = new Point(176, 330);
 		reservationComboBox.Name = "reservationComboBox";
 		reservationComboBox.Size = new Size(271, 36);
 		reservationComboBox.TabIndex = 9;
@@ -238,7 +238,7 @@ partial class EntryForm
 		// 
 		reservationLabel.AutoSize = true;
 		reservationLabel.Font = new Font("Segoe UI", 15F);
-		reservationLabel.Location = new Point(13, 432);
+		reservationLabel.Location = new Point(13, 333);
 		reservationLabel.Name = "reservationLabel";
 		reservationLabel.Size = new Size(113, 28);
 		reservationLabel.TabIndex = 23;
@@ -247,7 +247,7 @@ partial class EntryForm
 		// approvedByTextBox
 		// 
 		approvedByTextBox.Font = new Font("Segoe UI", 15F);
-		approvedByTextBox.Location = new Point(176, 471);
+		approvedByTextBox.Location = new Point(176, 372);
 		approvedByTextBox.Name = "approvedByTextBox";
 		approvedByTextBox.PlaceholderText = "Approved By";
 		approvedByTextBox.Size = new Size(271, 34);
@@ -257,7 +257,7 @@ partial class EntryForm
 		// 
 		approvedByLabel.AutoSize = true;
 		approvedByLabel.Font = new Font("Segoe UI", 15F);
-		approvedByLabel.Location = new Point(13, 474);
+		approvedByLabel.Location = new Point(13, 375);
 		approvedByLabel.Name = "approvedByLabel";
 		approvedByLabel.Size = new Size(126, 28);
 		approvedByLabel.TabIndex = 25;
@@ -282,7 +282,7 @@ partial class EntryForm
 		richTextBoxFooter.Dock = DockStyle.Bottom;
 		richTextBoxFooter.Location = new Point(0, 615);
 		richTextBoxFooter.Name = "richTextBoxFooter";
-		richTextBoxFooter.Size = new Size(486, 26);
+		richTextBoxFooter.Size = new Size(966, 26);
 		richTextBoxFooter.TabIndex = 27;
 		richTextBoxFooter.Text = "";
 		// 
@@ -291,7 +291,7 @@ partial class EntryForm
 		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 		brandingLabel.AutoSize = true;
 		brandingLabel.BackColor = Color.White;
-		brandingLabel.Location = new Point(406, 621);
+		brandingLabel.Location = new Point(886, 621);
 		brandingLabel.Name = "brandingLabel";
 		brandingLabel.Size = new Size(76, 15);
 		brandingLabel.TabIndex = 28;
@@ -305,7 +305,7 @@ partial class EntryForm
 		// 
 		amexLabel.AutoSize = true;
 		amexLabel.Font = new Font("Segoe UI", 15F);
-		amexLabel.Location = new Point(272, 360);
+		amexLabel.Location = new Point(536, 300);
 		amexLabel.Name = "amexLabel";
 		amexLabel.Size = new Size(61, 28);
 		amexLabel.TabIndex = 30;
@@ -314,7 +314,7 @@ partial class EntryForm
 		// amexAmountTextBox
 		// 
 		amexAmountTextBox.Font = new Font("Segoe UI", 15F);
-		amexAmountTextBox.Location = new Point(334, 357);
+		amexAmountTextBox.Location = new Point(598, 297);
 		amexAmountTextBox.Name = "amexAmountTextBox";
 		amexAmountTextBox.PlaceholderText = "Amex Amount";
 		amexAmountTextBox.RightToLeft = RightToLeft.Yes;
@@ -355,7 +355,7 @@ partial class EntryForm
 		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(486, 641);
+		ClientSize = new Size(966, 641);
 		Controls.Add(versionLabel);
 		Controls.Add(loyaltyCheckBox);
 		Controls.Add(amexLabel);
@@ -386,7 +386,7 @@ partial class EntryForm
 		Name = "EntryForm";
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "Dashboard";
-		Load += EntryForm_Load;
+		Load += UpdateEntryForm_Load;
 		ResumeLayout(false);
 		PerformLayout();
 	}

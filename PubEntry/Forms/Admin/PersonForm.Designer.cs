@@ -1,4 +1,4 @@
-﻿namespace PubEntry.Admin;
+﻿namespace PubEntry.Forms.Admin;
 
 partial class PersonForm
 {
@@ -39,7 +39,7 @@ partial class PersonForm
 		// saveButton
 		// 
 		saveButton.Font = new Font("Segoe UI", 15F);
-		saveButton.Location = new Point(192, 170);
+		saveButton.Location = new Point(201, 113);
 		saveButton.Name = "saveButton";
 		saveButton.Size = new Size(118, 38);
 		saveButton.TabIndex = 4;
@@ -91,7 +91,7 @@ partial class PersonForm
 		// 
 		loyaltyCheckBox.AutoSize = true;
 		loyaltyCheckBox.Font = new Font("Segoe UI", 15F);
-		loyaltyCheckBox.Location = new Point(201, 123);
+		loyaltyCheckBox.Location = new Point(32, 113);
 		loyaltyCheckBox.Name = "loyaltyCheckBox";
 		loyaltyCheckBox.Size = new Size(94, 32);
 		loyaltyCheckBox.TabIndex = 3;
@@ -103,7 +103,7 @@ partial class PersonForm
 		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(524, 232);
+		ClientSize = new Size(502, 174);
 		Controls.Add(loyaltyCheckBox);
 		Controls.Add(numberLabel);
 		Controls.Add(numberTextBox);
