@@ -1,16 +1,8 @@
-﻿using PubEntry.Forms.Admin;
-
-namespace PubEntry.Admin;
+﻿namespace PubEntry.Admin;
 
 public partial class AdminPanel : Form
 {
 	public AdminPanel() => InitializeComponent();
-
-	private void advanceButton_Click(object sender, EventArgs e)
-	{
-		AdvanceEntryForm advanceForm = new();
-		advanceForm.ShowDialog();
-	}
 
 	private void manageUsersButton_Click(object sender, EventArgs e)
 	{
@@ -34,11 +26,5 @@ public partial class AdminPanel : Form
 	{
 		SlipIdForm slipIdForm = new();
 		slipIdForm.ShowDialog();
-	}
-
-	private void paymentModesButton_Click(object sender, EventArgs e)
-	{
-		PaymentModeForm paymentModeForm = new();
-		paymentModeForm.ShowDialog();
 	}
 }
