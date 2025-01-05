@@ -70,11 +70,8 @@ public partial class Dashboard : Form
 			return;
 		}
 
-		else
-		{
-			EntryForm entryForm = new((locationComboBox.SelectedItem as LocationModel).Id, (userComboBox.SelectedItem as UserModel).Id);
-			entryForm.ShowDialog();
-		}
+		EntryForm entryForm = new((locationComboBox.SelectedItem as LocationModel).Id, (userComboBox.SelectedItem as UserModel).Id);
+		entryForm.ShowDialog();
 	}
 
 	private void reportsButton_Click(object sender, EventArgs e)
@@ -85,13 +82,14 @@ public partial class Dashboard : Form
 
 	private void adminButton_Click(object sender, EventArgs e)
 	{
-		if (passwordTextBox.Text == "admin")
+		if (!ValidatePassword())
 		{
-			AdminPanel adminPanel = new();
-			adminPanel.ShowDialog();
+			MessageBox.Show("Incorrect Password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			return;
 		}
 
-		else MessageBox.Show("Incorrect Password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+		AdminPanel adminPanel = new();
+		adminPanel.ShowDialog();
 	}
 	#endregion
 }

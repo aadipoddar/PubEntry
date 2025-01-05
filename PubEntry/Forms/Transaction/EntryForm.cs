@@ -7,38 +7,10 @@ namespace PubEntry.Forms.Transaction;
 
 public partial class EntryForm : Form
 {
-	#region InitalLoading
+	#region InactivityTimer
 	private Timer inactivityTimer;
 	private const int InactivityLimit = 5 * 60 * 1000;
 
-	private int transactionId, userId, locationId;
-
-	public EntryForm(int locationId, int userId)
-	{
-		InitializeComponent();
-
-		this.userId = userId;
-		this.locationId = locationId;
-	}
-
-	private async void EntryForm_Load(object sender, EventArgs e)
-	{
-		await LoadComboBox();
-		InitializeInactivityTimer();
-		SubscribeToTextChangedEvents();
-	}
-
-	private async Task LoadComboBox()
-	{
-		reservationComboBox.DataSource = await CommonData.LoadTableData<ReservationTypeModel>("ReservationTypeTable");
-		reservationComboBox.DisplayMember = nameof(ReservationTypeModel.Name);
-		reservationComboBox.ValueMember = nameof(ReservationTypeModel.Id);
-
-		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
-	}
-	#endregion
-
-	#region InactivityTimer
 	private void InitializeInactivityTimer()
 	{
 		inactivityTimer = new Timer();
@@ -72,6 +44,34 @@ public partial class EntryForm : Form
 	}
 	#endregion
 
+	#region InitalLoading
+	private int transactionId, userId, locationId, foundAdvanceId = 0;
+
+	public EntryForm(int locationId, int userId)
+	{
+		InitializeComponent();
+
+		this.userId = userId;
+		this.locationId = locationId;
+	}
+
+	private async void EntryForm_Load(object sender, EventArgs e)
+	{
+		await LoadData();
+		InitializeInactivityTimer();
+		SubscribeToTextChangedEvents();
+	}
+
+	private async Task LoadData()
+	{
+		reservationComboBox.DataSource = await CommonData.LoadTableData<ReservationTypeModel>("ReservationTypeTable");
+		reservationComboBox.DisplayMember = nameof(ReservationTypeModel.Name);
+		reservationComboBox.ValueMember = nameof(ReservationTypeModel.Id);
+
+		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
+	}
+	#endregion
+
 	#region Validation
 	private void textBox_KeyPress(object sender, KeyPressEventArgs e)
 	{
@@ -96,31 +96,9 @@ public partial class EntryForm : Form
 
 		return true;
 	}
-
-	private void ClearForm()
-	{
-		numberTextBox.Text = string.Empty;
-		nameTextBox.Text = string.Empty;
-		nameTextBox.ReadOnly = false;
-		numberTextBox.Focus();
-		loyaltyCheckBox.Checked = false;
-
-		approvedByTextBox.Text = string.Empty;
-		reservationComboBox.SelectedIndex = 0;
-
-		maleTextBox.Text = "0";
-		femaleTextBox.Text = "0";
-
-		cashTextBox.Text = "0";
-		cardTextBox.Text = "0";
-		upiTextBox.Text = "0";
-		amexTextBox.Text = "0";
-	}
 	#endregion
 
-	#region Events
-	#endregion
-
+	#region LoadData
 	private async void NumberTextBox_TextChanged(object sender, EventArgs e)
 	{
 		var foundPerson = await PersonData.LoadPersonByNumber(numberTextBox.Text);
@@ -137,8 +115,36 @@ public partial class EntryForm : Form
 			nameTextBox.ReadOnly = false;
 			loyaltyCheckBox.Checked = false;
 		}
+
+		await LoadPersonAdvance();
 	}
 
+	private async Task LoadPersonAdvance()
+	{
+		var foundPerson = await PersonData.LoadPersonByNumber(numberTextBox.Text);
+		if (foundPerson is not null)
+		{
+			var foundAdvance = await AdvanceData.LoadAdvanceByDateLocationPerson(locationId, foundPerson.Id);
+			if (foundAdvance is not null)
+			{
+				foundAdvanceId = foundAdvance.Id;
+				advancePanel.Visible = true;
+				approvedByTextBox.Text = foundAdvance.ApprovedBy;
+				bookingTextBox.Text = foundAdvance.Booking.ToString();
+				var advanceDetail = await AdvanceData.LoadAdvanceDetailByAdvanceId(foundAdvance.Id);
+				advanceTextBox.Text = advanceDetail.Sum(x => x.Amount).ToString();
+
+				return;
+			}
+		}
+
+		foundAdvanceId = 0;
+		advancePanel.Visible = false;
+		approvedByTextBox.Text = string.Empty;
+	}
+	#endregion
+
+	#region Saving
 	private async void SaveButton_Click(object sender, EventArgs e)
 	{
 		if (!ValidateFields())
@@ -147,6 +153,17 @@ public partial class EntryForm : Form
 			return;
 		}
 
+		await TransactionInsert();
+
+		if (foundAdvanceId is not 0) await AdvanceData.AdvanceClear(foundAdvanceId, transactionId);
+
+		PrintTransactionThermal();
+
+		ClearForm();
+	}
+
+	private async Task TransactionInsert()
+	{
 		PersonModel personModel = new()
 		{
 			Id = 0,
@@ -174,7 +191,32 @@ public partial class EntryForm : Form
 			LocationId = locationId,
 			UserId = userId
 		});
+	}
 
+	private void ClearForm()
+	{
+		numberTextBox.Text = string.Empty;
+		nameTextBox.Text = string.Empty;
+		nameTextBox.ReadOnly = false;
+		numberTextBox.Focus();
+		loyaltyCheckBox.Checked = false;
+
+		approvedByTextBox.Text = string.Empty;
+		reservationComboBox.SelectedIndex = 0;
+
+		maleTextBox.Text = "0";
+		femaleTextBox.Text = "0";
+
+		cashTextBox.Text = "0";
+		cardTextBox.Text = "0";
+		upiTextBox.Text = "0";
+		amexTextBox.Text = "0";
+	}
+	#endregion
+
+	#region Printing
+	private void PrintTransactionThermal()
+	{
 		PrintDialog printDialog = new();
 		printDialog.Document = printDocumentCustomer;
 		printDocumentCustomer.Print();
@@ -182,11 +224,10 @@ public partial class EntryForm : Form
 		printDialog = new();
 		printDialog.Document = printDocumentMerchant;
 		printDocumentMerchant.Print();
-
-		ClearForm();
 	}
 
-	private void printDocumentCustomer_PrintPage(object sender, PrintPageEventArgs e) => PrintReceipt.DrawGraphics(e, "Customer", transactionId);
+	private void printDocumentCustomer_PrintPage(object sender, PrintPageEventArgs e) => PrintReceipt.DrawGraphics(e, "Customer", transactionId, foundAdvanceId);
 
-	private void printDocumentMerchant_PrintPage(object sender, PrintPageEventArgs e) => PrintReceipt.DrawGraphics(e, "Merchant", transactionId);
+	private void printDocumentMerchant_PrintPage(object sender, PrintPageEventArgs e) => PrintReceipt.DrawGraphics(e, "Merchant", transactionId, foundAdvanceId);
+	#endregion
 }

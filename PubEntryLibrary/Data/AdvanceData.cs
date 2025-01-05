@@ -11,7 +11,7 @@ public class AdvanceData
 	public static async Task<int> AdvanceDetailInsert(AdvanceDetailModel advanceDetailModel) =>
 			(await SqlDataAccess.LoadData<int, dynamic>("AdvanceDetailInsert", advanceDetailModel)).FirstOrDefault();
 
-	public static async Task<AdvanceModel> LoadAdvanceByDateLocationPerson(int locationId, int personId, DateTime advanceDate) =>
+	public static async Task<AdvanceModel> LoadAdvanceByDateLocationPerson(int locationId, int personId, DateTime? advanceDate = null) =>
 			(await SqlDataAccess.LoadData<AdvanceModel, dynamic>("LoadAdvanceByDateLocationPerson",
 				new { LocationId = locationId, PersonId = personId, AdvanceDate = advanceDate })).FirstOrDefault();
 
@@ -20,4 +20,7 @@ public class AdvanceData
 
 	public static async Task AdvanceDetailDeleteByAdvanceId(int advanceId) =>
 		await SqlDataAccess.SaveData<dynamic>("AdvanceDetailDeleteByAdvanceId", new { AdvanceId = advanceId });
+
+	public static async Task AdvanceClear(int advanceId, int transactionId) =>
+		await SqlDataAccess.SaveData<dynamic>("AdvanceClear", new { Id = advanceId, TransactionId = transactionId });
 }

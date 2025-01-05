@@ -1,6 +1,4 @@
-﻿using PubEntry.Forms.Transaction;
-
-namespace PubEntry.Forms.Admin;
+﻿namespace PubEntry.Forms.Admin;
 
 public partial class SlipIdForm : Form
 {
@@ -34,7 +32,7 @@ public partial class SlipIdForm : Form
 			return;
 		}
 
-		UpdateEntryForm updateEntryForm = new(transaction);
-		updateEntryForm.ShowDialog();
+		//UpdateEntryForm updateEntryForm = new(transaction);
+		//updateEntryForm.ShowDialog();
 	}
 }

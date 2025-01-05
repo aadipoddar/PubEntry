@@ -73,11 +73,7 @@ public partial class AdvanceForm : Form
 				return;
 			}
 		}
-		ClearAdvances();
-	}
 
-	private void ClearAdvances()
-	{
 		foundAdvanceId = 0;
 		approvedByTextBox.Text = string.Empty;
 		bookingTextBox.Text = "0";

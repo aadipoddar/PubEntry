@@ -54,12 +54,14 @@ public static class PrintReceipt
 		DrawString(g, "------------------------", true);
 	}
 
-	private static void DrawPaymentDetails(Graphics g, ReceiptModel receiptModel)
+	private static void DrawPaymentDetails(Graphics g, ReceiptModel receiptModel, int advance)
 	{
 		font = subHeaderFont;
 		DrawString(g, $"Total: {receiptModel.TotalAmount}");
 
+
 		font = regularFont;
+		if (advance > 0) DrawString(g, $"Advance: {advance}");
 		if (receiptModel.Cash > 0) DrawString(g, $"Cash: {receiptModel.Cash}");
 		if (receiptModel.Card > 0) DrawString(g, $"Card: {receiptModel.Card}");
 		if (receiptModel.UPI > 0) DrawString(g, $"UPI: {receiptModel.UPI}");
@@ -84,9 +86,12 @@ public static class PrintReceipt
 		DrawString(g, "is lost by the guest");
 	}
 
-	public static void DrawGraphics(PrintPageEventArgs e, string copyOf, int transactionId)
+	public static void DrawGraphics(PrintPageEventArgs e, string copyOf, int transactionId, int advanceId)
 	{
 		ReceiptModel receiptModel = Task.Run(async () => await PrintData.LoadReceiptDetails(transactionId)).Result.FirstOrDefault();
+
+		var advance = 0;
+		if (advanceId is not 0) advance = Task.Run(async () => await AdvanceData.LoadAdvanceDetailByAdvanceId(advanceId)).Result.Sum(x => x.Amount);
 
 		Graphics g = e.Graphics;
 		maxWidth = e.PageBounds.Width - 20;
@@ -95,7 +100,7 @@ public static class PrintReceipt
 
 		DrawHeader(g, receiptModel.LocationName, copyOf);
 		DrawReceiptDetails(g, receiptModel);
-		DrawPaymentDetails(g, receiptModel);
+		DrawPaymentDetails(g, receiptModel, advance);
 		DrawFooter(g, receiptModel);
 
 		PaperSize ps58 = new PaperSize("58mm Thermal", 220, lowerSpacing + 20);
