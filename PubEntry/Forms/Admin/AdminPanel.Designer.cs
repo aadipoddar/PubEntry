@@ -43,7 +43,7 @@ partial class AdminPanel
 		manageLocationButton.Location = new Point(38, 191);
 		manageLocationButton.Name = "manageLocationButton";
 		manageLocationButton.Size = new Size(213, 52);
-		manageLocationButton.TabIndex = 18;
+		manageLocationButton.TabIndex = 4;
 		manageLocationButton.Text = "Manage Locations";
 		manageLocationButton.UseVisualStyleBackColor = true;
 		manageLocationButton.Click += manageLocationButton_Click;
@@ -54,7 +54,7 @@ partial class AdminPanel
 		manageUsersButton.Location = new Point(38, 133);
 		manageUsersButton.Name = "manageUsersButton";
 		manageUsersButton.Size = new Size(213, 52);
-		manageUsersButton.TabIndex = 17;
+		manageUsersButton.TabIndex = 3;
 		manageUsersButton.Text = "Manage Users";
 		manageUsersButton.UseVisualStyleBackColor = true;
 		manageUsersButton.Click += manageUsersButton_Click;
@@ -65,7 +65,7 @@ partial class AdminPanel
 		manageTransactionsButton.Location = new Point(38, 75);
 		manageTransactionsButton.Name = "manageTransactionsButton";
 		manageTransactionsButton.Size = new Size(213, 52);
-		manageTransactionsButton.TabIndex = 20;
+		manageTransactionsButton.TabIndex = 2;
 		manageTransactionsButton.Text = "Manage Transactions";
 		manageTransactionsButton.UseVisualStyleBackColor = true;
 		manageTransactionsButton.Click += manageTransactionsButton_Click;
@@ -76,7 +76,7 @@ partial class AdminPanel
 		managePersonsButton.Location = new Point(38, 249);
 		managePersonsButton.Name = "managePersonsButton";
 		managePersonsButton.Size = new Size(213, 52);
-		managePersonsButton.TabIndex = 19;
+		managePersonsButton.TabIndex = 5;
 		managePersonsButton.Text = "Manage Persons";
 		managePersonsButton.UseVisualStyleBackColor = true;
 		managePersonsButton.Click += managePersonsButton_Click;
@@ -87,7 +87,7 @@ partial class AdminPanel
 		settingsButton.Location = new Point(38, 365);
 		settingsButton.Name = "settingsButton";
 		settingsButton.Size = new Size(213, 52);
-		settingsButton.TabIndex = 21;
+		settingsButton.TabIndex = 7;
 		settingsButton.Text = "Settings";
 		settingsButton.UseVisualStyleBackColor = true;
 		// 
@@ -97,7 +97,7 @@ partial class AdminPanel
 		paymentModeButton.Location = new Point(38, 307);
 		paymentModeButton.Name = "paymentModeButton";
 		paymentModeButton.Size = new Size(213, 52);
-		paymentModeButton.TabIndex = 22;
+		paymentModeButton.TabIndex = 6;
 		paymentModeButton.Text = "Payment Modes";
 		paymentModeButton.UseVisualStyleBackColor = true;
 		paymentModeButton.Click += paymentModeButton_Click;
@@ -108,7 +108,7 @@ partial class AdminPanel
 		advanceButton.Location = new Point(38, 17);
 		advanceButton.Name = "advanceButton";
 		advanceButton.Size = new Size(213, 52);
-		advanceButton.TabIndex = 23;
+		advanceButton.TabIndex = 1;
 		advanceButton.Text = "Advance Entry";
 		advanceButton.UseVisualStyleBackColor = true;
 		advanceButton.Click += advanceButton_Click;

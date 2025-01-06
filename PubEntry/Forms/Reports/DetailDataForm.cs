@@ -1,25 +1,19 @@
 ﻿using System.Diagnostics;
-using System.Globalization;
 
-using PubEntryLibrary.Models.Printing;
 using PubEntryLibrary.Printing;
 
 namespace PubEntry.Forms.Reports;
 
 public partial class DetailDataForm : Form
 {
-	DateTimePicker fromDateTimePicker, toDateTimePicker;
-	TextBox fromTimeTextBox, toTimeTextBox;
-	int locationId;
+	private readonly int _locationId;
+	private readonly DateTime _fromDateTime, _toDateTime;
 
-	public DetailDataForm(DateTimePicker fromDateTimePicker, DateTimePicker toDateTimePicker, TextBox fromTimeTextBox, TextBox toTimeTextBox, int locationId)
+	public DetailDataForm(DateTime fromDateTime, DateTime toDateTime, int locationId)
 	{
-		this.fromDateTimePicker = fromDateTimePicker;
-		this.toDateTimePicker = toDateTimePicker;
-		this.fromTimeTextBox = fromTimeTextBox;
-		this.toTimeTextBox = toTimeTextBox;
-		this.locationId = locationId;
-		AutoScroll = true;
+		_locationId = locationId;
+		_fromDateTime = fromDateTime;
+		_toDateTime = toDateTime;
 
 		InitializeComponent();
 	}
@@ -30,66 +24,81 @@ public partial class DetailDataForm : Form
 
 	private async void LoadComponents()
 	{
-		dateLabel.Text = $"{GetFormatedDate()} - {GetFormatedDate(false)}";
-		locationNameLabel.Text = $"{(await CommonData.LoadTableDataById<LocationModel>("LocationTable", locationId)).FirstOrDefault().Name}";
+		dateLabel.Text = $"{_fromDateTime} - {_toDateTime}";
+		locationNameLabel.Text = $"{(await CommonData.LoadTableDataById<LocationModel>("LocationTable", _locationId)).FirstOrDefault().Name}";
 
-		List<DetailedPrintModel> detailedPrintModel = (await PrintData.LoadTransactionsByDateAndLocation(GetFromDateTime(), GetToDateTime(), locationId)).ToList();
+		var detailedTransactionPrintModel = (await PrintData.LoadTransactionsByDateAndLocation(_fromDateTime, _toDateTime, _locationId)).ToList();
 
-		dataGridView.DataSource = detailedPrintModel;
+		var detailedAdvancePrintModel = _toDateTime.TimeOfDay < TimeSpan.FromHours(17)
+			? (await PrintData.LoadAdvancesByDateAndLocation(_fromDateTime.Date, _toDateTime.AddDays(-1).Date.AddHours(23).AddMinutes(59), _locationId)).ToList()
+			: (await PrintData.LoadAdvancesByDateAndLocation(_fromDateTime.Date, _toDateTime.Date, _locationId)).ToList();
 
-		dataGridView.Columns[0].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-		dataGridView.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-		dataGridView.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-		dataGridView.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-		dataGridView.Columns[7].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-		dataGridView.Columns[8].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-		dataGridView.Columns[9].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+		transactionDataGridView.DataSource = detailedTransactionPrintModel;
+		foreach (DataGridViewColumn column in transactionDataGridView.Columns)
+		{
+			if (column.Index == 1)
+				column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+			else if (new[] { 0, 4, 5, 6, 7, 8, 9 }.Contains(column.Index))
+				column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+		}
 
-		totalPeopleLabel.Text = $"{detailedPrintModel.Sum(x => x.Male) + detailedPrintModel.Sum(x => x.Female)}";
-		maleLabel.Text = $"{detailedPrintModel.Sum(x => x.Male)}";
-		femaleLabel.Text = $"{detailedPrintModel.Sum(x => x.Female)}";
-		totalLoyaltyLabel.Text = $"{detailedPrintModel.Count(x => x.Loyalty == 'L')}";
-		totalAmountLabel.Text = $"{detailedPrintModel.Sum(x => x.Cash) + detailedPrintModel.Sum(x => x.Card) + detailedPrintModel.Sum(x => x.UPI) + detailedPrintModel.Sum(x => x.Amex)}";
-		cashLabel.Text = $"{detailedPrintModel.Sum(x => x.Cash)}";
-		cardLabel.Text = $"{detailedPrintModel.Sum(x => x.Card)}";
-		upiLabel.Text = $"{detailedPrintModel.Sum(x => x.UPI)}";
-		amexLabel.Text = $"{detailedPrintModel.Sum(x => x.Amex)}";
+		peopleTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.Male + x.Female)}";
+		maleTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.Male)}";
+		femaleTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.Female)}";
+		loyaltyTextBox.Text = $"{detailedTransactionPrintModel.Count(x => x.Loyalty == 'L')}";
+
+		amountTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.Cash + x.Card + x.UPI + x.Amex)}";
+		cashTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.Cash)}";
+		cardTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.Card)}";
+		upiTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.UPI)}";
+		amexTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.Amex)}";
+
+		advanceTextBox.Text = $"{detailedAdvancePrintModel.Sum(x => x.AdvancePaid)}";
+		redeemedAdvanceTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x.SlipId != "NOT REDEEMED").Sum(x => x.AdvancePaid)}";
+		notRedeemedAdvanceTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x.SlipId == "NOT REDEEMED").Sum(x => x.AdvancePaid)}";
+
+		bookingTextBox.Text = $"{detailedAdvancePrintModel.Sum(x => x.Booking)}";
+		redeemedBookingTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x.SlipId != "NOT REDEEMED").Sum(x => x.Booking)}";
+		notRedeemedBookingTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x.SlipId == "NOT REDEEMED").Sum(x => x.Booking)}";
+
+		advanceDataGridView.DataSource = detailedAdvancePrintModel;
+		foreach (DataGridViewColumn column in advanceDataGridView.Columns)
+		{
+			if (column.Index == 1)
+				column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+			else if (new[] { 0, 7, 8, 10, 11, 13 }.Contains(column.Index))
+				column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+		}
 	}
 
-	#region GetData
-	private string GetFromDateTime()
+	private void SelectTransactionRows(string slipId)
 	{
-		string fromDateTime = fromDateTimePicker.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-		return fromDateTime + $" {fromTimeTextBox.Text}:00:00";
+		transactionDataGridView.ClearSelection();
+		foreach (DataGridViewRow row in transactionDataGridView.Rows)
+			if (row.Cells["SlipId"].Value?.ToString() == slipId)
+			{
+				row.Selected = true;
+				transactionDataGridView.FirstDisplayedScrollingRowIndex = row.Index;
+			}
 	}
 
-	private string GetToDateTime()
+	private void advanceDataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
 	{
-		string toDateTime = toDateTimePicker.Value.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-		return toDateTime + $" {toTimeTextBox.Text}:00:00";
+		if (e.RowIndex >= 0)
+		{
+			string slipId = advanceDataGridView.Rows[e.RowIndex].Cells["SlipId"].Value?.ToString();
+			if (!string.IsNullOrEmpty(slipId)) SelectTransactionRows(slipId);
+		}
 	}
-
-	private string GetFormatedDate(bool getFromDate = true)
-	{
-		if (getFromDate)
-			return fromDateTimePicker.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) + $" {fromTimeTextBox.Text}:00";
-
-		else
-			return toDateTimePicker.Value.ToString("dd/MM/yyyy", CultureInfo.InvariantCulture) + $" {toTimeTextBox.Text}:00";
-	}
-	#endregion
 
 	private async void printButton_Click(object sender, EventArgs e)
 	{
 		LoadingScreen.ShowSplashScreen();
 
-		string dateHeader = $"{GetFormatedDate()} - {GetFormatedDate(false)}";
-		string fromTime = GetFromDateTime();
-		string toTime = GetToDateTime();
+		MemoryStream ms = await PrintReport.PrintDetail(_fromDateTime, _toDateTime, _locationId);
 
-		MemoryStream ms = await PrintReport.PrintDetail(dateHeader, fromTime, toTime, locationId);
-
-		using (FileStream stream = new FileStream(Path.Combine(Path.GetTempPath(), "DetailedReport.pdf"), FileMode.Create, FileAccess.Write)) ms.WriteTo(stream);
+		using (FileStream stream = new FileStream(Path.Combine(Path.GetTempPath(), "DetailedReport.pdf"), FileMode.Create, FileAccess.Write))
+			ms.WriteTo(stream);
 
 		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\DetailedReport.pdf") { UseShellExecute = true });
 
@@ -100,13 +109,10 @@ public partial class DetailDataForm : Form
 	{
 		LoadingScreen.ShowSplashScreen();
 
-		string dateHeader = $"{GetFormatedDate()} - {GetFormatedDate(false)}";
-		string fromTime = GetFromDateTime();
-		string toTime = GetToDateTime();
+		MemoryStream ms = await Excel.ExcelExport(_fromDateTime, _toDateTime, _locationId);
 
-		MemoryStream ms = await Excel.ExcelExport(dateHeader, fromTime, toTime, locationId);
-
-		using (FileStream stream = new FileStream(Path.Combine(Path.GetTempPath(), "DetailedReportExcel.xlsx"), FileMode.Create, FileAccess.Write)) ms.WriteTo(stream);
+		using (FileStream stream = new FileStream(Path.Combine(Path.GetTempPath(), "DetailedReportExcel.xlsx"), FileMode.Create, FileAccess.Write))
+			ms.WriteTo(stream);
 
 		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\DetailedReportExcel.xlsx") { UseShellExecute = true });
 

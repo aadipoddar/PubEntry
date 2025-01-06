@@ -75,8 +75,10 @@ public static class PrintReport
 		return footer;
 	}
 
-	public static async Task<MemoryStream> PrintSummary(string dateHeader, string fromTime, string toTime)
+	public static async Task<MemoryStream> PrintSummary(DateTime fromDateTime, DateTime toDateTime)
 	{
+		string dateHeader = $"{fromDateTime} - {toDateTime}";
+
 		PdfDocument pdfDocument = new();
 		PdfPage pdfPage = pdfDocument.Pages.Add();
 
@@ -109,7 +111,7 @@ public static class PrintReport
 			if (result == null) result = textElement.Draw(pdfPage, new PointF(textX, 20), layoutFormat);
 			else result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 20), layoutFormat);
 
-			transactionTotalsModel.Add((await PrintData.LoadTransactionTotals(fromTime, toTime, location.Id)).FirstOrDefault());
+			transactionTotalsModel.Add((await PrintData.LoadTransactionTotals(fromDateTime, toDateTime, location.Id)).FirstOrDefault());
 
 			font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
 
@@ -226,12 +228,14 @@ public static class PrintReport
 		return ms;
 	}
 
-	public static async Task<MemoryStream> PrintDetail(string dateHeader, string fromTime, string toTime, int selectedLocationId)
+	public static async Task<MemoryStream> PrintDetail(DateTime fromDateTime, DateTime toDateTime, int selectedLocationId)
 	{
+		string dateHeader = $"{fromDateTime} - {toDateTime}";
+
 		PdfDocument pdfDocument = new();
 		PdfPage pdfPage = pdfDocument.Pages.Add();
 
-		pdfDocument.Template.Top = AddHeader(pdfDocument, dateHeader, "Summary Report");
+		pdfDocument.Template.Top = AddHeader(pdfDocument, dateHeader, "Detail Report");
 		pdfDocument.Template.Bottom = AddFooter(pdfDocument);
 
 		PdfLayoutFormat layoutFormat = new();
@@ -253,14 +257,25 @@ public static class PrintReport
 		textElement = new PdfTextElement(text, font);
 
 		if (result == null) result = textElement.Draw(pdfPage, new PointF(textX, 20), layoutFormat);
-
 		else result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 20), layoutFormat);
+
+
+		font = new PdfStandardFont(PdfFontFamily.Helvetica, 20, PdfFontStyle.Bold);
+
+		#region TransactionDetails
+		font = new PdfStandardFont(PdfFontFamily.Helvetica, 20, PdfFontStyle.Bold);
+		text = "Transaction Details";
+		textWidth = font.MeasureString(text).Width;
+		pageWidth = pdfPage.GetClientSize().Width;
+		textX = (pageWidth - textWidth) / 2f;
+		textElement = new PdfTextElement(text, font);
+		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 20), layoutFormat);
 
 		PdfGrid pdfGrid = new();
 
-		var detailedPrintModel = await PrintData.LoadTransactionsByDateAndLocation(fromTime, toTime, selectedLocationId);
+		var detailedTransactionPrintModel = await PrintData.LoadTransactionsByDateAndLocation(fromDateTime, toDateTime, selectedLocationId);
 
-		pdfGrid.DataSource = detailedPrintModel;
+		pdfGrid.DataSource = detailedTransactionPrintModel;
 
 		pdfGrid.Columns[0].Width = 30;
 		pdfGrid.Columns[2].Width = 60;
@@ -291,55 +306,134 @@ public static class PrintReport
 		pdfGrid.Columns[1].Format = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
 
 		result = pdfGrid.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 20), layoutFormat);
+		#endregion
 
+		#region AdvanceDetails
+		font = new PdfStandardFont(PdfFontFamily.Helvetica, 20, PdfFontStyle.Bold);
+		text = "Advance Details";
+		textWidth = font.MeasureString(text).Width;
+		pageWidth = pdfPage.GetClientSize().Width;
+		textX = (pageWidth - textWidth) / 2f;
+		textElement = new PdfTextElement(text, font);
+		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 20), layoutFormat);
+
+		pdfGrid = new();
+
+		var detailedAdvancePrintModel = await PrintData.LoadAdvancesByDateAndLocation(fromDateTime, toDateTime, selectedLocationId);
+
+		pdfGrid.DataSource = detailedAdvancePrintModel;
+
+		pdfGrid.Columns[0].Width = 30;
+		pdfGrid.Columns[2].Width = 60;
+		pdfGrid.Columns[3].Width = 27;
+		pdfGrid.Columns[4].Width = 40;
+		pdfGrid.Columns[5].Width = 40;
+		pdfGrid.Columns[6].Width = 40;
+		pdfGrid.Columns[10].Width = 30;
+
+		foreach (PdfGridRow row in pdfGrid.Rows)
+		{
+			foreach (PdfGridCell cell in row.Cells)
+			{
+				PdfGridCellStyle cellStyle = new()
+				{
+					CellPadding = new PdfPaddings(5, 5, 5, 5),
+					Font = new PdfStandardFont(PdfFontFamily.Helvetica, 7)
+				};
+				cell.Style = cellStyle;
+			}
+		}
+
+		pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent1);
+
+		foreach (PdfGridColumn column in pdfGrid.Columns)
+			column.Format = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
+
+		pdfGrid.Columns[1].Format = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+
+		result = pdfGrid.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 20), layoutFormat);
+		#endregion
+
+		#region Totals
 		font = new PdfStandardFont(PdfFontFamily.Helvetica, 20);
 
-		textElement = new PdfTextElement($"Total People: {detailedPrintModel.Sum(x => x.Male) + detailedPrintModel.Sum(x => x.Female)}", font);
+		textElement = new PdfTextElement($"Total People: {detailedTransactionPrintModel.Sum(x => x.Male) + detailedTransactionPrintModel.Sum(x => x.Female)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-		text = $"Total Amount: {detailedPrintModel.Sum(x => x.Cash) + detailedPrintModel.Sum(x => x.Card) + detailedPrintModel.Sum(x => x.UPI) + detailedPrintModel.Sum(x => x.Amex)}";
+		text = $"Total Amount: {detailedTransactionPrintModel.Sum(x => x.Cash) + detailedTransactionPrintModel.Sum(x => x.Card) + detailedTransactionPrintModel.Sum(x => x.UPI) + detailedTransactionPrintModel.Sum(x => x.Amex)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		textElement = new PdfTextElement($"Male: {detailedPrintModel.Sum(x => x.Male)}", font);
+		textElement = new PdfTextElement($"Male: {detailedTransactionPrintModel.Sum(x => x.Male)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-		text = $"Cash: {detailedPrintModel.Sum(x => x.Cash)}";
+		text = $"Cash: {detailedTransactionPrintModel.Sum(x => x.Cash)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		textElement = new PdfTextElement($"Female: {detailedPrintModel.Sum(x => x.Female)}", font);
+		textElement = new PdfTextElement($"Female: {detailedTransactionPrintModel.Sum(x => x.Female)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-		text = $"Card: {detailedPrintModel.Sum(x => x.Card)}";
+		text = $"Card: {detailedTransactionPrintModel.Sum(x => x.Card)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		textElement = new PdfTextElement($"Total Loyalty: {detailedPrintModel.Count(x => x.Loyalty == 'L')}", font);
+		textElement = new PdfTextElement($"Total Loyalty: {detailedTransactionPrintModel.Count(x => x.Loyalty == 'L')}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-		text = $"UPI: {detailedPrintModel.Sum(x => x.UPI)}";
+		text = $"UPI: {detailedTransactionPrintModel.Sum(x => x.UPI)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		text = $"Amex: {detailedPrintModel.Sum(x => x.Amex)}";
+		text = $"Amex: {detailedTransactionPrintModel.Sum(x => x.Amex)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 10), layoutFormat);
+
+		textElement = new PdfTextElement($"Advance: {detailedAdvancePrintModel.Sum(x => x.AdvancePaid)}", font);
+		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 20), layoutFormat);
+
+		text = $"Booking: {detailedAdvancePrintModel.Sum(x => x.Booking)}";
+		textWidth = font.MeasureString(text).Width;
+		pageWidth = pdfPage.GetClientSize().Width;
+		textX = pageWidth - textWidth;
+		textElement = new PdfTextElement(text, font);
+		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
+
+		textElement = new PdfTextElement($"Redeemed: {detailedAdvancePrintModel.Where(x => x.SlipId != "NOT REDEEMED").Sum(x => x.AdvancePaid)}", font);
+		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
+
+		text = $"Redeemed: {detailedAdvancePrintModel.Where(x => x.SlipId != "NOT REDEEMED").Sum(x => x.Booking)}";
+		textWidth = font.MeasureString(text).Width;
+		pageWidth = pdfPage.GetClientSize().Width;
+		textX = pageWidth - textWidth;
+		textElement = new PdfTextElement(text, font);
+		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
+
+		textElement = new PdfTextElement($"Not Redeemed: {detailedAdvancePrintModel.Where(x => x.SlipId == "NOT REDEEMED").Sum(x => x.AdvancePaid)}", font);
+		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
+
+		text = $"Not Redeemed: {detailedAdvancePrintModel.Where(x => x.SlipId == "NOT REDEEMED").Sum(x => x.Booking)}";
+		textWidth = font.MeasureString(text).Width;
+		pageWidth = pdfPage.GetClientSize().Width;
+		textX = pageWidth - textWidth;
+		textElement = new PdfTextElement(text, font);
+		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
+		#endregion
 
 		MemoryStream ms = new();
 		pdfDocument.Save(ms);

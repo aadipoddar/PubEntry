@@ -48,10 +48,15 @@ partial class LoadingScreen
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(492, 180);
 		Controls.Add(loadingLabel);
+		FormBorderStyle = FormBorderStyle.None;
 		Icon = (Icon)resources.GetObject("$this.Icon");
+		MaximizeBox = false;
+		MinimizeBox = false;
 		Name = "LoadingScreen";
+		ShowInTaskbar = false;
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "Loading...";
+		TopMost = true;
 		ResumeLayout(false);
 		PerformLayout();
 	}

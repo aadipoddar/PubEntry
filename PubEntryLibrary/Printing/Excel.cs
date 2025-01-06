@@ -6,8 +6,10 @@ namespace PubEntryLibrary.Printing;
 
 public static class Excel
 {
-	public static async Task<MemoryStream> ExcelExport(string dateHeader, string fromTime, string toTime, int selectedLocationId)
+	public static async Task<MemoryStream> ExcelExport(DateTime fromDateTime, DateTime toDateTime, int selectedLocationId)
 	{
+		string dateHeader = $"{fromDateTime} - {toDateTime}";
+
 		MemoryStream ms = new();
 		using (ExcelEngine excelEngine = new())
 		{
@@ -39,7 +41,7 @@ public static class Excel
 			worksheet.Range["H2"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
 			worksheet.Range["H2"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
 
-			var detailedPrintModel = await PrintData.LoadTransactionsByDateAndLocation(fromTime, toTime, selectedLocationId);
+			var detailedPrintModel = await PrintData.LoadTransactionsByDateAndLocation(fromDateTime, toDateTime, selectedLocationId);
 
 			worksheet.Range["A4"].Text = "SlipId";
 			worksheet.Range["B4"].Text = "Name";

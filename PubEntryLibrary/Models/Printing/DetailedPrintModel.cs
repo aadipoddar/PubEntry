@@ -1,6 +1,6 @@
 ﻿namespace PubEntryLibrary.Models.Printing;
 
-public class DetailedPrintModel
+public class DetailedTransactionPrintModel
 {
 	public int SlipId { get; set; }
 	public string PersonName { get; set; }

@@ -26,7 +26,7 @@ public partial class Dashboard : Form
 				await AadiSoftUpdater.AadiSoftUpdater.UpdateApp("aadipoddar", "PubEntry", "PubEntrySetup", "477557B4-2908-4106-B360-D2D114F02452");
 	}
 
-	public async Task LoadLocationComboBox()
+	private async Task LoadLocationComboBox()
 	{
 		locationComboBox.DataSource = await CommonData.LoadTableDataByStatus<LocationModel>("LocationTable", true);
 		locationComboBox.DisplayMember = nameof(LocationModel.Name);
@@ -43,7 +43,6 @@ public partial class Dashboard : Form
 	}
 	#endregion
 
-	#region Validation
 	private bool ValidatePassword()
 	{
 		if ((userComboBox.SelectedItem as UserModel).Password == passwordTextBox.Text || passwordTextBox.Text == "admin")
@@ -55,7 +54,6 @@ public partial class Dashboard : Form
 		passwordTextBox.Text = string.Empty;
 		return false;
 	}
-	#endregion
 
 	#region Events
 	private async void locationComboBox_SelectedIndexChanged(object sender, EventArgs e) => await LoadUserComboBox();
@@ -76,7 +74,7 @@ public partial class Dashboard : Form
 
 	private void reportsButton_Click(object sender, EventArgs e)
 	{
-		SelectDataForm selectDataForm = new((locationComboBox.SelectedItem as LocationModel).Id);
+		SelectDataForm selectDataForm = new();
 		selectDataForm.ShowDialog();
 	}
 

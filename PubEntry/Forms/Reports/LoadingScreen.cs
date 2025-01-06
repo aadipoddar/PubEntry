@@ -2,38 +2,32 @@
 
 public partial class LoadingScreen : Form
 {
-	public LoadingScreen()
-	{
-		InitializeComponent();
-	}
+	private static LoadingScreen? _loadingScreen;
 
-	private static LoadingScreen loadingScreen;
+	public LoadingScreen() => InitializeComponent();
 
-	static public void ShowSplashScreen()
+	public static void ShowSplashScreen()
 	{
-		if (loadingScreen != null) return;
-		loadingScreen = new LoadingScreen();
-		Thread thread = new(new ThreadStart(ShowForm));
-		thread.IsBackground = true;
+		if (_loadingScreen != null) return;
+		_loadingScreen = new LoadingScreen();
+		Thread thread = new(ShowForm)
+		{
+			IsBackground = true
+		};
 		thread.SetApartmentState(ApartmentState.STA);
 		thread.Start();
 	}
 
 	private static void ShowForm()
 	{
-		if (loadingScreen != null) Application.Run(loadingScreen);
+		if (_loadingScreen != null) Application.Run(_loadingScreen);
 	}
 
-	public static void CloseForm() => loadingScreen?.Invoke(new CloseDelegate(CloseFormInternal));
+	public static void CloseForm() => _loadingScreen?.Invoke(new Action(CloseFormInternal));
 
 	private static void CloseFormInternal()
 	{
-		if (loadingScreen != null)
-		{
-			loadingScreen.Close();
-			loadingScreen = null;
-		};
+		_loadingScreen?.Close();
+		_loadingScreen = null;
 	}
-
-	private delegate void CloseDelegate();
 }
