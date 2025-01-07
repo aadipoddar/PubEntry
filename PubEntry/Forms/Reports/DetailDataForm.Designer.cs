@@ -196,7 +196,7 @@ partial class DetailDataForm
 		printButton.Location = new Point(509, 153);
 		printButton.Name = "printButton";
 		printButton.Size = new Size(118, 35);
-		printButton.TabIndex = 19;
+		printButton.TabIndex = 2;
 		printButton.Text = "PRINT";
 		printButton.UseVisualStyleBackColor = true;
 		printButton.Click += printButton_Click;
@@ -208,7 +208,7 @@ partial class DetailDataForm
 		excelButton.Location = new Point(341, 153);
 		excelButton.Name = "excelButton";
 		excelButton.Size = new Size(118, 35);
-		excelButton.TabIndex = 20;
+		excelButton.TabIndex = 1;
 		excelButton.Text = "EXCEL";
 		excelButton.UseVisualStyleBackColor = true;
 		excelButton.Click += excelButton_Click;
@@ -220,7 +220,7 @@ partial class DetailDataForm
 		refreshButton.Location = new Point(722, 153);
 		refreshButton.Name = "refreshButton";
 		refreshButton.Size = new Size(124, 35);
-		refreshButton.TabIndex = 21;
+		refreshButton.TabIndex = 3;
 		refreshButton.Text = "REFRESH";
 		refreshButton.UseVisualStyleBackColor = true;
 		refreshButton.Click += refreshButton_Click;

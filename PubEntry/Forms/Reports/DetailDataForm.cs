@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 
 using PubEntryLibrary.Printing;
+using PubEntryLibrary.Printing.Excel;
 
 namespace PubEntry.Forms.Reports;
 
@@ -53,13 +54,13 @@ public partial class DetailDataForm : Form
 		upiTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.UPI)}";
 		amexTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.Amex)}";
 
-		advanceTextBox.Text = $"{detailedAdvancePrintModel.Sum(x => x.AdvancePaid)}";
-		redeemedAdvanceTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x.SlipId != "NOT REDEEMED").Sum(x => x.AdvancePaid)}";
-		notRedeemedAdvanceTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x.SlipId == "NOT REDEEMED").Sum(x => x.AdvancePaid)}";
+		advanceTextBox.Text = $"{detailedAdvancePrintModel.Sum(x => x.Adv_Paid)}";
+		redeemedAdvanceTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x.Slip_No != "NOT REDEEMED").Sum(x => x.Adv_Paid)}";
+		notRedeemedAdvanceTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x.Slip_No == "NOT REDEEMED").Sum(x => x.Adv_Paid)}";
 
-		bookingTextBox.Text = $"{detailedAdvancePrintModel.Sum(x => x.Booking)}";
-		redeemedBookingTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x.SlipId != "NOT REDEEMED").Sum(x => x.Booking)}";
-		notRedeemedBookingTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x.SlipId == "NOT REDEEMED").Sum(x => x.Booking)}";
+		bookingTextBox.Text = $"{detailedAdvancePrintModel.Sum(x => x.Booking_Amt)}";
+		redeemedBookingTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x.Slip_No != "NOT REDEEMED").Sum(x => x.Booking_Amt)}";
+		notRedeemedBookingTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x.Slip_No == "NOT REDEEMED").Sum(x => x.Booking_Amt)}";
 
 		advanceDataGridView.DataSource = detailedAdvancePrintModel;
 		foreach (DataGridViewColumn column in advanceDataGridView.Columns)

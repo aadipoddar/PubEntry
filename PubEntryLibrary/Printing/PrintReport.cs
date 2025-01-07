@@ -317,41 +317,46 @@ public static class PrintReport
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 20), layoutFormat);
 
-		pdfGrid = new();
+		var detailedAdvancePrintModel = toDateTime.TimeOfDay < TimeSpan.FromHours(17)
+			? (await PrintData.LoadAdvancesByDateAndLocation(fromDateTime.Date, toDateTime.AddDays(-1).Date.AddHours(23).AddMinutes(59), selectedLocationId)).ToList()
+			: (await PrintData.LoadAdvancesByDateAndLocation(fromDateTime.Date, toDateTime.Date, selectedLocationId)).ToList();
 
-		var detailedAdvancePrintModel = await PrintData.LoadAdvancesByDateAndLocation(fromDateTime, toDateTime, selectedLocationId);
-
-		pdfGrid.DataSource = detailedAdvancePrintModel;
-
-		pdfGrid.Columns[0].Width = 30;
-		pdfGrid.Columns[2].Width = 60;
-		pdfGrid.Columns[3].Width = 27;
-		pdfGrid.Columns[4].Width = 40;
-		pdfGrid.Columns[5].Width = 40;
-		pdfGrid.Columns[6].Width = 40;
-		pdfGrid.Columns[10].Width = 30;
-
-		foreach (PdfGridRow row in pdfGrid.Rows)
+		if (detailedAdvancePrintModel.Count() > 0)
 		{
-			foreach (PdfGridCell cell in row.Cells)
+			pdfGrid = new();
+
+			pdfGrid.DataSource = detailedAdvancePrintModel;
+
+			pdfGrid.Columns[0].Width = 30;
+			pdfGrid.Columns[2].Width = 60;
+			pdfGrid.Columns[3].Width = 27;
+			pdfGrid.Columns[4].Width = 40;
+			pdfGrid.Columns[5].Width = 40;
+			pdfGrid.Columns[6].Width = 40;
+			pdfGrid.Columns[10].Width = 30;
+
+			foreach (PdfGridRow row in pdfGrid.Rows)
 			{
-				PdfGridCellStyle cellStyle = new()
+				foreach (PdfGridCell cell in row.Cells)
 				{
-					CellPadding = new PdfPaddings(5, 5, 5, 5),
-					Font = new PdfStandardFont(PdfFontFamily.Helvetica, 7)
-				};
-				cell.Style = cellStyle;
+					PdfGridCellStyle cellStyle = new()
+					{
+						CellPadding = new PdfPaddings(5, 5, 5, 5),
+						Font = new PdfStandardFont(PdfFontFamily.Helvetica, 7)
+					};
+					cell.Style = cellStyle;
+				}
 			}
+
+			pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent1);
+
+			foreach (PdfGridColumn column in pdfGrid.Columns)
+				column.Format = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
+
+			pdfGrid.Columns[1].Format = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
+
+			result = pdfGrid.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 20), layoutFormat);
 		}
-
-		pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent1);
-
-		foreach (PdfGridColumn column in pdfGrid.Columns)
-			column.Format = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
-
-		pdfGrid.Columns[1].Format = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
-
-		result = pdfGrid.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 20), layoutFormat);
 		#endregion
 
 		#region Totals
@@ -404,30 +409,30 @@ public static class PrintReport
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 10), layoutFormat);
 
-		textElement = new PdfTextElement($"Advance: {detailedAdvancePrintModel.Sum(x => x.AdvancePaid)}", font);
+		textElement = new PdfTextElement($"Advance: {detailedAdvancePrintModel.Sum(x => x.Adv_Paid)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 20), layoutFormat);
 
-		text = $"Booking: {detailedAdvancePrintModel.Sum(x => x.Booking)}";
+		text = $"Booking: {detailedAdvancePrintModel.Sum(x => x.Booking_Amt)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		textElement = new PdfTextElement($"Redeemed: {detailedAdvancePrintModel.Where(x => x.SlipId != "NOT REDEEMED").Sum(x => x.AdvancePaid)}", font);
+		textElement = new PdfTextElement($"Redeemed: {detailedAdvancePrintModel.Where(x => x.Slip_No != "NOT REDEEMED").Sum(x => x.Adv_Paid)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-		text = $"Redeemed: {detailedAdvancePrintModel.Where(x => x.SlipId != "NOT REDEEMED").Sum(x => x.Booking)}";
+		text = $"Redeemed: {detailedAdvancePrintModel.Where(x => x.Slip_No != "NOT REDEEMED").Sum(x => x.Booking_Amt)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		textElement = new PdfTextElement($"Not Redeemed: {detailedAdvancePrintModel.Where(x => x.SlipId == "NOT REDEEMED").Sum(x => x.AdvancePaid)}", font);
+		textElement = new PdfTextElement($"Not Redeemed: {detailedAdvancePrintModel.Where(x => x.Slip_No == "NOT REDEEMED").Sum(x => x.Adv_Paid)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-		text = $"Not Redeemed: {detailedAdvancePrintModel.Where(x => x.SlipId == "NOT REDEEMED").Sum(x => x.Booking)}";
+		text = $"Not Redeemed: {detailedAdvancePrintModel.Where(x => x.Slip_No == "NOT REDEEMED").Sum(x => x.Booking_Amt)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
