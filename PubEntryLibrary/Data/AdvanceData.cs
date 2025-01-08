@@ -1,6 +1,8 @@
-﻿namespace PubEntryLibrary.Data;
+﻿using PubEntryLibrary.Models.Printing;
 
-public class AdvanceData
+namespace PubEntryLibrary.Data;
+
+public static class AdvanceData
 {
 	public static async Task<int> AdvanceInsert(AdvanceModel advanceModel) =>
 			(await SqlDataAccess.LoadData<int, dynamic>("AdvanceInsert", advanceModel)).FirstOrDefault();
@@ -23,4 +25,7 @@ public class AdvanceData
 
 	public static async Task AdvanceClear(int advanceId, int transactionId) =>
 		await SqlDataAccess.SaveData<dynamic>("AdvanceClear", new { Id = advanceId, TransactionId = transactionId });
+
+	public static async Task<List<AdvanceTotalsModel>> LoadTotalsByAdvanceTakenON(DateTime takenOn, int locationId) =>
+		await SqlDataAccess.LoadData<AdvanceTotalsModel, dynamic>("LoadTotalsByAdvanceTakenON", new { TakenOn = takenOn, LocationId = locationId });
 }

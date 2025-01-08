@@ -318,8 +318,8 @@ public static class PrintReport
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 20), layoutFormat);
 
 		var detailedAdvancePrintModel = toDateTime.TimeOfDay < TimeSpan.FromHours(17)
-			? (await PrintData.LoadAdvancesByDateAndLocation(fromDateTime.Date, toDateTime.AddDays(-1).Date.AddHours(23).AddMinutes(59), selectedLocationId)).ToList()
-			: (await PrintData.LoadAdvancesByDateAndLocation(fromDateTime.Date, toDateTime.Date, selectedLocationId)).ToList();
+			? (await PrintData.LoadAdvancesByTakenForAndLocation(fromDateTime.Date, toDateTime.AddDays(-1).Date.AddHours(23).AddMinutes(59), selectedLocationId)).ToList()
+			: (await PrintData.LoadAdvancesByTakenForAndLocation(fromDateTime.Date, toDateTime.Date, selectedLocationId)).ToList();
 
 		if (detailedAdvancePrintModel.Count() > 0)
 		{

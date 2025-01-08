@@ -41,6 +41,7 @@ partial class LoadingScreen
 		loadingLabel.Size = new Size(363, 37);
 		loadingLabel.TabIndex = 0;
 		loadingLabel.Text = "Please Wait Data is Loading...";
+		loadingLabel.UseWaitCursor = true;
 		// 
 		// LoadingScreen
 		// 
@@ -57,6 +58,7 @@ partial class LoadingScreen
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "Loading...";
 		TopMost = true;
+		UseWaitCursor = true;
 		ResumeLayout(false);
 		PerformLayout();
 	}

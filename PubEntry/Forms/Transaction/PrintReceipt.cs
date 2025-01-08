@@ -103,7 +103,7 @@ public static class PrintReceipt
 		DrawPaymentDetails(g, receiptModel, advance);
 		DrawFooter(g, receiptModel);
 
-		PaperSize ps58 = new PaperSize("58mm Thermal", 220, lowerSpacing + 20);
+		PaperSize ps58 = new("58mm Thermal", 220, lowerSpacing + 20);
 		e.PageSettings.PaperSize = ps58;
 
 		e.HasMorePages = false;

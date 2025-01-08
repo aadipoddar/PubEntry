@@ -18,7 +18,7 @@ public static class AdvanceWorksheet
 		string locationName = await Excel.GetLocationName(selectedLocationId);
 		Excel.SetupHeader(worksheet, dateHeader, locationName, "Advance Details");
 
-		var detailedAdvancePrintModel = await PrintData.LoadAdvancesByDateAndLocation(fromDateTime, toDateTime, selectedLocationId);
+		var detailedAdvancePrintModel = await PrintData.LoadAdvancesByTakenForAndLocation(fromDateTime, toDateTime, selectedLocationId);
 		FillAdvanceData(worksheet, detailedAdvancePrintModel);
 		FillAdvanceTotals(worksheet, detailedAdvancePrintModel);
 	}

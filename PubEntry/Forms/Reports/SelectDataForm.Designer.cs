@@ -39,6 +39,11 @@ partial class SelectDataForm
 		versionLabel = new Label();
 		toDateTimePicker = new DateTimePicker();
 		locationComboBox = new ComboBox();
+		advanceButton = new Button();
+		groupBox1 = new GroupBox();
+		label1 = new Label();
+		takeOnDatePicker = new DateTimePicker();
+		groupBox1.SuspendLayout();
 		SuspendLayout();
 		// 
 		// toDateLabel
@@ -99,7 +104,7 @@ partial class SelectDataForm
 		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 		brandingLabel.AutoSize = true;
 		brandingLabel.BackColor = Color.White;
-		brandingLabel.Location = new Point(281, 335);
+		brandingLabel.Location = new Point(281, 486);
 		brandingLabel.Name = "brandingLabel";
 		brandingLabel.Size = new Size(76, 15);
 		brandingLabel.TabIndex = 36;
@@ -108,7 +113,7 @@ partial class SelectDataForm
 		// richTextBoxFooter
 		// 
 		richTextBoxFooter.Dock = DockStyle.Bottom;
-		richTextBoxFooter.Location = new Point(0, 328);
+		richTextBoxFooter.Location = new Point(0, 479);
 		richTextBoxFooter.Name = "richTextBoxFooter";
 		richTextBoxFooter.Size = new Size(360, 26);
 		richTextBoxFooter.TabIndex = 35;
@@ -119,7 +124,7 @@ partial class SelectDataForm
 		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 		versionLabel.AutoSize = true;
 		versionLabel.BackColor = Color.White;
-		versionLabel.Location = new Point(5, 335);
+		versionLabel.Location = new Point(5, 486);
 		versionLabel.Name = "versionLabel";
 		versionLabel.Size = new Size(84, 15);
 		versionLabel.TabIndex = 37;
@@ -148,11 +153,56 @@ partial class SelectDataForm
 		locationComboBox.Size = new Size(271, 36);
 		locationComboBox.TabIndex = 1;
 		// 
+		// advanceButton
+		// 
+		advanceButton.Font = new Font("Segoe UI", 15F);
+		advanceButton.Location = new Point(85, 96);
+		advanceButton.Name = "advanceButton";
+		advanceButton.Size = new Size(175, 38);
+		advanceButton.TabIndex = 7;
+		advanceButton.Text = "Advance Report";
+		advanceButton.UseVisualStyleBackColor = true;
+		advanceButton.Click += advanceButton_Click;
+		// 
+		// groupBox1
+		// 
+		groupBox1.Controls.Add(label1);
+		groupBox1.Controls.Add(advanceButton);
+		groupBox1.Controls.Add(takeOnDatePicker);
+		groupBox1.Location = new Point(5, 320);
+		groupBox1.Name = "groupBox1";
+		groupBox1.Size = new Size(352, 153);
+		groupBox1.TabIndex = 39;
+		groupBox1.TabStop = false;
+		groupBox1.Text = "Advance Reporting";
+		// 
+		// label1
+		// 
+		label1.AutoSize = true;
+		label1.Font = new Font("Segoe UI", 15F);
+		label1.Location = new Point(17, 42);
+		label1.Name = "label1";
+		label1.Size = new Size(96, 28);
+		label1.TabIndex = 41;
+		label1.Text = "Taken On:";
+		// 
+		// takeOnDatePicker
+		// 
+		takeOnDatePicker.CustomFormat = "";
+		takeOnDatePicker.Font = new Font("Segoe UI", 15F);
+		takeOnDatePicker.Format = DateTimePickerFormat.Short;
+		takeOnDatePicker.Location = new Point(119, 37);
+		takeOnDatePicker.Name = "takeOnDatePicker";
+		takeOnDatePicker.Size = new Size(141, 34);
+		takeOnDatePicker.TabIndex = 6;
+		takeOnDatePicker.Value = new DateTime(2025, 1, 6, 17, 0, 0, 0);
+		// 
 		// SelectDataForm
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(360, 354);
+		ClientSize = new Size(360, 505);
+		Controls.Add(groupBox1);
 		Controls.Add(locationComboBox);
 		Controls.Add(toDateTimePicker);
 		Controls.Add(versionLabel);
@@ -168,6 +218,8 @@ partial class SelectDataForm
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "Select Data";
 		Load += SelectDataForm_Load;
+		groupBox1.ResumeLayout(false);
+		groupBox1.PerformLayout();
 		ResumeLayout(false);
 		PerformLayout();
 	}
@@ -184,4 +236,8 @@ partial class SelectDataForm
 	private Label versionLabel;
 	private DateTimePicker toDateTimePicker;
 	private ComboBox locationComboBox;
+	private Button advanceButton;
+	private GroupBox groupBox1;
+	private Label label1;
+	private DateTimePicker takeOnDatePicker;
 }

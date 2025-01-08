@@ -28,6 +28,8 @@ public partial class SelectDataForm : Form
 			fromDateTimePicker.Value = DateTime.Now.Date.AddDays(-1).AddHours(17);
 		}
 
+		takeOnDatePicker.Value = DateTime.Now.Date;
+
 		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
@@ -45,7 +47,7 @@ public partial class SelectDataForm : Form
 		LoadingScreen.ShowSplashScreen();
 
 		MemoryStream ms = await PrintReport.PrintSummary(fromDateTimePicker.Value, toDateTimePicker.Value);
-		using (FileStream stream = new FileStream(Path.Combine(Path.GetTempPath(), "SummaryReport.pdf"), FileMode.Create, FileAccess.Write)) ms.CopyTo(stream);
+		using (FileStream stream = new(Path.Combine(Path.GetTempPath(), "SummaryReport.pdf"), FileMode.Create, FileAccess.Write)) ms.CopyTo(stream);
 		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\SummaryReport.pdf") { UseShellExecute = true });
 
 		LoadingScreen.CloseForm();
@@ -62,5 +64,11 @@ public partial class SelectDataForm : Form
 
 		DetailDataForm detailDataForm = new(fromDateTimePicker.Value, toDateTimePicker.Value, (locationComboBox.SelectedItem as LocationModel).Id);
 		detailDataForm.ShowDialog();
+	}
+
+	private void advanceButton_Click(object sender, EventArgs e)
+	{
+		AdvanceReport advanceReport = new(takeOnDatePicker.Value.Date, (locationComboBox.SelectedItem as LocationModel).Id);
+		advanceReport.ShowDialog();
 	}
 }

@@ -21,8 +21,7 @@ public static class Excel
 
 			if (toDateTime.TimeOfDay < TimeSpan.FromHours(17))
 				await AdvanceWorksheet.AddAdvanceWorksheet(workbook, dateHeader, selectedLocationId, fromDateTime.Date, toDateTime.AddDays(-1).Date.AddHours(23).AddMinutes(59));
-			else
-				await AdvanceWorksheet.AddAdvanceWorksheet(workbook, dateHeader, selectedLocationId, fromDateTime.Date, toDateTime.Date);
+			else await AdvanceWorksheet.AddAdvanceWorksheet(workbook, dateHeader, selectedLocationId, fromDateTime.Date, toDateTime.Date);
 
 			workbook.SaveAs(ms);
 			ms.Position = 0;
@@ -89,19 +88,22 @@ public static class Excel
 
 	public static void SetColumnAlignments(IWorksheet worksheet)
 	{
-		worksheet.Columns[0].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-		worksheet.Columns[1].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-		worksheet.Columns[2].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-		worksheet.Columns[3].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-		worksheet.Columns[4].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
-		worksheet.Columns[5].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
-		worksheet.Columns[6].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
-		worksheet.Columns[7].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
-		worksheet.Columns[8].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
-		worksheet.Columns[9].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
-		worksheet.Columns[10].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-		worksheet.Columns[11].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
-		worksheet.Columns[12].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+		int maxColumns = worksheet.Columns.Length;
+
+		if (maxColumns > 0) worksheet.Columns[0].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+		if (maxColumns > 1) worksheet.Columns[1].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
+		if (maxColumns > 2) worksheet.Columns[2].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+		if (maxColumns > 3) worksheet.Columns[3].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+		if (maxColumns > 4) worksheet.Columns[4].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
+		if (maxColumns > 5) worksheet.Columns[5].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
+		if (maxColumns > 6) worksheet.Columns[6].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
+		if (maxColumns > 7) worksheet.Columns[7].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
+		if (maxColumns > 8) worksheet.Columns[8].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
+		if (maxColumns > 9) worksheet.Columns[9].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
+		if (maxColumns > 10) worksheet.Columns[10].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+		if (maxColumns > 11) worksheet.Columns[11].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
+		if (maxColumns > 12) worksheet.Columns[12].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+		if (maxColumns > 13) worksheet.Columns[13].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
 	}
 
 	public static void SetTotalCell(IWorksheet worksheet, string cellAddress, string text, int fontSize, ExcelHAlign hAlign)

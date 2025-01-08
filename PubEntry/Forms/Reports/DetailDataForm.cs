@@ -31,8 +31,8 @@ public partial class DetailDataForm : Form
 		var detailedTransactionPrintModel = (await PrintData.LoadTransactionsByDateAndLocation(_fromDateTime, _toDateTime, _locationId)).ToList();
 
 		var detailedAdvancePrintModel = _toDateTime.TimeOfDay < TimeSpan.FromHours(17)
-			? (await PrintData.LoadAdvancesByDateAndLocation(_fromDateTime.Date, _toDateTime.AddDays(-1).Date.AddHours(23).AddMinutes(59), _locationId)).ToList()
-			: (await PrintData.LoadAdvancesByDateAndLocation(_fromDateTime.Date, _toDateTime.Date, _locationId)).ToList();
+			? (await PrintData.LoadAdvancesByTakenForAndLocation(_fromDateTime.Date, _toDateTime.AddDays(-1).Date.AddHours(23).AddMinutes(59), _locationId)).ToList()
+			: (await PrintData.LoadAdvancesByTakenForAndLocation(_fromDateTime.Date, _toDateTime.Date, _locationId)).ToList();
 
 		transactionDataGridView.DataSource = detailedTransactionPrintModel;
 		foreach (DataGridViewColumn column in transactionDataGridView.Columns)
@@ -87,7 +87,7 @@ public partial class DetailDataForm : Form
 	{
 		if (e.RowIndex >= 0)
 		{
-			string slipId = advanceDataGridView.Rows[e.RowIndex].Cells["SlipId"].Value?.ToString();
+			string slipId = advanceDataGridView.Rows[e.RowIndex].Cells["Slip_No"].Value?.ToString();
 			if (!string.IsNullOrEmpty(slipId)) SelectTransactionRows(slipId);
 		}
 	}
@@ -98,7 +98,7 @@ public partial class DetailDataForm : Form
 
 		MemoryStream ms = await PrintReport.PrintDetail(_fromDateTime, _toDateTime, _locationId);
 
-		using (FileStream stream = new FileStream(Path.Combine(Path.GetTempPath(), "DetailedReport.pdf"), FileMode.Create, FileAccess.Write))
+		using (FileStream stream = new(Path.Combine(Path.GetTempPath(), "DetailedReport.pdf"), FileMode.Create, FileAccess.Write))
 			ms.WriteTo(stream);
 
 		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\DetailedReport.pdf") { UseShellExecute = true });
@@ -112,7 +112,7 @@ public partial class DetailDataForm : Form
 
 		MemoryStream ms = await Excel.ExcelExport(_fromDateTime, _toDateTime, _locationId);
 
-		using (FileStream stream = new FileStream(Path.Combine(Path.GetTempPath(), "DetailedReportExcel.xlsx"), FileMode.Create, FileAccess.Write))
+		using (FileStream stream = new(Path.Combine(Path.GetTempPath(), "DetailedReportExcel.xlsx"), FileMode.Create, FileAccess.Write))
 			ms.WriteTo(stream);
 
 		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\DetailedReportExcel.xlsx") { UseShellExecute = true });
