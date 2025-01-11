@@ -77,7 +77,6 @@ partial class DetailDataForm
 		transactionDataGridView.AllowUserToAddRows = false;
 		transactionDataGridView.AllowUserToDeleteRows = false;
 		transactionDataGridView.AllowUserToOrderColumns = true;
-		transactionDataGridView.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
 		transactionDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 		transactionDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 		transactionDataGridView.Location = new Point(12, 40);
@@ -237,7 +236,6 @@ partial class DetailDataForm
 		// 
 		// tableLayoutPanel1
 		// 
-		tableLayoutPanel1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
 		tableLayoutPanel1.ColumnCount = 11;
 		tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
 		tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle());
@@ -525,7 +523,6 @@ partial class DetailDataForm
 		advanceDataGridView.AllowUserToAddRows = false;
 		advanceDataGridView.AllowUserToDeleteRows = false;
 		advanceDataGridView.AllowUserToOrderColumns = true;
-		advanceDataGridView.Anchor = AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 		advanceDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
 		advanceDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 		advanceDataGridView.Location = new Point(12, 534);
