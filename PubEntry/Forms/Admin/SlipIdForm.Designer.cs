@@ -28,9 +28,13 @@ partial class SlipIdForm
 	/// </summary>
 	private void InitializeComponent()
 	{
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SlipIdForm));
 		slipIdLabel = new Label();
 		slipIdTextBox = new TextBox();
 		goButton = new Button();
+		versionLabel = new Label();
+		brandingLabel = new Label();
+		richTextBoxFooter = new RichTextBox();
 		SuspendLayout();
 		// 
 		// slipIdLabel
@@ -64,18 +68,56 @@ partial class SlipIdForm
 		goButton.UseVisualStyleBackColor = true;
 		goButton.Click += goButton_Click;
 		// 
+		// versionLabel
+		// 
+		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+		versionLabel.AutoSize = true;
+		versionLabel.BackColor = Color.White;
+		versionLabel.Location = new Point(4, 137);
+		versionLabel.Name = "versionLabel";
+		versionLabel.Size = new Size(84, 15);
+		versionLabel.TabIndex = 46;
+		versionLabel.Text = "Version: 0.0.0.0";
+		// 
+		// brandingLabel
+		// 
+		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+		brandingLabel.AutoSize = true;
+		brandingLabel.BackColor = Color.White;
+		brandingLabel.Location = new Point(215, 138);
+		brandingLabel.Name = "brandingLabel";
+		brandingLabel.Size = new Size(76, 15);
+		brandingLabel.TabIndex = 45;
+		brandingLabel.Text = "© AADISOFT";
+		// 
+		// richTextBoxFooter
+		// 
+		richTextBoxFooter.Dock = DockStyle.Bottom;
+		richTextBoxFooter.Location = new Point(0, 132);
+		richTextBoxFooter.Name = "richTextBoxFooter";
+		richTextBoxFooter.Size = new Size(291, 24);
+		richTextBoxFooter.TabIndex = 44;
+		richTextBoxFooter.Text = "";
+		// 
 		// SlipIdForm
 		// 
 		AcceptButton = goButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(291, 158);
+		ClientSize = new Size(291, 156);
+		Controls.Add(versionLabel);
+		Controls.Add(brandingLabel);
+		Controls.Add(richTextBoxFooter);
 		Controls.Add(slipIdLabel);
 		Controls.Add(slipIdTextBox);
 		Controls.Add(goButton);
+		Icon = (Icon)resources.GetObject("$this.Icon");
+		MaximizeBox = false;
+		MinimizeBox = false;
 		Name = "SlipIdForm";
 		StartPosition = FormStartPosition.CenterScreen;
-		Text = "TransactionForm";
+		Text = "Slip ID";
+		Load += SlipIdForm_Load;
 		ResumeLayout(false);
 		PerformLayout();
 	}
@@ -85,4 +127,7 @@ partial class SlipIdForm
 	private Label slipIdLabel;
 	private TextBox slipIdTextBox;
 	private Button goButton;
+	private Label versionLabel;
+	private Label brandingLabel;
+	private RichTextBox richTextBoxFooter;
 }

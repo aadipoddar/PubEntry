@@ -1,5 +1,4 @@
 using PubEntryLibrary.Data;
-using PubEntryLibrary.Models.Printing;
 
 using Syncfusion.XlsIO;
 
@@ -16,20 +15,20 @@ public static class AdvanceWorksheet
 		worksheet.Clear();
 
 		string locationName = await Excel.GetLocationName(selectedLocationId);
-		Excel.SetupHeader(worksheet, dateHeader, locationName, "Advance Details");
+		_rowCount = Excel.SetupHeader(worksheet, dateHeader, locationName, "Advance Details");
 
-		var detailedAdvancePrintModel = await PrintData.LoadAdvancesByTakenForAndLocation(fromDateTime, toDateTime, selectedLocationId);
+		var detailedAdvancePrintModel = await AdvanceData.LoadAdvancesByForDateLocation(fromDateTime, toDateTime, selectedLocationId);
 		FillAdvanceData(worksheet, detailedAdvancePrintModel);
 		FillAdvanceTotals(worksheet, detailedAdvancePrintModel);
 	}
 
-	private static void FillAdvanceData(IWorksheet worksheet, IEnumerable<DetailedAdvancePrintModel> detailedAdvancePrintModels)
+	private static void FillAdvanceData(IWorksheet worksheet, IEnumerable<AdvancePrintModel> detailedAdvancePrintModels)
 	{
-		string[] headers = { "Adv Id", "Name", "Number", "Loyalty", "Adv Pymt DT", "Adv For DT", "Remarks", "Booking Amt", "Adv Paid", "Pay Mode", "Slip No", "Entry Paid", "Slip DT", "Total Amt" };
-		_rowCount = Excel.FillData(worksheet, headers, detailedAdvancePrintModels, FillAdvanceRow);
+		string[] headers = ["Adv Id", "Name", "Number", "Loyalty", "Adv Pymt DT", "Adv For DT", "Remarks", "Booking Amt", "Adv Paid", "Pay Mode", "Slip No", "Entry Paid", "Slip DT", "Total Amt"];
+		_rowCount = Excel.FillData(worksheet, headers, _rowCount, detailedAdvancePrintModels, FillAdvanceRow);
 	}
 
-	private static void FillAdvanceRow(IWorksheet worksheet, DetailedAdvancePrintModel advance, int row)
+	private static void FillAdvanceRow(IWorksheet worksheet, AdvancePrintModel advance, int row)
 	{
 		worksheet.Range[$"A{row}"].Number = advance.Adv_Id;
 		worksheet.Range[$"B{row}"].Text = advance.Name;
@@ -47,24 +46,22 @@ public static class AdvanceWorksheet
 		worksheet.Range[$"N{row}"].Number = advance.Total_Amt;
 	}
 
-	private static void FillAdvanceTotals(IWorksheet worksheet, IEnumerable<DetailedAdvancePrintModel> detailedAdvancePrintModels)
+	private static void FillAdvanceTotals(IWorksheet worksheet, IEnumerable<AdvancePrintModel> detailedAdvancePrintModels)
 	{
-		int totalRow = _rowCount + 5;
+		Excel.SetTotalCell(worksheet, $"B{_rowCount + 2}", "Total Advance :", 20, ExcelHAlign.HAlignCenter);
+		Excel.SetTotalCell(worksheet, $"B{_rowCount + 3}", "Redeemed :", 15, ExcelHAlign.HAlignCenter);
+		Excel.SetTotalCell(worksheet, $"B{_rowCount + 4}", "Not Redeemed :", 15, ExcelHAlign.HAlignCenter);
 
-		Excel.SetTotalCell(worksheet, $"B{totalRow + 2}", "Total Advance :", 20, ExcelHAlign.HAlignCenter);
-		Excel.SetTotalCell(worksheet, $"B{totalRow + 3}", "Redeemed :", 15, ExcelHAlign.HAlignCenter);
-		Excel.SetTotalCell(worksheet, $"B{totalRow + 4}", "Not Redeemed :", 15, ExcelHAlign.HAlignCenter);
+		Excel.SetTotalCell(worksheet, $"D{_rowCount + 2}", detailedAdvancePrintModels.Sum(x => x.Adv_Paid), 20, ExcelHAlign.HAlignRight);
+		Excel.SetTotalCell(worksheet, $"D{_rowCount + 3}", detailedAdvancePrintModels.Where(x => x.Slip_No != "NOT REDEEMED").Sum(x => x.Adv_Paid), 15, ExcelHAlign.HAlignRight);
+		Excel.SetTotalCell(worksheet, $"D{_rowCount + 4}", detailedAdvancePrintModels.Where(x => x.Slip_No == "NOT REDEEMED").Sum(x => x.Adv_Paid), 15, ExcelHAlign.HAlignRight);
 
-		Excel.SetTotalCell(worksheet, $"D{totalRow + 2}", detailedAdvancePrintModels.Sum(x => x.Adv_Paid), 20, ExcelHAlign.HAlignRight);
-		Excel.SetTotalCell(worksheet, $"D{totalRow + 3}", detailedAdvancePrintModels.Where(x => x.Slip_No != "NOT REDEEMED").Sum(x => x.Adv_Paid), 15, ExcelHAlign.HAlignRight);
-		Excel.SetTotalCell(worksheet, $"D{totalRow + 4}", detailedAdvancePrintModels.Where(x => x.Slip_No == "NOT REDEEMED").Sum(x => x.Adv_Paid), 15, ExcelHAlign.HAlignRight);
+		Excel.SetTotalCell(worksheet, $"I{_rowCount + 2}", "Total Booking :", 20, ExcelHAlign.HAlignCenter);
+		Excel.SetTotalCell(worksheet, $"I{_rowCount + 3}", "Redeemed :", 15, ExcelHAlign.HAlignCenter);
+		Excel.SetTotalCell(worksheet, $"I{_rowCount + 4}", "Not Redeemed :", 15, ExcelHAlign.HAlignCenter);
 
-		Excel.SetTotalCell(worksheet, $"I{totalRow + 2}", "Total Booking :", 20, ExcelHAlign.HAlignCenter);
-		Excel.SetTotalCell(worksheet, $"I{totalRow + 3}", "Redeemed :", 15, ExcelHAlign.HAlignCenter);
-		Excel.SetTotalCell(worksheet, $"I{totalRow + 4}", "Not Redeemed :", 15, ExcelHAlign.HAlignCenter);
-
-		Excel.SetTotalCell(worksheet, $"K{totalRow + 2}", detailedAdvancePrintModels.Sum(x => x.Booking_Amt), 20, ExcelHAlign.HAlignRight);
-		Excel.SetTotalCell(worksheet, $"K{totalRow + 3}", detailedAdvancePrintModels.Where(x => x.Slip_No != "NOT REDEEMED").Sum(x => x.Booking_Amt), 15, ExcelHAlign.HAlignRight);
-		Excel.SetTotalCell(worksheet, $"K{totalRow + 4}", detailedAdvancePrintModels.Where(x => x.Slip_No == "NOT REDEEMED").Sum(x => x.Booking_Amt), 15, ExcelHAlign.HAlignRight);
+		Excel.SetTotalCell(worksheet, $"K{_rowCount + 2}", detailedAdvancePrintModels.Sum(x => x.Booking_Amt), 20, ExcelHAlign.HAlignRight);
+		Excel.SetTotalCell(worksheet, $"K{_rowCount + 3}", detailedAdvancePrintModels.Where(x => x.Slip_No != "NOT REDEEMED").Sum(x => x.Booking_Amt), 15, ExcelHAlign.HAlignRight);
+		Excel.SetTotalCell(worksheet, $"K{_rowCount + 4}", detailedAdvancePrintModels.Where(x => x.Slip_No == "NOT REDEEMED").Sum(x => x.Booking_Amt), 15, ExcelHAlign.HAlignRight);
 	}
 }

@@ -52,6 +52,9 @@ partial class AdvanceForm
 		label3 = new Label();
 		locationComboBox = new ComboBox();
 		addButton = new Button();
+		versionLabel = new Label();
+		brandingLabel = new Label();
+		richTextBoxFooter = new RichTextBox();
 		((System.ComponentModel.ISupportInitialize)amountDataGridView).BeginInit();
 		SuspendLayout();
 		// 
@@ -303,12 +306,46 @@ partial class AdvanceForm
 		addButton.UseVisualStyleBackColor = true;
 		addButton.Click += addButton_Click;
 		// 
+		// versionLabel
+		// 
+		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+		versionLabel.AutoSize = true;
+		versionLabel.BackColor = Color.White;
+		versionLabel.Location = new Point(3, 364);
+		versionLabel.Name = "versionLabel";
+		versionLabel.Size = new Size(84, 15);
+		versionLabel.TabIndex = 46;
+		versionLabel.Text = "Version: 0.0.0.0";
+		// 
+		// brandingLabel
+		// 
+		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+		brandingLabel.AutoSize = true;
+		brandingLabel.BackColor = Color.White;
+		brandingLabel.Location = new Point(574, 364);
+		brandingLabel.Name = "brandingLabel";
+		brandingLabel.Size = new Size(76, 15);
+		brandingLabel.TabIndex = 45;
+		brandingLabel.Text = "© AADISOFT";
+		// 
+		// richTextBoxFooter
+		// 
+		richTextBoxFooter.Dock = DockStyle.Bottom;
+		richTextBoxFooter.Location = new Point(0, 358);
+		richTextBoxFooter.Name = "richTextBoxFooter";
+		richTextBoxFooter.Size = new Size(652, 26);
+		richTextBoxFooter.TabIndex = 44;
+		richTextBoxFooter.Text = "";
+		// 
 		// AdvanceForm
 		// 
 		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(652, 361);
+		ClientSize = new Size(652, 384);
+		Controls.Add(versionLabel);
+		Controls.Add(brandingLabel);
+		Controls.Add(richTextBoxFooter);
 		Controls.Add(addButton);
 		Controls.Add(locationComboBox);
 		Controls.Add(label3);
@@ -363,4 +400,7 @@ partial class AdvanceForm
 	private DataGridViewTextBoxColumn Id;
 	private DataGridViewTextBoxColumn PaymentMode;
 	private DataGridViewTextBoxColumn Amount;
+	private Label versionLabel;
+	private Label brandingLabel;
+	private RichTextBox richTextBoxFooter;
 }

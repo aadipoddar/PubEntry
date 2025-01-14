@@ -1,31 +1,38 @@
-﻿using PubEntryLibrary.Models.Printing;
-
-namespace PubEntryLibrary.Data;
+﻿namespace PubEntryLibrary.Data;
 
 public static class AdvanceData
 {
-	public static async Task<int> AdvanceInsert(AdvanceModel advanceModel) =>
-			(await SqlDataAccess.LoadData<int, dynamic>("AdvanceInsert", advanceModel)).FirstOrDefault();
+	public static async Task<int> InsertAdvance(AdvanceModel advanceModel) =>
+			(await SqlDataAccess.LoadData<int, dynamic>(StoredProcedure.InsertAdvance, advanceModel)).FirstOrDefault();
 
-	public static async Task AdvanceUpdate(AdvanceModel advanceModel) =>
-			await SqlDataAccess.SaveData<dynamic>("AdvanceUpdate", advanceModel);
+	public static async Task UpdateAdvance(AdvanceModel advanceModel) =>
+			await SqlDataAccess.SaveData<dynamic>(StoredProcedure.UpdateAdvance, advanceModel);
 
-	public static async Task<int> AdvanceDetailInsert(AdvanceDetailModel advanceDetailModel) =>
-			(await SqlDataAccess.LoadData<int, dynamic>("AdvanceDetailInsert", advanceDetailModel)).FirstOrDefault();
+	public static async Task<int> InsertAdvanceDetail(AdvanceDetailModel advanceDetailModel) =>
+			(await SqlDataAccess.LoadData<int, dynamic>(StoredProcedure.InsertAdvanceDetail, advanceDetailModel)).FirstOrDefault();
 
-	public static async Task<AdvanceModel> LoadAdvanceByDateLocationPerson(int locationId, int personId, DateTime? advanceDate = null) =>
-			(await SqlDataAccess.LoadData<AdvanceModel, dynamic>("LoadAdvanceByDateLocationPerson",
-				new { LocationId = locationId, PersonId = personId, AdvanceDate = advanceDate })).FirstOrDefault();
+	public static async Task DeleteAdvanceDetails(int AdvanceId) =>
+			await SqlDataAccess.SaveData<dynamic>(StoredProcedure.DeleteAdvanceDetails, new { AdvanceId });
 
-	public static async Task<List<AdvanceDetailModel>> LoadAdvanceDetailByAdvanceId(int advanceId) =>
-		await SqlDataAccess.LoadData<AdvanceDetailModel, dynamic>("LoadAdvanceDetailByAdvanceId", new { AdvanceId = advanceId });
+	public static async Task ClearAdvance(int AdvanceId, int TransactionId) =>
+			await SqlDataAccess.SaveData<dynamic>(StoredProcedure.ClearAdvance, new { AdvanceId, TransactionId });
 
-	public static async Task AdvanceDetailDeleteByAdvanceId(int advanceId) =>
-		await SqlDataAccess.SaveData<dynamic>("AdvanceDetailDeleteByAdvanceId", new { AdvanceId = advanceId });
+	public static async Task<AdvanceModel> LoadAdvanceByDateLocationPerson(int LocationId, int PersonId, DateTime? AdvanceDate = null) =>
+			(await SqlDataAccess.LoadData<AdvanceModel, dynamic>(StoredProcedure.LoadAdvanceByDateLocationPerson,
+				new { LocationId, PersonId, AdvanceDate })).FirstOrDefault();
 
-	public static async Task AdvanceClear(int advanceId, int transactionId) =>
-		await SqlDataAccess.SaveData<dynamic>("AdvanceClear", new { Id = advanceId, TransactionId = transactionId });
+	public static async Task<List<AdvanceDetailModel>> LoadAdvanceDetailByAdvanceId(int AdvanceId) =>
+		await SqlDataAccess.LoadData<AdvanceDetailModel, dynamic>(StoredProcedure.LoadAdvanceDetailByAdvanceId, new { AdvanceId });
 
-	public static async Task<List<AdvanceTotalsModel>> LoadTotalsByAdvanceTakenON(DateTime takenOn, int locationId) =>
-		await SqlDataAccess.LoadData<AdvanceTotalsModel, dynamic>("LoadTotalsByAdvanceTakenON", new { TakenOn = takenOn, LocationId = locationId });
+	public static async Task<IEnumerable<AdvancePrintModel>> LoadAdvancesByForDateLocation(DateTime FromDate, DateTime ToDate, int LocationId) =>
+			await SqlDataAccess.LoadData<AdvancePrintModel, dynamic>(StoredProcedure.LoadAdvancesByForDateLocation, new { FromDate, ToDate, LocationId });
+
+	public static async Task<IEnumerable<AdvancePrintModel>> LoadAdvancesByTakenOnLocation(DateTime TakenOn, int LocationId) =>
+			await SqlDataAccess.LoadData<AdvancePrintModel, dynamic>(StoredProcedure.LoadAdvancesByTakenOnLocation, new { TakenOn, LocationId });
+
+	public static async Task<List<AdvancePaymentModeTotalsModel>> LoadAdvancePaymentModeTotalsByTakenOn(DateTime TakenOn, int LocationId) =>
+		await SqlDataAccess.LoadData<AdvancePaymentModeTotalsModel, dynamic>(StoredProcedure.LoadAdvancePaymentModeTotalsByTakenOn, new { TakenOn, LocationId });
+
+	public static async Task<AdvanceTotalsModel> LoadAdvanceTotalsByForDateLocation(DateTime FromDate, DateTime ToDate, int LocationId) =>
+		(await SqlDataAccess.LoadData<AdvanceTotalsModel, dynamic>(StoredProcedure.LoadAdvanceTotalsByForDateLocation, new { FromDate, ToDate, LocationId })).FirstOrDefault();
 }

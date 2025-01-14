@@ -38,6 +38,10 @@ partial class UserForm
 		saveButton = new Button();
 		userComboBox = new ComboBox();
 		statusCheckBox = new CheckBox();
+		versionLabel = new Label();
+		brandingLabel = new Label();
+		richTextBoxFooter = new RichTextBox();
+		adminCheckBox = new CheckBox();
 		SuspendLayout();
 		// 
 		// nameLabel
@@ -103,10 +107,10 @@ partial class UserForm
 		// saveButton
 		// 
 		saveButton.Font = new Font("Segoe UI", 15F);
-		saveButton.Location = new Point(185, 200);
+		saveButton.Location = new Point(338, 194);
 		saveButton.Name = "saveButton";
 		saveButton.Size = new Size(118, 38);
-		saveButton.TabIndex = 5;
+		saveButton.TabIndex = 6;
 		saveButton.Text = "SAVE";
 		saveButton.UseVisualStyleBackColor = true;
 		saveButton.Click += saveButton_Click;
@@ -122,7 +126,7 @@ partial class UserForm
 		userComboBox.Location = new Point(93, 12);
 		userComboBox.Name = "userComboBox";
 		userComboBox.Size = new Size(271, 36);
-		userComboBox.TabIndex = 6;
+		userComboBox.TabIndex = 7;
 		userComboBox.SelectedIndexChanged += userComboBox_SelectedIndexChanged;
 		// 
 		// statusCheckBox
@@ -136,12 +140,58 @@ partial class UserForm
 		statusCheckBox.Text = "Status";
 		statusCheckBox.UseVisualStyleBackColor = true;
 		// 
+		// versionLabel
+		// 
+		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+		versionLabel.AutoSize = true;
+		versionLabel.BackColor = Color.White;
+		versionLabel.Location = new Point(3, 249);
+		versionLabel.Name = "versionLabel";
+		versionLabel.Size = new Size(84, 15);
+		versionLabel.TabIndex = 46;
+		versionLabel.Text = "Version: 0.0.0.0";
+		// 
+		// brandingLabel
+		// 
+		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+		brandingLabel.AutoSize = true;
+		brandingLabel.BackColor = Color.White;
+		brandingLabel.Location = new Point(397, 249);
+		brandingLabel.Name = "brandingLabel";
+		brandingLabel.Size = new Size(76, 15);
+		brandingLabel.TabIndex = 45;
+		brandingLabel.Text = "© AADISOFT";
+		// 
+		// richTextBoxFooter
+		// 
+		richTextBoxFooter.Dock = DockStyle.Bottom;
+		richTextBoxFooter.Location = new Point(0, 243);
+		richTextBoxFooter.Name = "richTextBoxFooter";
+		richTextBoxFooter.Size = new Size(477, 26);
+		richTextBoxFooter.TabIndex = 44;
+		richTextBoxFooter.Text = "";
+		// 
+		// adminCheckBox
+		// 
+		adminCheckBox.AutoSize = true;
+		adminCheckBox.Font = new Font("Segoe UI", 15F);
+		adminCheckBox.Location = new Point(159, 198);
+		adminCheckBox.Name = "adminCheckBox";
+		adminCheckBox.Size = new Size(89, 32);
+		adminCheckBox.TabIndex = 5;
+		adminCheckBox.Text = "Admin";
+		adminCheckBox.UseVisualStyleBackColor = true;
+		// 
 		// UserForm
 		// 
 		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(477, 254);
+		ClientSize = new Size(477, 269);
+		Controls.Add(adminCheckBox);
+		Controls.Add(versionLabel);
+		Controls.Add(brandingLabel);
+		Controls.Add(richTextBoxFooter);
 		Controls.Add(statusCheckBox);
 		Controls.Add(userComboBox);
 		Controls.Add(saveButton);
@@ -171,4 +221,8 @@ partial class UserForm
 	private Button saveButton;
 	private ComboBox userComboBox;
 	private CheckBox statusCheckBox;
+	private Label versionLabel;
+	private Label brandingLabel;
+	private RichTextBox richTextBoxFooter;
+	private CheckBox adminCheckBox;
 }

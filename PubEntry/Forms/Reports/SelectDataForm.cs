@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 
-using PubEntryLibrary.Printing;
+using PubEntryLibrary.Printing.PDF;
 
 namespace PubEntry.Forms.Reports;
 
@@ -13,7 +13,7 @@ public partial class SelectDataForm : Form
 
 	private async Task LoadData()
 	{
-		locationComboBox.DataSource = await CommonData.LoadTableDataByStatus<LocationModel>("LocationTable", true);
+		locationComboBox.DataSource = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location);
 		locationComboBox.DisplayMember = nameof(LocationModel.Name);
 		locationComboBox.ValueMember = nameof(LocationModel.Id);
 
@@ -46,8 +46,9 @@ public partial class SelectDataForm : Form
 
 		LoadingScreen.ShowSplashScreen();
 
-		MemoryStream ms = await PrintReport.PrintSummary(fromDateTimePicker.Value, toDateTimePicker.Value);
-		using (FileStream stream = new(Path.Combine(Path.GetTempPath(), "SummaryReport.pdf"), FileMode.Create, FileAccess.Write)) ms.CopyTo(stream);
+		MemoryStream ms = await SummaryPrint.PrintSummary(fromDateTimePicker.Value, toDateTimePicker.Value);
+		using FileStream stream = new(Path.Combine(Path.GetTempPath(), "SummaryReport.pdf"), FileMode.Create, FileAccess.Write);
+		await ms.CopyToAsync(stream);
 		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\SummaryReport.pdf") { UseShellExecute = true });
 
 		LoadingScreen.CloseForm();

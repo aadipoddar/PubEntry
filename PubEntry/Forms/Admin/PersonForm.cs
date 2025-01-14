@@ -1,8 +1,13 @@
-﻿namespace PubEntry.Forms.Admin;
+﻿using System.Reflection;
+
+namespace PubEntry.Forms.Admin;
 
 public partial class PersonForm : Form
 {
 	public PersonForm() => InitializeComponent();
+
+	private void PersonForm_Load(object sender, EventArgs e) =>
+		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 
 	#region Validation
 	private void textBox_KeyPress(object sender, KeyPressEventArgs e)
@@ -11,19 +16,14 @@ public partial class PersonForm : Form
 			e.Handled = true;
 	}
 
-	private bool ValidateFields()
-	{
-		if (string.IsNullOrEmpty(numberTextBox.Text)) return false;
-		if (string.IsNullOrEmpty(nameTextBox.Text)) return false;
-
-		return true;
-	}
+	private bool ValidateFields() =>
+		!string.IsNullOrEmpty(numberTextBox.Text) && !string.IsNullOrEmpty(nameTextBox.Text);
 	#endregion
 
 	private async void numberTextBox_TextChanged(object sender, EventArgs e)
 	{
 		var foundPerson = await PersonData.LoadPersonByNumber(numberTextBox.Text);
-		if (foundPerson != null)
+		if (foundPerson is not null)
 		{
 			nameTextBox.Text = foundPerson.Name;
 			loyaltyCheckBox.Checked = foundPerson.Loyalty;
@@ -54,7 +54,7 @@ public partial class PersonForm : Form
 				Loyalty = loyaltyCheckBox.Checked
 			};
 
-			await PersonData.PersonUpdate(personModel);
+			await PersonData.UpdatePerson(personModel);
 
 			numberTextBox.Text = string.Empty;
 		}

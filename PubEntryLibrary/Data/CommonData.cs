@@ -2,12 +2,12 @@
 
 public static class CommonData
 {
-	public static async Task<IEnumerable<T>> LoadTableData<T>(string tableName) where T : new() =>
-			await SqlDataAccess.LoadData<T, dynamic>("LoadTableData", new { TableName = tableName });
+	public static async Task<IEnumerable<T>> LoadTableData<T>(string TableName) where T : new() =>
+			await SqlDataAccess.LoadData<T, dynamic>(StoredProcedure.LoadTableData, new { TableName });
 
-	public static async Task<IEnumerable<T>> LoadTableDataById<T>(string tableName, int id) where T : new() =>
-			await SqlDataAccess.LoadData<T, dynamic>("LoadTableDataById", new { TableName = tableName, Id = id });
+	public static async Task<T> LoadTableDataById<T>(string TableName, int Id) where T : new() =>
+			(await SqlDataAccess.LoadData<T, dynamic>(StoredProcedure.LoadTableDataById, new { TableName, Id })).FirstOrDefault();
 
-	public static async Task<IEnumerable<T>> LoadTableDataByStatus<T>(string tableName, bool status) where T : new() =>
-			await SqlDataAccess.LoadData<T, dynamic>("LoadTableDataByStatus", new { TableName = tableName, Status = status });
+	public static async Task<IEnumerable<T>> LoadTableDataByStatus<T>(string TableName, bool Status = true) where T : new() =>
+			await SqlDataAccess.LoadData<T, dynamic>(StoredProcedure.LoadTableDataByStatus, new { TableName, Status });
 }

@@ -8,11 +8,9 @@ namespace PubEntryLibrary.DataAccess;
 
 static class SqlDataAccess
 {
-	static string ConnectionString = $"Server=tcp:goldenpark.database.windows.net,1433;Initial Catalog={Secrets.DatabaseName};Persist Security Info=False;User ID=aadisql;Password={Secrets.DatabasePassword};MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=True;Connection Timeout=30;";
-
 	public static async Task<List<T>> LoadData<T, U>(string storedProcedure, U parameters)
 	{
-		using IDbConnection connection = new SqlConnection(ConnectionString);
+		using IDbConnection connection = new SqlConnection(ConnectionStrings.Local);
 
 		List<T> rows = (await connection.QueryAsync<T>(storedProcedure, parameters,
 			commandType: CommandType.StoredProcedure)).ToList();
@@ -22,7 +20,7 @@ static class SqlDataAccess
 
 	public static async Task SaveData<T>(string storedProcedure, T parameters)
 	{
-		using IDbConnection connection = new SqlConnection(ConnectionString);
+		using IDbConnection connection = new SqlConnection(ConnectionStrings.Local);
 
 		await connection.ExecuteAsync(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
 	}

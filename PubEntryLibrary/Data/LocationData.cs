@@ -2,12 +2,9 @@
 
 public class LocationData
 {
-	public static async Task LocationInsert(LocationModel locationModel) =>
-			await SqlDataAccess.SaveData("LocationInsert", locationModel);
+	public static async Task InsertLocation(LocationModel locationModel) =>
+			await SqlDataAccess.SaveData(StoredProcedure.InsertLocation, locationModel);
 
-	public static async Task LocationUpdate(LocationModel locationModel) =>
-			await SqlDataAccess.SaveData("LocationUpdate", locationModel);
-
-	public static async Task<IEnumerable<LocationModel>> LoadActiveLocations() =>
-			await SqlDataAccess.LoadData<LocationModel, dynamic>("LoadActiveLocations", new { });
+	public static async Task Update_Location(LocationModel locationModel) =>
+			await SqlDataAccess.SaveData(StoredProcedure.UpdateLocation, locationModel);
 }

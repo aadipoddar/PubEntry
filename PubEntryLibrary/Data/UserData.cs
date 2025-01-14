@@ -2,12 +2,12 @@
 
 public class UserData
 {
-	public static async Task UserInsert(UserModel userModel) =>
-			await SqlDataAccess.SaveData("UserInsert", userModel);
+	public static async Task InsertUser(UserModel userModel) =>
+			await SqlDataAccess.SaveData(StoredProcedure.InsertUser, userModel);
 
-	public static async Task UserUpdate(UserModel userModel) =>
-			await SqlDataAccess.SaveData("UserUpdate", userModel);
+	public static async Task UpdateUser(UserModel userModel) =>
+			await SqlDataAccess.SaveData(StoredProcedure.UpdateUser, userModel);
 
-	public static async Task<IEnumerable<UserModel>> LoadActiveUserByLocationId(int locationId) =>
-			await SqlDataAccess.LoadData<UserModel, dynamic>("LoadActiveUserByLocationId", new { LocationId = locationId });
+	public static async Task<List<UserModel>> LoadUsersByLocationId(int LocationId) =>
+			await SqlDataAccess.LoadData<UserModel, dynamic>(StoredProcedure.LoadUsersByLocationId, new { LocationId });
 }

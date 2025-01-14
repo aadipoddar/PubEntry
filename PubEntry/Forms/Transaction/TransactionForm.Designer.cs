@@ -1,6 +1,6 @@
 ﻿namespace PubEntry.Forms.Transaction;
 
-partial class EntryForm
+partial class TransactionForm
 {
 	/// <summary>
 	/// Required designer variable.
@@ -29,7 +29,7 @@ partial class EntryForm
 	private void InitializeComponent()
 	{
 		components = new System.ComponentModel.Container();
-		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(EntryForm));
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TransactionForm));
 		nameTextBox = new TextBox();
 		nameLabel = new Label();
 		numberLabel = new Label();
@@ -219,7 +219,7 @@ partial class EntryForm
 		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 		brandingLabel.AutoSize = true;
 		brandingLabel.BackColor = Color.White;
-		brandingLabel.Location = new Point(493, 501);
+		brandingLabel.Location = new Point(493, 430);
 		brandingLabel.Name = "brandingLabel";
 		brandingLabel.Size = new Size(76, 15);
 		brandingLabel.TabIndex = 28;
@@ -260,7 +260,7 @@ partial class EntryForm
 		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 		versionLabel.AutoSize = true;
 		versionLabel.BackColor = Color.White;
-		versionLabel.Location = new Point(5, 501);
+		versionLabel.Location = new Point(5, 429);
 		versionLabel.Name = "versionLabel";
 		versionLabel.Size = new Size(84, 15);
 		versionLabel.TabIndex = 31;
@@ -441,7 +441,7 @@ partial class EntryForm
 		label2.TabIndex = 41;
 		label2.Text = "Advance";
 		// 
-		// EntryForm
+		// TransactionForm
 		// 
 		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
@@ -477,9 +477,9 @@ partial class EntryForm
 		Controls.Add(nameTextBox);
 		Font = new Font("Segoe UI", 9F);
 		Icon = (Icon)resources.GetObject("$this.Icon");
-		Name = "EntryForm";
+		Name = "TransactionForm";
 		StartPosition = FormStartPosition.CenterScreen;
-		Text = "Dashboard";
+		Text = "Transaction";
 		Load += EntryForm_Load;
 		KeyPress += textBox_KeyPress;
 		advancePanel.ResumeLayout(false);

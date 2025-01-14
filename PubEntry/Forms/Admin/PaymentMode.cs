@@ -1,4 +1,6 @@
-﻿namespace PubEntry.Forms.Admin;
+﻿using System.Reflection;
+
+namespace PubEntry.Forms.Admin;
 
 public partial class PaymentMode : Form
 {
@@ -8,11 +10,13 @@ public partial class PaymentMode : Form
 
 	private async void LoadData()
 	{
-		paymentComboBox.DataSource = await CommonData.LoadTableData<PaymentModeModel>("PaymentModeTable");
+		paymentComboBox.DataSource = await CommonData.LoadTableData<PaymentModeModel>(Table.PaymentMode);
 		paymentComboBox.DisplayMember = nameof(PaymentModeModel.Name);
 		paymentComboBox.ValueMember = nameof(PaymentModeModel.Id);
 
 		paymentComboBox.SelectedIndex = -1;
+
+		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
 	private void paymentComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -29,11 +33,7 @@ public partial class PaymentMode : Form
 		}
 	}
 
-	private bool ValidateForm()
-	{
-		if (nameTextBox.Text == string.Empty) return false;
-		return true;
-	}
+	private bool ValidateForm() => !string.IsNullOrEmpty(nameTextBox.Text);
 
 	private async void saveButton_Click(object sender, EventArgs e)
 	{
@@ -49,11 +49,11 @@ public partial class PaymentMode : Form
 			Status = statusCheckBox.Checked
 		};
 
-		if (paymentComboBox.SelectedIndex == -1) await PaymentModeData.PaymentModeInsert(paymentModeModel);
+		if (paymentComboBox.SelectedIndex == -1) await PaymentModeData.InsertPaymentMode(paymentModeModel);
 		else
 		{
 			paymentModeModel.Id = (paymentComboBox.SelectedItem as PaymentModeModel).Id;
-			await PaymentModeData.PaymentModeUpdate(paymentModeModel);
+			await PaymentModeData.Update_PaymentMode(paymentModeModel);
 		}
 
 		LoadData();

@@ -25,7 +25,7 @@ namespace PubReport.Services
 				UIViewController uiViewController = window.RootViewController;
 				if (uiViewController != null)
 				{
-					QLPreviewController qlPreview = new();
+					QLPreviewController qlPreview = [];
 					QLPreviewItem item = new QLPreviewItemBundle(filename, filePath);
 					qlPreview.DataSource = new PreviewControllerDS(item);
 					uiViewController.PresentViewController((UIViewController)qlPreview, true, null);

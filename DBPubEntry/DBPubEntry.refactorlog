@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="01b21d59-fd1f-4dd7-8bba-b96c8bbac980" ChangeDateTime="01/12/2025 17:02:33">
+    <Property Name="ElementName" Value="[dbo].[AdvanceClear]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[Clear&#x1F;_Advance]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="426a54c8-072b-4358-b14d-bdc4fde35b85" ChangeDateTime="01/12/2025 17:06:37">
+    <Property Name="ElementName" Value="[dbo].[AdvanceDetailDeleteByAdvanceId]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="Delete_AdvanceDetails" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0c6baade-0da9-4a35-894f-50a329760202" ChangeDateTime="01/12/2025 17:09:01">
+    <Property Name="ElementName" Value="[dbo].[AdvanceDetailTable]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="AdvanceDetail" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="437cd249-c737-48da-827e-055428c1b4fc" ChangeDateTime="01/12/2025 17:09:38">
+    <Property Name="ElementName" Value="[dbo].[AdvanceTable]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="Advance" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8a8785c3-c3c8-4378-a90e-7f3d61b21f83" ChangeDateTime="01/12/2025 17:10:14">
+    <Property Name="ElementName" Value="[dbo].[LocationTable]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="Location" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="01bc81b5-bf90-41b7-a40a-6108e6e8d6e1" ChangeDateTime="01/12/2025 17:12:57">
+    <Property Name="ElementName" Value="[dbo].[PaymentModeTable]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="PaymentMode" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f99c12c6-d0a3-4af0-8492-172c65a9f662" ChangeDateTime="01/12/2025 17:13:18">
+    <Property Name="ElementName" Value="[dbo].[PersonTable]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="Person" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b23db882-cd14-46fd-b4cc-a45c16dc0ee4" ChangeDateTime="01/12/2025 17:13:53">
+    <Property Name="ElementName" Value="[dbo].[ReservationTypeTable]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="ReservationType" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c34e89f4-8c76-4a82-91fc-377355ac8e4f" ChangeDateTime="01/12/2025 17:14:34">
+    <Property Name="ElementName" Value="[dbo].[TransactionTable]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[Transaction]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="99dbf7e1-322f-469b-ad06-1c1f23193bf0" ChangeDateTime="01/12/2025 17:14:49">
+    <Property Name="ElementName" Value="[dbo].[UserTable]" />
+    <Property Name="ElementType" Value="SqlTable" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="[User]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="45b02ef1-3b4e-4be8-b1e4-e227d709ea03" ChangeDateTime="01/12/2025 17:21:27">
+    <Property Name="ElementName" Value="[dbo].[AdvanceDetail].[PaymentMode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[AdvanceDetail]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[PaymentModeId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="7f8589bb-c936-4926-a672-d637bc5272e0" ChangeDateTime="01/12/2025 17:21:45">
+    <Property Name="ElementName" Value="[dbo].[Transaction].[ReservationType]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Transaction]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[ReservationTypeId]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2b73b89c-8525-41e9-8183-87b9ac4c285d" ChangeDateTime="01/12/2025 18:03:47">
+    <Property Name="ElementName" Value="[dbo].[AdvanceUpdate]" />
+    <Property Name="ElementType" Value="SqlProcedure" />
+    <Property Name="ParentElementName" Value="[dbo]" />
+    <Property Name="ParentElementType" Value="SqlSchema" />
+    <Property Name="NewName" Value="Update_Advance" />
+  </Operation>
+</Operations>

@@ -5,7 +5,7 @@ using Timer = System.Windows.Forms.Timer;
 
 namespace PubEntry.Forms.Transaction;
 
-public partial class EntryForm : Form
+public partial class TransactionForm : Form
 {
 	#region InactivityTimer
 	private Timer inactivityTimer;
@@ -13,8 +13,10 @@ public partial class EntryForm : Form
 
 	private void InitializeInactivityTimer()
 	{
-		inactivityTimer = new Timer();
-		inactivityTimer.Interval = InactivityLimit;
+		inactivityTimer = new Timer
+		{
+			Interval = InactivityLimit
+		};
 		inactivityTimer.Tick += InactivityTimer_Tick;
 		inactivityTimer.Start();
 	}
@@ -45,14 +47,15 @@ public partial class EntryForm : Form
 	#endregion
 
 	#region InitalLoading
-	private int transactionId, userId, locationId, foundAdvanceId = 0;
+	private readonly int _userId, _locationId;
+	private int transactionId, foundAdvanceId;
 
-	public EntryForm(int locationId, int userId)
+	public TransactionForm(int locationId, int userId)
 	{
 		InitializeComponent();
 
-		this.userId = userId;
-		this.locationId = locationId;
+		_userId = userId;
+		_locationId = locationId;
 	}
 
 	private async void EntryForm_Load(object sender, EventArgs e)
@@ -64,11 +67,11 @@ public partial class EntryForm : Form
 
 	private async Task LoadData()
 	{
-		reservationComboBox.DataSource = await CommonData.LoadTableData<ReservationTypeModel>("ReservationTypeTable");
+		reservationComboBox.DataSource = await CommonData.LoadTableData<ReservationTypeModel>(Table.ReservationType);
 		reservationComboBox.DisplayMember = nameof(ReservationTypeModel.Name);
 		reservationComboBox.ValueMember = nameof(ReservationTypeModel.Id);
 
-		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
+		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 	#endregion
 
@@ -124,7 +127,7 @@ public partial class EntryForm : Form
 		var foundPerson = await PersonData.LoadPersonByNumber(numberTextBox.Text);
 		if (foundPerson is not null)
 		{
-			var foundAdvance = await AdvanceData.LoadAdvanceByDateLocationPerson(locationId, foundPerson.Id);
+			var foundAdvance = await AdvanceData.LoadAdvanceByDateLocationPerson(_locationId, foundPerson.Id);
 			if (foundAdvance is not null)
 			{
 				foundAdvanceId = foundAdvance.Id;
@@ -132,7 +135,7 @@ public partial class EntryForm : Form
 				approvedByTextBox.Text = foundAdvance.ApprovedBy;
 				bookingTextBox.Text = foundAdvance.Booking.ToString();
 				var advanceDetail = await AdvanceData.LoadAdvanceDetailByAdvanceId(foundAdvance.Id);
-				advanceTextBox.Text = advanceDetail.Sum(x => x.Amount).ToString();
+				advanceTextBox.Text = advanceDetail.Sum(x => x?.Amount).ToString();
 
 				return;
 			}
@@ -153,16 +156,16 @@ public partial class EntryForm : Form
 			return;
 		}
 
-		await TransactionInsert();
+		await InsertTransaction();
 
-		if (foundAdvanceId is not 0) await AdvanceData.AdvanceClear(foundAdvanceId, transactionId);
+		if (foundAdvanceId is not 0) await AdvanceData.ClearAdvance(foundAdvanceId, transactionId);
 
 		PrintTransactionThermal();
 
 		ClearForm();
 	}
 
-	private async Task TransactionInsert()
+	private async Task InsertTransaction()
 	{
 		PersonModel personModel = new()
 		{
@@ -172,10 +175,10 @@ public partial class EntryForm : Form
 			Loyalty = loyaltyCheckBox.Checked
 		};
 
-		if (nameTextBox.ReadOnly == false) personModel.Id = await PersonData.PersonInsert(personModel);
-		personModel.Id = await PersonData.PersonUpdate(personModel);
+		if (nameTextBox.ReadOnly == false) personModel.Id = await PersonData.InsertPerson(personModel);
+		personModel.Id = await PersonData.UpdatePerson(personModel);
 
-		transactionId = await TransactionData.TransactionInsert(new TransactionModel
+		transactionId = await TransactionData.InsertTransaction(new TransactionModel
 		{
 			Id = 0,
 			PersonId = personModel.Id,
@@ -185,11 +188,11 @@ public partial class EntryForm : Form
 			Card = (int)Convert.ToInt64(cardTextBox.Text),
 			UPI = (int)Convert.ToInt64(upiTextBox.Text),
 			Amex = (int)Convert.ToInt64(amexTextBox.Text),
-			ReservationType = (reservationComboBox.SelectedItem as ReservationTypeModel).Id,
+			ReservationTypeId = (reservationComboBox.SelectedItem as ReservationTypeModel).Id,
 			DateTime = DateTime.Now,
 			ApprovedBy = approvedByTextBox.Text,
-			LocationId = locationId,
-			UserId = userId
+			LocationId = _locationId,
+			UserId = _userId
 		});
 	}
 
@@ -217,12 +220,7 @@ public partial class EntryForm : Form
 	#region Printing
 	private void PrintTransactionThermal()
 	{
-		PrintDialog printDialog = new();
-		printDialog.Document = printDocumentCustomer;
 		printDocumentCustomer.Print();
-
-		printDialog = new();
-		printDialog.Document = printDocumentMerchant;
 		printDocumentMerchant.Print();
 	}
 

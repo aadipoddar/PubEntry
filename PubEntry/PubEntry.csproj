@@ -64,7 +64,14 @@
 
   <ItemGroup>
     <Using Include="PubEntryLibrary.Data" />
+    <Using Include="PubEntryLibrary.DataAccess" />
     <Using Include="PubEntryLibrary.Models" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Forms\Admin\ReservationTypeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

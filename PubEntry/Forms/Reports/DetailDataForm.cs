@@ -1,7 +1,8 @@
 ﻿using System.Diagnostics;
+using System.Reflection;
 
-using PubEntryLibrary.Printing;
 using PubEntryLibrary.Printing.Excel;
+using PubEntryLibrary.Printing.PDF;
 
 namespace PubEntry.Forms.Reports;
 
@@ -25,58 +26,57 @@ public partial class DetailDataForm : Form
 
 	private async void LoadComponents()
 	{
-		dateLabel.Text = $"{_fromDateTime} - {_toDateTime}";
-		locationNameLabel.Text = $"{(await CommonData.LoadTableDataById<LocationModel>("LocationTable", _locationId)).FirstOrDefault().Name}";
+		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 
-		var detailedTransactionPrintModel = (await PrintData.LoadTransactionsByDateAndLocation(_fromDateTime, _toDateTime, _locationId)).ToList();
+		dateLabel.Text = $"{_fromDateTime} - {_toDateTime}";
+		locationNameLabel.Text = $"{(await CommonData.LoadTableDataById<LocationModel>(Table.Location, _locationId)).Name}";
+
+		var detailedTransactionPrintModel = await TransactionData.LoadTransactionsByDateLocation(_fromDateTime, _toDateTime, _locationId);
 
 		var detailedAdvancePrintModel = _toDateTime.TimeOfDay < TimeSpan.FromHours(17)
-			? (await PrintData.LoadAdvancesByTakenForAndLocation(_fromDateTime.Date, _toDateTime.AddDays(-1).Date.AddHours(23).AddMinutes(59), _locationId)).ToList()
-			: (await PrintData.LoadAdvancesByTakenForAndLocation(_fromDateTime.Date, _toDateTime.Date, _locationId)).ToList();
+			? await AdvanceData.LoadAdvancesByForDateLocation(_fromDateTime.Date, _toDateTime.AddDays(-1).Date.AddHours(23).AddMinutes(59), _locationId)
+			: await AdvanceData.LoadAdvancesByForDateLocation(_fromDateTime.Date, _toDateTime.Date, _locationId);
 
 		transactionDataGridView.DataSource = detailedTransactionPrintModel;
 		foreach (DataGridViewColumn column in transactionDataGridView.Columns)
 		{
-			if (column.Index == 1)
-				column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-			else if (new[] { 0, 4, 5, 6, 7, 8, 9 }.Contains(column.Index))
+			if (new[] { 1, 2 }.Contains(column.Index))
+				column.Visible = false;
+
+			if (new[] { 0, 7, 8, 9, 11, 12 }.Contains(column.Index))
 				column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 		}
 
-		peopleTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.Male + x.Female)}";
-		maleTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.Male)}";
-		femaleTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.Female)}";
-		loyaltyTextBox.Text = $"{detailedTransactionPrintModel.Count(x => x.Loyalty == 'L')}";
+		peopleTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Male + x.Female)}";
+		maleTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Male)}";
+		femaleTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Female)}";
+		loyaltyTextBox.Text = $"{detailedTransactionPrintModel.Count(x => x?.Loyalty == 'L')}";
 
-		amountTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.Cash + x.Card + x.UPI + x.Amex)}";
-		cashTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.Cash)}";
-		cardTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.Card)}";
-		upiTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.UPI)}";
-		amexTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x.Amex)}";
+		amountTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Cash + x.Card + x.UPI + x.Amex)}";
+		cashTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Cash)}";
+		cardTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Card)}";
+		upiTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.UPI)}";
+		amexTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Amex)}";
 
-		advanceTextBox.Text = $"{detailedAdvancePrintModel.Sum(x => x.Adv_Paid)}";
-		redeemedAdvanceTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x.Slip_No != "NOT REDEEMED").Sum(x => x.Adv_Paid)}";
-		notRedeemedAdvanceTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x.Slip_No == "NOT REDEEMED").Sum(x => x.Adv_Paid)}";
+		advanceTextBox.Text = $"{detailedAdvancePrintModel.Sum(x => x?.Adv_Paid)}";
+		redeemedAdvanceTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x?.Slip_No != "NOT REDEEMED").Sum(x => x?.Adv_Paid)}";
+		notRedeemedAdvanceTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x?.Slip_No == "NOT REDEEMED").Sum(x => x?.Adv_Paid)}";
 
-		bookingTextBox.Text = $"{detailedAdvancePrintModel.Sum(x => x.Booking_Amt)}";
-		redeemedBookingTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x.Slip_No != "NOT REDEEMED").Sum(x => x.Booking_Amt)}";
-		notRedeemedBookingTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x.Slip_No == "NOT REDEEMED").Sum(x => x.Booking_Amt)}";
+		bookingTextBox.Text = $"{detailedAdvancePrintModel.Sum(x => x?.Booking_Amt)}";
+		redeemedBookingTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x?.Slip_No != "NOT REDEEMED").Sum(x => x?.Booking_Amt)}";
+		notRedeemedBookingTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x?.Slip_No == "NOT REDEEMED").Sum(x => x?.Booking_Amt)}";
 
 		advanceDataGridView.DataSource = detailedAdvancePrintModel;
 		foreach (DataGridViewColumn column in advanceDataGridView.Columns)
-		{
-			if (column.Index == 1)
-				column.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-			else if (new[] { 0, 7, 8, 10, 11, 13 }.Contains(column.Index))
+			if (new[] { 0, 7, 8, 10, 11, 13 }.Contains(column.Index))
 				column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-		}
 	}
 
 	private void SelectTransactionRows(string slipId)
 	{
 		transactionDataGridView.ClearSelection();
 		foreach (DataGridViewRow row in transactionDataGridView.Rows)
-			if (row.Cells["SlipId"].Value?.ToString() == slipId)
+			if (row.Cells["Id"].Value?.ToString() == slipId)
 			{
 				row.Selected = true;
 				transactionDataGridView.FirstDisplayedScrollingRowIndex = row.Index;
@@ -96,11 +96,9 @@ public partial class DetailDataForm : Form
 	{
 		LoadingScreen.ShowSplashScreen();
 
-		MemoryStream ms = await PrintReport.PrintDetail(_fromDateTime, _toDateTime, _locationId);
-
-		using (FileStream stream = new(Path.Combine(Path.GetTempPath(), "DetailedReport.pdf"), FileMode.Create, FileAccess.Write))
-			ms.WriteTo(stream);
-
+		MemoryStream ms = await DetailPrint.PrintDetail(_fromDateTime, _toDateTime, _locationId);
+		using FileStream stream = new(Path.Combine(Path.GetTempPath(), "DetailedReport.pdf"), FileMode.Create, FileAccess.Write);
+		await ms.CopyToAsync(stream);
 		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\DetailedReport.pdf") { UseShellExecute = true });
 
 		LoadingScreen.CloseForm();
@@ -111,10 +109,8 @@ public partial class DetailDataForm : Form
 		LoadingScreen.ShowSplashScreen();
 
 		MemoryStream ms = await Excel.ExcelExport(_fromDateTime, _toDateTime, _locationId);
-
-		using (FileStream stream = new(Path.Combine(Path.GetTempPath(), "DetailedReportExcel.xlsx"), FileMode.Create, FileAccess.Write))
-			ms.WriteTo(stream);
-
+		using FileStream stream = new(Path.Combine(Path.GetTempPath(), "DetailedReportExcel.xlsx"), FileMode.Create, FileAccess.Write);
+		await ms.CopyToAsync(stream);
 		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\DetailedReportExcel.xlsx") { UseShellExecute = true });
 
 		LoadingScreen.CloseForm();

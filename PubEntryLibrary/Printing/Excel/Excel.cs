@@ -30,80 +30,85 @@ public static class Excel
 	}
 
 	public static async Task<string> GetLocationName(int locationId) =>
-		(await CommonData.LoadTableDataById<LocationModel>("LocationTable", locationId)).FirstOrDefault()?.Name ?? string.Empty;
+		(await CommonData.LoadTableDataById<LocationModel>(Table.Location, locationId)).Name;
 
-	public static void SetupHeader(IWorksheet worksheet, string dateHeader, string locationName, string detailsHeader)
+	public static int SetupHeader(IWorksheet worksheet, string dateHeader, string locationName, string detailsHeader)
 	{
-		worksheet.Range["A1:M1"].Merge();
-		worksheet.Range["A1"].Text = dateHeader;
-		worksheet.Range["A1"].CellStyle.Font.Bold = true;
-		worksheet.Range["A1"].CellStyle.Font.RGBColor = Syncfusion.Drawing.Color.FromArgb(0, 42, 118, 189);
-		worksheet.Range["A1"].CellStyle.Font.Size = 25;
-		worksheet.Range["A1"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-		worksheet.Range["A1"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+		int row = 1;
 
-		worksheet.Range["G2:I2"].Merge();
-		worksheet.Range["G2"].Text = locationName;
-		worksheet.Range["G2"].CellStyle.Font.Bold = true;
-		worksheet.Range["G2"].CellStyle.Font.RGBColor = Syncfusion.Drawing.Color.FromArgb(0, 42, 118, 189);
-		worksheet.Range["G2"].CellStyle.Font.Size = 25;
-		worksheet.Range["G2"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-		worksheet.Range["G2"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+		worksheet.Range[$"A{row}:M{row}"].Merge();
+		worksheet.Range[$"A{row}"].Text = dateHeader;
+		worksheet.Range[$"A{row}"].CellStyle.Font.Bold = true;
+		worksheet.Range[$"A{row}"].CellStyle.Font.RGBColor = Syncfusion.Drawing.Color.FromArgb(0, 42, 118, 189);
+		worksheet.Range[$"A{row}"].CellStyle.Font.Size = 25;
+		worksheet.Range[$"A{row}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+		worksheet.Range[$"A{row}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+		worksheet.Range[$"A{row}"].RowHeight = 47;
 
-		worksheet.Range["E3:I3"].Merge();
-		worksheet.Range["E3"].Text = detailsHeader;
-		worksheet.Range["E3"].CellStyle.Font.Bold = true;
-		worksheet.Range["E3"].CellStyle.Font.RGBColor = Syncfusion.Drawing.Color.FromArgb(0, 42, 118, 189);
-		worksheet.Range["E3"].CellStyle.Font.Size = 25;
-		worksheet.Range["E3"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-		worksheet.Range["E3"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+		row++;
 
-		worksheet.Range["A1"].RowHeight = 47;
-		worksheet.Range["A2"].RowHeight = 15;
-		worksheet.Range["A4"].RowHeight = 15;
+		worksheet.Range[$"G{row}:I{row}"].Merge();
+		worksheet.Range[$"G{row}"].Text = locationName;
+		worksheet.Range[$"G{row}"].CellStyle.Font.Bold = true;
+		worksheet.Range[$"G{row}"].CellStyle.Font.RGBColor = Syncfusion.Drawing.Color.FromArgb(0, 42, 118, 189);
+		worksheet.Range[$"G{row}"].CellStyle.Font.Size = 25;
+		worksheet.Range[$"G{row}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+		worksheet.Range[$"G{row}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+		worksheet.Range[$"A{row}"].RowHeight = 15;
+
+		row++;
+
+		worksheet.Range[$"E{row}:I{row}"].Merge();
+		worksheet.Range[$"E{row}"].Text = detailsHeader;
+		worksheet.Range[$"E{row}"].CellStyle.Font.Bold = true;
+		worksheet.Range[$"E{row}"].CellStyle.Font.RGBColor = Syncfusion.Drawing.Color.FromArgb(0, 42, 118, 189);
+		worksheet.Range[$"E{row}"].CellStyle.Font.Size = 25;
+		worksheet.Range[$"E{row}"].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
+		worksheet.Range[$"E{row}"].CellStyle.VerticalAlignment = ExcelVAlign.VAlignCenter;
+		worksheet.Range[$"A{row}"].RowHeight = 15;
+
+		return ++row;
 	}
 
-	public static int FillData<T>(IWorksheet worksheet, string[] headers, IEnumerable<T> data, Action<IWorksheet, T, int> fillRowAction)
+	public static int FillData<T>(IWorksheet worksheet, string[] headers, int startRow, IEnumerable<T> data, Action<IWorksheet, T, int> fillRowAction)
 	{
 		for (int i = 0; i < headers.Length; i++)
 		{
-			worksheet.Range[4, i + 1].Text = headers[i];
-			worksheet.Range[4, i + 1].ColumnWidth = 12;
-			worksheet.Range[4, i + 1].CellStyle.Color = Syncfusion.Drawing.Color.FromArgb(0, 42, 118, 189);
-			worksheet.Range[4, i + 1].CellStyle.Font.Color = ExcelKnownColors.White;
-			worksheet.Range[4, i + 1].CellStyle.Font.Bold = true;
+			worksheet.Range[startRow, i + 1].Text = headers[i];
+			worksheet.Range[startRow, i + 1].ColumnWidth = 12;
+			worksheet.Range[startRow, i + 1].CellStyle.Color = Syncfusion.Drawing.Color.FromArgb(0, 42, 118, 189);
+			worksheet.Range[startRow, i + 1].CellStyle.Font.Color = ExcelKnownColors.White;
+			worksheet.Range[startRow, i + 1].CellStyle.Font.Bold = true;
 		}
 
-		int rowCount = 1;
 		foreach (var item in data)
-		{
-			fillRowAction(worksheet, item, rowCount + 4);
-			rowCount++;
-		}
+			fillRowAction(worksheet, item, ++startRow);
 
 		SetColumnAlignments(worksheet);
-
-		return rowCount;
+		return ++startRow;
 	}
 
 	public static void SetColumnAlignments(IWorksheet worksheet)
 	{
-		int maxColumns = worksheet.Columns.Length;
+		ExcelHAlign[] alignments = [
+			ExcelHAlign.HAlignCenter,
+			ExcelHAlign.HAlignLeft,
+			ExcelHAlign.HAlignCenter,
+			ExcelHAlign.HAlignCenter,
+			ExcelHAlign.HAlignRight,
+			ExcelHAlign.HAlignRight,
+			ExcelHAlign.HAlignRight,
+			ExcelHAlign.HAlignRight,
+			ExcelHAlign.HAlignRight,
+			ExcelHAlign.HAlignRight,
+			ExcelHAlign.HAlignCenter,
+			ExcelHAlign.HAlignRight,
+			ExcelHAlign.HAlignCenter,
+			ExcelHAlign.HAlignRight
+		];
 
-		if (maxColumns > 0) worksheet.Columns[0].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-		if (maxColumns > 1) worksheet.Columns[1].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignLeft;
-		if (maxColumns > 2) worksheet.Columns[2].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-		if (maxColumns > 3) worksheet.Columns[3].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-		if (maxColumns > 4) worksheet.Columns[4].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
-		if (maxColumns > 5) worksheet.Columns[5].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
-		if (maxColumns > 6) worksheet.Columns[6].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
-		if (maxColumns > 7) worksheet.Columns[7].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
-		if (maxColumns > 8) worksheet.Columns[8].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
-		if (maxColumns > 9) worksheet.Columns[9].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
-		if (maxColumns > 10) worksheet.Columns[10].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-		if (maxColumns > 11) worksheet.Columns[11].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
-		if (maxColumns > 12) worksheet.Columns[12].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignCenter;
-		if (maxColumns > 13) worksheet.Columns[13].CellStyle.HorizontalAlignment = ExcelHAlign.HAlignRight;
+		for (int i = 0; i < worksheet.Columns.Length && i < alignments.Length; i++)
+			worksheet.Columns[i].CellStyle.HorizontalAlignment = alignments[i];
 	}
 
 	public static void SetTotalCell(IWorksheet worksheet, string cellAddress, string text, int fontSize, ExcelHAlign hAlign)

@@ -1,7 +1,5 @@
 ﻿using System.Drawing.Printing;
 
-using PubEntryLibrary.Models.Printing;
-
 namespace PubEntry.Forms.Transaction;
 
 public static class PrintReceipt
@@ -15,7 +13,7 @@ public static class PrintReceipt
 	private static readonly StringFormat center = new(StringFormatFlags.FitBlackBox) { Alignment = StringAlignment.Center };
 	private static readonly StringFormat tabbedFormat = new();
 	private static int startPosition = 10;
-	private static int lowerSpacing = 0;
+	private static int lowerSpacing;
 	private static int maxWidth;
 
 	static PrintReceipt() => tabbedFormat.SetTabStops(0, [100]);
@@ -37,27 +35,27 @@ public static class PrintReceipt
 		DrawString(g, $"--- {copyOf} Copy ---", true);
 	}
 
-	private static void DrawReceiptDetails(Graphics g, ReceiptModel receiptModel)
+	private static void DrawReceiptDetails(Graphics g, TransactionPrintModel receiptModel)
 	{
 		font = regularFont;
-		DrawString(g, $"Receipt No.: {receiptModel.ReceiptId}");
-		DrawString(g, $"DT: {receiptModel.ReceiptDate:dd/MM/yy HH:mm}");
+		DrawString(g, $"Receipt No.: {receiptModel.Id}");
+		DrawString(g, $"DT: {receiptModel.DateTime:dd/MM/yy HH:mm}");
 		DrawString(g, $"Name: {receiptModel.PersonName}");
 		DrawString(g, $"Contact: {receiptModel.PersonNumber}");
-		if (receiptModel.PersonLoyalty) DrawString(g, "Loyalty Member");
+		if (receiptModel.Loyalty == 'L') DrawString(g, "Loyalty Member");
 		DrawString(g, $"Reservation: {receiptModel.Reservation}");
 		DrawString(g, "------------------------", true);
 
-		DrawString(g, $"Total Persons: {receiptModel.TotalPerson}");
+		DrawString(g, $"Total Persons: {receiptModel.Male + receiptModel.Female}");
 		DrawString(g, "Male\tFemale", false, true);
 		DrawString(g, $"{receiptModel.Male}\t{receiptModel.Female}", false, true);
 		DrawString(g, "------------------------", true);
 	}
 
-	private static void DrawPaymentDetails(Graphics g, ReceiptModel receiptModel, int advance)
+	private static void DrawPaymentDetails(Graphics g, TransactionPrintModel receiptModel, int advance)
 	{
 		font = subHeaderFont;
-		DrawString(g, $"Total: {receiptModel.TotalAmount}");
+		DrawString(g, $"Total: {receiptModel.Cash + receiptModel.Card + receiptModel.UPI + receiptModel.Amex + advance}");
 
 
 		font = regularFont;
@@ -69,7 +67,7 @@ public static class PrintReceipt
 		DrawString(g, "------------------------", true);
 	}
 
-	private static void DrawFooter(Graphics g, ReceiptModel receiptModel)
+	private static void DrawFooter(Graphics g, TransactionPrintModel receiptModel)
 	{
 		if (receiptModel.ApprovedBy != string.Empty) DrawString(g, $"Approved By: {receiptModel.ApprovedBy}");
 		DrawString(g, $"Entered By: {receiptModel.EnteredBy}");
@@ -80,7 +78,7 @@ public static class PrintReceipt
 		DrawString(g, "This coupon is to be redeemed");
 		DrawString(g, "until the end of the operations");
 		DrawString(g, "of the particular night:");
-		DrawString(g, $"{receiptModel.ReceiptDate:dd/MM/yy HH:mm}");
+		DrawString(g, $"{receiptModel.DateTime:dd/MM/yy HH:mm}");
 		DrawString(g, "The hotel does not take liability");
 		DrawString(g, "or responsibility if the coupon");
 		DrawString(g, "is lost by the guest");
@@ -88,7 +86,7 @@ public static class PrintReceipt
 
 	public static void DrawGraphics(PrintPageEventArgs e, string copyOf, int transactionId, int advanceId)
 	{
-		ReceiptModel receiptModel = Task.Run(async () => await PrintData.LoadReceiptDetails(transactionId)).Result.FirstOrDefault();
+		TransactionPrintModel receiptModel = Task.Run(async () => await CommonData.LoadTableDataById<TransactionPrintModel>(Views.Transactions, transactionId)).Result;
 
 		var advance = 0;
 		if (advanceId is not 0) advance = Task.Run(async () => await AdvanceData.LoadAdvanceDetailByAdvanceId(advanceId)).Result.Sum(x => x.Amount);

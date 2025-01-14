@@ -1,7 +1,8 @@
 ﻿using PubEntryLibrary.Data;
+using PubEntryLibrary.DataAccess;
 using PubEntryLibrary.Models;
-using PubEntryLibrary.Printing;
 using PubEntryLibrary.Printing.Excel;
+using PubEntryLibrary.Printing.PDF;
 
 using PubReport.Services;
 
@@ -30,7 +31,7 @@ public partial class MainPage : ContentPage
 			fromDatePicker.Date = DateTime.Now.Date.AddDays(-1);
 		}
 
-		locationPicker.ItemsSource = (await LocationData.LoadActiveLocations()).ToList();
+		locationPicker.ItemsSource = (await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location)).ToList();
 		locationPicker.ItemDisplayBinding = new Binding(nameof(LocationModel.Name));
 		locationPicker.SelectedIndex = 0;
 	}
@@ -70,8 +71,8 @@ public partial class MainPage : ContentPage
 	private async Task PrintPDF(bool isDetail = false)
 	{
 		MemoryStream ms;
-		if (isDetail) ms = await PrintReport.PrintDetail(fromDatePicker.Date.Add(fromTimePicker.Time), toDatePicker.Date.Add(toTimePicker.Time), (locationPicker.SelectedItem as LocationModel).Id);
-		else ms = await PrintReport.PrintSummary(fromDatePicker.Date.Add(fromTimePicker.Time), toDatePicker.Date.Add(toTimePicker.Time));
+		if (isDetail) ms = await DetailPrint.PrintDetail(fromDatePicker.Date.Add(fromTimePicker.Time), toDatePicker.Date.Add(toTimePicker.Time), (locationPicker.SelectedItem as LocationModel).Id);
+		else ms = await SummaryPrint.PrintSummary(fromDatePicker.Date.Add(fromTimePicker.Time), toDatePicker.Date.Add(toTimePicker.Time));
 
 		SaveService saveService = new();
 		if (isDetail) saveService.SaveAndView("DetailReport.pdf", "application/pdf", ms);

@@ -1,4 +1,5 @@
-﻿namespace PubEntry.Forms.Admin;
+﻿using System.Reflection;
+namespace PubEntry.Forms.Admin;
 
 public partial class LocationForm : Form
 {
@@ -8,11 +9,13 @@ public partial class LocationForm : Form
 
 	private async void LoadData()
 	{
-		locationComboBox.DataSource = await CommonData.LoadTableData<LocationModel>("LocationTable");
+		locationComboBox.DataSource = await CommonData.LoadTableData<LocationModel>(Table.Location);
 		locationComboBox.DisplayMember = nameof(LocationModel.Name);
 		locationComboBox.ValueMember = nameof(LocationModel.Id);
 
 		locationComboBox.SelectedIndex = -1;
+
+		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
 	private void locationComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -30,12 +33,7 @@ public partial class LocationForm : Form
 		}
 	}
 
-	private bool ValidateForm()
-	{
-		if (nameTextBox.Text == string.Empty) return false;
-
-		return true;
-	}
+	private bool ValidateForm() => !string.IsNullOrEmpty(nameTextBox.Text);
 
 	private async void saveButton_Click(object sender, EventArgs e)
 	{
@@ -51,11 +49,11 @@ public partial class LocationForm : Form
 			Status = statusCheckBox.Checked
 		};
 
-		if (locationComboBox.SelectedIndex == -1) await LocationData.LocationInsert(locationModel);
+		if (locationComboBox.SelectedIndex == -1) await LocationData.InsertLocation(locationModel);
 		else
 		{
 			locationModel.Id = (locationComboBox.SelectedItem as LocationModel).Id;
-			await LocationData.LocationUpdate(locationModel);
+			await LocationData.Update_Location(locationModel);
 		}
 
 		LoadData();

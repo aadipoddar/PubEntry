@@ -9,15 +9,13 @@ namespace PubEntry;
 public partial class Dashboard : Form
 {
 	#region InitialLoading
-	public Dashboard() => InitializeComponent();
-
-	private async void SelectLocation_Load(object sender, EventArgs e)
+	public Dashboard()
 	{
-		await UpdateCheck();
-		await LoadLocationComboBox();
+		InitializeComponent();
+		UpdateCheck();
 	}
 
-	private async Task UpdateCheck()
+	private static async void UpdateCheck()
 	{
 		bool isUpdateAvailable = await AadiSoftUpdater.AadiSoftUpdater.CheckForUpdates("aadipoddar", "PubEntry", Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
@@ -26,18 +24,20 @@ public partial class Dashboard : Form
 				await AadiSoftUpdater.AadiSoftUpdater.UpdateApp("aadipoddar", "PubEntry", "PubEntrySetup", "477557B4-2908-4106-B360-D2D114F02452");
 	}
 
+	private async void SelectLocation_Load(object sender, EventArgs e) => await LoadLocationComboBox();
+
 	private async Task LoadLocationComboBox()
 	{
-		locationComboBox.DataSource = await CommonData.LoadTableDataByStatus<LocationModel>("LocationTable", true);
+		locationComboBox.DataSource = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location, true);
 		locationComboBox.DisplayMember = nameof(LocationModel.Name);
 		locationComboBox.ValueMember = nameof(LocationModel.Id);
 
-		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version.ToString()}";
+		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
 	private async Task LoadUserComboBox()
 	{
-		userComboBox.DataSource = await UserData.LoadActiveUserByLocationId((locationComboBox.SelectedItem as LocationModel).Id);
+		userComboBox.DataSource = await UserData.LoadUsersByLocationId((locationComboBox.SelectedItem as LocationModel).Id);
 		userComboBox.DisplayMember = nameof(UserModel.Name);
 		userComboBox.ValueMember = nameof(UserModel.Id);
 	}
@@ -45,7 +45,7 @@ public partial class Dashboard : Form
 
 	private bool ValidatePassword()
 	{
-		if ((userComboBox.SelectedItem as UserModel).Password == passwordTextBox.Text || passwordTextBox.Text == "admin")
+		if ((userComboBox.SelectedItem as UserModel)?.Password == passwordTextBox.Text)
 		{
 			passwordTextBox.Text = string.Empty;
 			return true;
@@ -68,7 +68,7 @@ public partial class Dashboard : Form
 			return;
 		}
 
-		EntryForm entryForm = new((locationComboBox.SelectedItem as LocationModel).Id, (userComboBox.SelectedItem as UserModel).Id);
+		TransactionForm entryForm = new((locationComboBox.SelectedItem as LocationModel).Id, (userComboBox.SelectedItem as UserModel).Id);
 		entryForm.ShowDialog();
 	}
 
@@ -80,7 +80,7 @@ public partial class Dashboard : Form
 
 	private void adminButton_Click(object sender, EventArgs e)
 	{
-		if (!ValidatePassword())
+		if (!ValidatePassword() || !(userComboBox.SelectedItem as UserModel).Admin)
 		{
 			MessageBox.Show("Incorrect Password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			return;

@@ -28,6 +28,7 @@ partial class AdminPanel
 	/// </summary>
 	private void InitializeComponent()
 	{
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdminPanel));
 		manageLocationButton = new Button();
 		manageUsersButton = new Button();
 		manageTransactionsButton = new Button();
@@ -35,6 +36,10 @@ partial class AdminPanel
 		settingsButton = new Button();
 		paymentModeButton = new Button();
 		advanceButton = new Button();
+		versionLabel = new Label();
+		brandingLabel = new Label();
+		richTextBoxFooter = new RichTextBox();
+		reservationButton = new Button();
 		SuspendLayout();
 		// 
 		// manageLocationButton
@@ -84,10 +89,10 @@ partial class AdminPanel
 		// settingsButton
 		// 
 		settingsButton.Font = new Font("Segoe UI", 15F);
-		settingsButton.Location = new Point(38, 365);
+		settingsButton.Location = new Point(38, 423);
 		settingsButton.Name = "settingsButton";
 		settingsButton.Size = new Size(213, 52);
-		settingsButton.TabIndex = 7;
+		settingsButton.TabIndex = 8;
 		settingsButton.Text = "Settings";
 		settingsButton.UseVisualStyleBackColor = true;
 		// 
@@ -113,11 +118,57 @@ partial class AdminPanel
 		advanceButton.UseVisualStyleBackColor = true;
 		advanceButton.Click += advanceButton_Click;
 		// 
+		// versionLabel
+		// 
+		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+		versionLabel.AutoSize = true;
+		versionLabel.BackColor = Color.White;
+		versionLabel.Location = new Point(0, 496);
+		versionLabel.Name = "versionLabel";
+		versionLabel.Size = new Size(84, 15);
+		versionLabel.TabIndex = 40;
+		versionLabel.Text = "Version: 0.0.0.0";
+		// 
+		// brandingLabel
+		// 
+		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+		brandingLabel.AutoSize = true;
+		brandingLabel.BackColor = Color.White;
+		brandingLabel.Location = new Point(212, 496);
+		brandingLabel.Name = "brandingLabel";
+		brandingLabel.Size = new Size(76, 15);
+		brandingLabel.TabIndex = 39;
+		brandingLabel.Text = "© AADISOFT";
+		// 
+		// richTextBoxFooter
+		// 
+		richTextBoxFooter.Dock = DockStyle.Bottom;
+		richTextBoxFooter.Location = new Point(0, 490);
+		richTextBoxFooter.Name = "richTextBoxFooter";
+		richTextBoxFooter.Size = new Size(292, 26);
+		richTextBoxFooter.TabIndex = 38;
+		richTextBoxFooter.Text = "";
+		// 
+		// reservationButton
+		// 
+		reservationButton.Font = new Font("Segoe UI", 15F);
+		reservationButton.Location = new Point(38, 365);
+		reservationButton.Name = "reservationButton";
+		reservationButton.Size = new Size(213, 52);
+		reservationButton.TabIndex = 7;
+		reservationButton.Text = "Reservation Type";
+		reservationButton.UseVisualStyleBackColor = true;
+		reservationButton.Click += reservationButton_Click;
+		// 
 		// AdminPanel
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(292, 439);
+		ClientSize = new Size(292, 516);
+		Controls.Add(reservationButton);
+		Controls.Add(versionLabel);
+		Controls.Add(brandingLabel);
+		Controls.Add(richTextBoxFooter);
 		Controls.Add(advanceButton);
 		Controls.Add(paymentModeButton);
 		Controls.Add(settingsButton);
@@ -125,10 +176,13 @@ partial class AdminPanel
 		Controls.Add(managePersonsButton);
 		Controls.Add(manageLocationButton);
 		Controls.Add(manageUsersButton);
+		Icon = (Icon)resources.GetObject("$this.Icon");
 		Name = "AdminPanel";
 		StartPosition = FormStartPosition.CenterScreen;
-		Text = "AdminPanel";
+		Text = "Admin Panel";
+		Load += AdminPanel_Load;
 		ResumeLayout(false);
+		PerformLayout();
 	}
 
 	#endregion
@@ -140,4 +194,8 @@ partial class AdminPanel
 	private Button settingsButton;
 	private Button paymentModeButton;
 	private Button advanceButton;
+	private Label versionLabel;
+	private Label brandingLabel;
+	private RichTextBox richTextBoxFooter;
+	private Button reservationButton;
 }

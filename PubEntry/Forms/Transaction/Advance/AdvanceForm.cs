@@ -1,8 +1,10 @@
-﻿namespace PubEntry.Forms.Transaction.Advance;
+﻿using System.Reflection;
+
+namespace PubEntry.Forms.Transaction.Advance;
 
 public partial class AdvanceForm : Form
 {
-	private int foundAdvanceId = 0;
+	private int foundAdvanceId;
 
 	public AdvanceForm() => InitializeComponent();
 
@@ -11,15 +13,16 @@ public partial class AdvanceForm : Form
 
 	private async void LoadData()
 	{
-		locationComboBox.DataSource = await CommonData.LoadTableDataByStatus<LocationModel>("LocationTable", true);
+		locationComboBox.DataSource = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location, true);
 		locationComboBox.DisplayMember = nameof(LocationModel.Name);
 		locationComboBox.ValueMember = nameof(LocationModel.Id);
 
-		paymentComboBox.DataSource = await CommonData.LoadTableDataByStatus<PaymentModeModel>("PaymentModeTable", true);
+		paymentComboBox.DataSource = await CommonData.LoadTableDataByStatus<PaymentModeModel>(Table.PaymentMode, true);
 		paymentComboBox.DisplayMember = nameof(PaymentModeModel.Name);
 		paymentComboBox.ValueMember = nameof(PaymentModeModel.Id);
 
 		advanceDateTimePicker.MinDate = DateTime.Now;
+		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
 	private async void numberTextBox_TextChanged(object sender, EventArgs e)
@@ -65,8 +68,8 @@ public partial class AdvanceForm : Form
 
 				var advanceDetails = await AdvanceData.LoadAdvanceDetailByAdvanceId(foundAdvance.Id);
 				foreach (var item in advanceDetails)
-					amountDataGridView.Rows.Add(item.PaymentMode,
-						(paymentComboBox.DataSource as List<PaymentModeModel>).FirstOrDefault(x => x.Id == item.PaymentMode).Name,
+					amountDataGridView.Rows.Add(item.PaymentModeId,
+						(paymentComboBox.DataSource as List<PaymentModeModel>).FirstOrDefault(x => x?.Id == item.PaymentModeId).Name,
 						item.Amount);
 
 				CalculateTotalAmount();
@@ -121,7 +124,7 @@ public partial class AdvanceForm : Form
 	{
 		if (e.RowIndex == -1) return;
 		amountTextBox.Text = amountDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
-		paymentComboBox.SelectedItem = (paymentComboBox.DataSource as List<PaymentModeModel>).FirstOrDefault(x => x.Id == (int)amountDataGridView.Rows[e.RowIndex].Cells[0].Value);
+		paymentComboBox.SelectedItem = (paymentComboBox.DataSource as List<PaymentModeModel>).FirstOrDefault(x => x?.Id == (int)amountDataGridView.Rows[e.RowIndex].Cells[0].Value);
 		amountDataGridView.Rows.RemoveAt(e.RowIndex);
 		CalculateTotalAmount();
 	}
@@ -146,16 +149,16 @@ public partial class AdvanceForm : Form
 
 		if (foundAdvanceId != 0)
 		{
-			await UpdateAdvanceTable();
+			await UpdateAdvance();
 			await DeleteAndInsertAdvanceDetail();
 		}
 
-		else await InsertIntoAdvanceDetailTable(await InsertIntoAdvanceTable());
+		else await InsertAdvanceDetail(await InsertAdvance());
 
 		ClearForm();
 	}
 
-	private async Task<int> InsertIntoAdvanceTable()
+	private async Task<int> InsertAdvance()
 	{
 		PersonModel personModel = new()
 		{
@@ -165,10 +168,10 @@ public partial class AdvanceForm : Form
 			Loyalty = loyaltyCheckBox.Checked
 		};
 
-		if (nameTextBox.ReadOnly == false) personModel.Id = await PersonData.PersonInsert(personModel);
-		personModel.Id = await PersonData.PersonUpdate(personModel);
+		if (nameTextBox.ReadOnly == false) personModel.Id = await PersonData.InsertPerson(personModel);
+		personModel.Id = await PersonData.UpdatePerson(personModel);
 
-		return await AdvanceData.AdvanceInsert(new AdvanceModel
+		return await AdvanceData.InsertAdvance(new AdvanceModel
 		{
 			Id = 0,
 			LocationId = (locationComboBox.SelectedItem as LocationModel).Id,
@@ -181,8 +184,20 @@ public partial class AdvanceForm : Form
 		});
 	}
 
-	private async Task UpdateAdvanceTable() =>
-		await AdvanceData.AdvanceUpdate(new AdvanceModel
+	private async Task InsertAdvanceDetail(int advanceId)
+	{
+		foreach (DataGridViewRow row in amountDataGridView.Rows)
+			await AdvanceData.InsertAdvanceDetail(new AdvanceDetailModel
+			{
+				Id = 0,
+				AdvanceId = advanceId,
+				PaymentModeId = (int)row.Cells[0].Value,
+				Amount = (int)row.Cells[2].Value
+			});
+	}
+
+	private async Task UpdateAdvance() =>
+		await AdvanceData.UpdateAdvance(new AdvanceModel
 		{
 			Id = foundAdvanceId,
 			LocationId = (locationComboBox.SelectedItem as LocationModel).Id,
@@ -194,33 +209,15 @@ public partial class AdvanceForm : Form
 			TransactionId = 0
 		});
 
-	private async Task InsertIntoAdvanceDetailTable(int advanceId)
-	{
-		foreach (DataGridViewRow row in amountDataGridView.Rows)
-			await AdvanceData.AdvanceDetailInsert(new AdvanceDetailModel
-			{
-				Id = 0,
-				AdvanceId = advanceId,
-				PaymentMode = (int)row.Cells[0].Value,
-				Amount = (int)row.Cells[2].Value
-			});
-	}
-
 	private async Task DeleteAndInsertAdvanceDetail()
 	{
-		await AdvanceData.AdvanceDetailDeleteByAdvanceId(foundAdvanceId);
-		await InsertIntoAdvanceDetailTable(foundAdvanceId);
+		await AdvanceData.DeleteAdvanceDetails(foundAdvanceId);
+		await InsertAdvanceDetail(foundAdvanceId);
 	}
 
 	private void ClearForm()
 	{
 		numberTextBox.Text = string.Empty;
-		bookingTextBox.Text = string.Empty;
-		approvedByTextBox.Text = string.Empty;
-
-		amountDataGridView.Rows.Clear();
-
-		CalculateTotalAmount();
 		numberTextBox.Focus();
 	}
 	#endregion

@@ -28,11 +28,15 @@ partial class PaymentMode
 	/// </summary>
 	private void InitializeComponent()
 	{
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PaymentMode));
 		statusCheckBox = new CheckBox();
 		paymentComboBox = new ComboBox();
 		saveButton = new Button();
 		nameLabel = new Label();
 		nameTextBox = new TextBox();
+		versionLabel = new Label();
+		brandingLabel = new Label();
+		richTextBoxFooter = new RichTextBox();
 		SuspendLayout();
 		// 
 		// statusCheckBox
@@ -89,20 +93,55 @@ partial class PaymentMode
 		nameTextBox.Size = new Size(271, 34);
 		nameTextBox.TabIndex = 24;
 		// 
+		// versionLabel
+		// 
+		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+		versionLabel.AutoSize = true;
+		versionLabel.BackColor = Color.White;
+		versionLabel.Location = new Point(6, 187);
+		versionLabel.Name = "versionLabel";
+		versionLabel.Size = new Size(84, 15);
+		versionLabel.TabIndex = 46;
+		versionLabel.Text = "Version: 0.0.0.0";
+		// 
+		// brandingLabel
+		// 
+		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+		brandingLabel.AutoSize = true;
+		brandingLabel.BackColor = Color.White;
+		brandingLabel.Location = new Point(328, 187);
+		brandingLabel.Name = "brandingLabel";
+		brandingLabel.Size = new Size(76, 15);
+		brandingLabel.TabIndex = 45;
+		brandingLabel.Text = "© AADISOFT";
+		// 
+		// richTextBoxFooter
+		// 
+		richTextBoxFooter.Dock = DockStyle.Bottom;
+		richTextBoxFooter.Location = new Point(0, 181);
+		richTextBoxFooter.Name = "richTextBoxFooter";
+		richTextBoxFooter.Size = new Size(404, 26);
+		richTextBoxFooter.TabIndex = 44;
+		richTextBoxFooter.Text = "";
+		// 
 		// PaymentMode
 		// 
 		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(404, 190);
+		ClientSize = new Size(404, 207);
+		Controls.Add(versionLabel);
+		Controls.Add(brandingLabel);
+		Controls.Add(richTextBoxFooter);
 		Controls.Add(statusCheckBox);
 		Controls.Add(paymentComboBox);
 		Controls.Add(saveButton);
 		Controls.Add(nameLabel);
 		Controls.Add(nameTextBox);
+		Icon = (Icon)resources.GetObject("$this.Icon");
 		Name = "PaymentMode";
 		StartPosition = FormStartPosition.CenterScreen;
-		Text = "PaymentMode";
+		Text = "Payment Mode";
 		Load += PaymentMode_Load;
 		ResumeLayout(false);
 		PerformLayout();
@@ -115,4 +154,7 @@ partial class PaymentMode
 	private Button saveButton;
 	private Label nameLabel;
 	private TextBox nameTextBox;
+	private Label versionLabel;
+	private Label brandingLabel;
+	private RichTextBox richTextBoxFooter;
 }

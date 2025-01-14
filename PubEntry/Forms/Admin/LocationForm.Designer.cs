@@ -34,6 +34,9 @@ partial class LocationForm
 		saveButton = new Button();
 		nameLabel = new Label();
 		nameTextBox = new TextBox();
+		versionLabel = new Label();
+		brandingLabel = new Label();
+		richTextBoxFooter = new RichTextBox();
 		SuspendLayout();
 		// 
 		// statusCheckBox
@@ -90,11 +93,46 @@ partial class LocationForm
 		nameTextBox.Size = new Size(271, 34);
 		nameTextBox.TabIndex = 29;
 		// 
+		// versionLabel
+		// 
+		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+		versionLabel.AutoSize = true;
+		versionLabel.BackColor = Color.White;
+		versionLabel.Location = new Point(3, 175);
+		versionLabel.Name = "versionLabel";
+		versionLabel.Size = new Size(84, 15);
+		versionLabel.TabIndex = 43;
+		versionLabel.Text = "Version: 0.0.0.0";
+		// 
+		// brandingLabel
+		// 
+		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+		brandingLabel.AutoSize = true;
+		brandingLabel.BackColor = Color.White;
+		brandingLabel.Location = new Point(311, 175);
+		brandingLabel.Name = "brandingLabel";
+		brandingLabel.Size = new Size(76, 15);
+		brandingLabel.TabIndex = 42;
+		brandingLabel.Text = "© AADISOFT";
+		// 
+		// richTextBoxFooter
+		// 
+		richTextBoxFooter.Dock = DockStyle.Bottom;
+		richTextBoxFooter.Location = new Point(0, 169);
+		richTextBoxFooter.Name = "richTextBoxFooter";
+		richTextBoxFooter.Size = new Size(392, 26);
+		richTextBoxFooter.TabIndex = 41;
+		richTextBoxFooter.Text = "";
+		// 
 		// LocationForm
 		// 
+		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(392, 170);
+		ClientSize = new Size(392, 195);
+		Controls.Add(versionLabel);
+		Controls.Add(brandingLabel);
+		Controls.Add(richTextBoxFooter);
 		Controls.Add(statusCheckBox);
 		Controls.Add(locationComboBox);
 		Controls.Add(saveButton);
@@ -103,7 +141,7 @@ partial class LocationForm
 		Icon = (Icon)resources.GetObject("$this.Icon");
 		Name = "LocationForm";
 		StartPosition = FormStartPosition.CenterScreen;
-		Text = "LocationForm";
+		Text = "Reservation Type";
 		Load += LocationForm_Load;
 		ResumeLayout(false);
 		PerformLayout();
@@ -116,4 +154,7 @@ partial class LocationForm
 	private Button saveButton;
 	private Label nameLabel;
 	private TextBox nameTextBox;
+	private Label versionLabel;
+	private Label brandingLabel;
+	private RichTextBox richTextBoxFooter;
 }

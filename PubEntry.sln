@@ -11,6 +11,8 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupProject", "SetupProjec
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubReport", "PubReport\PubReport.csproj", "{888235EC-960E-460A-8BCC-9941500C1E16}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DBPubEntry", "DBPubEntry\DBPubEntry.sqlproj", "{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,15 @@ Global
 		{888235EC-960E-460A-8BCC-9941500C1E16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{888235EC-960E-460A-8BCC-9941500C1E16}.Release|Any CPU.Build.0 = Release|Any CPU
 		{888235EC-960E-460A-8BCC-9941500C1E16}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}.DefaultBuild|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}.DefaultBuild|Any CPU.Build.0 = Debug|Any CPU
+		{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}.DefaultBuild|Any CPU.Deploy.0 = Debug|Any CPU
+		{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

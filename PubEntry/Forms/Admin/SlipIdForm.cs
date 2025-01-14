@@ -1,8 +1,13 @@
-﻿namespace PubEntry.Forms.Admin;
+﻿using System.Reflection;
+
+namespace PubEntry.Forms.Admin;
 
 public partial class SlipIdForm : Form
 {
 	public SlipIdForm() => InitializeComponent();
+
+	private void SlipIdForm_Load(object sender, EventArgs e) =>
+		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 
 	private void slipIdTextBox_KeyPress(object sender, KeyPressEventArgs e)
 	{
@@ -10,11 +15,7 @@ public partial class SlipIdForm : Form
 			e.Handled = true;
 	}
 
-	private bool ValidateForm()
-	{
-		if (string.IsNullOrEmpty(slipIdTextBox.Text)) return false;
-		return true;
-	}
+	private bool ValidateForm() => !string.IsNullOrEmpty(slipIdTextBox.Text);
 
 	private async void goButton_Click(object sender, EventArgs e)
 	{
@@ -24,15 +25,14 @@ public partial class SlipIdForm : Form
 			return;
 		}
 
-		TransactionModel transaction = (await CommonData.LoadTableDataById<TransactionModel>("TransactionTable", int.Parse(slipIdTextBox.Text))).FirstOrDefault();
+		TransactionModel transaction = await CommonData.LoadTableDataById<TransactionModel>(Table.Transaction, int.Parse(slipIdTextBox.Text));
 
-		if (transaction == null)
+		if (transaction is null)
 		{
 			MessageBox.Show("Invalid Slip Id", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			return;
 		}
 
-		//UpdateEntryForm updateEntryForm = new(transaction);
-		//updateEntryForm.ShowDialog();
+		// TODO - Update Form
 	}
 }

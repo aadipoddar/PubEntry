@@ -1,5 +1,3 @@
-using PubEntryLibrary.DataAccess;
-
 namespace PubEntry;
 
 internal static class Program
