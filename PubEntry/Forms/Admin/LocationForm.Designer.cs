@@ -141,7 +141,7 @@ partial class LocationForm
 		Icon = (Icon)resources.GetObject("$this.Icon");
 		Name = "LocationForm";
 		StartPosition = FormStartPosition.CenterScreen;
-		Text = "Reservation Type";
+		Text = "Location";
 		Load += LocationForm_Load;
 		ResumeLayout(false);
 		PerformLayout();

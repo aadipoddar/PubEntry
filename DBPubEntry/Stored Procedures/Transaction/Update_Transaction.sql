@@ -7,15 +7,13 @@
     @Card INT,
     @UPI INT,
     @Amex INT,
-    @ReservationType INT,
+    @ReservationTypeId INT,
 	@DateTime DATETIME,
     @ApprovedBy VARCHAR(50),
     @LocationId INT,
     @UserId INT
 AS
 BEGIN
-
-    SET NOCOUNT ON;
 
     UPDATE [Transaction]
     SET
@@ -26,11 +24,10 @@ BEGIN
         Card = @Card,
         UPI = @UPI,
         Amex = @Amex,
-        [ReservationTypeId] = @ReservationType,
+        ReservationTypeId = @ReservationTypeId,
         ApprovedBy = @ApprovedBy,
         LocationId = @LocationId,
         UserId = @UserId
-    OUTPUT INSERTED.Id
     WHERE Id = @Id
 
 END;

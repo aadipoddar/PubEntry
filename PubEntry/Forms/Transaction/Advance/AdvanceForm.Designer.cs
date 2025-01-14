@@ -29,6 +29,7 @@ partial class AdvanceForm
 	private void InitializeComponent()
 	{
 		DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AdvanceForm));
 		numberTextBox = new TextBox();
 		loyaltyCheckBox = new CheckBox();
 		numberLabel = new Label();
@@ -366,6 +367,7 @@ partial class AdvanceForm
 		Controls.Add(numberLabel);
 		Controls.Add(nameLabel);
 		Controls.Add(nameTextBox);
+		Icon = (Icon)resources.GetObject("$this.Icon");
 		Name = "AdvanceForm";
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "Advance Entry";

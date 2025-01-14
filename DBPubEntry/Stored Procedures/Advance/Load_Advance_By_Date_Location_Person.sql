@@ -20,8 +20,8 @@ BEGIN
             (@AdvanceDate IS NULL AND 
                 (
 					--( @CurrentHour >= 17 AND at.AdvanceDate = @CurrentDate ) OR
-                    ( @CurrentHour >= 5 AND at.AdvanceDate = @CurrentDate ) OR
-                    ( @CurrentHour < 5 AND at.AdvanceDate = @PreviousDate)
+                    ( @CurrentHour >= 6 AND at.AdvanceDate = @CurrentDate ) OR
+                    ( @CurrentHour < 6 AND at.AdvanceDate = @PreviousDate)
                 )
             )
             OR (@AdvanceDate IS NOT NULL AND at.AdvanceDate = @AdvanceDate)

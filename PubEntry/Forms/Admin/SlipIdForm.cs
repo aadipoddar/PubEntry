@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 
+using PubEntry.Forms.Transaction;
+
 namespace PubEntry.Forms.Admin;
 
 public partial class SlipIdForm : Form
@@ -33,6 +35,7 @@ public partial class SlipIdForm : Form
 			return;
 		}
 
-		// TODO - Update Form
+		UpdateTransactionForm updateTransactionForm = new(transaction);
+		updateTransactionForm.ShowDialog();
 	}
 }

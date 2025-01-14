@@ -123,7 +123,7 @@ partial class AdminPanel
 		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 		versionLabel.AutoSize = true;
 		versionLabel.BackColor = Color.White;
-		versionLabel.Location = new Point(0, 496);
+		versionLabel.Location = new Point(4, 496);
 		versionLabel.Name = "versionLabel";
 		versionLabel.Size = new Size(84, 15);
 		versionLabel.TabIndex = 40;

@@ -72,6 +72,9 @@
     <Compile Update="Forms\Admin\ReservationTypeForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Forms\Transaction\UpdateTransactionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>
