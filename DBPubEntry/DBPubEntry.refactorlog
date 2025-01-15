@@ -91,4 +91,25 @@
     <Property Name="ParentElementType" Value="SqlSchema" />
     <Property Name="NewName" Value="Update_Advance" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="b4d6e496-fe7d-4411-9c98-297844879113" ChangeDateTime="01/15/2025 14:26:33">
+    <Property Name="ElementName" Value="[dbo].[Setting].[Id]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Setting]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="InactivityTimer" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="d28522c2-7749-4dc2-9930-dd7ed8b7061c" ChangeDateTime="01/15/2025 15:04:17">
+    <Property Name="ElementName" Value="[dbo].[Setting].[InactivityTimer]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Setting]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[InactivityTime]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="fe7ec727-9a21-434f-87e2-4a9a13bf2dcf" ChangeDateTime="01/15/2025 17:43:06">
+    <Property Name="ElementName" Value="[dbo].[Settings].[HeaderFontThermal]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Settings]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="HeaderFontFamilyThermal" />
+  </Operation>
 </Operations>

@@ -95,6 +95,7 @@ partial class AdminPanel
 		settingsButton.TabIndex = 8;
 		settingsButton.Text = "Settings";
 		settingsButton.UseVisualStyleBackColor = true;
+		settingsButton.Click += settingsButton_Click;
 		// 
 		// paymentModeButton
 		// 

@@ -4,11 +4,11 @@ namespace PubEntry.Forms.Transaction;
 
 public static class PrintReceipt
 {
-	private static readonly Font headerFont = new("Arial", 25, FontStyle.Bold);
-	private static readonly Font subHeaderFont = new("Arial", 15, FontStyle.Bold);
-	private static readonly Font regularFont = new("Courier New", 12, FontStyle.Bold);
-	private static readonly Font footerFont = new("Courier New", 8, FontStyle.Bold);
-	private static Font font = regularFont;
+	private static readonly Font _headerFont;
+	private static readonly Font _subHeaderFont;
+	private static readonly Font _regularFont;
+	private static readonly Font _footerFont;
+	private static Font font = _regularFont;
 
 	private static readonly StringFormat center = new(StringFormatFlags.FitBlackBox) { Alignment = StringAlignment.Center };
 	private static readonly StringFormat tabbedFormat = new();
@@ -16,7 +16,17 @@ public static class PrintReceipt
 	private static int lowerSpacing;
 	private static int maxWidth;
 
-	static PrintReceipt() => tabbedFormat.SetTabStops(0, [100]);
+	static PrintReceipt()
+	{
+		var settings = Task.Run(async () => await CommonData.LoadTableDataById<SettingsModel>(Table.Settings, 1)).Result;
+
+		_headerFont = new(settings.HeaderFontFamilyThermal, settings.HeaderFontSizeThermal, (FontStyle)settings.HeaderFontStyleThermal);
+		_subHeaderFont = new(settings.SubHeaderFontFamilyThermal, settings.SubHeaderFontSizeThermal, (FontStyle)settings.SubHeaderFontStyleThermal);
+		_regularFont = new(settings.RegularFontFamilyThermal, settings.RegularFontSizeThermal, (FontStyle)settings.RegularFontStyleThermal);
+		_footerFont = new(settings.FooterFontFamilyThermal, settings.FooterFontSizeThermal, (FontStyle)settings.FooterFontStyleThermal);
+
+		tabbedFormat.SetTabStops(0, [100]);
+	}
 
 	private static void DrawString(Graphics g, string content, bool isCenter = false, bool useTabs = false)
 	{
@@ -28,16 +38,16 @@ public static class PrintReceipt
 
 	private static void DrawHeader(Graphics g, string locationName, string copyOf)
 	{
-		font = headerFont;
+		font = _headerFont;
 		DrawString(g, $"** {locationName} **", true);
 
-		font = subHeaderFont;
+		font = _subHeaderFont;
 		DrawString(g, $"--- {copyOf} Copy ---", true);
 	}
 
 	private static void DrawReceiptDetails(Graphics g, TransactionPrintModel receiptModel)
 	{
-		font = regularFont;
+		font = _regularFont;
 		DrawString(g, $"Receipt No.: {receiptModel.Id}");
 		DrawString(g, $"DT: {receiptModel.DateTime:dd/MM/yy HH:mm}");
 		DrawString(g, $"Name: {receiptModel.PersonName}");
@@ -54,11 +64,11 @@ public static class PrintReceipt
 
 	private static void DrawPaymentDetails(Graphics g, TransactionPrintModel receiptModel, int advance)
 	{
-		font = subHeaderFont;
+		font = _subHeaderFont;
 		DrawString(g, $"Total: {receiptModel.Cash + receiptModel.Card + receiptModel.UPI + receiptModel.Amex + advance}");
 
 
-		font = regularFont;
+		font = _regularFont;
 		if (advance > 0) DrawString(g, $"Advance: {advance}");
 		if (receiptModel.Cash > 0) DrawString(g, $"Cash: {receiptModel.Cash}");
 		if (receiptModel.Card > 0) DrawString(g, $"Card: {receiptModel.Card}");
@@ -72,7 +82,7 @@ public static class PrintReceipt
 		if (receiptModel.ApprovedBy != string.Empty) DrawString(g, $"Approved By: {receiptModel.ApprovedBy}");
 		DrawString(g, $"Entered By: {receiptModel.EnteredBy}");
 
-		font = footerFont;
+		font = _footerFont;
 		DrawString(g, "This coupon is non-transferable");
 		DrawString(g, "to any person or any other outlet.");
 		DrawString(g, "This coupon is to be redeemed");
@@ -93,7 +103,6 @@ public static class PrintReceipt
 
 		Graphics g = e.Graphics;
 		maxWidth = e.PageBounds.Width - 20;
-		startPosition = 10;
 		lowerSpacing = 0;
 
 		DrawHeader(g, receiptModel.LocationName, copyOf);

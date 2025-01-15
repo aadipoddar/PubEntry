@@ -52,4 +52,10 @@ public partial class AdminPanel : Form
 		ReservationTypeForm reservationTypeForm = new();
 		reservationTypeForm.ShowDialog();
 	}
+
+	private void settingsButton_Click(object sender, EventArgs e)
+	{
+		SettingForm settingForm = new();
+		settingForm.ShowDialog();
+	}
 }

@@ -38,7 +38,7 @@ public static class SummaryPrint
 
 		foreach (var location in locations)
 		{
-			font = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
+			font = new PdfStandardFont(PdfFontFamily.Helvetica, 20, PdfFontStyle.Bold);
 
 			text = $"{location.Name}";
 			textWidth = font.MeasureString(text).Width;
@@ -57,7 +57,7 @@ public static class SummaryPrint
 				transactionTotalsModel.Add(new TransactionTotalsModel());
 			}
 
-			font = new PdfStandardFont(PdfFontFamily.Helvetica, 17);
+			font = new PdfStandardFont(PdfFontFamily.Helvetica, 15);
 
 			textElement = new PdfTextElement($"Total People: {transactionTotalsModel.Last().Male + transactionTotalsModel.Last().Female}", font);
 			result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
@@ -119,7 +119,7 @@ public static class SummaryPrint
 				advanceTotalsModel.Add(new AdvanceTotalsModel());
 			}
 
-			font = new PdfStandardFont(PdfFontFamily.Helvetica, 15);
+			font = new PdfStandardFont(PdfFontFamily.Helvetica, 12);
 
 			textElement = new PdfTextElement($"Total Advance: {advanceTotalsModel.Last().TotalAdvance}", font);
 			result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
@@ -131,20 +131,20 @@ public static class SummaryPrint
 			textElement = new PdfTextElement(text, font);
 			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-			textElement = new PdfTextElement($"Redeemed Advance: {advanceTotalsModel.Last().RedeemedAdvance}", font);
+			textElement = new PdfTextElement($"Redeemed: {advanceTotalsModel.Last().RedeemedAdvance}", font);
 			result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-			text = $"Redeemed Booking: {advanceTotalsModel.Last().RedeemedBooking}";
+			text = $"Redeemed: {advanceTotalsModel.Last().RedeemedBooking}";
 			textWidth = font.MeasureString(text).Width;
 			pageWidth = pdfPage.GetClientSize().Width;
 			textX = pageWidth - textWidth;
 			textElement = new PdfTextElement(text, font);
 			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-			textElement = new PdfTextElement($"Not Redeemed Advance: {advanceTotalsModel.Last().NotRedeemedAdvance}", font);
+			textElement = new PdfTextElement($"Not Redeemed: {advanceTotalsModel.Last().NotRedeemedAdvance}", font);
 			result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-			text = $"Not Redeemed Booking: {advanceTotalsModel.Last().NotRedeemedBooking}";
+			text = $"Not Redeemed: {advanceTotalsModel.Last().NotRedeemedBooking}";
 			textWidth = font.MeasureString(text).Width;
 			pageWidth = pdfPage.GetClientSize().Width;
 			textX = pageWidth - textWidth;
@@ -154,7 +154,7 @@ public static class SummaryPrint
 			#endregion
 		}
 
-		font = new PdfStandardFont(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
+		font = new PdfStandardFont(PdfFontFamily.Helvetica, 20, PdfFontStyle.Bold);
 		text = "Grand Total";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
@@ -162,7 +162,7 @@ public static class SummaryPrint
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 20), layoutFormat);
 
-		font = new PdfStandardFont(PdfFontFamily.Helvetica, 17);
+		font = new PdfStandardFont(PdfFontFamily.Helvetica, 15);
 
 		textElement = new PdfTextElement($"Total People: {transactionTotalsModel.Sum(x => x.Male + x.Female)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
@@ -211,6 +211,9 @@ public static class SummaryPrint
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 10), layoutFormat);
 
+
+		font = new PdfStandardFont(PdfFontFamily.Helvetica, 12);
+
 		textElement = new PdfTextElement($"Total Advance: {advanceTotalsModel.Sum(x => x.TotalAdvance)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
@@ -221,20 +224,20 @@ public static class SummaryPrint
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		textElement = new PdfTextElement($"Redeemed Advance: {advanceTotalsModel.Sum(x => x.RedeemedAdvance)}", font);
+		textElement = new PdfTextElement($"Redeemed: {advanceTotalsModel.Sum(x => x.RedeemedAdvance)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-		text = $"Redeemed Booking: {advanceTotalsModel.Sum(x => x.RedeemedBooking)}";
+		text = $"Redeemed: {advanceTotalsModel.Sum(x => x.RedeemedBooking)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		textElement = new PdfTextElement($"Not Redeemed Advance: {advanceTotalsModel.Sum(x => x.NotRedeemedAdvance)}", font);
+		textElement = new PdfTextElement($"Not Redeemed: {advanceTotalsModel.Sum(x => x.NotRedeemedAdvance)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
-		text = $"Not Redeemed Booking: {advanceTotalsModel.Sum(x => x.NotRedeemedBooking)}";
+		text = $"Not Redeemed: {advanceTotalsModel.Sum(x => x.NotRedeemedBooking)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;

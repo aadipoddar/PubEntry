@@ -88,13 +88,10 @@
     <Build Include="Tables\ReservationType.sql" />
     <Build Include="Tables\Transaction.sql" />
     <Build Include="Tables\User.sql" />
-    <Build Include="Views\View_TransactionTotals.sql" />
     <Build Include="Views\View_Advances.sql" />
     <Build Include="Views\View_Transactions.sql" />
     <Build Include="Stored Procedures\Insert_ReservationType.sql" />
     <Build Include="Stored Procedures\Update_ReservationType.sql" />
-    <Build Include="Views\View_AdvanceTotals.sql" />
-    <Build Include="Views\View_AdvancePaymentModeTotals.sql" />
     <Build Include="Stored Procedures\Advance\Clear_Advance.sql" />
     <Build Include="Stored Procedures\Advance\Load_Advance_By_Date_Location_Person.sql" />
     <Build Include="Stored Procedures\Advance\Load_Advance_By_TransactionId.sql" />
@@ -108,6 +105,8 @@
     <Build Include="Stored Procedures\Advance\Update_Advance.sql" />
     <Build Include="Stored Procedures\Transaction\Load_TransactionTotals_By_Date_Location.sql" />
     <Build Include="Stored Procedures\Transaction\Load_Transactions_By_Date_Location.sql" />
+    <Build Include="Tables\Settings.sql" />
+    <Build Include="Stored Procedures\Update_Setting.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishLocations\LocalDBPubEntry.publish.xml" />

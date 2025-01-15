@@ -10,15 +10,13 @@ public static class Table
 	public static string ReservationType => "ReservationType";
 	public static string Transaction => "Transaction";
 	public static string User => "User";
+	public static string Settings => "Settings";
 }
 
 public static class Views
 {
 	public static string Advances => "View_Advances";
-	public static string AdvancePaymentModeTotals => "View_AdvancePaymentModeTotals";
-	public static string AdvanceTotals => "View_AdvanceTotals";
 	public static string Transactions => "View_Transactions";
-	public static string TransactionTotals => "View_TransactionTotals";
 }
 
 public static class StoredProcedure
@@ -53,6 +51,7 @@ public static class StoredProcedure
 	public static string UpdatePerson => "Update_Person";
 	public static string UpdateReservationType => "Update_ReservationType";
 	public static string UpdateUser => "Update_User";
+	public static string UpdateSettings => "Update_Settings";
 
 	public static string LoadTableData => "Load_TableData";
 	public static string LoadTableDataById => "Load_TableData_By_Id";

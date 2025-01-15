@@ -8,15 +8,13 @@ namespace PubEntry.Forms.Transaction;
 public partial class TransactionForm : Form
 {
 	#region InactivityTimer
-	private Timer inactivityTimer;
-	private const int InactivityLimit = 5 * 60 * 1000;
 
-	private void InitializeInactivityTimer()
+	private Timer inactivityTimer;
+
+	private async void InitializeInactivityTimer()
 	{
-		inactivityTimer = new Timer
-		{
-			Interval = InactivityLimit
-		};
+		int InactivityLimit = (await CommonData.LoadTableDataById<SettingsModel>(Table.Settings, 1)).InactivityTime * 60 * 1000;
+		inactivityTimer = new Timer { Interval = InactivityLimit };
 		inactivityTimer.Tick += InactivityTimer_Tick;
 		inactivityTimer.Start();
 	}
@@ -44,9 +42,11 @@ public partial class TransactionForm : Form
 		reservationComboBox.SelectedIndexChanged += ResetInactivityTimer;
 		saveButton.Click += ResetInactivityTimer;
 	}
+
 	#endregion
 
 	#region InitalLoading
+
 	private readonly int _userId, _locationId;
 	private int transactionId, foundAdvanceId;
 
@@ -73,9 +73,11 @@ public partial class TransactionForm : Form
 
 		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
+
 	#endregion
 
 	#region Validation
+
 	private void textBox_KeyPress(object sender, KeyPressEventArgs e)
 	{
 		if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
@@ -99,9 +101,11 @@ public partial class TransactionForm : Form
 
 		return true;
 	}
+
 	#endregion
 
 	#region LoadData
+
 	private async void NumberTextBox_TextChanged(object sender, EventArgs e)
 	{
 		var foundPerson = await PersonData.LoadPersonByNumber(numberTextBox.Text);
@@ -145,9 +149,11 @@ public partial class TransactionForm : Form
 		advancePanel.Visible = false;
 		approvedByTextBox.Text = string.Empty;
 	}
+
 	#endregion
 
 	#region Saving
+
 	private async void SaveButton_Click(object sender, EventArgs e)
 	{
 		if (!ValidateFields())
@@ -182,12 +188,12 @@ public partial class TransactionForm : Form
 		{
 			Id = 0,
 			PersonId = personModel.Id,
-			Male = (int)Convert.ToInt64(maleTextBox.Text),
-			Female = (int)Convert.ToInt64(femaleTextBox.Text),
-			Cash = (int)Convert.ToInt64(cashTextBox.Text),
-			Card = (int)Convert.ToInt64(cardTextBox.Text),
-			UPI = (int)Convert.ToInt64(upiTextBox.Text),
-			Amex = (int)Convert.ToInt64(amexTextBox.Text),
+			Male = int.Parse(maleTextBox.Text),
+			Female = int.Parse(femaleTextBox.Text),
+			Cash = int.Parse(cashTextBox.Text),
+			Card = int.Parse(cardTextBox.Text),
+			UPI = int.Parse(upiTextBox.Text),
+			Amex = int.Parse(amexTextBox.Text),
 			ReservationTypeId = (reservationComboBox.SelectedItem as ReservationTypeModel).Id,
 			DateTime = DateTime.Now,
 			ApprovedBy = approvedByTextBox.Text,
@@ -215,6 +221,7 @@ public partial class TransactionForm : Form
 		upiTextBox.Text = "0";
 		amexTextBox.Text = "0";
 	}
+
 	#endregion
 
 	#region Printing
