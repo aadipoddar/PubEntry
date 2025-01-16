@@ -19,9 +19,8 @@ BEGIN
         AND (
             (@AdvanceDate IS NULL AND 
                 (
-					--( @CurrentHour >= 17 AND at.AdvanceDate = @CurrentDate ) OR
-                    ( @CurrentHour >= 6 AND at.AdvanceDate = @CurrentDate ) OR
-                    ( @CurrentHour < 6 AND at.AdvanceDate = @PreviousDate)
+                    (@CurrentHour >= DATEPART(HOUR, (SELECT PubOpenTime FROM Settings WHERE Id = 1)) AND at.AdvanceDate = @CurrentDate) OR
+                    (@CurrentHour < DATEPART(HOUR, (SELECT PubCloseTime FROM Settings WHERE Id = 1)) AND at.AdvanceDate = @PreviousDate)
                 )
             )
             OR (@AdvanceDate IS NOT NULL AND at.AdvanceDate = @AdvanceDate)

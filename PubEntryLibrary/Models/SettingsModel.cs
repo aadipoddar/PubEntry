@@ -4,6 +4,9 @@ public class SettingsModel
 {
 	public int Id { get; set; }
 
+	public TimeSpan PubOpenTime { get; set; }
+	public TimeSpan PubCloseTime { get; set; }
+
 	public int InactivityTime { get; set; }
 
 	public string HeaderFontFamilyThermal { get; set; }

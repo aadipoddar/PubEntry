@@ -55,7 +55,7 @@ public partial class AdminPanel : Form
 
 	private void settingsButton_Click(object sender, EventArgs e)
 	{
-		SettingForm settingForm = new();
+		SettingsForm settingForm = new();
 		settingForm.ShowDialog();
 	}
 }

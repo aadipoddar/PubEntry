@@ -1,9 +1,9 @@
 ﻿
 namespace PubEntry.Forms.Admin;
 
-public partial class SettingForm : Form
+public partial class SettingsForm : Form
 {
-	public SettingForm() => InitializeComponent();
+	public SettingsForm() => InitializeComponent();
 
 	private async void SettingForm_Load(object sender, EventArgs e) => await LoadData();
 
@@ -51,6 +51,9 @@ public partial class SettingForm : Form
 
 		var settings = (await CommonData.LoadTableData<SettingsModel>(Table.Settings)).FirstOrDefault();
 
+		pubOpenTimePicker.Value = DateTime.Today.Add(settings.PubOpenTime);
+		pubCloseTimePicker.Value = DateTime.Today.Add(settings.PubCloseTime);
+
 		inactivityTimeTextBox.Text = settings.InactivityTime.ToString();
 
 		headerFontFamilyComboBox.SelectedValue = settings.HeaderFontFamilyThermal;
@@ -96,6 +99,9 @@ public partial class SettingForm : Form
 		await SettingsData.UpdateSettings(new SettingsModel
 		{
 			Id = 1,
+
+			PubOpenTime = pubOpenTimePicker.Value.TimeOfDay,
+			PubCloseTime = pubCloseTimePicker.Value.TimeOfDay,
 
 			InactivityTime = int.Parse(inactivityTimeTextBox.Text),
 

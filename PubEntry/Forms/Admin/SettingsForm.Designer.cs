@@ -1,6 +1,6 @@
 ﻿namespace PubEntry.Forms.Admin;
 
-partial class SettingForm
+partial class SettingsForm
 {
 	/// <summary>
 	/// Required designer variable.
@@ -28,7 +28,7 @@ partial class SettingForm
 	/// </summary>
 	private void InitializeComponent()
 	{
-		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingForm));
+		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
 		saveButton = new Button();
 		inactivityTimeTextBox = new TextBox();
 		inactivityTimeLabel = new Label();
@@ -61,13 +61,17 @@ partial class SettingForm
 		label2 = new Label();
 		headerFontSizeTextBox = new TextBox();
 		label1 = new Label();
+		label17 = new Label();
+		label18 = new Label();
+		pubOpenTimePicker = new DateTimePicker();
+		pubCloseTimePicker = new DateTimePicker();
 		thermalGroupBox.SuspendLayout();
 		SuspendLayout();
 		// 
 		// saveButton
 		// 
 		saveButton.Font = new Font("Segoe UI", 12.75F);
-		saveButton.Location = new Point(214, 505);
+		saveButton.Location = new Point(214, 594);
 		saveButton.Name = "saveButton";
 		saveButton.Size = new Size(135, 44);
 		saveButton.TabIndex = 50;
@@ -78,12 +82,12 @@ partial class SettingForm
 		// inactivityTimeTextBox
 		// 
 		inactivityTimeTextBox.Font = new Font("Segoe UI", 12.75F);
-		inactivityTimeTextBox.Location = new Point(255, 21);
+		inactivityTimeTextBox.Location = new Point(245, 108);
 		inactivityTimeTextBox.MaxLength = 5;
 		inactivityTimeTextBox.Name = "inactivityTimeTextBox";
 		inactivityTimeTextBox.PlaceholderText = "Inactivity Time";
 		inactivityTimeTextBox.Size = new Size(77, 30);
-		inactivityTimeTextBox.TabIndex = 1;
+		inactivityTimeTextBox.TabIndex = 3;
 		inactivityTimeTextBox.Text = "5";
 		inactivityTimeTextBox.Click += textBox_Click;
 		inactivityTimeTextBox.KeyPress += textBox_KeyPress;
@@ -92,7 +96,7 @@ partial class SettingForm
 		// 
 		inactivityTimeLabel.AutoSize = true;
 		inactivityTimeLabel.Font = new Font("Segoe UI", 12.75F);
-		inactivityTimeLabel.Location = new Point(22, 24);
+		inactivityTimeLabel.Location = new Point(12, 111);
 		inactivityTimeLabel.Name = "inactivityTimeLabel";
 		inactivityTimeLabel.Size = new Size(215, 23);
 		inactivityTimeLabel.TabIndex = 15;
@@ -128,7 +132,7 @@ partial class SettingForm
 		thermalGroupBox.Controls.Add(label2);
 		thermalGroupBox.Controls.Add(headerFontSizeTextBox);
 		thermalGroupBox.Controls.Add(label1);
-		thermalGroupBox.Location = new Point(12, 60);
+		thermalGroupBox.Location = new Point(13, 166);
 		thermalGroupBox.Name = "thermalGroupBox";
 		thermalGroupBox.Size = new Size(549, 422);
 		thermalGroupBox.TabIndex = 16;
@@ -155,7 +159,7 @@ partial class SettingForm
 		footerFontStyleComboBox.Location = new Point(384, 361);
 		footerFontStyleComboBox.Name = "footerFontStyleComboBox";
 		footerFontStyleComboBox.Size = new Size(151, 31);
-		footerFontStyleComboBox.TabIndex = 13;
+		footerFontStyleComboBox.TabIndex = 31;
 		// 
 		// label14
 		// 
@@ -177,7 +181,7 @@ partial class SettingForm
 		footerFontFamilyComboBox.Location = new Point(11, 361);
 		footerFontFamilyComboBox.Name = "footerFontFamilyComboBox";
 		footerFontFamilyComboBox.Size = new Size(258, 31);
-		footerFontFamilyComboBox.TabIndex = 11;
+		footerFontFamilyComboBox.TabIndex = 29;
 		// 
 		// label15
 		// 
@@ -197,7 +201,7 @@ partial class SettingForm
 		footerFontSizeTextBox.Name = "footerFontSizeTextBox";
 		footerFontSizeTextBox.PlaceholderText = "Inactivity Time";
 		footerFontSizeTextBox.Size = new Size(63, 30);
-		footerFontSizeTextBox.TabIndex = 12;
+		footerFontSizeTextBox.TabIndex = 30;
 		footerFontSizeTextBox.Text = "8";
 		footerFontSizeTextBox.Click += textBox_Click;
 		footerFontSizeTextBox.KeyPress += textBox_KeyPress;
@@ -232,7 +236,7 @@ partial class SettingForm
 		regularFontStyleComboBox.Location = new Point(385, 260);
 		regularFontStyleComboBox.Name = "regularFontStyleComboBox";
 		regularFontStyleComboBox.Size = new Size(151, 31);
-		regularFontStyleComboBox.TabIndex = 10;
+		regularFontStyleComboBox.TabIndex = 28;
 		// 
 		// label9
 		// 
@@ -254,7 +258,7 @@ partial class SettingForm
 		regularFontFamilyComboBox.Location = new Point(12, 260);
 		regularFontFamilyComboBox.Name = "regularFontFamilyComboBox";
 		regularFontFamilyComboBox.Size = new Size(258, 31);
-		regularFontFamilyComboBox.TabIndex = 8;
+		regularFontFamilyComboBox.TabIndex = 26;
 		// 
 		// label11
 		// 
@@ -274,7 +278,7 @@ partial class SettingForm
 		regularFontSizeTextBox.Name = "regularFontSizeTextBox";
 		regularFontSizeTextBox.PlaceholderText = "Inactivity Time";
 		regularFontSizeTextBox.Size = new Size(63, 30);
-		regularFontSizeTextBox.TabIndex = 9;
+		regularFontSizeTextBox.TabIndex = 27;
 		regularFontSizeTextBox.Text = "12";
 		regularFontSizeTextBox.Click += textBox_Click;
 		regularFontSizeTextBox.KeyPress += textBox_KeyPress;
@@ -309,7 +313,7 @@ partial class SettingForm
 		subHeaderFontStyleComboBox.Location = new Point(384, 163);
 		subHeaderFontStyleComboBox.Name = "subHeaderFontStyleComboBox";
 		subHeaderFontStyleComboBox.Size = new Size(151, 31);
-		subHeaderFontStyleComboBox.TabIndex = 7;
+		subHeaderFontStyleComboBox.TabIndex = 25;
 		// 
 		// label5
 		// 
@@ -331,7 +335,7 @@ partial class SettingForm
 		subHeaderFontFamilyComboBox.Location = new Point(11, 163);
 		subHeaderFontFamilyComboBox.Name = "subHeaderFontFamilyComboBox";
 		subHeaderFontFamilyComboBox.Size = new Size(258, 31);
-		subHeaderFontFamilyComboBox.TabIndex = 5;
+		subHeaderFontFamilyComboBox.TabIndex = 23;
 		// 
 		// label6
 		// 
@@ -351,7 +355,7 @@ partial class SettingForm
 		subHeaderFontSizeTextBox.Name = "subHeaderFontSizeTextBox";
 		subHeaderFontSizeTextBox.PlaceholderText = "Inactivity Time";
 		subHeaderFontSizeTextBox.Size = new Size(63, 30);
-		subHeaderFontSizeTextBox.TabIndex = 6;
+		subHeaderFontSizeTextBox.TabIndex = 24;
 		subHeaderFontSizeTextBox.Text = "15";
 		subHeaderFontSizeTextBox.Click += textBox_Click;
 		subHeaderFontSizeTextBox.KeyPress += textBox_KeyPress;
@@ -386,7 +390,7 @@ partial class SettingForm
 		headerFontStyleComboBox.Location = new Point(380, 68);
 		headerFontStyleComboBox.Name = "headerFontStyleComboBox";
 		headerFontStyleComboBox.Size = new Size(151, 31);
-		headerFontStyleComboBox.TabIndex = 4;
+		headerFontStyleComboBox.TabIndex = 22;
 		// 
 		// label3
 		// 
@@ -408,7 +412,7 @@ partial class SettingForm
 		headerFontFamilyComboBox.Location = new Point(7, 68);
 		headerFontFamilyComboBox.Name = "headerFontFamilyComboBox";
 		headerFontFamilyComboBox.Size = new Size(258, 31);
-		headerFontFamilyComboBox.TabIndex = 2;
+		headerFontFamilyComboBox.TabIndex = 20;
 		// 
 		// label2
 		// 
@@ -428,7 +432,7 @@ partial class SettingForm
 		headerFontSizeTextBox.Name = "headerFontSizeTextBox";
 		headerFontSizeTextBox.PlaceholderText = "Inactivity Time";
 		headerFontSizeTextBox.Size = new Size(63, 30);
-		headerFontSizeTextBox.TabIndex = 3;
+		headerFontSizeTextBox.TabIndex = 21;
 		headerFontSizeTextBox.Text = "25";
 		headerFontSizeTextBox.Click += textBox_Click;
 		headerFontSizeTextBox.KeyPress += textBox_KeyPress;
@@ -443,18 +447,66 @@ partial class SettingForm
 		label1.TabIndex = 18;
 		label1.Text = "Size";
 		// 
-		// SettingForm
+		// label17
+		// 
+		label17.AutoSize = true;
+		label17.Font = new Font("Segoe UI", 12.75F);
+		label17.Location = new Point(13, 20);
+		label17.Name = "label17";
+		label17.Size = new Size(129, 23);
+		label17.TabIndex = 52;
+		label17.Text = "Pub Open Time";
+		// 
+		// label18
+		// 
+		label18.AutoSize = true;
+		label18.Font = new Font("Segoe UI", 12.75F);
+		label18.Location = new Point(12, 56);
+		label18.Name = "label18";
+		label18.Size = new Size(128, 23);
+		label18.TabIndex = 54;
+		label18.Text = "Pub Close Time";
+		// 
+		// pubOpenTimePicker
+		// 
+		pubOpenTimePicker.CustomFormat = "hh tt";
+		pubOpenTimePicker.Font = new Font("Segoe UI", 13F);
+		pubOpenTimePicker.Format = DateTimePickerFormat.Custom;
+		pubOpenTimePicker.Location = new Point(245, 14);
+		pubOpenTimePicker.Name = "pubOpenTimePicker";
+		pubOpenTimePicker.ShowUpDown = true;
+		pubOpenTimePicker.Size = new Size(77, 31);
+		pubOpenTimePicker.TabIndex = 1;
+		pubOpenTimePicker.Value = new DateTime(2025, 1, 16, 17, 0, 0, 0);
+		// 
+		// pubCloseTimePicker
+		// 
+		pubCloseTimePicker.CustomFormat = "hh tt";
+		pubCloseTimePicker.Font = new Font("Segoe UI", 13F);
+		pubCloseTimePicker.Format = DateTimePickerFormat.Custom;
+		pubCloseTimePicker.Location = new Point(245, 51);
+		pubCloseTimePicker.Name = "pubCloseTimePicker";
+		pubCloseTimePicker.ShowUpDown = true;
+		pubCloseTimePicker.Size = new Size(77, 31);
+		pubCloseTimePicker.TabIndex = 2;
+		pubCloseTimePicker.Value = new DateTime(2025, 1, 16, 5, 0, 0, 0);
+		// 
+		// SettingsForm
 		// 
 		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(574, 564);
+		ClientSize = new Size(574, 650);
+		Controls.Add(pubCloseTimePicker);
+		Controls.Add(pubOpenTimePicker);
+		Controls.Add(label18);
+		Controls.Add(label17);
 		Controls.Add(thermalGroupBox);
 		Controls.Add(inactivityTimeTextBox);
 		Controls.Add(inactivityTimeLabel);
 		Controls.Add(saveButton);
 		Icon = (Icon)resources.GetObject("$this.Icon");
-		Name = "SettingForm";
+		Name = "SettingsForm";
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "Settings";
 		Load += SettingForm_Load;
@@ -498,4 +550,8 @@ partial class SettingForm
 	private Label label15;
 	private TextBox footerFontSizeTextBox;
 	private Label label16;
+	private Label label17;
+	private Label label18;
+	private DateTimePicker pubOpenTimePicker;
+	private DateTimePicker pubCloseTimePicker;
 }

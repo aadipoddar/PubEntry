@@ -17,15 +17,17 @@ public partial class SelectDataForm : Form
 		locationComboBox.DisplayMember = nameof(LocationModel.Name);
 		locationComboBox.ValueMember = nameof(LocationModel.Id);
 
-		if (DateTime.Now.Hour >= 17)
+		var settings = await CommonData.LoadTableDataById<SettingsModel>(Table.Settings, 1);
+
+		if (DateTime.Now.Hour >= settings.PubOpenTime.Hours)
 		{
-			toDateTimePicker.Value = DateTime.Now.Date.AddDays(1).AddHours(5);
-			fromDateTimePicker.Value = DateTime.Now.Date.AddHours(17);
+			toDateTimePicker.Value = DateTime.Now.Date.AddDays(1).AddHours(settings.PubCloseTime.Hours);
+			fromDateTimePicker.Value = DateTime.Now.Date.AddHours(settings.PubOpenTime.Hours);
 		}
 		else
 		{
-			toDateTimePicker.Value = DateTime.Now.Date.AddHours(5);
-			fromDateTimePicker.Value = DateTime.Now.Date.AddDays(-1).AddHours(17);
+			toDateTimePicker.Value = DateTime.Now.Date.AddHours(settings.PubCloseTime.Hours);
+			fromDateTimePicker.Value = DateTime.Now.Date.AddDays(-1).AddHours(settings.PubOpenTime.Hours);
 		}
 
 		takeOnDatePicker.Value = DateTime.Now.Date;

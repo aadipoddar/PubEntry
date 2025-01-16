@@ -1,5 +1,9 @@
 ﻿CREATE PROCEDURE Update_Settings
 	@Id INT,
+
+	@PubOpenTime TIME,
+	@PubCloseTime TIME,
+
 	@InactivityTime INT,
 
 	@HeaderFontFamilyThermal VARCHAR(20),
@@ -22,6 +26,9 @@ BEGIN
 
 	UPDATE Settings
 	SET
+		PubOpenTime = @PubOpenTime,
+		PubCloseTime = @PubCloseTime,
+
 		InactivityTime = @InactivityTime,
 
 		HeaderFontFamilyThermal = @HeaderFontFamilyThermal,
