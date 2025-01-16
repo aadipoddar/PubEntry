@@ -51,9 +51,11 @@ public static class StoredProcedure
 	public static string UpdatePerson => "Update_Person";
 	public static string UpdateReservationType => "Update_ReservationType";
 	public static string UpdateUser => "Update_User";
-	public static string UpdateSettings => "Update_Settings";
 
 	public static string LoadTableData => "Load_TableData";
 	public static string LoadTableDataById => "Load_TableData_By_Id";
 	public static string LoadTableDataByStatus => "Load_TableData_By_Status";
+
+	public static string LoadSettingsByKey => "Load_Settings_By_Key";
+	public static string UpdateSettings => "Update_Settings";
 }

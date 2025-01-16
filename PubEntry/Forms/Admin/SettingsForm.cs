@@ -1,5 +1,4 @@
-﻿
-namespace PubEntry.Forms.Admin;
+﻿namespace PubEntry.Forms.Admin;
 
 public partial class SettingsForm : Form
 {
@@ -49,28 +48,26 @@ public partial class SettingsForm : Form
 		footerFontStyleComboBox.DisplayMember = nameof(FontStyleItem.DisplayName);
 		footerFontStyleComboBox.ValueMember = nameof(FontStyleItem.Value);
 
-		var settings = (await CommonData.LoadTableData<SettingsModel>(Table.Settings)).FirstOrDefault();
+		pubOpenTimePicker.Value = DateTime.Today.Add(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)));
+		pubCloseTimePicker.Value = DateTime.Today.Add(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)));
 
-		pubOpenTimePicker.Value = DateTime.Today.Add(settings.PubOpenTime);
-		pubCloseTimePicker.Value = DateTime.Today.Add(settings.PubCloseTime);
+		inactivityTimeTextBox.Text = await SettingsData.LoadSettingsByKey(SettingsKeys.InactivityTime);
 
-		inactivityTimeTextBox.Text = settings.InactivityTime.ToString();
+		headerFontFamilyComboBox.SelectedValue = await SettingsData.LoadSettingsByKey(SettingsKeys.HeaderFontFamilyThermal);
+		headerFontSizeTextBox.Text = await SettingsData.LoadSettingsByKey(SettingsKeys.HeaderFontSizeThermal);
+		headerFontStyleComboBox.SelectedValue = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.HeaderFontStyleThermal));
 
-		headerFontFamilyComboBox.SelectedValue = settings.HeaderFontFamilyThermal;
-		headerFontSizeTextBox.Text = settings.HeaderFontSizeThermal.ToString();
-		headerFontStyleComboBox.SelectedValue = settings.HeaderFontStyleThermal;
+		subHeaderFontFamilyComboBox.SelectedValue = await SettingsData.LoadSettingsByKey(SettingsKeys.SubHeaderFontFamilyThermal);
+		subHeaderFontSizeTextBox.Text = await SettingsData.LoadSettingsByKey(SettingsKeys.SubHeaderFontSizeThermal);
+		subHeaderFontStyleComboBox.SelectedValue = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.SubHeaderFontStyleThermal));
 
-		subHeaderFontFamilyComboBox.SelectedValue = settings.SubHeaderFontFamilyThermal;
-		subHeaderFontSizeTextBox.Text = settings.SubHeaderFontSizeThermal.ToString();
-		subHeaderFontStyleComboBox.SelectedValue = settings.SubHeaderFontStyleThermal;
+		regularFontFamilyComboBox.SelectedValue = await SettingsData.LoadSettingsByKey(SettingsKeys.RegularFontFamilyThermal);
+		regularFontSizeTextBox.Text = await SettingsData.LoadSettingsByKey(SettingsKeys.RegularFontSizeThermal);
+		regularFontStyleComboBox.SelectedValue = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.RegularFontStyleThermal));
 
-		regularFontFamilyComboBox.SelectedValue = settings.RegularFontFamilyThermal;
-		regularFontSizeTextBox.Text = settings.RegularFontSizeThermal.ToString();
-		regularFontStyleComboBox.SelectedValue = settings.RegularFontStyleThermal;
-
-		footerFontFamilyComboBox.SelectedValue = settings.FooterFontFamilyThermal;
-		footerFontSizeTextBox.Text = settings.FooterFontSizeThermal.ToString();
-		footerFontStyleComboBox.SelectedValue = settings.FooterFontStyleThermal;
+		footerFontFamilyComboBox.SelectedValue = await SettingsData.LoadSettingsByKey(SettingsKeys.FooterFontFamilyThermal);
+		footerFontSizeTextBox.Text = await SettingsData.LoadSettingsByKey(SettingsKeys.FooterFontSizeThermal);
+		footerFontStyleComboBox.SelectedValue = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.FooterFontStyleThermal));
 	}
 
 	private void textBox_KeyPress(object sender, KeyPressEventArgs e)
@@ -96,31 +93,31 @@ public partial class SettingsForm : Form
 			return;
 		}
 
-		await SettingsData.UpdateSettings(new SettingsModel
-		{
-			Id = 1,
+		List<SettingsModel> settings =
+		[
+			new SettingsModel { Id = 1, Key = SettingsKeys.PubOpenTime, Value = pubOpenTimePicker.Value.TimeOfDay.ToString() },
+			new SettingsModel { Id = 2, Key = SettingsKeys.PubCloseTime, Value = pubCloseTimePicker.Value.TimeOfDay.ToString() },
 
-			PubOpenTime = pubOpenTimePicker.Value.TimeOfDay,
-			PubCloseTime = pubCloseTimePicker.Value.TimeOfDay,
+			new SettingsModel { Id = 3, Key = SettingsKeys.InactivityTime, Value = inactivityTimeTextBox.Text },
 
-			InactivityTime = int.Parse(inactivityTimeTextBox.Text),
+			new SettingsModel { Id = 4, Key = SettingsKeys.HeaderFontFamilyThermal, Value = headerFontFamilyComboBox.SelectedValue.ToString() },
+			new SettingsModel { Id = 5, Key = SettingsKeys.HeaderFontSizeThermal, Value = headerFontSizeTextBox.Text },
+			new SettingsModel { Id = 6, Key = SettingsKeys.HeaderFontStyleThermal, Value = headerFontStyleComboBox.SelectedValue.ToString() },
 
-			HeaderFontFamilyThermal = headerFontFamilyComboBox.SelectedValue.ToString(),
-			HeaderFontSizeThermal = int.Parse(headerFontSizeTextBox.Text),
-			HeaderFontStyleThermal = int.Parse(headerFontStyleComboBox.SelectedValue.ToString()),
+			new SettingsModel { Id = 7, Key = SettingsKeys.SubHeaderFontFamilyThermal, Value = subHeaderFontFamilyComboBox.SelectedValue.ToString() },
+			new SettingsModel { Id = 8, Key = SettingsKeys.SubHeaderFontSizeThermal, Value = subHeaderFontSizeTextBox.Text },
+			new SettingsModel { Id = 9, Key = SettingsKeys.SubHeaderFontStyleThermal, Value = subHeaderFontStyleComboBox.SelectedValue.ToString() },
 
-			SubHeaderFontFamilyThermal = subHeaderFontFamilyComboBox.SelectedValue.ToString(),
-			SubHeaderFontSizeThermal = int.Parse(subHeaderFontSizeTextBox.Text),
-			SubHeaderFontStyleThermal = int.Parse(subHeaderFontStyleComboBox.SelectedValue.ToString()),
+			new SettingsModel { Id = 10, Key = SettingsKeys.RegularFontFamilyThermal, Value = regularFontFamilyComboBox.SelectedValue.ToString() },
+			new SettingsModel { Id = 11, Key = SettingsKeys.RegularFontSizeThermal, Value = regularFontSizeTextBox.Text },
+			new SettingsModel { Id = 12, Key = SettingsKeys.RegularFontStyleThermal, Value = regularFontStyleComboBox.SelectedValue.ToString() },
 
-			RegularFontFamilyThermal = regularFontFamilyComboBox.SelectedValue.ToString(),
-			RegularFontSizeThermal = int.Parse(regularFontSizeTextBox.Text),
-			RegularFontStyleThermal = int.Parse(regularFontStyleComboBox.SelectedValue.ToString()),
+			new SettingsModel { Id = 13, Key = SettingsKeys.FooterFontFamilyThermal, Value = footerFontFamilyComboBox.SelectedValue.ToString() },
+			new SettingsModel { Id = 14, Key = SettingsKeys.FooterFontSizeThermal, Value = footerFontSizeTextBox.Text },
+			new SettingsModel { Id = 15, Key = SettingsKeys.FooterFontStyleThermal, Value = footerFontStyleComboBox.SelectedValue.ToString() },
+		];
 
-			FooterFontFamilyThermal = footerFontFamilyComboBox.SelectedValue.ToString(),
-			FooterFontSizeThermal = int.Parse(footerFontSizeTextBox.Text),
-			FooterFontStyleThermal = int.Parse(footerFontStyleComboBox.SelectedValue.ToString())
-		});
+		foreach (var setting in settings) await SettingsData.UpdateSettings(setting);
 
 		Close();
 	}

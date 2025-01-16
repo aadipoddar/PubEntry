@@ -13,7 +13,7 @@ public partial class TransactionForm : Form
 
 	private async void InitializeInactivityTimer()
 	{
-		int InactivityLimit = (await CommonData.LoadTableDataById<SettingsModel>(Table.Settings, 1)).InactivityTime * 60 * 1000;
+		int InactivityLimit = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.InactivityTime)) * 60 * 1000;
 		inactivityTimer = new Timer { Interval = InactivityLimit };
 		inactivityTimer.Tick += InactivityTimer_Tick;
 		inactivityTimer.Start();
@@ -104,7 +104,7 @@ public partial class TransactionForm : Form
 
 	#endregion
 
-	#region LoadData
+	#region LoadAdvanceData
 
 	private async void NumberTextBox_TextChanged(object sender, EventArgs e)
 	{

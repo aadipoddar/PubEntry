@@ -18,12 +18,21 @@ public static class PrintReceipt
 
 	static PrintReceipt()
 	{
-		var settings = Task.Run(async () => await CommonData.LoadTableDataById<SettingsModel>(Table.Settings, 1)).Result;
+		_headerFont = new(Task.Run(async () => await SettingsData.LoadSettingsByKey(SettingsKeys.HeaderFontFamilyThermal)).Result.ToString(),
+			int.Parse(Task.Run(async () => await SettingsData.LoadSettingsByKey(SettingsKeys.HeaderFontSizeThermal)).Result),
+			(FontStyle)int.Parse(Task.Run(async () => await SettingsData.LoadSettingsByKey(SettingsKeys.HeaderFontStyleThermal)).Result));
 
-		_headerFont = new(settings.HeaderFontFamilyThermal, settings.HeaderFontSizeThermal, (FontStyle)settings.HeaderFontStyleThermal);
-		_subHeaderFont = new(settings.SubHeaderFontFamilyThermal, settings.SubHeaderFontSizeThermal, (FontStyle)settings.SubHeaderFontStyleThermal);
-		_regularFont = new(settings.RegularFontFamilyThermal, settings.RegularFontSizeThermal, (FontStyle)settings.RegularFontStyleThermal);
-		_footerFont = new(settings.FooterFontFamilyThermal, settings.FooterFontSizeThermal, (FontStyle)settings.FooterFontStyleThermal);
+		_subHeaderFont = new(Task.Run(async () => await SettingsData.LoadSettingsByKey(SettingsKeys.SubHeaderFontFamilyThermal)).Result.ToString(),
+			int.Parse(Task.Run(async () => await SettingsData.LoadSettingsByKey(SettingsKeys.SubHeaderFontSizeThermal)).Result),
+			(FontStyle)int.Parse(Task.Run(async () => await SettingsData.LoadSettingsByKey(SettingsKeys.SubHeaderFontStyleThermal)).Result));
+
+		_regularFont = new(Task.Run(async () => await SettingsData.LoadSettingsByKey(SettingsKeys.RegularFontFamilyThermal)).Result.ToString(),
+			int.Parse(Task.Run(async () => await SettingsData.LoadSettingsByKey(SettingsKeys.RegularFontSizeThermal)).Result),
+			(FontStyle)int.Parse(Task.Run(async () => await SettingsData.LoadSettingsByKey(SettingsKeys.RegularFontStyleThermal)).Result));
+
+		_footerFont = new(Task.Run(async () => await SettingsData.LoadSettingsByKey(SettingsKeys.FooterFontFamilyThermal)).Result.ToString(),
+			int.Parse(Task.Run(async () => await SettingsData.LoadSettingsByKey(SettingsKeys.FooterFontSizeThermal)).Result),
+			(FontStyle)int.Parse(Task.Run(async () => await SettingsData.LoadSettingsByKey(SettingsKeys.FooterFontStyleThermal)).Result));
 
 		tabbedFormat.SetTabStops(0, [100]);
 	}

@@ -19,15 +19,15 @@ public partial class SelectDataForm : Form
 
 		var settings = await CommonData.LoadTableDataById<SettingsModel>(Table.Settings, 1);
 
-		if (DateTime.Now.Hour >= settings.PubOpenTime.Hours)
+		if (DateTime.Now.Hour >= TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours)
 		{
-			toDateTimePicker.Value = DateTime.Now.Date.AddDays(1).AddHours(settings.PubCloseTime.Hours);
-			fromDateTimePicker.Value = DateTime.Now.Date.AddHours(settings.PubOpenTime.Hours);
+			toDateTimePicker.Value = DateTime.Now.Date.AddDays(1).AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)).Hours);
+			fromDateTimePicker.Value = DateTime.Now.Date.AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours);
 		}
 		else
 		{
-			toDateTimePicker.Value = DateTime.Now.Date.AddHours(settings.PubCloseTime.Hours);
-			fromDateTimePicker.Value = DateTime.Now.Date.AddDays(-1).AddHours(settings.PubOpenTime.Hours);
+			toDateTimePicker.Value = DateTime.Now.Date.AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)).Hours);
+			fromDateTimePicker.Value = DateTime.Now.Date.AddDays(-1).AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours);
 		}
 
 		takeOnDatePicker.Value = DateTime.Now.Date;

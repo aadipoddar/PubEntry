@@ -3,25 +3,25 @@
 public class SettingsModel
 {
 	public int Id { get; set; }
+	public string Key { get; set; }
+	public string Value { get; set; }
+}
 
-	public TimeSpan PubOpenTime { get; set; }
-	public TimeSpan PubCloseTime { get; set; }
-
-	public int InactivityTime { get; set; }
-
-	public string HeaderFontFamilyThermal { get; set; }
-	public int HeaderFontSizeThermal { get; set; }
-	public int HeaderFontStyleThermal { get; set; }
-
-	public string SubHeaderFontFamilyThermal { get; set; }
-	public int SubHeaderFontSizeThermal { get; set; }
-	public int SubHeaderFontStyleThermal { get; set; }
-
-	public string RegularFontFamilyThermal { get; set; }
-	public int RegularFontSizeThermal { get; set; }
-	public int RegularFontStyleThermal { get; set; }
-
-	public string FooterFontFamilyThermal { get; set; }
-	public int FooterFontSizeThermal { get; set; }
-	public int FooterFontStyleThermal { get; set; }
+public static class SettingsKeys
+{
+	public static string PubOpenTime => "PubOpenTime";
+	public static string PubCloseTime => "PubCloseTime";
+	public static string InactivityTime => "InactivityTime";
+	public static string HeaderFontFamilyThermal => "HeaderFontFamilyThermal";
+	public static string HeaderFontSizeThermal => "HeaderFontSizeThermal";
+	public static string HeaderFontStyleThermal => "HeaderFontStyleThermal";
+	public static string SubHeaderFontFamilyThermal => "SubHeaderFontFamilyThermal";
+	public static string SubHeaderFontSizeThermal => "SubHeaderFontSizeThermal";
+	public static string SubHeaderFontStyleThermal => "SubHeaderFontStyleThermal";
+	public static string RegularFontFamilyThermal => "RegularFontFamilyThermal";
+	public static string RegularFontSizeThermal => "RegularFontSizeThermal";
+	public static string RegularFontStyleThermal => "RegularFontStyleThermal";
+	public static string FooterFontFamilyThermal => "FooterFontFamilyThermal";
+	public static string FooterFontSizeThermal => "FooterFontSizeThermal";
+	public static string FooterFontStyleThermal => "FooterFontStyleThermal";
 }
