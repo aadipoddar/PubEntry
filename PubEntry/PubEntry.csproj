@@ -43,6 +43,7 @@
 
   <ItemGroup>
     <PackageReference Include="AadiSoft.Updater" Version="1.0.3" />
+    <PackageReference Include="Syncfusion.Edit.Windows" Version="28.1.41" />
   </ItemGroup>
 
   <ItemGroup>

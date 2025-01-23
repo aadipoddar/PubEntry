@@ -58,4 +58,10 @@ public partial class AdminPanel : Form
 		SettingsForm settingForm = new();
 		settingForm.ShowDialog();
 	}
+
+	private void sqlQueryButton_Click(object sender, EventArgs e)
+	{
+		SqlQuery sqlQuery = new();
+		sqlQuery.ShowDialog();
+	}
 }

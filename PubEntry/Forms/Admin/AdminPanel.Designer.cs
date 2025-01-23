@@ -40,6 +40,7 @@ partial class AdminPanel
 		brandingLabel = new Label();
 		richTextBoxFooter = new RichTextBox();
 		reservationButton = new Button();
+		sqlQueryButton = new Button();
 		SuspendLayout();
 		// 
 		// manageLocationButton
@@ -124,7 +125,7 @@ partial class AdminPanel
 		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
 		versionLabel.AutoSize = true;
 		versionLabel.BackColor = Color.White;
-		versionLabel.Location = new Point(4, 496);
+		versionLabel.Location = new Point(4, 545);
 		versionLabel.Name = "versionLabel";
 		versionLabel.Size = new Size(84, 15);
 		versionLabel.TabIndex = 40;
@@ -135,7 +136,7 @@ partial class AdminPanel
 		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 		brandingLabel.AutoSize = true;
 		brandingLabel.BackColor = Color.White;
-		brandingLabel.Location = new Point(212, 496);
+		brandingLabel.Location = new Point(212, 545);
 		brandingLabel.Name = "brandingLabel";
 		brandingLabel.Size = new Size(76, 15);
 		brandingLabel.TabIndex = 39;
@@ -144,7 +145,7 @@ partial class AdminPanel
 		// richTextBoxFooter
 		// 
 		richTextBoxFooter.Dock = DockStyle.Bottom;
-		richTextBoxFooter.Location = new Point(0, 490);
+		richTextBoxFooter.Location = new Point(0, 539);
 		richTextBoxFooter.Name = "richTextBoxFooter";
 		richTextBoxFooter.Size = new Size(292, 26);
 		richTextBoxFooter.TabIndex = 38;
@@ -161,11 +162,23 @@ partial class AdminPanel
 		reservationButton.UseVisualStyleBackColor = true;
 		reservationButton.Click += reservationButton_Click;
 		// 
+		// sqlQueryButton
+		// 
+		sqlQueryButton.Font = new Font("Segoe UI", 15F);
+		sqlQueryButton.Location = new Point(38, 481);
+		sqlQueryButton.Name = "sqlQueryButton";
+		sqlQueryButton.Size = new Size(213, 52);
+		sqlQueryButton.TabIndex = 9;
+		sqlQueryButton.Text = "SQL Editor";
+		sqlQueryButton.UseVisualStyleBackColor = true;
+		sqlQueryButton.Click += sqlQueryButton_Click;
+		// 
 		// AdminPanel
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(292, 516);
+		ClientSize = new Size(292, 565);
+		Controls.Add(sqlQueryButton);
 		Controls.Add(reservationButton);
 		Controls.Add(versionLabel);
 		Controls.Add(brandingLabel);
@@ -199,4 +212,5 @@ partial class AdminPanel
 	private Label brandingLabel;
 	private RichTextBox richTextBoxFooter;
 	private Button reservationButton;
+	private Button sqlQueryButton;
 }
