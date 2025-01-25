@@ -17,8 +17,6 @@ public partial class SelectDataForm : Form
 		locationComboBox.DisplayMember = nameof(LocationModel.Name);
 		locationComboBox.ValueMember = nameof(LocationModel.Id);
 
-		var settings = await CommonData.LoadTableDataById<SettingsModel>(Table.Settings, 1);
-
 		if (DateTime.Now.Hour >= TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours)
 		{
 			toDateTimePicker.Value = DateTime.Now.Date.AddDays(1).AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)).Hours);

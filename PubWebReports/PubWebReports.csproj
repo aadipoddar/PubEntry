@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PubEntryLibrary\PubEntryLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="PubEntryLibrary.Data" />
+    <Using Include="PubEntryLibrary.DataAccess" />
+    <Using Include="PubEntryLibrary.Models" />
+    <Using Include="PubEntryLibrary.Printing.Excel" />
+    <Using Include="PubEntryLibrary.Printing.PDF" />
+  </ItemGroup>
+
+</Project>
