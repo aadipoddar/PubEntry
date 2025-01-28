@@ -4,7 +4,7 @@ namespace PubEntry.Forms.Transaction.Advance;
 
 public partial class AdvanceForm : Form
 {
-	private int foundAdvanceId;
+	private int _foundAdvanceId;
 
 	public AdvanceForm() => InitializeComponent();
 
@@ -13,16 +13,16 @@ public partial class AdvanceForm : Form
 
 	private async void LoadData()
 	{
-		locationComboBox.DataSource = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location, true);
+		locationComboBox.DataSource = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location);
 		locationComboBox.DisplayMember = nameof(LocationModel.Name);
 		locationComboBox.ValueMember = nameof(LocationModel.Id);
 
-		paymentComboBox.DataSource = await CommonData.LoadTableDataByStatus<PaymentModeModel>(Table.PaymentMode, true);
+		paymentComboBox.DataSource = await CommonData.LoadTableDataByStatus<PaymentModeModel>(Table.PaymentMode);
 		paymentComboBox.DisplayMember = nameof(PaymentModeModel.Name);
 		paymentComboBox.ValueMember = nameof(PaymentModeModel.Id);
 
 		advanceDateTimePicker.MinDate = DateTime.Now;
-		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
 	private async void numberTextBox_TextChanged(object sender, EventArgs e)
@@ -61,7 +61,7 @@ public partial class AdvanceForm : Form
 
 			if (foundAdvance is not null)
 			{
-				foundAdvanceId = foundAdvance.Id;
+				_foundAdvanceId = foundAdvance.Id;
 				approvedByTextBox.Text = foundAdvance.ApprovedBy;
 				bookingTextBox.Text = foundAdvance.Booking.ToString();
 				amountDataGridView.Rows.Clear();
@@ -77,7 +77,7 @@ public partial class AdvanceForm : Form
 			}
 		}
 
-		foundAdvanceId = 0;
+		_foundAdvanceId = 0;
 		approvedByTextBox.Text = string.Empty;
 		bookingTextBox.Text = "0";
 		amountDataGridView.Rows.Clear();
@@ -147,7 +147,7 @@ public partial class AdvanceForm : Form
 			return;
 		}
 
-		if (foundAdvanceId != 0)
+		if (_foundAdvanceId != 0)
 		{
 			await UpdateAdvance();
 			await DeleteAndInsertAdvanceDetail();
@@ -199,7 +199,7 @@ public partial class AdvanceForm : Form
 	private async Task UpdateAdvance() =>
 		await AdvanceData.UpdateAdvance(new AdvanceModel
 		{
-			Id = foundAdvanceId,
+			Id = _foundAdvanceId,
 			LocationId = (locationComboBox.SelectedItem as LocationModel).Id,
 			PersonId = (await PersonData.LoadPersonByNumber(numberTextBox.Text)).Id,
 			DateTime = DateTime.Now,
@@ -211,8 +211,8 @@ public partial class AdvanceForm : Form
 
 	private async Task DeleteAndInsertAdvanceDetail()
 	{
-		await AdvanceData.DeleteAdvanceDetails(foundAdvanceId);
-		await InsertAdvanceDetail(foundAdvanceId);
+		await AdvanceData.DeleteAdvanceDetails(_foundAdvanceId);
+		await InsertAdvanceDetail(_foundAdvanceId);
 	}
 
 	private void ClearForm()

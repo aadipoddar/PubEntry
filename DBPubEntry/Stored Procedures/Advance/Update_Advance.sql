@@ -11,7 +11,11 @@ AS
 BEGIN
 
 	UPDATE Advance
-	SET Booking = @Booking,
+	SET 
+	    LocationId = @LocationId,
+	    PersonId = @PersonId,
+	    AdvanceDate = @AdvanceDate,
+	    Booking = @Booking,
 		ApprovedBy = @ApprovedBy
 	WHERE Id = @Id
 

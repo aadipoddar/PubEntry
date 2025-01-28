@@ -6,7 +6,7 @@ namespace PubEntry.Forms.Transaction;
 public partial class UpdateTransactionForm : Form
 {
 	private readonly TransactionModel _transaction;
-	private int foundAdvanceId;
+	private int _foundAdvanceId;
 
 	public UpdateTransactionForm(TransactionModel transaction)
 	{
@@ -82,12 +82,12 @@ public partial class UpdateTransactionForm : Form
 		{
 			AdvanceModel foundAdvance;
 
-			if (foundPerson.Id == _transaction.PersonId)
+			if (foundPerson.Id == _transaction.PersonId && (locationComboBox.SelectedItem as LocationModel).Id == _transaction.LocationId)
 			{
 				foundAdvance = await AdvanceData.LoadAdvanceByTransactionId(_transaction.Id);
 				if (foundAdvance is not null)
 				{
-					foundAdvanceId = foundAdvance.Id;
+					_foundAdvanceId = foundAdvance.Id;
 					advancePanel.Visible = true;
 					bookingTextBox.Text = foundAdvance.Booking.ToString();
 					var advanceDetail = await AdvanceData.LoadAdvanceDetailByAdvanceId(foundAdvance.Id);
@@ -103,7 +103,7 @@ public partial class UpdateTransactionForm : Form
 					: await AdvanceData.LoadAdvanceByDateLocationPerson((locationComboBox.SelectedItem as LocationModel).Id, foundPerson.Id, _transaction.DateTime);
 				if (foundAdvance is not null)
 				{
-					foundAdvanceId = foundAdvance.Id;
+					_foundAdvanceId = foundAdvance.Id;
 					advancePanel.Visible = true;
 					approvedByTextBox.Text = foundAdvance.ApprovedBy;
 					bookingTextBox.Text = foundAdvance.Booking.ToString();
@@ -114,7 +114,7 @@ public partial class UpdateTransactionForm : Form
 			}
 		}
 
-		foundAdvanceId = 0;
+		_foundAdvanceId = 0;
 		advancePanel.Visible = false;
 		approvedByTextBox.Text = _transaction.ApprovedBy;
 	}
@@ -166,7 +166,7 @@ public partial class UpdateTransactionForm : Form
 	{
 		var existingAdvance = await AdvanceData.LoadAdvanceByTransactionId(_transaction.Id);
 		if (existingAdvance is not null) await AdvanceData.ClearAdvance(existingAdvance.Id, 0);
-		if (foundAdvanceId is not 0) await AdvanceData.ClearAdvance(foundAdvanceId, _transaction.Id);
+		if (_foundAdvanceId is not 0) await AdvanceData.ClearAdvance(_foundAdvanceId, _transaction.Id);
 	}
 
 	private async Task UpdateTransaction()
@@ -209,8 +209,8 @@ public partial class UpdateTransactionForm : Form
 		printDocumentMerchant.Print();
 	}
 
-	private void printDocumentCustomer_PrintPage(object sender, PrintPageEventArgs e) => PrintReceipt.DrawGraphics(e, "Customer", _transaction.Id, foundAdvanceId);
+	private void printDocumentCustomer_PrintPage(object sender, PrintPageEventArgs e) => PrintReceipt.DrawGraphics(e, "Customer", _transaction.Id, _foundAdvanceId);
 
-	private void printDocumentMerchant_PrintPage(object sender, PrintPageEventArgs e) => PrintReceipt.DrawGraphics(e, "Merchant", _transaction.Id, foundAdvanceId);
+	private void printDocumentMerchant_PrintPage(object sender, PrintPageEventArgs e) => PrintReceipt.DrawGraphics(e, "Merchant", _transaction.Id, _foundAdvanceId);
 	#endregion
 }

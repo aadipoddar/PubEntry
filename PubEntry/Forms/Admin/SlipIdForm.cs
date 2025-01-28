@@ -9,7 +9,9 @@ public partial class SlipIdForm : Form
 	public SlipIdForm() => InitializeComponent();
 
 	private void SlipIdForm_Load(object sender, EventArgs e) =>
-		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+		richTextBoxFooter.Text =  $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+
+	#region Validation
 
 	private void slipIdTextBox_KeyPress(object sender, KeyPressEventArgs e)
 	{
@@ -18,6 +20,8 @@ public partial class SlipIdForm : Form
 	}
 
 	private bool ValidateForm() => !string.IsNullOrEmpty(slipIdTextBox.Text);
+	
+	#endregion
 
 	private async void goButton_Click(object sender, EventArgs e)
 	{

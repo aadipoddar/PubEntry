@@ -64,4 +64,10 @@ public partial class AdminPanel : Form
 		SqlQuery sqlQuery = new();
 		sqlQuery.ShowDialog();
 	}
+
+	private void button1_Click(object sender, EventArgs e)
+	{
+		AdvanceId advanceIdForm = new();
+		advanceIdForm.ShowDialog();
+	}
 }

@@ -14,7 +14,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9706df91-d067-40dc-bf45-694f4b484076" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/PubEntry.sln" beforeDir="false" afterPath="$PROJECT_DIR$/PubEntry.sln" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.PubEntry/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PubEntry/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DBPubEntry/Stored Procedures/Advance/Update_Advance.sql" beforeDir="false" afterPath="$PROJECT_DIR$/DBPubEntry/Stored Procedures/Advance/Update_Advance.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PubEntry/Dashboard.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PubEntry/Dashboard.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PubEntry/Forms/Admin/AdminPanel.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PubEntry/Forms/Admin/AdminPanel.Designer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PubEntry/Forms/Admin/AdminPanel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PubEntry/Forms/Admin/AdminPanel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PubEntry/Forms/Admin/AdminPanel.resx" beforeDir="false" afterPath="$PROJECT_DIR$/PubEntry/Forms/Admin/AdminPanel.resx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PubEntry/Forms/Admin/SlipIdForm.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PubEntry/Forms/Admin/SlipIdForm.Designer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PubEntry/Forms/Admin/SlipIdForm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PubEntry/Forms/Admin/SlipIdForm.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PubEntry/Forms/Admin/SlipIdForm.resx" beforeDir="false" afterPath="$PROJECT_DIR$/PubEntry/Forms/Admin/SlipIdForm.resx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PubEntry/Forms/Transaction/Advance/AdvanceForm.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PubEntry/Forms/Transaction/Advance/AdvanceForm.Designer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PubEntry/Forms/Transaction/Advance/AdvanceForm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PubEntry/Forms/Transaction/Advance/AdvanceForm.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PubEntry/Forms/Transaction/Advance/AdvanceForm.resx" beforeDir="false" afterPath="$PROJECT_DIR$/PubEntry/Forms/Transaction/Advance/AdvanceForm.resx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PubEntry/Forms/Transaction/UpdateTransactionForm.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PubEntry/Forms/Transaction/UpdateTransactionForm.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PubEntry/PubEntry.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/PubEntry/PubEntry.csproj" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -27,7 +40,22 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "aadipoddar"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/aadipoddar/PubEntry",
+    "accountId": "75e4d7f4-24ed-41a8-8006-c8394da47c0f"
+  }
+}]]></component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/72a82b7d0f9b4c86897d4f6d15ff266ccef928/0d/57bd6222/ListControl.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/72a82b7d0f9b4c86897d4f6d15ff266ccef928/9c/78da3b3f/TextBox.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/8a03fcac5714437e83949a44ecf2e771c90920/c1/ab63b753/ExecutionContext.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/PubWebReports/Components/Pages/Home.razor" root0="FORCE_HIGHLIGHTING" root1="FORCE_HIGHLIGHTING" root2="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/PubWebReports/Program.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -43,23 +71,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;.NET Launch Settings Profile.PubWebReports: IIS Express.executor&quot;: &quot;Run&quot;,
-    &quot;.NET Launch Settings Profile.PubWebReports: https.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;HotReloadSettingsPage&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    ".NET Launch Settings Profile.PubWebReports: IIS Express.executor": "Run",
+    ".NET Launch Settings Profile.PubWebReports: https.executor": "Run",
+    ".NET Project.PubEntry.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
-  <component name="RunManager" selected=".NET Launch Settings Profile.PubWebReports: https">
+}]]></component>
+  <component name="RunManager" selected=".NET Project.PubEntry">
     <configuration name="PubEntry" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
       <option name="PROGRAM_PARAMETERS" value="" />
@@ -160,6 +189,7 @@
       <workItem from="1737691780992" duration="447000" />
       <workItem from="1737726190182" duration="365000" />
       <workItem from="1737728120956" duration="622000" />
+      <workItem from="1738072561141" duration="11212000" />
     </task>
     <servers />
   </component>
