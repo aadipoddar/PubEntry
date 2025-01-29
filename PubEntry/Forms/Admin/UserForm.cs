@@ -22,7 +22,7 @@ public partial class UserForm : Form
 
 		adminCheckBox.Checked = false;
 
-		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
 	private void userComboBox_SelectedIndexChanged(object sender, EventArgs e)

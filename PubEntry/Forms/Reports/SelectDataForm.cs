@@ -30,7 +30,7 @@ public partial class SelectDataForm : Form
 
 		takeOnDatePicker.Value = DateTime.Now.Date;
 
-		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
 	private bool ValidateTime() => fromDateTimePicker.Value < toDateTimePicker.Value;

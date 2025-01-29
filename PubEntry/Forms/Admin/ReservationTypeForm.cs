@@ -16,7 +16,7 @@ public partial class ReservationTypeForm : Form
 
 		reservationComboBox.SelectedIndex = -1;
 
-		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
 	private void reservationComboBox_SelectedIndexChanged(object sender, EventArgs e)

@@ -29,7 +29,7 @@ public partial class UpdateTransactionForm : Form
 		reservationComboBox.DisplayMember = nameof(ReservationTypeModel.Name);
 		reservationComboBox.ValueMember = nameof(ReservationTypeModel.Id);
 
-		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 
 		if (_transaction is not null)
 		{

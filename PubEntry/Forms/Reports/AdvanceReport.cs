@@ -32,6 +32,6 @@ public partial class AdvanceReport : Form
 			else column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 		}
 
-		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 }

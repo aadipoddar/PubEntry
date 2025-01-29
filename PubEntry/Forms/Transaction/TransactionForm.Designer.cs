@@ -50,7 +50,6 @@ partial class TransactionForm
 		amexLabel = new Label();
 		dateChangeTimer = new System.Windows.Forms.Timer(components);
 		loyaltyCheckBox = new CheckBox();
-		versionLabel = new Label();
 		numberTextBox = new TextBox();
 		maleTextBox = new TextBox();
 		femaleTextBox = new TextBox();
@@ -255,17 +254,6 @@ partial class TransactionForm
 		loyaltyCheckBox.Text = "Loyalty";
 		loyaltyCheckBox.UseVisualStyleBackColor = true;
 		// 
-		// versionLabel
-		// 
-		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-		versionLabel.AutoSize = true;
-		versionLabel.BackColor = Color.White;
-		versionLabel.Location = new Point(5, 429);
-		versionLabel.Name = "versionLabel";
-		versionLabel.Size = new Size(84, 15);
-		versionLabel.TabIndex = 31;
-		versionLabel.Text = "Version: 0.0.0.0";
-		// 
 		// numberTextBox
 		// 
 		numberTextBox.Font = new Font("Segoe UI", 12.75F);
@@ -457,7 +445,6 @@ partial class TransactionForm
 		Controls.Add(femaleTextBox);
 		Controls.Add(maleTextBox);
 		Controls.Add(numberTextBox);
-		Controls.Add(versionLabel);
 		Controls.Add(loyaltyCheckBox);
 		Controls.Add(amexLabel);
 		Controls.Add(brandingLabel);
@@ -510,7 +497,6 @@ partial class TransactionForm
 	private Label amexLabel;
 	private System.Windows.Forms.Timer dateChangeTimer;
 	private CheckBox loyaltyCheckBox;
-	private Label versionLabel;
 	private TextBox numberTextBox;
 	private TextBox maleTextBox;
 	private TextBox femaleTextBox;

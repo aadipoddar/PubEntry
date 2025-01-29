@@ -33,6 +33,8 @@ partial class SqlQuery
 		runButton = new Button();
 		tabControl1 = new TabControl();
 		queryEditControl = new Syncfusion.Windows.Forms.Edit.EditControl();
+		brandingLabel = new Label();
+		richTextBoxFooter = new RichTextBox();
 		((System.ComponentModel.ISupportInitialize)queryEditControl).BeginInit();
 		SuspendLayout();
 		// 
@@ -89,11 +91,33 @@ partial class SqlQuery
 		queryEditControl.ZoomFactor = 1F;
 		queryEditControl.KeyDown += queryEditControl_KeyDown;
 		// 
+		// brandingLabel
+		// 
+		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+		brandingLabel.AutoSize = true;
+		brandingLabel.BackColor = Color.White;
+		brandingLabel.Location = new Point(855, 695);
+		brandingLabel.Name = "brandingLabel";
+		brandingLabel.Size = new Size(76, 15);
+		brandingLabel.TabIndex = 48;
+		brandingLabel.Text = "© AADISOFT";
+		// 
+		// richTextBoxFooter
+		// 
+		richTextBoxFooter.Dock = DockStyle.Bottom;
+		richTextBoxFooter.Location = new Point(0, 689);
+		richTextBoxFooter.Name = "richTextBoxFooter";
+		richTextBoxFooter.Size = new Size(936, 26);
+		richTextBoxFooter.TabIndex = 47;
+		richTextBoxFooter.Text = "";
+		// 
 		// SqlQuery
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(936, 689);
+		ClientSize = new Size(936, 715);
+		Controls.Add(brandingLabel);
+		Controls.Add(richTextBoxFooter);
 		Controls.Add(queryEditControl);
 		Controls.Add(tabControl1);
 		Controls.Add(runButton);
@@ -103,6 +127,7 @@ partial class SqlQuery
 		Text = "SqlQuery";
 		((System.ComponentModel.ISupportInitialize)queryEditControl).EndInit();
 		ResumeLayout(false);
+		PerformLayout();
 	}
 
 	#endregion
@@ -110,4 +135,6 @@ partial class SqlQuery
 	private Button runButton;
 	private TabControl tabControl1;
 	private Syncfusion.Windows.Forms.Edit.EditControl queryEditControl;
+	private Label brandingLabel;
+	private RichTextBox richTextBoxFooter;
 }

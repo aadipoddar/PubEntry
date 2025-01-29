@@ -16,7 +16,7 @@ public partial class PaymentMode : Form
 
 		paymentComboBox.SelectedIndex = -1;
 
-		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
 	private void paymentComboBox_SelectedIndexChanged(object sender, EventArgs e)

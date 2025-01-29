@@ -7,7 +7,7 @@ public partial class PersonForm : Form
 	public PersonForm() => InitializeComponent();
 
 	private void PersonForm_Load(object sender, EventArgs e) =>
-		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 
 	#region Validation
 	private void textBox_KeyPress(object sender, KeyPressEventArgs e)

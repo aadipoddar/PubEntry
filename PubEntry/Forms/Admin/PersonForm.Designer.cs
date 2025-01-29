@@ -35,7 +35,6 @@ partial class PersonForm
 		numberLabel = new Label();
 		numberTextBox = new TextBox();
 		loyaltyCheckBox = new CheckBox();
-		versionLabel = new Label();
 		brandingLabel = new Label();
 		richTextBoxFooter = new RichTextBox();
 		SuspendLayout();
@@ -102,17 +101,6 @@ partial class PersonForm
 		loyaltyCheckBox.Text = "Loyalty";
 		loyaltyCheckBox.UseVisualStyleBackColor = true;
 		// 
-		// versionLabel
-		// 
-		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-		versionLabel.AutoSize = true;
-		versionLabel.BackColor = Color.White;
-		versionLabel.Location = new Point(5, 166);
-		versionLabel.Name = "versionLabel";
-		versionLabel.Size = new Size(84, 15);
-		versionLabel.TabIndex = 46;
-		versionLabel.Text = "Version: 0.0.0.0";
-		// 
 		// brandingLabel
 		// 
 		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
@@ -139,7 +127,6 @@ partial class PersonForm
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(502, 184);
-		Controls.Add(versionLabel);
 		Controls.Add(brandingLabel);
 		Controls.Add(richTextBoxFooter);
 		Controls.Add(loyaltyCheckBox);
@@ -164,7 +151,6 @@ partial class PersonForm
 	private Label numberLabel;
 	private TextBox numberTextBox;
 	private CheckBox loyaltyCheckBox;
-	private Label versionLabel;
 	private Label brandingLabel;
 	private RichTextBox richTextBoxFooter;
 }

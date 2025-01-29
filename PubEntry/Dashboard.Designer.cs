@@ -36,7 +36,6 @@ partial class Dashboard
 		brandingLabel = new Label();
 		richTextBoxFooter = new RichTextBox();
 		reportsButton = new Button();
-		versionLabel = new Label();
 		adminButton = new Button();
 		SuspendLayout();
 		// 
@@ -118,17 +117,6 @@ partial class Dashboard
 		reportsButton.UseVisualStyleBackColor = true;
 		reportsButton.Click += reportsButton_Click;
 		// 
-		// versionLabel
-		// 
-		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-		versionLabel.AutoSize = true;
-		versionLabel.BackColor = Color.White;
-		versionLabel.Location = new Point(2, 451);
-		versionLabel.Name = "versionLabel";
-		versionLabel.Size = new Size(84, 15);
-		versionLabel.TabIndex = 32;
-		versionLabel.Text = "Version: 0.0.0.0";
-		// 
 		// adminButton
 		// 
 		adminButton.Font = new Font("Segoe UI", 15F);
@@ -147,7 +135,6 @@ partial class Dashboard
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(336, 471);
 		Controls.Add(adminButton);
-		Controls.Add(versionLabel);
 		Controls.Add(reportsButton);
 		Controls.Add(brandingLabel);
 		Controls.Add(richTextBoxFooter);
@@ -173,6 +160,5 @@ partial class Dashboard
 	private Label brandingLabel;
 	private RichTextBox richTextBoxFooter;
 	private Button reportsButton;
-	private Label versionLabel;
 	private Button adminButton;
 }

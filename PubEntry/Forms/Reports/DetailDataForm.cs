@@ -26,7 +26,7 @@ public partial class DetailDataForm : Form
 
 	private async void LoadComponents()
 	{
-		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 
 		dateLabel.Text = $"{_fromDateTime} - {_toDateTime}";
 		locationNameLabel.Text = $"{(await CommonData.LoadTableDataById<LocationModel>(Table.Location, _locationId)).Name}";

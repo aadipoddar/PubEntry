@@ -36,7 +36,6 @@ partial class SelectDataForm
 		detailReportButton = new Button();
 		brandingLabel = new Label();
 		richTextBoxFooter = new RichTextBox();
-		versionLabel = new Label();
 		toDateTimePicker = new DateTimePicker();
 		locationComboBox = new ComboBox();
 		advanceButton = new Button();
@@ -119,17 +118,6 @@ partial class SelectDataForm
 		richTextBoxFooter.TabIndex = 35;
 		richTextBoxFooter.Text = "";
 		// 
-		// versionLabel
-		// 
-		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-		versionLabel.AutoSize = true;
-		versionLabel.BackColor = Color.White;
-		versionLabel.Location = new Point(5, 486);
-		versionLabel.Name = "versionLabel";
-		versionLabel.Size = new Size(84, 15);
-		versionLabel.TabIndex = 37;
-		versionLabel.Text = "Version: 0.0.0.0";
-		// 
 		// toDateTimePicker
 		// 
 		toDateTimePicker.CustomFormat = "dd-MMM-yy   hh tt";
@@ -205,7 +193,6 @@ partial class SelectDataForm
 		Controls.Add(groupBox1);
 		Controls.Add(locationComboBox);
 		Controls.Add(toDateTimePicker);
-		Controls.Add(versionLabel);
 		Controls.Add(brandingLabel);
 		Controls.Add(richTextBoxFooter);
 		Controls.Add(detailReportButton);
@@ -233,7 +220,6 @@ partial class SelectDataForm
 	private Button detailReportButton;
 	private Label brandingLabel;
 	private RichTextBox richTextBoxFooter;
-	private Label versionLabel;
 	private DateTimePicker toDateTimePicker;
 	private ComboBox locationComboBox;
 	private Button advanceButton;

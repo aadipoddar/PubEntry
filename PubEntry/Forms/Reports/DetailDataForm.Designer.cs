@@ -66,7 +66,6 @@ partial class DetailDataForm
 		redeemedBookingTextBox = new TextBox();
 		notRedeemedBookingTextBox = new TextBox();
 		advanceDataGridView = new DataGridView();
-		versionLabel = new Label();
 		brandingLabel = new Label();
 		richTextBoxFooter = new RichTextBox();
 		((System.ComponentModel.ISupportInitialize)transactionDataGridView).BeginInit();
@@ -470,17 +469,6 @@ partial class DetailDataForm
 		advanceDataGridView.TabIndex = 24;
 		advanceDataGridView.CellClick += advanceDataGridView_CellClick;
 		// 
-		// versionLabel
-		// 
-		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-		versionLabel.AutoSize = true;
-		versionLabel.BackColor = Color.White;
-		versionLabel.Location = new Point(3, 703);
-		versionLabel.Name = "versionLabel";
-		versionLabel.Size = new Size(84, 15);
-		versionLabel.TabIndex = 49;
-		versionLabel.Text = "Version: 0.0.0.0";
-		// 
 		// brandingLabel
 		// 
 		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
@@ -507,7 +495,6 @@ partial class DetailDataForm
 		AutoScaleMode = AutoScaleMode.Font;
 		AutoScroll = true;
 		ClientSize = new Size(1211, 723);
-		Controls.Add(versionLabel);
 		Controls.Add(brandingLabel);
 		Controls.Add(richTextBoxFooter);
 		Controls.Add(amexTextBox);
@@ -598,7 +585,6 @@ partial class DetailDataForm
 	private TextBox redeemedBookingTextBox;
 	private TextBox notRedeemedBookingTextBox;
 	private DataGridView advanceDataGridView;
-	private Label versionLabel;
 	private Label brandingLabel;
 	private RichTextBox richTextBoxFooter;
 }

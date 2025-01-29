@@ -9,7 +9,7 @@ public partial class AdminPanel : Form
 	public AdminPanel() => InitializeComponent();
 
 	private void AdminPanel_Load(object sender, EventArgs e) =>
-		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 
 	private void advanceButton_Click(object sender, EventArgs e)
 	{

@@ -15,7 +15,7 @@ public partial class LocationForm : Form
 
 		locationComboBox.SelectedIndex = -1;
 
-		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
 	private void locationComboBox_SelectedIndexChanged(object sender, EventArgs e)

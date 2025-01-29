@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UpdateAdvanceForm));
 			locationComboBox = new System.Windows.Forms.ComboBox();
 			label3 = new System.Windows.Forms.Label();
 			advanceDateTimePicker = new System.Windows.Forms.DateTimePicker();
@@ -192,7 +193,7 @@
 			richTextBoxFooter.TabIndex = 51;
 			richTextBoxFooter.Text = "";
 			// 
-			// UpdateAdvance
+			// UpdateAdvanceForm
 			// 
 			AcceptButton = saveButton;
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -212,6 +213,7 @@
 			Controls.Add(numberLabel);
 			Controls.Add(nameLabel);
 			Controls.Add(nameTextBox);
+			Icon = ((System.Drawing.Icon)resources.GetObject("$this.Icon"));
 			StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			Text = "UpdateAdvance";
 			Load += UpdateAdvance_Load;

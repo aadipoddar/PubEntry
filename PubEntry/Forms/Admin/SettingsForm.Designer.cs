@@ -65,6 +65,8 @@ partial class SettingsForm
 		label18 = new Label();
 		pubOpenTimePicker = new DateTimePicker();
 		pubCloseTimePicker = new DateTimePicker();
+		brandingLabel = new Label();
+		richTextBoxFooter = new RichTextBox();
 		thermalGroupBox.SuspendLayout();
 		SuspendLayout();
 		// 
@@ -491,12 +493,34 @@ partial class SettingsForm
 		pubCloseTimePicker.TabIndex = 2;
 		pubCloseTimePicker.Value = new DateTime(2025, 1, 16, 5, 0, 0, 0);
 		// 
+		// brandingLabel
+		// 
+		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+		brandingLabel.AutoSize = true;
+		brandingLabel.BackColor = Color.White;
+		brandingLabel.Location = new Point(492, 649);
+		brandingLabel.Name = "brandingLabel";
+		brandingLabel.Size = new Size(76, 15);
+		brandingLabel.TabIndex = 56;
+		brandingLabel.Text = "© AADISOFT";
+		// 
+		// richTextBoxFooter
+		// 
+		richTextBoxFooter.Dock = DockStyle.Bottom;
+		richTextBoxFooter.Location = new Point(0, 643);
+		richTextBoxFooter.Name = "richTextBoxFooter";
+		richTextBoxFooter.Size = new Size(574, 24);
+		richTextBoxFooter.TabIndex = 55;
+		richTextBoxFooter.Text = "";
+		// 
 		// SettingsForm
 		// 
 		AcceptButton = saveButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(574, 650);
+		ClientSize = new Size(574, 667);
+		Controls.Add(brandingLabel);
+		Controls.Add(richTextBoxFooter);
 		Controls.Add(pubCloseTimePicker);
 		Controls.Add(pubOpenTimePicker);
 		Controls.Add(label18);
@@ -554,4 +578,6 @@ partial class SettingsForm
 	private Label label18;
 	private DateTimePicker pubOpenTimePicker;
 	private DateTimePicker pubCloseTimePicker;
+	private Label brandingLabel;
+	private RichTextBox richTextBoxFooter;
 }

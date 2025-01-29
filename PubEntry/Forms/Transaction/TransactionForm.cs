@@ -71,7 +71,7 @@ public partial class TransactionForm : Form
 		reservationComboBox.DisplayMember = nameof(ReservationTypeModel.Name);
 		reservationComboBox.ValueMember = nameof(ReservationTypeModel.Id);
 
-		versionLabel.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
 	#endregion

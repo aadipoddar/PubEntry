@@ -34,7 +34,6 @@ partial class ReservationTypeForm
 		saveButton = new Button();
 		nameLabel = new Label();
 		nameTextBox = new TextBox();
-		versionLabel = new Label();
 		brandingLabel = new Label();
 		richTextBoxFooter = new RichTextBox();
 		SuspendLayout();
@@ -93,17 +92,6 @@ partial class ReservationTypeForm
 		nameTextBox.Size = new Size(271, 34);
 		nameTextBox.TabIndex = 29;
 		// 
-		// versionLabel
-		// 
-		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-		versionLabel.AutoSize = true;
-		versionLabel.BackColor = Color.White;
-		versionLabel.Location = new Point(3, 175);
-		versionLabel.Name = "versionLabel";
-		versionLabel.Size = new Size(84, 15);
-		versionLabel.TabIndex = 43;
-		versionLabel.Text = "Version: 0.0.0.0";
-		// 
 		// brandingLabel
 		// 
 		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
@@ -130,7 +118,6 @@ partial class ReservationTypeForm
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(392, 195);
-		Controls.Add(versionLabel);
 		Controls.Add(brandingLabel);
 		Controls.Add(richTextBoxFooter);
 		Controls.Add(statusCheckBox);
@@ -154,7 +141,6 @@ partial class ReservationTypeForm
 	private Button saveButton;
 	private Label nameLabel;
 	private TextBox nameTextBox;
-	private Label versionLabel;
 	private Label brandingLabel;
 	private RichTextBox richTextBoxFooter;
 }

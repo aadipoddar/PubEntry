@@ -1,18 +1,12 @@
-﻿namespace PubEntry.Forms.Admin;
+﻿using System.Reflection;
+
+namespace PubEntry.Forms.Admin;
 
 public partial class SettingsForm : Form
 {
 	public SettingsForm() => InitializeComponent();
 
 	private async void SettingForm_Load(object sender, EventArgs e) => await LoadData();
-
-	public class FontStyleItem
-	{
-		public FontStyle FontStyle { get; set; }
-		public string DisplayName { get; set; }
-		public int Value => (int)FontStyle;
-		public override string ToString() => DisplayName;
-	}
 
 	private async Task LoadData()
 	{
@@ -68,6 +62,8 @@ public partial class SettingsForm : Form
 		footerFontFamilyComboBox.SelectedValue = await SettingsData.LoadSettingsByKey(SettingsKeys.FooterFontFamilyThermal);
 		footerFontSizeTextBox.Text = await SettingsData.LoadSettingsByKey(SettingsKeys.FooterFontSizeThermal);
 		footerFontStyleComboBox.SelectedValue = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.FooterFontStyleThermal));
+
+		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
 	private void textBox_KeyPress(object sender, KeyPressEventArgs e)
@@ -121,4 +117,12 @@ public partial class SettingsForm : Form
 
 		Close();
 	}
+}
+
+class FontStyleItem
+{
+	public FontStyle FontStyle { get; set; }
+	public string DisplayName { get; set; }
+	public int Value => (int)FontStyle;
+	public override string ToString() => DisplayName;
 }

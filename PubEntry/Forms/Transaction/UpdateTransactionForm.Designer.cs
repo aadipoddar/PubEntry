@@ -48,7 +48,6 @@ partial class UpdateTransactionForm
 		printDocumentMerchant = new System.Drawing.Printing.PrintDocument();
 		amexLabel = new Label();
 		loyaltyCheckBox = new CheckBox();
-		versionLabel = new Label();
 		numberTextBox = new TextBox();
 		maleTextBox = new TextBox();
 		femaleTextBox = new TextBox();
@@ -248,17 +247,6 @@ partial class UpdateTransactionForm
 		loyaltyCheckBox.TabIndex = 3;
 		loyaltyCheckBox.Text = "Loyalty";
 		loyaltyCheckBox.UseVisualStyleBackColor = true;
-		// 
-		// versionLabel
-		// 
-		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-		versionLabel.AutoSize = true;
-		versionLabel.BackColor = Color.White;
-		versionLabel.Location = new Point(5, 434);
-		versionLabel.Name = "versionLabel";
-		versionLabel.Size = new Size(84, 15);
-		versionLabel.TabIndex = 31;
-		versionLabel.Text = "Version: 0.0.0.0";
 		// 
 		// numberTextBox
 		// 
@@ -465,7 +453,6 @@ partial class UpdateTransactionForm
 		Controls.Add(femaleTextBox);
 		Controls.Add(maleTextBox);
 		Controls.Add(numberTextBox);
-		Controls.Add(versionLabel);
 		Controls.Add(loyaltyCheckBox);
 		Controls.Add(amexLabel);
 		Controls.Add(brandingLabel);
@@ -517,7 +504,6 @@ partial class UpdateTransactionForm
 	private System.Drawing.Printing.PrintDocument printDocumentMerchant;
 	private Label amexLabel;
 	private CheckBox loyaltyCheckBox;
-	private Label versionLabel;
 	private TextBox numberTextBox;
 	private TextBox maleTextBox;
 	private TextBox femaleTextBox;

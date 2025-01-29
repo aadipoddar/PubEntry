@@ -38,7 +38,6 @@ partial class UserForm
 		saveButton = new Button();
 		userComboBox = new ComboBox();
 		statusCheckBox = new CheckBox();
-		versionLabel = new Label();
 		brandingLabel = new Label();
 		richTextBoxFooter = new RichTextBox();
 		adminCheckBox = new CheckBox();
@@ -140,17 +139,6 @@ partial class UserForm
 		statusCheckBox.Text = "Status";
 		statusCheckBox.UseVisualStyleBackColor = true;
 		// 
-		// versionLabel
-		// 
-		versionLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-		versionLabel.AutoSize = true;
-		versionLabel.BackColor = Color.White;
-		versionLabel.Location = new Point(3, 249);
-		versionLabel.Name = "versionLabel";
-		versionLabel.Size = new Size(84, 15);
-		versionLabel.TabIndex = 46;
-		versionLabel.Text = "Version: 0.0.0.0";
-		// 
 		// brandingLabel
 		// 
 		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
@@ -189,7 +177,6 @@ partial class UserForm
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(477, 269);
 		Controls.Add(adminCheckBox);
-		Controls.Add(versionLabel);
 		Controls.Add(brandingLabel);
 		Controls.Add(richTextBoxFooter);
 		Controls.Add(statusCheckBox);
@@ -221,7 +208,6 @@ partial class UserForm
 	private Button saveButton;
 	private ComboBox userComboBox;
 	private CheckBox statusCheckBox;
-	private Label versionLabel;
 	private Label brandingLabel;
 	private RichTextBox richTextBoxFooter;
 	private CheckBox adminCheckBox;

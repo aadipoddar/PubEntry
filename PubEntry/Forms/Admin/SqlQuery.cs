@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Reflection;
 
 using Microsoft.Data.SqlClient;
 
@@ -12,6 +13,7 @@ public partial class SqlQuery : Form
 	{
 		InitializeComponent();
 		queryEditControl.ApplyConfiguration(KnownLanguages.SQL);
+		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
 
