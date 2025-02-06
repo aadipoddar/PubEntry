@@ -9,18 +9,18 @@ public partial class SlipIdForm : Form
 	public SlipIdForm() => InitializeComponent();
 
 	private void SlipIdForm_Load(object sender, EventArgs e) =>
-		richTextBoxFooter.Text =  $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 
 	#region Validation
 
 	private void slipIdTextBox_KeyPress(object sender, KeyPressEventArgs e)
 	{
-		if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
+		if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
 			e.Handled = true;
 	}
 
 	private bool ValidateForm() => !string.IsNullOrEmpty(slipIdTextBox.Text);
-	
+
 	#endregion
 
 	private async void goButton_Click(object sender, EventArgs e)

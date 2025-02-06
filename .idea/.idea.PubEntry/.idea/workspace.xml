@@ -13,13 +13,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9706df91-d067-40dc-bf45-694f4b484076" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.PubEntry/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PubEntry/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.PubEntry/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PubEntry/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.PubEntry/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PubEntry/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PubEntry/Forms/Transaction/Advance/UpdateAdvanceForm.Designer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/PubEntry/Forms/Transaction/Advance/UpdateAdvanceForm.Designer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PubEntry/Forms/Transaction/Advance/UpdateAdvanceForm.resx" beforeDir="false" afterPath="$PROJECT_DIR$/PubEntry/Forms/Transaction/Advance/UpdateAdvanceForm.resx" afterDir="false" />
-    </list>
+    <list default="true" id="9706df91-d067-40dc-bf45-694f4b484076" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -188,6 +182,7 @@
       <workItem from="1738072561141" duration="11212000" />
       <workItem from="1738127629043" duration="498000" />
       <workItem from="1738128729599" duration="67000" />
+      <workItem from="1738732218228" duration="722000" />
     </task>
     <servers />
   </component>

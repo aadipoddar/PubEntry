@@ -4,40 +4,40 @@ namespace PubEntry.Forms.Transaction.Advance;
 
 public partial class AdvanceId : Form
 {
-    public AdvanceId() => InitializeComponent();
+	public AdvanceId() => InitializeComponent();
 
-    private void AdvanceId_Load(object sender, EventArgs e) => 
-        richTextBoxFooter.Text =  $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+	private void AdvanceId_Load(object sender, EventArgs e) =>
+		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 
-    #region Validation
+	#region Validation
 
-    private void advanceIdTextBox_KeyPress(object sender, KeyPressEventArgs e)
-    {
-        if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && (e.KeyChar != '.'))
-            e.Handled = true;
-    }
-    
-    private bool ValidateForm() => !string.IsNullOrEmpty(advanceIdTextBox.Text);
-    
-    #endregion
+	private void advanceIdTextBox_KeyPress(object sender, KeyPressEventArgs e)
+	{
+		if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+			e.Handled = true;
+	}
 
-    private async void goButton_Click(object sender, EventArgs e)
-    {
-        if (!ValidateForm())
-        {
-            MessageBox.Show("Please enter Advance Id", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            return;
-        }
+	private bool ValidateForm() => !string.IsNullOrEmpty(advanceIdTextBox.Text);
 
-        var advance = await CommonData.LoadTableDataById<AdvanceModel>(Table.Advance, int.Parse(advanceIdTextBox.Text));
+	#endregion
 
-        if (advance is null || advance.TransactionId != 0)
-        {
-            MessageBox.Show("Invalid Advance Id", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            return;
-        }
+	private async void goButton_Click(object sender, EventArgs e)
+	{
+		if (!ValidateForm())
+		{
+			MessageBox.Show("Please enter Advance Id", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			return;
+		}
 
-        UpdateAdvanceForm updateAdvance = new(advance);
-        updateAdvance.ShowDialog();
-    }
+		var advance = await CommonData.LoadTableDataById<AdvanceModel>(Table.Advance, int.Parse(advanceIdTextBox.Text));
+
+		if (advance is null || advance.TransactionId != 0)
+		{
+			MessageBox.Show("Invalid Advance Id", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			return;
+		}
+
+		UpdateAdvanceForm updateAdvance = new(advance);
+		updateAdvance.ShowDialog();
+	}
 }

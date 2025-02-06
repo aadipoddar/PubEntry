@@ -98,8 +98,7 @@ public partial class AdvanceForm : Form
 	{
 		if (string.IsNullOrEmpty(numberTextBox.Text)) return false;
 		if (string.IsNullOrEmpty(nameTextBox.Text)) return false;
-		if (string.IsNullOrEmpty(bookingTextBox.Text) || int.Parse(bookingTextBox.Text) == 0) bookingTextBox.Text = totalTextBox.Text;
-		if (amountDataGridView.Rows.Count == 0) return false;
+		if (string.IsNullOrEmpty(bookingTextBox.Text)) bookingTextBox.Text = "0";
 
 		return true;
 	}
@@ -111,7 +110,8 @@ public partial class AdvanceForm : Form
 		var selectedPaymentMode = paymentComboBox.SelectedItem as PaymentModeModel;
 		var existingRow = amountDataGridView.Rows
 			.Cast<DataGridViewRow>()
-			.FirstOrDefault(row => (int)row.Cells[0].Value == selectedPaymentMode.Id);
+			.FirstOrDefault(row =>
+			(int)row.Cells[0].Value == selectedPaymentMode.Id);
 
 		if (existingRow != null) existingRow.Cells[2].Value = (int)existingRow.Cells[2].Value + int.Parse(amountTextBox.Text);
 		else amountDataGridView.Rows.Add(selectedPaymentMode.Id, selectedPaymentMode.Name, int.Parse(amountTextBox.Text));
@@ -124,7 +124,8 @@ public partial class AdvanceForm : Form
 	{
 		if (e.RowIndex == -1) return;
 		amountTextBox.Text = amountDataGridView.Rows[e.RowIndex].Cells[2].Value.ToString();
-		paymentComboBox.SelectedItem = (paymentComboBox.DataSource as List<PaymentModeModel>).FirstOrDefault(x => x?.Id == (int)amountDataGridView.Rows[e.RowIndex].Cells[0].Value);
+		paymentComboBox.SelectedItem = (paymentComboBox.DataSource as List<PaymentModeModel>)
+			.FirstOrDefault(x => x?.Id == (int)amountDataGridView.Rows[e.RowIndex].Cells[0].Value);
 		amountDataGridView.Rows.RemoveAt(e.RowIndex);
 		CalculateTotalAmount();
 	}
