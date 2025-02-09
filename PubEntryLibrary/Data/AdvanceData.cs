@@ -27,10 +27,10 @@ public static class AdvanceData
 	public static async Task<AdvanceModel> LoadAdvanceByTransactionId(int TransactionId) =>
 		(await SqlDataAccess.LoadData<AdvanceModel, dynamic>(StoredProcedure.LoadAdvanceByTransactionId, new { TransactionId })).FirstOrDefault();
 
-	public static async Task<IEnumerable<AdvancePrintModel>> LoadAdvancesByForDateLocation(DateTime FromDate, DateTime ToDate, int LocationId) =>
+	public static async Task<List<AdvancePrintModel>> LoadAdvancesByForDateLocation(DateTime FromDate, DateTime ToDate, int LocationId) =>
 			await SqlDataAccess.LoadData<AdvancePrintModel, dynamic>(StoredProcedure.LoadAdvancesByForDateLocation, new { FromDate, ToDate, LocationId });
 
-	public static async Task<IEnumerable<AdvancePrintModel>> LoadAdvancesByTakenOnLocation(DateTime TakenOn, int LocationId) =>
+	public static async Task<List<AdvancePrintModel>> LoadAdvancesByTakenOnLocation(DateTime TakenOn, int LocationId) =>
 			await SqlDataAccess.LoadData<AdvancePrintModel, dynamic>(StoredProcedure.LoadAdvancesByTakenOnLocation, new { TakenOn, LocationId });
 
 	public static async Task<List<AdvancePaymentModeTotalsModel>> LoadAdvancePaymentModeTotalsByTakenOn(DateTime TakenOn, int LocationId) =>

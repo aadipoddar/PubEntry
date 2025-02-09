@@ -1,5 +1,6 @@
 ﻿@page "/"
 @rendermode InteractiveServer
+@inject NavigationManager NavManager
 @inject IJSRuntime JSRuntime
 @inject Microsoft.JSInterop.IJSRuntime JS
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment hostingEnvironment
@@ -8,10 +9,10 @@
 
 <div class="container">
 	<div class="container-bottom">
-		<SfDateTimePicker TValue="DateTime" Placeholder="From Date Time" Value="@fromDateTime">
+		<SfDateTimePicker TValue="DateTime" Placeholder="From Date Time" Value="@FromDateTime" Max="@ToDateTime">
 			<DateTimePickerEvents TValue="DateTime" ValueChange="OnFromValueChanged"></DateTimePickerEvents>
 		</SfDateTimePicker>
-		<SfDateTimePicker TValue="DateTime" Placeholder="To Date Time" Value="@toDateTime">
+		<SfDateTimePicker TValue="DateTime" Placeholder="To Date Time" Value="@ToDateTime" Min="@FromDateTime">
 			<DateTimePickerEvents TValue="DateTime" ValueChange="OnToValueChanged"></DateTimePickerEvents>
 		</SfDateTimePicker>
 	</div>
@@ -20,7 +21,11 @@
 		<AccordionItems>
 			@foreach (var location in locations)
 			{
-				<AccordionItem Header=@location.Name>
+				<AccordionItem>
+					<HeaderTemplate>
+						<label>@location.Name</label>
+						<button class="btn btn-primary" type="button" @onclick="() => OnDetailedClick(location.Id)">Detailed</button>
+					</HeaderTemplate>
 					<ContentTemplate>
 						<div class="accordion-content">
 							<!-- First Row -->
@@ -121,6 +126,111 @@
 					</ContentTemplate>
 				</AccordionItem>
 			}
+		</AccordionItems>
+	</SfAccordion>
+
+	<SfAccordion>
+		<AccordionItems>
+			<AccordionItem Header="Grand Total">
+				<ContentTemplate>
+					<div class="accordion-content">
+						<!-- First Row -->
+						<div class="form-row">
+							<div class="form-group">
+								<label>Total People</label>
+								<input type="number" value="@(transactionTotalsModel?.Sum(_ => _.Male + _.Female) ?? 0)" readonly />
+							</div>
+							<div class="form-group">
+								<label>Total Amount</label>
+								<input type="number" value="@(transactionTotalsModel?.Sum(_ => _.Cash + _.Card + _.UPI + _.Amex) ?? 0)" readonly />
+							</div>
+						</div>
+
+						<!-- Second Row -->
+						<div class="form-row">
+							<div class="form-group">
+								<label>Male</label>
+								<input type="number" value="@(transactionTotalsModel?.Sum(_ => _.Male) ?? 0)" readonly />
+							</div>
+							<div class="form-group">
+								<label>Cash</label>
+								<input type="number" value="@(transactionTotalsModel?.Sum(_ => _.Cash) ?? 0)" readonly />
+							</div>
+						</div>
+
+						<!-- Third Row -->
+						<div class="form-row">
+							<div class="form-group">
+								<label>Female</label>
+								<input type="number" value="@(transactionTotalsModel?.Sum(_ => _.Female) ?? 0)" readonly />
+							</div>
+							<div class="form-group">
+								<label>Card</label>
+								<input type="number" value="@(transactionTotalsModel?.Sum(_ => _.Card) ?? 0)" readonly />
+							</div>
+						</div>
+
+						<!-- Fourth Row -->
+						<div class="form-row">
+							<div class="form-group">
+								<label>Total Loyalty</label>
+								<input type="number" value="@(transactionTotalsModel?.Sum(_ => _.Loyalty) ?? 0)" readonly />
+							</div>
+							<div class="form-group">
+								<label>UPI</label>
+								<input type="number" value="@(transactionTotalsModel?.Sum(_ => _.UPI) ?? 0)" readonly />
+							</div>
+						</div>
+
+						<!-- Fifth Row (Amex on right) -->
+						<div class="form-row">
+							<div class="form-group">
+								<!-- Empty spacer -->
+							</div>
+							<div class="form-group">
+								<label>Amex</label>
+								<input type="number" value="@(transactionTotalsModel?.Sum(_ => _.Amex) ?? 0)" readonly />
+							</div>
+						</div>
+
+						<!-- Sixth Row -->
+						<div class="form-row">
+							<div class="form-group">
+								<label>Total Advance</label>
+								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.TotalAdvance) ?? 0)" readonly />
+							</div>
+							<div class="form-group">
+								<label>Total Booking</label>
+								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.TotalBooking) ?? 0)" readonly />
+							</div>
+						</div>
+
+						<!-- Seventh Row -->
+						<div class="form-row">
+							<div class="form-group">
+								<label>Redeemed</label>
+								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.RedeemedAdvance) ?? 0)" readonly />
+							</div>
+							<div class="form-group">
+								<label>Redeemed</label>
+								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.RedeemedBooking) ?? 0)" readonly />
+							</div>
+						</div>
+
+						<!-- Eighth Row -->
+						<div class="form-row">
+							<div class="form-group">
+								<label>Not Redeemed</label>
+								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.NotRedeemedAdvance) ?? 0)" readonly />
+							</div>
+							<div class="form-group">
+								<label>Not Redeemed</label>
+								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.NotRedeemedBooking) ?? 0)" readonly />
+							</div>
+						</div>
+					</div>
+				</ContentTemplate>
+			</AccordionItem>
 		</AccordionItems>
 	</SfAccordion>
 

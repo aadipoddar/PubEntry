@@ -2,6 +2,7 @@ using PubWebReports.Components;
 
 using Syncfusion.Blazor;
 
+
 Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Secrets.SyncfusionLicense);
 
 var builder = WebApplication.CreateBuilder(args);
