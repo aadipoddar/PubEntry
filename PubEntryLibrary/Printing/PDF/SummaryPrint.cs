@@ -55,6 +55,7 @@ public static class SummaryPrint
 			{
 				transactionTotalsModel.Remove(transactionTotalsModel.LastOrDefault());
 				transactionTotalsModel.Add(new TransactionTotalsModel());
+				transactionTotalsModel.LastOrDefault().LocationId = location.Id;
 			}
 
 			font = new PdfStandardFont(PdfFontFamily.Helvetica, 15);

@@ -6,181 +6,245 @@
 
 <PageTitle>Pub Reports</PageTitle>
 
+<div class="container">
+	<div class="container-bottom">
+		<SfDateTimePicker TValue="DateTime" Placeholder="From Date Time" Value="@fromDateTime">
+			<DateTimePickerEvents TValue="DateTime" ValueChange="OnFromValueChanged"></DateTimePickerEvents>
+		</SfDateTimePicker>
+		<SfDateTimePicker TValue="DateTime" Placeholder="To Date Time" Value="@toDateTime">
+			<DateTimePickerEvents TValue="DateTime" ValueChange="OnToValueChanged"></DateTimePickerEvents>
+		</SfDateTimePicker>
+	</div>
+
+	<SfAccordion ExpandMode="ExpandMode.Single">
+		<AccordionItems>
+			@foreach (var location in locations)
+			{
+				<AccordionItem Header=@location.Name>
+					<ContentTemplate>
+						<div class="accordion-content">
+							<!-- First Row -->
+							<div class="form-row">
+								<div class="form-group">
+									<label>Total People</label>
+									<input type="number" value="@((transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Male ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Female ?? 0))" readonly />
+								</div>
+								<div class="form-group">
+									<label>Total Amount</label>
+									<input type="number" value="@((transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Cash ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Card ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.UPI ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Amex ?? 0))" readonly />
+								</div>
+							</div>
+
+							<!-- Second Row -->
+							<div class="form-row">
+								<div class="form-group">
+									<label>Male</label>
+									<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Male ?? 0)" readonly />
+								</div>
+								<div class="form-group">
+									<label>Cash</label>
+									<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Cash ?? 0)" readonly />
+								</div>
+							</div>
+
+							<!-- Third Row -->
+							<div class="form-row">
+								<div class="form-group">
+									<label>Female</label>
+									<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Female ?? 0)" readonly />
+								</div>
+								<div class="form-group">
+									<label>Card</label>
+									<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Card ?? 0)" readonly />
+								</div>
+							</div>
+
+							<!-- Fourth Row -->
+							<div class="form-row">
+								<div class="form-group">
+									<label>Total Loyalty</label>
+									<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Loyalty ?? 0)" readonly />
+								</div>
+								<div class="form-group">
+									<label>UPI</label>
+									<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.UPI ?? 0)" readonly />
+								</div>
+							</div>
+
+							<!-- Fifth Row (Amex on right) -->
+							<div class="form-row">
+								<div class="form-group">
+									<!-- Empty spacer -->
+								</div>
+								<div class="form-group">
+									<label>Amex</label>
+									<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Amex ?? 0)" readonly />
+								</div>
+							</div>
+
+							<!-- Sixth Row -->
+							<div class="form-row">
+								<div class="form-group">
+									<label>Total Advance</label>
+									<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.TotalAdvance ?? 0)" readonly />
+								</div>
+								<div class="form-group">
+									<label>Total Booking</label>
+									<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.TotalBooking ?? 0)" readonly />
+								</div>
+							</div>
+
+							<!-- Seventh Row -->
+							<div class="form-row">
+								<div class="form-group">
+									<label>Redeemed</label>
+									<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.RedeemedAdvance ?? 0)" readonly />
+								</div>
+								<div class="form-group">
+									<label>Redeemed</label>
+									<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.RedeemedBooking ?? 0)" readonly />
+								</div>
+							</div>
+
+							<!-- Eighth Row -->
+							<div class="form-row">
+								<div class="form-group">
+									<label>Not Redeemed</label>
+									<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.NotRedeemedAdvance ?? 0)" readonly />
+								</div>
+								<div class="form-group">
+									<label>Not Redeemed</label>
+									<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.NotRedeemedBooking ?? 0)" readonly />
+								</div>
+							</div>
+						</div>
+					</ContentTemplate>
+				</AccordionItem>
+			}
+		</AccordionItems>
+	</SfAccordion>
+
+	<div class="container-bottom">
+		<button class="btn btn-primary" type="button" @onclick="SummaryButtonClicked">Summary Report</button>
+
+		<select class="form-select-sm" name="locationSelect" @bind="selectedLocationId">
+			@foreach (var location in locations)
+			{
+				<option value="@location.Id">@location.Name</option>
+			}
+		</select>
+
+		<div>
+			<button class="btn btn-primary" type="button" @onclick="DetailedButtonClicked">PDF</button>
+			<button class="btn btn-primary" type="button" @onclick="ExcelButtonClicked">Excel</button>
+		</div>
+	</div>
+</div>
+
 <style>
-	body {
-		overflow: hidden;
+	.container {
+		max-width: 1200px;
+		margin: 2rem auto;
+		padding: 20px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 	}
 
-	.container {
+	.container-bottom {
+		max-width: 1200px;
+		gap: 1rem;
+		margin: 2rem auto;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		min-height: 100vh;
-		padding: 10px;
-		box-sizing: border-box;
 	}
 
-	.form-group {
-		margin: 10px 0;
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
+		margin-bottom: 1.5rem;
 	}
 
 	.btn {
 		margin: 15px;
 	}
 
-	.grid {
+	input[type="date"],
+	input[type="time"],
+	input[type="number"],
+	select {
+		padding: 0.5rem;
+		border: 1px solid #cbd5e0;
+		border-radius: 4px;
+		font-size: 1rem;
+	}
+
+	input[readonly] {
+		background-color: #f7fafc;
+		text-align: right;
+	}
+
+	.accordion-content {
+		padding: 1rem;
+		background-color: #f8fafc;
+		border-radius: 4px;
+	}
+
+	.e-accordion {
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+		margin-bottom: 1rem;
+	}
+
+	.form-row {
 		display: grid;
-		grid-template-columns: auto auto;
-		gap: 10px;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 1rem;
+		margin-bottom: 1rem;
+	}
+
+	.form-group {
+		display: block;
+	}
+
+		.form-group label {
+			display: block;
+			margin-bottom: 0.5rem;
+		}
+
+		.form-group input {
+			width: 100%;
+			text-align: right;
+		}
+
+	/* Desktop styles */
+	@@media (min-width: 768px) {
+		.form-row {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 2rem;
+		}
+
+		.form-group {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 1rem;
+		}
+
+			.form-group label {
+				margin-bottom: 0;
+				white-space: nowrap;
+				flex-shrink: 0;
+			}
+
+			.form-group input {
+				width: 150px;
+			}
+
+		.form-select-sm {
+			width: 150px;
+		}
 	}
 </style>
-
-
-<div class="container">
-	<div class="form-group grid">
-		<label for="fromDate">Form Date</label>
-		<input type="date" id="fromDate" name="fromDate" value="@fromDate.ToString("yyyy-MM-dd")" @onchange="OnFromDateChange" />
-
-		<label for="toDate">To Date</label>
-		<input type="date" id="toDate" name="toDate" value="@toDate.ToString("yyyy-MM-dd")" @onchange="OnToDateChange" />
-	</div>
-
-	<div class="form-group grid">
-		<label for="fromTime">From Time</label>
-		<input type="time" id="fromTime" name="fromTime" value="@fromTime.ToString(@"hh\:mm")" @onchange="OnFromTimeChange" />
-
-		<label for="toTime">To Time</label>
-		<input type="time" id="toTime" name="toTime" value="@toTime.ToString(@"hh\:mm")" @onchange="OnToTimeChange" />
-	</div>
-
-	<button class="btn btn-primary" type="button" @onclick="SummaryButtonClicked">Summary Report</button>
-
-	<select class="form-select-sm" name="locationSelect" @bind="selectedLocationId">
-		@foreach (var location in locations)
-		{
-			<option value="@location.Id">@location.Name</option>
-		}
-	</select>
-
-	<button class="btn btn-primary" type="button" @onclick="DetailedButtonClicked">Detailed Report</button>
-
-	<button class="btn btn-primary" type="button" @onclick="ExcelButtonClicked">Excel Report</button>
-
-	<script type="text/javascript">
-		function saveAsFile(filename, bytesBase64) {
-			if (navigator.msSaveBlob) {
-				//Download document in Edge browser
-				var data = window.atob(bytesBase64);
-				var bytes = new Uint8Array(data.length);
-				for (var i = 0; i < data.length; i++) {
-					bytes[i] = data.charCodeAt(i);
-				}
-				var blob = new Blob([bytes.buffer], { type: "application/octet-stream" });
-				navigator.msSaveBlob(blob, filename);
-			}
-			else {
-				var link = document.createElement('a');
-				link.download = filename;
-				link.href = "data:application/octet-stream;base64," + bytesBase64;
-				document.body.appendChild(link); // Needed for Firefox
-				link.click();
-				document.body.removeChild(link);
-			}
-		}
-	</script>
-</div>
-
-@code {
-	private List<LocationModel> locations = new();
-	private TimeSpan fromTime, toTime;
-	private DateOnly fromDate, toDate;
-	private int selectedLocationId = 1;
-
-	protected override async Task OnInitializedAsync() => await LoadData();
-
-	private async Task LoadData()
-	{
-		locations = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location);
-		selectedLocationId = locations.FirstOrDefault().Id;
-
-		fromTime = TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime));
-		toTime = TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime));
-
-		if (DateTime.Now.TimeOfDay >= fromTime)
-		{
-			toDate = DateOnly.FromDateTime(DateTime.Now.Date.AddDays(1));
-			fromDate = DateOnly.FromDateTime(DateTime.Now.Date);
-		}
-		else
-		{
-			toDate = DateOnly.FromDateTime(DateTime.Now.Date);
-			fromDate = DateOnly.FromDateTime(DateTime.Now.Date.AddDays(-1));
-		}
-	}
-
-	private async Task SummaryButtonClicked()
-	{
-		if (!ValidateTime())
-		{
-			await JSRuntime.InvokeVoidAsync("alert", ["Incorrect Time"]);
-			return;
-		}
-
-		DateTime fromDateTime = new(fromDate.Year, fromDate.Month, fromDate.Day, fromTime.Hours, fromTime.Minutes, 0);
-		DateTime toDateTime = new(toDate.Year, toDate.Month, toDate.Day, toTime.Hours, toTime.Minutes, 0);
-
-		MemoryStream ms = await SummaryPrint.PrintSummary(fromDateTime, toDateTime);
-		await JS.InvokeVoidAsync("saveAsFile", "SummaryReport.pdf", Convert.ToBase64String(ms.ToArray()));
-	}
-
-	private async Task DetailedButtonClicked()
-	{
-		if (!ValidateTime())
-		{
-			await JSRuntime.InvokeVoidAsync("alert", ["Incorrect Time"]);
-			return;
-		}
-
-		DateTime fromDateTime = new(fromDate.Year, fromDate.Month, fromDate.Day, fromTime.Hours, fromTime.Minutes, 0);
-		DateTime toDateTime = new(toDate.Year, toDate.Month, toDate.Day, toTime.Hours, toTime.Minutes, 0);
-
-		MemoryStream ms = await DetailPrint.PrintDetail(fromDateTime, toDateTime, selectedLocationId);
-		await JS.InvokeVoidAsync("saveAsFile", "DetailedReport.pdf", Convert.ToBase64String(ms.ToArray()));
-	}
-
-	private async Task ExcelButtonClicked()
-	{
-		if (!ValidateTime())
-		{
-			await JSRuntime.InvokeVoidAsync("alert", ["Incorrect Time"]);
-			return;
-		}
-
-		DateTime fromDateTime = new(fromDate.Year, fromDate.Month, fromDate.Day, fromTime.Hours, fromTime.Minutes, 0);
-		DateTime toDateTime = new(toDate.Year, toDate.Month, toDate.Day, toTime.Hours, toTime.Minutes, 0);
-
-		MemoryStream ms = await Excel.ExcelExport(fromDateTime, toDateTime, selectedLocationId);
-		await JS.InvokeVoidAsync("saveAsFile", "ExcelReport.xlsx", Convert.ToBase64String(ms.ToArray()));
-	}
-
-	#region Change Events
-
-	private bool ValidateTime()
-	{
-		if (fromDate > toDate) return false;
-		if (fromDate == toDate && fromTime > toTime) return false;
-
-		return true;
-	}
-
-	private void OnFromDateChange(ChangeEventArgs e) => fromDate = DateOnly.Parse(e.Value.ToString());
-
-	private void OnToDateChange(ChangeEventArgs e) => toDate = DateOnly.Parse(e.Value.ToString());
-
-	private void OnFromTimeChange(ChangeEventArgs e) => fromTime = TimeSpan.Parse(e.Value.ToString());
-
-	private void OnToTimeChange(ChangeEventArgs e) => toTime = TimeSpan.Parse(e.Value.ToString());
-
-	#endregion
-}

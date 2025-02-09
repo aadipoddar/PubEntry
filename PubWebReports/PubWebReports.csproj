@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Syncfusion.Blazor.Calendars" Version="28.2.4" />
+    <PackageReference Include="Syncfusion.Blazor.DropDowns" Version="28.2.4" />
+    <PackageReference Include="Syncfusion.Blazor.Navigations" Version="28.2.4" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" Version="28.2.4" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\PubEntryLibrary\PubEntryLibrary.csproj" />
   </ItemGroup>
 

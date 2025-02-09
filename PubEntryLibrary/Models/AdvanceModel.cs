@@ -46,6 +46,7 @@ public class AdvancePaymentModeTotalsModel
 
 public class AdvanceTotalsModel
 {
+	public int LocationId { get; set; }
 	public int TotalBooking { get; set; }
 	public int RedeemedBooking { get; set; }
 	public int NotRedeemedBooking { get; set; }

@@ -6,6 +6,7 @@ AS
 BEGIN
 
     SELECT
+        LocationId,
         SUM(at.Booking) AS TotalBooking,
         SUM(CASE WHEN at.TransactionId != 0 THEN at.Booking ELSE 0 END) AS RedeemedBooking,
         SUM(CASE WHEN at.TransactionId = 0 THEN at.Booking ELSE 0 END) AS NotRedeemedBooking,
@@ -22,5 +23,6 @@ BEGIN
     ) adt ON at.Id = adt.AdvanceId
     WHERE AdvanceDate BETWEEN @FromDate AND @ToDate
         AND at.LocationId = @LocationId
+        GROUP BY at.LocationId
 
 END

@@ -39,6 +39,7 @@ public class TransactionPrintModel
 
 public class TransactionTotalsModel
 {
+	public int LocationId { get; set; }
 	public int Male { get; set; }
 	public int Female { get; set; }
 	public int Loyalty { get; set; }
