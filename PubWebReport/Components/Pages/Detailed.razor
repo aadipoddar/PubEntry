@@ -1,0 +1,218 @@
+﻿@page "/detailed-report"
+
+<PageTitle>Pub Reports</PageTitle>
+
+<div class="container">
+	<div class="container-bottom">
+		<SfDateTimePicker TValue="DateTime" Placeholder="From Date Time" Value="@FromDateTime" Max="@ToDateTime">
+			<DateTimePickerEvents TValue="DateTime" ValueChange="OnFromValueChanged"></DateTimePickerEvents>
+		</SfDateTimePicker>
+		<SfDateTimePicker TValue="DateTime" Placeholder="To Date Time" Value="@ToDateTime" Min="@FromDateTime">
+			<DateTimePickerEvents TValue="DateTime" ValueChange="OnToValueChanged"></DateTimePickerEvents>
+		</SfDateTimePicker>
+	</div>
+
+	<div class="container-bottom">
+		<select class="form-select-sm" name="locationSelect" @bind="SelectedLocationId" @bind:after="OnLocationChanged">
+			@foreach (var location in locations)
+			{
+				<option value="@location.Id">@location.Name</option>
+			}
+		</select>
+
+		<div>
+			<button class="btn btn-primary" type="button" @onclick="DetailedButtonClicked">PDF</button>
+			<button class="btn btn-primary" type="button" @onclick="ExcelButtonClicked">Excel</button>
+		</div>
+	</div>
+
+	<label class="section-label">Transaction Details</label>
+
+	<SfGrid DataSource="@TransactionPrintModels"
+			ID="TransactionGrid"
+			@ref="TransactionGrid"
+			Height="300"
+			AllowPaging="true"
+			AllowSorting="true"
+			AllowResizing="true"
+			AllowFiltering="true"
+			AllowGrouping="true"
+			AllowPdfExport="true"
+			AllowExcelExport="true"
+			EnableInfiniteScrolling="true"
+			Toolbar="@(new List<string>() { "PdfExport", "ExcelExport" })"
+			ContextMenuItems="@(new List<object>() { "AutoFit", "AutoFitAll", "SortAscending", "SortDescending","Copy", "Save", "Cancel","PdfExport", "ExcelExport", "CsvExport", "FirstPage", "PrevPage","LastPage", "NextPage"})">
+
+		<GridEvents OnToolbarClick="ToolbarClickHandler" TValue="TransactionPrintModel"></GridEvents>
+
+		<GridPageSettings PageSize="50"></GridPageSettings>
+
+		<GridSortSettings>
+			<GridSortColumns>
+				<GridSortColumn Field="DateTime" Direction="SortDirection.Ascending"></GridSortColumn>
+			</GridSortColumns>
+		</GridSortSettings>
+
+		<GridColumns>
+			<GridColumn Field="@nameof(TransactionPrintModel.Id)" HeaderText="Slip Id" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(TransactionPrintModel.PersonName)" HeaderText="Name" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(TransactionPrintModel.PersonNumber)" HeaderText="Number" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(TransactionPrintModel.Loyalty)" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(TransactionPrintModel.Male)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(TransactionPrintModel.Female)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(TransactionPrintModel.Cash)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(TransactionPrintModel.Card)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(TransactionPrintModel.UPI)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(TransactionPrintModel.Amex)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(TransactionPrintModel.Reservation)" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(TransactionPrintModel.ApprovedBy)" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(TransactionPrintModel.EnteredBy)" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(TransactionPrintModel.DateTime)" Format="dd/MM/yy HH:mm" Type="ColumnType.DateTime" AutoFit="true"></GridColumn>
+		</GridColumns>
+	</SfGrid>
+
+	<label class="section-label">Advance Details</label>
+
+	<SfGrid DataSource="@AdvancePrintModels"
+			ID="AdvanceGrid"
+			@ref="AdvanceGrid"
+			Height="300"
+			AllowPaging="true"
+			AllowSorting="true"
+			AllowResizing="true"
+			AllowFiltering="true"
+			AllowGrouping="true"
+			AllowPdfExport="true"
+			AllowExcelExport="true"
+			EnableInfiniteScrolling="true"
+			Toolbar="@(new List<string>() { "PdfExport", "ExcelExport" })"
+			ContextMenuItems="@(new List<object>() { "AutoFit", "AutoFitAll", "SortAscending", "SortDescending","Copy", "Save", "Cancel","PdfExport", "ExcelExport", "CsvExport", "FirstPage", "PrevPage","LastPage", "NextPage"})">
+
+		<GridEvents OnToolbarClick="ToolbarClickHandler" TValue="AdvancePrintModel"></GridEvents>
+
+		<GridPageSettings PageSize="50"></GridPageSettings>
+
+		<GridSortSettings>
+			<GridSortColumns>
+				<GridSortColumn Field="Adv_Id" Direction="SortDirection.Ascending"></GridSortColumn>
+			</GridSortColumns>
+		</GridSortSettings>
+
+		<GridColumns>
+			<GridColumn Field="@nameof(AdvancePrintModel.Adv_Id)" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(AdvancePrintModel.Name)" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(AdvancePrintModel.Number)" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(AdvancePrintModel.Loyalty)" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(AdvancePrintModel.Adv_Pymt_DT)" Format="dd/MM/yy HH:mm" Type="ColumnType.DateTime" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(AdvancePrintModel.Adv_For_DT)" Format="dd/MM/yy" Type="ColumnType.DateOnly" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(AdvancePrintModel.Remarks)" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(AdvancePrintModel.Booking_Amt)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(AdvancePrintModel.Adv_Paid)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(AdvancePrintModel.Pay_Mode)" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(AdvancePrintModel.Slip_No)" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(AdvancePrintModel.Entry_Paid)" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(AdvancePrintModel.Slip_DT)" AutoFit="true"></GridColumn>
+			<GridColumn Field="@nameof(AdvancePrintModel.Total_Amt)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+		</GridColumns>
+
+	</SfGrid>
+
+	<label class="section-label">Totals</label>
+
+	<div class="accordion-content">
+		<!-- First Row -->
+		<div class="form-row">
+			<div class="form-group">
+				<label>Total People</label>
+				<input type="number" value="@((transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.Male ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.Female ?? 0))" readonly />
+			</div>
+			<div class="form-group">
+				<label>Total Amount</label>
+				<input type="number" value="@((transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.Cash ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.Card ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.UPI ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.Amex ?? 0))" readonly />
+			</div>
+		</div>
+
+		<!-- Second Row -->
+		<div class="form-row">
+			<div class="form-group">
+				<label>Male</label>
+				<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.Male ?? 0)" readonly />
+			</div>
+			<div class="form-group">
+				<label>Cash</label>
+				<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.Cash ?? 0)" readonly />
+			</div>
+		</div>
+
+		<!-- Third Row -->
+		<div class="form-row">
+			<div class="form-group">
+				<label>Female</label>
+				<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.Female ?? 0)" readonly />
+			</div>
+			<div class="form-group">
+				<label>Card</label>
+				<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.Card ?? 0)" readonly />
+			</div>
+		</div>
+
+		<!-- Fourth Row -->
+		<div class="form-row">
+			<div class="form-group">
+				<label>Total Loyalty</label>
+				<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.Loyalty ?? 0)" readonly />
+			</div>
+			<div class="form-group">
+				<label>UPI</label>
+				<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.UPI ?? 0)" readonly />
+			</div>
+		</div>
+
+		<!-- Fifth Row (Amex on right) -->
+		<div class="form-row">
+			<div class="form-group">
+				<!-- Empty spacer -->
+			</div>
+			<div class="form-group">
+				<label>Amex</label>
+				<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.Amex ?? 0)" readonly />
+			</div>
+		</div>
+
+		<!-- Sixth Row -->
+		<div class="form-row">
+			<div class="form-group">
+				<label>Total Advance</label>
+				<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.TotalAdvance ?? 0)" readonly />
+			</div>
+			<div class="form-group">
+				<label>Total Booking</label>
+				<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.TotalBooking ?? 0)" readonly />
+			</div>
+		</div>
+
+		<!-- Seventh Row -->
+		<div class="form-row">
+			<div class="form-group">
+				<label>Redeemed</label>
+				<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.RedeemedAdvance ?? 0)" readonly />
+			</div>
+			<div class="form-group">
+				<label>Redeemed</label>
+				<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.RedeemedBooking ?? 0)" readonly />
+			</div>
+		</div>
+
+		<!-- Eighth Row -->
+		<div class="form-row">
+			<div class="form-group">
+				<label>Not Redeemed</label>
+				<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.NotRedeemedAdvance ?? 0)" readonly />
+			</div>
+			<div class="form-group">
+				<label>Not Redeemed</label>
+				<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.NotRedeemedBooking ?? 0)" readonly />
+			</div>
+		</div>
+	</div>
+</div>
