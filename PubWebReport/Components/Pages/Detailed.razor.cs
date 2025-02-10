@@ -8,9 +8,11 @@ public partial class Detailed
 {
 	[Inject] public IJSRuntime JS { get; set; }
 
+	[Parameter][SupplyParameterFromQuery] public int SelectedLocationId { get; set; }
 	[Parameter][SupplyParameterFromQuery] public DateTime FromDateTime { get; set; }
 	[Parameter][SupplyParameterFromQuery] public DateTime ToDateTime { get; set; }
-	[Parameter][SupplyParameterFromQuery] public int SelectedLocationId { get; set; }
+
+	private DateTime CurrentDateTime { get; set; } = DateTime.Now.AddHours(5).AddMinutes(30);
 
 	private SfGrid<TransactionPrintModel> TransactionGrid;
 	private SfGrid<AdvancePrintModel> AdvanceGrid;

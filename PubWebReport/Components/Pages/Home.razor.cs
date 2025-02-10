@@ -7,8 +7,9 @@ public partial class Home
 	[Inject] public NavigationManager NavManager { get; set; }
 	[Inject] public IJSRuntime JS { get; set; }
 
-	private DateTime FromDateTime { get; set; } = DateTime.Now;
-	private DateTime ToDateTime { get; set; } = DateTime.Now;
+	private static DateTime CurrentDateTime { get; set; } = DateTime.Now.AddHours(5).AddMinutes(30);
+	private DateTime FromDateTime { get; set; } = CurrentDateTime;
+	private DateTime ToDateTime { get; set; } = CurrentDateTime;
 
 	private int selectedLocationId;
 
@@ -27,15 +28,15 @@ public partial class Home
 
 		selectedLocationId = locations.FirstOrDefault().Id;
 
-		if (DateTime.Now.Hour >= TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours)
+		if (CurrentDateTime.Hour >= TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours)
 		{
-			ToDateTime = DateTime.Now.Date.AddDays(1).AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)).Hours);
-			FromDateTime = DateTime.Now.Date.AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours);
+			ToDateTime = CurrentDateTime.Date.AddDays(1).AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)).Hours);
+			FromDateTime = CurrentDateTime.Date.AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours);
 		}
 		else
 		{
-			ToDateTime = DateTime.Now.Date.AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)).Hours);
-			FromDateTime = DateTime.Now.Date.AddDays(-1).AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours);
+			ToDateTime = CurrentDateTime.Date.AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)).Hours);
+			FromDateTime = CurrentDateTime.Date.AddDays(-1).AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours);
 		}
 
 		await LoadTransactionsAdvance();
