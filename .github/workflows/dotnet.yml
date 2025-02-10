@@ -9,16 +9,14 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-    strategy:
-      matrix:
-        dotnet-version: [ '8.0.x', '9.0.x' ]
+
     steps:
     - uses: actions/checkout@v4
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: ${{ matrix.dotnet-version }}
+        dotnet-version: 8.0.x
 
     - name: Restore dependencies
       run: dotnet restore
@@ -28,4 +26,3 @@ jobs:
         dotnet build PubEntryLibrary\PubEntryLibrary.csproj --no-restore
         dotnet build PubEntry\PubEntry.csproj --no-restore
         dotnet build PubReport\PubReport.csproj --no-restore
-        dotnet build PubEntry\PubWebReport.csproj --no-restore  # Ensure this is intentional
