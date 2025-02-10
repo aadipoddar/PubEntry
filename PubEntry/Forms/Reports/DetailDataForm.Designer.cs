@@ -538,7 +538,6 @@ partial class DetailDataForm
 		Name = "DetailDataForm";
 		StartPosition = FormStartPosition.CenterScreen;
 		Text = "Detail Data";
-		WindowState = FormWindowState.Maximized;
 		Load += DetailDataForm_Load;
 		((System.ComponentModel.ISupportInitialize)transactionDataGridView).EndInit();
 		((System.ComponentModel.ISupportInitialize)advanceDataGridView).EndInit();

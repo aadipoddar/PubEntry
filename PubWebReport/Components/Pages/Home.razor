@@ -18,8 +18,8 @@
 			{
 				<AccordionItem>
 					<HeaderTemplate>
-						<label>@location.Name</label>
-						<button class="btn btn-primary" type="button" @onclick="() => OnDetailedClick(location.Id)">Detailed</button>
+							<label>@location.Name</label>
+							<button class="btn btn-primary" type="button" @onclick="() => OnDetailedClick(location.Id)">Detailed</button>
 					</HeaderTemplate>
 					<ContentTemplate>
 						<div class="accordion-content">
@@ -62,7 +62,7 @@
 							<!-- Fourth Row -->
 							<div class="form-row">
 								<div class="form-group">
-									<label>Total Loyalty</label>
+									<label>Loyalty</label>
 									<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Loyalty ?? 0)" readonly />
 								</div>
 								<div class="form-group">
@@ -129,6 +129,9 @@
 	<SfAccordion>
 		<AccordionItems>
 			<AccordionItem Header="Grand Total">
+				<HeaderTemplate>
+					<label style="font-weight:500">Grand Total</label>
+				</HeaderTemplate>
 				<ContentTemplate>
 					<div class="accordion-content">
 						<!-- First Row -->
@@ -170,7 +173,7 @@
 						<!-- Fourth Row -->
 						<div class="form-row">
 							<div class="form-group">
-								<label>Total Loyalty</label>
+								<label>Loyalty</label>
 								<input type="number" value="@(transactionTotalsModel?.Sum(_ => _.Loyalty) ?? 0)" readonly />
 							</div>
 							<div class="form-group">

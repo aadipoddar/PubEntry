@@ -90,7 +90,7 @@ public static class SummaryPrint
 			textElement = new PdfTextElement(text, font);
 			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-			textElement = new PdfTextElement($"Total Loyalty: {transactionTotalsModel.Last().Loyalty}", font);
+			textElement = new PdfTextElement($"Loyalty: {transactionTotalsModel.Last().Loyalty}", font);
 			result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
 			text = $"UPI: {transactionTotalsModel.Last().UPI}";
@@ -195,7 +195,7 @@ public static class SummaryPrint
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		textElement = new PdfTextElement($"Grand Total Loyalty: {transactionTotalsModel.Sum(x => x.Loyalty)}", font);
+		textElement = new PdfTextElement($"Loyalty: {transactionTotalsModel.Sum(x => x.Loyalty)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
 		text = $"UPI: {transactionTotalsModel.Sum(x => x.UPI)}";

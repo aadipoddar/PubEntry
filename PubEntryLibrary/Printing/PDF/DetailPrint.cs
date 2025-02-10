@@ -196,7 +196,7 @@ public static class DetailPrint
 		textElement = new PdfTextElement(text, font);
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), layoutFormat);
 
-		textElement = new PdfTextElement($"Total Loyalty: {detailedTransactionPrintModel.Count(x => x.Loyalty == 'L')}", font);
+		textElement = new PdfTextElement($"Loyalty: {detailedTransactionPrintModel.Count(x => x.Loyalty == 'L')}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), layoutFormat);
 
 		text = $"UPI: {detailedTransactionPrintModel.Sum(x => x.UPI)}";
