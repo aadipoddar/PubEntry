@@ -53,7 +53,7 @@ public partial class PaymentMode : Form
 		else
 		{
 			paymentModeModel.Id = (paymentComboBox.SelectedItem as PaymentModeModel).Id;
-			await PaymentModeData.Update_PaymentMode(paymentModeModel);
+			await PaymentModeData.UpdatePaymentMode(paymentModeModel);
 		}
 
 		LoadData();

@@ -15,11 +15,13 @@
 	<SfAccordion ExpandMode="ExpandMode.Single">
 		<AccordionItems>
 			@foreach (var location in locations)
-			{
-				<AccordionItem>
+	{
+		<AccordionItem>
 					<HeaderTemplate>
-							<label>@location.Name</label>
-							<button class="btn btn-primary" type="button" @onclick="() => OnDetailedClick(location.Id)">Detailed</button>
+						<label>@location.Name</label>
+						<button class="btn btn-primary" type="button" @onclick="() => OnDetailedClick(location.Id)">
+							Detailed
+						</button>
 					</HeaderTemplate>
 					<ContentTemplate>
 						<div class="accordion-content">
@@ -27,11 +29,15 @@
 							<div class="form-row">
 								<div class="form-group">
 									<label>Total People</label>
-									<input type="number" value="@((transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Male ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Female ?? 0))" readonly />
+									<input type="number"
+										   value="@((transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Male ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Female ?? 0))"
+										   readonly />
 								</div>
 								<div class="form-group">
 									<label>Total Amount</label>
-									<input type="number" value="@((transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Cash ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Card ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.UPI ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Amex ?? 0))" readonly />
+									<input type="number"
+										   value="@((transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Cash ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Card ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.UPI ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Amex ?? 0))"
+										   readonly />
 								</div>
 							</div>
 
@@ -39,11 +45,15 @@
 							<div class="form-row">
 								<div class="form-group">
 									<label>Male</label>
-									<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Male ?? 0)" readonly />
+									<input type="number"
+										   value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Male ?? 0)"
+										   readonly />
 								</div>
 								<div class="form-group">
 									<label>Cash</label>
-									<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Cash ?? 0)" readonly />
+									<input type="number"
+										   value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Cash ?? 0)"
+										   readonly />
 								</div>
 							</div>
 
@@ -51,11 +61,15 @@
 							<div class="form-row">
 								<div class="form-group">
 									<label>Female</label>
-									<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Female ?? 0)" readonly />
+									<input type="number"
+										   value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Female ?? 0)"
+										   readonly />
 								</div>
 								<div class="form-group">
 									<label>Card</label>
-									<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Card ?? 0)" readonly />
+									<input type="number"
+										   value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Card ?? 0)"
+										   readonly />
 								</div>
 							</div>
 
@@ -63,11 +77,15 @@
 							<div class="form-row">
 								<div class="form-group">
 									<label>Loyalty</label>
-									<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Loyalty ?? 0)" readonly />
+									<input type="number"
+										   value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Loyalty ?? 0)"
+										   readonly />
 								</div>
 								<div class="form-group">
 									<label>UPI</label>
-									<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.UPI ?? 0)" readonly />
+									<input type="number"
+										   value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.UPI ?? 0)"
+										   readonly />
 								</div>
 							</div>
 
@@ -78,7 +96,9 @@
 								</div>
 								<div class="form-group">
 									<label>Amex</label>
-									<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Amex ?? 0)" readonly />
+									<input type="number"
+										   value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Amex ?? 0)"
+										   readonly />
 								</div>
 							</div>
 
@@ -86,11 +106,15 @@
 							<div class="form-row">
 								<div class="form-group">
 									<label>Total Advance</label>
-									<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.TotalAdvance ?? 0)" readonly />
+									<input type="number"
+										   value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.TotalAdvance ?? 0)"
+										   readonly />
 								</div>
 								<div class="form-group">
 									<label>Total Booking</label>
-									<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.TotalBooking ?? 0)" readonly />
+									<input type="number"
+										   value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.TotalBooking ?? 0)"
+										   readonly />
 								</div>
 							</div>
 
@@ -98,11 +122,15 @@
 							<div class="form-row">
 								<div class="form-group">
 									<label>Redeemed</label>
-									<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.RedeemedAdvance ?? 0)" readonly />
+									<input type="number"
+										   value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.RedeemedAdvance ?? 0)"
+										   readonly />
 								</div>
 								<div class="form-group">
 									<label>Redeemed</label>
-									<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.RedeemedBooking ?? 0)" readonly />
+									<input type="number"
+										   value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.RedeemedBooking ?? 0)"
+										   readonly />
 								</div>
 							</div>
 
@@ -110,17 +138,21 @@
 							<div class="form-row">
 								<div class="form-group">
 									<label>Not Redeemed</label>
-									<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.NotRedeemedAdvance ?? 0)" readonly />
+									<input type="number"
+										   value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.NotRedeemedAdvance ?? 0)"
+										   readonly />
 								</div>
 								<div class="form-group">
 									<label>Not Redeemed</label>
-									<input type="number" value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.NotRedeemedBooking ?? 0)" readonly />
+									<input type="number"
+										   value="@(advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.NotRedeemedBooking ?? 0)"
+										   readonly />
 								</div>
 							</div>
 						</div>
 					</ContentTemplate>
 				</AccordionItem>
-			}
+	}
 		</AccordionItems>
 	</SfAccordion>
 
@@ -138,11 +170,14 @@
 						<div class="form-row">
 							<div class="form-group">
 								<label>Total People</label>
-								<input type="number" value="@(transactionTotalsModel?.Sum(_ => _.Male + _.Female) ?? 0)" readonly />
+								<input type="number" value="@(transactionTotalsModel?.Sum(_ => _.Male + _.Female) ?? 0)"
+									   readonly />
 							</div>
 							<div class="form-group">
 								<label>Total Amount</label>
-								<input type="number" value="@(transactionTotalsModel?.Sum(_ => _.Cash + _.Card + _.UPI + _.Amex) ?? 0)" readonly />
+								<input type="number"
+									   value="@(transactionTotalsModel?.Sum(_ => _.Cash + _.Card + _.UPI + _.Amex) ?? 0)"
+									   readonly />
 							</div>
 						</div>
 
@@ -162,7 +197,8 @@
 						<div class="form-row">
 							<div class="form-group">
 								<label>Female</label>
-								<input type="number" value="@(transactionTotalsModel?.Sum(_ => _.Female) ?? 0)" readonly />
+								<input type="number" value="@(transactionTotalsModel?.Sum(_ => _.Female) ?? 0)"
+									   readonly />
 							</div>
 							<div class="form-group">
 								<label>Card</label>
@@ -174,7 +210,8 @@
 						<div class="form-row">
 							<div class="form-group">
 								<label>Loyalty</label>
-								<input type="number" value="@(transactionTotalsModel?.Sum(_ => _.Loyalty) ?? 0)" readonly />
+								<input type="number" value="@(transactionTotalsModel?.Sum(_ => _.Loyalty) ?? 0)"
+									   readonly />
 							</div>
 							<div class="form-group">
 								<label>UPI</label>
@@ -197,11 +234,13 @@
 						<div class="form-row">
 							<div class="form-group">
 								<label>Total Advance</label>
-								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.TotalAdvance) ?? 0)" readonly />
+								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.TotalAdvance) ?? 0)"
+									   readonly />
 							</div>
 							<div class="form-group">
 								<label>Total Booking</label>
-								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.TotalBooking) ?? 0)" readonly />
+								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.TotalBooking) ?? 0)"
+									   readonly />
 							</div>
 						</div>
 
@@ -209,11 +248,13 @@
 						<div class="form-row">
 							<div class="form-group">
 								<label>Redeemed</label>
-								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.RedeemedAdvance) ?? 0)" readonly />
+								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.RedeemedAdvance) ?? 0)"
+									   readonly />
 							</div>
 							<div class="form-group">
 								<label>Redeemed</label>
-								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.RedeemedBooking) ?? 0)" readonly />
+								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.RedeemedBooking) ?? 0)"
+									   readonly />
 							</div>
 						</div>
 
@@ -221,11 +262,13 @@
 						<div class="form-row">
 							<div class="form-group">
 								<label>Not Redeemed</label>
-								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.NotRedeemedAdvance) ?? 0)" readonly />
+								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.NotRedeemedAdvance) ?? 0)"
+									   readonly />
 							</div>
 							<div class="form-group">
 								<label>Not Redeemed</label>
-								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.NotRedeemedBooking) ?? 0)" readonly />
+								<input type="number" value="@(advanceTotalsModel?.Sum(_ => _.NotRedeemedBooking) ?? 0)"
+									   readonly />
 							</div>
 						</div>
 					</div>
@@ -239,14 +282,23 @@
 
 		<select class="form-select-sm" name="locationSelect" @bind="selectedLocationId">
 			@foreach (var location in locations)
-			{
-				<option value="@location.Id">@location.Name</option>
-			}
+	{
+		<option value="@location.Id">@location.Name</option>
+	}
 		</select>
 
 		<div>
 			<button class="btn btn-primary" type="button" @onclick="DetailedButtonClicked">PDF</button>
 			<button class="btn btn-primary" type="button" @onclick="ExcelButtonClicked">Excel</button>
 		</div>
+
+		<select class="form-select-sm" name="userSelect" @bind="selectedUserId">
+			@foreach (var user in users)
+	{
+		<option value="@user.Id">@user.Name</option>
+	}
+		</select>
+		<input class="input-group-text" type="password" @bind="Password" />
+		<button class="btn btn-primary" type="button" @onclick="AdminButtonClicked">Admin Panel</button>
 	</div>
 </div>

@@ -1,0 +1,29 @@
+﻿@page "/admin/paymentModes"
+
+<PageTitle>Manage Payment Modes</PageTitle>
+
+<div class="page">
+	<div class="sidebar">
+		<NavMenu />
+	</div>
+
+	<main>
+		<article class="content px-4">
+			<div class="container">
+				<select class="form-select-sm" @onchange="OnPaymentModeSelect">
+					<option value="0" selected>Select a Payment Mode</option>
+					@foreach (var paymentMode in paymentModes)
+					{
+						<option value="@paymentMode.Id">@paymentMode.Name</option>
+					}
+				</select>
+
+				<input class="input-group-text" type="text" @bind="PaymentModeModel.Name" />
+
+				<SfCheckBox Label="Status" @bind-Checked="PaymentModeModel.Status" />
+
+				<button class="btn btn-primary" type="submit" @onclick="OnSaveButtonClick">Save</button>
+			</div>
+		</article>
+	</main>
+</div>

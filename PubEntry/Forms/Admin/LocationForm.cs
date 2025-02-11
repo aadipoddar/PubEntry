@@ -53,7 +53,7 @@ public partial class LocationForm : Form
 		else
 		{
 			locationModel.Id = (locationComboBox.SelectedItem as LocationModel).Id;
-			await LocationData.Update_Location(locationModel);
+			await LocationData.UpdateLocation(locationModel);
 		}
 
 		LoadData();

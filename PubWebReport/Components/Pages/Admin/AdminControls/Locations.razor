@@ -1,0 +1,29 @@
+﻿@page "/admin/locations"
+
+<PageTitle>Manage Locations</PageTitle>
+
+<div class="page">
+	<div class="sidebar">
+		<NavMenu />
+	</div>
+
+	<main>
+		<article class="content px-4">
+			<div class="container">
+				<select class="form-select-sm" @onchange="OnLocationSelect">
+					<option value="0" selected>Select a Location</option>
+					@foreach (var location in locations)
+					{
+						<option value="@location.Id">@location.Name</option>
+					}
+				</select>
+
+				<input class="input-group-text" type="text" @bind="LocationModel.Name" />
+
+				<SfCheckBox Label="Status" @bind-Checked="LocationModel.Status" />
+
+				<button class="btn btn-primary" type="submit" @onclick="OnSaveButtonClick">Save</button>
+			</div>
+		</article>
+	</main>
+</div>

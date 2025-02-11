@@ -1,0 +1,38 @@
+﻿@page "/admin/users"
+
+<PageTitle>Manage Users</PageTitle>
+
+<div class="page">
+	<div class="sidebar">
+		<NavMenu />
+	</div>
+
+	<main>
+		<article class="content px-4">
+			<div class="container">
+				<select class="form-select-sm" @onchange="OnUserSelect">
+					<option value="0" selected>Select a user</option>
+					@foreach (var user in users)
+					{
+						<option value="@user.Id">@user.Name</option>
+					}
+				</select>
+
+				<input class="input-group-text" type="text" @bind="UserModel.Name" />
+				<input class="input-group-text" type="password" @bind="UserModel.Password" />
+
+				<select class="form-select-sm" @bind="UserModel.LocationId">
+					@foreach (var location in locations)
+					{
+						<option value="@location.Id">@location.Name</option>
+					}
+				</select>
+
+				<SfCheckBox Label="Status" @bind-Checked="UserModel.Status" />
+				<SfCheckBox Label="Admin" @bind-Checked="UserModel.Admin" />
+
+				<button class="btn btn-primary" type="submit" @onclick="OnSaveButtonClick">Save</button>
+			</div>
+		</article>
+	</main>
+</div>

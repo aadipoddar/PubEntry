@@ -11,22 +11,42 @@ public partial class Home
 	private DateTime FromDateTime { get; set; } = CurrentDateTime;
 	private DateTime ToDateTime { get; set; } = CurrentDateTime;
 
+	private string Password { get; set; }
+
 	private int selectedLocationId;
+	private int selectedUserId;
 
 	private readonly List<LocationModel> locations = [];
+	private readonly List<UserModel> users = [];
 	private readonly List<TransactionTotalsModel> transactionTotalsModel = [];
 	private readonly List<AdvanceTotalsModel> advanceTotalsModel = [];
 
 	protected override async Task OnInitializedAsync() => await LoadData();
 
+	protected override Task OnAfterRenderAsync(bool firstRender)
+	{
+		// TODO - Testing
+		//NavManager.NavigateTo(
+		//		$"/admin" +
+		//		$"?UserId={23}" +
+		//		$"&Password={BCrypt.Net.BCrypt.EnhancedHashPassword("1234", 13)}");
+		return base.OnAfterRenderAsync(firstRender);
+	}
+
 	private async Task LoadData()
 	{
 		locations.Clear();
-		var activeLocations = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location);
-		foreach (var location in activeLocations)
+		users.Clear();
+
+		foreach (var location in await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location))
 			locations.Add(location);
 
+		foreach (var user in await CommonData.LoadTableDataByStatus<UserModel>(Table.User))
+			if (user.Admin)
+				users.Add(user);
+
 		selectedLocationId = locations.FirstOrDefault().Id;
+		selectedUserId = users.FirstOrDefault().Id;
 
 		if (CurrentDateTime.Hour >= TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours)
 		{
@@ -106,4 +126,26 @@ public partial class Home
 			"saveAsFile",
 			"ExcelReport.xlsx",
 			Convert.ToBase64String((await Excel.ExcelExport(FromDateTime, ToDateTime, selectedLocationId)).ToArray()));
+
+	private async Task AdminButtonClicked()
+	{
+		if (await ValidatePassword())
+			NavManager.NavigateTo(
+				$"/admin" +
+				$"?UserId={selectedUserId}" +
+				$"&Password={BCrypt.Net.BCrypt.EnhancedHashPassword(Password, 13)}");
+
+		else await JS.InvokeVoidAsync("alert", "Invalid Password");
+	}
+
+	private async Task<bool> ValidatePassword()
+	{
+		if (string.IsNullOrEmpty(Password)) return false;
+
+		if ((await CommonData.LoadTableDataById<UserModel>(Table.User, selectedUserId)).Password == Password)
+			return true;
+
+		Password = string.Empty;
+		return false;
+	}
 }
