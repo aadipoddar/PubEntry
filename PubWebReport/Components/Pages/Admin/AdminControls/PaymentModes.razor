@@ -18,7 +18,10 @@
 					}
 				</select>
 
-				<input class="input-group-text" type="text" @bind="PaymentModeModel.Name" />
+				<div class="form-group">
+					<label>Name</label>
+					<input class="input-group-text" type="text" @bind="PaymentModeModel.Name" placeholder="Name" />
+				</div>
 
 				<SfCheckBox Label="Status" @bind-Checked="PaymentModeModel.Status" />
 

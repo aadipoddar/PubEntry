@@ -18,8 +18,15 @@
 					}
 				</select>
 
-				<input class="input-group-text" type="text" @bind="UserModel.Name" />
-				<input class="input-group-text" type="password" @bind="UserModel.Password" />
+				<div class="form-group">
+					<label>Name</label>
+					<input class="input-group-text" type="text" @bind="UserModel.Name" placeholder="Name" />
+				</div>
+
+				<div class="form-group">
+					<label>Password</label>
+					<input class="input-group-text" type="password" @bind="UserModel.Password" placeholder="Password" />
+				</div>
 
 				<select class="form-select-sm" @bind="UserModel.LocationId">
 					@foreach (var location in locations)

@@ -1,0 +1,33 @@
+﻿@page "/admin/reservationTypes"
+
+<PageTitle>Manage Reservation Types</PageTitle>
+
+<div class="page">
+	<div class="sidebar">
+		<NavMenu />
+	</div>
+
+	<main>
+		<article class="content px-4">
+			<div class="container">
+				<select class="form-select-sm" @onchange="OnReservationTypeSelect">
+					<option value="0" selected>Select a Reservation Type</option>
+					@foreach (var reservationType in reservationTypes)
+					{
+						<option value="@reservationType.Id">@reservationType.Name</option>
+					}
+				</select>
+
+				<div class="form-group">
+					<label>Name</label>
+					<input class="input-group-text" type="text" @bind="ReservationTypeModel.Name" placeholder="Name" />
+				</div>
+
+				<SfCheckBox Label="Status" @bind-Checked="ReservationTypeModel.Status" />
+
+				<button class="btn btn-primary" type="submit" @onclick="OnSaveButtonClick">Save</button>
+			</div>
+		</article>
+	</main>
+</div>
+

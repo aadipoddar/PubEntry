@@ -28,94 +28,102 @@
 
 	<label class="section-label">Transaction Details</label>
 
-	<SfGrid DataSource="@TransactionPrintModels"
-			ID="TransactionGrid"
-			@ref="TransactionGrid"
-			Height="300"
-			AllowPaging="true"
-			AllowSorting="true"
-			AllowResizing="true"
-			AllowFiltering="true"
-			AllowGrouping="true"
-			AllowPdfExport="true"
-			AllowExcelExport="true"
-			EnableInfiniteScrolling="true"
-			Toolbar="@(new List<string>() { "PdfExport", "ExcelExport" })"
-			ContextMenuItems="@(new List<object>() { "AutoFit", "AutoFitAll", "SortAscending", "SortDescending","Copy", "Save", "Cancel","PdfExport", "ExcelExport", "CsvExport", "FirstPage", "PrevPage","LastPage", "NextPage"})">
+	<div class="grid-wrapper">
+		<SfGrid DataSource="@TransactionPrintModels"
+				ID="TransactionGrid"
+				@ref="TransactionGrid"
+				Height="300"
+				Width="100%"
+				AllowPaging="true"
+				AllowSorting="true"
+				AllowResizing="true"
+				AllowFiltering="true"
+				AllowGrouping="true"
+				AllowPdfExport="true"
+				AllowExcelExport="true"
+				EnableInfiniteScrolling="true"
+				Toolbar="@(new List<string>() { "PdfExport", "ExcelExport" })"
+				ContextMenuItems="@(new List<object>() { "AutoFit", "AutoFitAll", "SortAscending", "SortDescending","Copy", "Save", "Cancel","PdfExport", "ExcelExport", "CsvExport", "FirstPage", "PrevPage","LastPage", "NextPage"})"
+				style="min-width: 900px; overflow-x: auto;">
 
-		<GridEvents OnToolbarClick="ToolbarClickHandler" TValue="TransactionPrintModel"></GridEvents>
+			<GridEvents OnToolbarClick="ToolbarClickHandler" TValue="TransactionPrintModel"></GridEvents>
 
-		<GridPageSettings PageSize="50"></GridPageSettings>
+			<GridPageSettings PageSize="50"></GridPageSettings>
 
-		<GridSortSettings>
-			<GridSortColumns>
-				<GridSortColumn Field="DateTime" Direction="SortDirection.Ascending"></GridSortColumn>
-			</GridSortColumns>
-		</GridSortSettings>
+			<GridSortSettings>
+				<GridSortColumns>
+					<GridSortColumn Field="DateTime" Direction="SortDirection.Ascending"></GridSortColumn>
+				</GridSortColumns>
+			</GridSortSettings>
 
-		<GridColumns>
-			<GridColumn Field="@nameof(TransactionPrintModel.Id)" HeaderText="Slip Id" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(TransactionPrintModel.PersonName)" HeaderText="Name" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(TransactionPrintModel.PersonNumber)" HeaderText="Number" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(TransactionPrintModel.Loyalty)" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(TransactionPrintModel.Male)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(TransactionPrintModel.Female)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(TransactionPrintModel.Cash)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(TransactionPrintModel.Card)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(TransactionPrintModel.UPI)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(TransactionPrintModel.Amex)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(TransactionPrintModel.Reservation)" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(TransactionPrintModel.ApprovedBy)" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(TransactionPrintModel.EnteredBy)" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(TransactionPrintModel.DateTime)" Format="dd/MM/yy HH:mm" Type="ColumnType.DateTime" AutoFit="true"></GridColumn>
-		</GridColumns>
-	</SfGrid>
+			<GridColumns>
+				<GridColumn Field="@nameof(TransactionPrintModel.Id)" HeaderText="Slip Id" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(TransactionPrintModel.PersonName)" HeaderText="Name" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(TransactionPrintModel.PersonNumber)" HeaderText="Number" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(TransactionPrintModel.Loyalty)" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(TransactionPrintModel.Male)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(TransactionPrintModel.Female)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(TransactionPrintModel.Cash)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(TransactionPrintModel.Card)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(TransactionPrintModel.UPI)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(TransactionPrintModel.Amex)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(TransactionPrintModel.Reservation)" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(TransactionPrintModel.ApprovedBy)" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(TransactionPrintModel.EnteredBy)" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(TransactionPrintModel.DateTime)" Format="dd/MM/yy HH:mm" Type="ColumnType.DateTime" AutoFit="true"></GridColumn>
+			</GridColumns>
+		</SfGrid>
+	</div>
 
 	<label class="section-label">Advance Details</label>
 
-	<SfGrid DataSource="@AdvancePrintModels"
-			ID="AdvanceGrid"
-			@ref="AdvanceGrid"
-			Height="300"
-			AllowPaging="true"
-			AllowSorting="true"
-			AllowResizing="true"
-			AllowFiltering="true"
-			AllowGrouping="true"
-			AllowPdfExport="true"
-			AllowExcelExport="true"
-			EnableInfiniteScrolling="true"
-			Toolbar="@(new List<string>() { "PdfExport", "ExcelExport" })"
-			ContextMenuItems="@(new List<object>() { "AutoFit", "AutoFitAll", "SortAscending", "SortDescending","Copy", "Save", "Cancel","PdfExport", "ExcelExport", "CsvExport", "FirstPage", "PrevPage","LastPage", "NextPage"})">
+	<div class="grid-wrapper">
+		<SfGrid DataSource="@AdvancePrintModels"
+				ID="AdvanceGrid"
+				@ref="AdvanceGrid"
+				Height="300"
+				Width="100%"
+				AllowPaging="true"
+				AllowSorting="true"
+				AllowResizing="true"
+				AllowFiltering="true"
+				AllowGrouping="true"
+				AllowPdfExport="true"
+				AllowExcelExport="true"
+				EnableInfiniteScrolling="true"
+				Toolbar="@(new List<string>() { "PdfExport", "ExcelExport" })"
+				ContextMenuItems="@(new List<object>() { "AutoFit", "AutoFitAll", "SortAscending", "SortDescending","Copy", "Save", "Cancel","PdfExport", "ExcelExport", "CsvExport", "FirstPage", "PrevPage","LastPage", "NextPage"})"
+				style="min-width: 900px; overflow-x: auto;">
 
-		<GridEvents OnToolbarClick="ToolbarClickHandler" TValue="AdvancePrintModel"></GridEvents>
+			<GridEvents OnToolbarClick="ToolbarClickHandler" TValue="AdvancePrintModel"></GridEvents>
 
-		<GridPageSettings PageSize="50"></GridPageSettings>
+			<GridPageSettings PageSize="50"></GridPageSettings>
 
-		<GridSortSettings>
-			<GridSortColumns>
-				<GridSortColumn Field="Adv_Id" Direction="SortDirection.Ascending"></GridSortColumn>
-			</GridSortColumns>
-		</GridSortSettings>
+			<GridSortSettings>
+				<GridSortColumns>
+					<GridSortColumn Field="Adv_Id" Direction="SortDirection.Ascending"></GridSortColumn>
+				</GridSortColumns>
+			</GridSortSettings>
 
-		<GridColumns>
-			<GridColumn Field="@nameof(AdvancePrintModel.Adv_Id)" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(AdvancePrintModel.Name)" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(AdvancePrintModel.Number)" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(AdvancePrintModel.Loyalty)" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(AdvancePrintModel.Adv_Pymt_DT)" Format="dd/MM/yy HH:mm" Type="ColumnType.DateTime" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(AdvancePrintModel.Adv_For_DT)" Format="dd/MM/yy" Type="ColumnType.DateOnly" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(AdvancePrintModel.Remarks)" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(AdvancePrintModel.Booking_Amt)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(AdvancePrintModel.Adv_Paid)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(AdvancePrintModel.Pay_Mode)" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(AdvancePrintModel.Slip_No)" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(AdvancePrintModel.Entry_Paid)" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(AdvancePrintModel.Slip_DT)" AutoFit="true"></GridColumn>
-			<GridColumn Field="@nameof(AdvancePrintModel.Total_Amt)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
-		</GridColumns>
+			<GridColumns>
+				<GridColumn Field="@nameof(AdvancePrintModel.Adv_Id)" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Name)" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Number)" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Loyalty)" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Adv_Pymt_DT)" Format="dd/MM/yy HH:mm" Type="ColumnType.DateTime" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Adv_For_DT)" Format="dd/MM/yy" Type="ColumnType.DateOnly" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Remarks)" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Booking_Amt)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Adv_Paid)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Pay_Mode)" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Slip_No)" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Entry_Paid)" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Slip_DT)" AutoFit="true"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Total_Amt)" TextAlign="TextAlign.Right" Type="ColumnType.Integer" AutoFit="true"></GridColumn>
+			</GridColumns>
 
-	</SfGrid>
+		</SfGrid>
+	</div>
 
 	<label class="section-label">Totals</label>
 
