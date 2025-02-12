@@ -1,10 +1,8 @@
 using Syncfusion.Blazor.Calendars;
 
-using Syncfusion.Blazor.Grids;
-
 namespace PubWebReport.Components.Pages.Admin.AdminControls;
 
-public partial class Advance
+public partial class UpdateAdvance
 {
 	[Inject] public NavigationManager NavManager { get; set; }
 	[Inject] public IJSRuntime JS { get; set; }
@@ -19,12 +17,6 @@ public partial class Advance
 
 	private readonly List<LocationModel> locations = [];
 	private readonly List<PaymentModeModel> paymentModes = [];
-	private readonly List<AdvancePaymentModel> advancePaymentModels = [];
-
-	private SfGrid<AdvancePaymentModel> AdvanceGrid;
-
-	private int amount = 0;
-	private int totalAmount = 0;
 
 	#region LoadData
 
@@ -47,12 +39,22 @@ public partial class Advance
 			locations.Add(location);
 
 		LocationModel = locations.FirstOrDefault();
+	}
 
-		paymentModes.Clear();
-		foreach (var paymentMode in await CommonData.LoadTableDataByStatus<PaymentModeModel>(Table.PaymentMode))
-			paymentModes.Add(paymentMode);
+	private async Task OnLoadAdvanceButtonClicked()
+	{
+		var advance = await CommonData.LoadTableDataById<AdvanceModel>(Table.Advance, AdvanceModel.Id);
 
-		PaymentModeModel = paymentModes.FirstOrDefault();
+		if (advance is null || advance.TransactionId != 0)
+		{
+			await JS.InvokeVoidAsync("alert", "Invalid Advance Id");
+			return;
+		}
+
+		AdvanceModel = advance;
+
+		PersonModel = await CommonData.LoadTableDataById<PersonModel>(Table.Person, AdvanceModel.PersonId);
+		LocationModel = await CommonData.LoadTableDataById<LocationModel>(Table.Location, AdvanceModel.LocationId);
 	}
 
 	private async Task OnLocationSelect(ChangeEventArgs e)
@@ -90,85 +92,35 @@ public partial class Advance
 
 			if (foundAdvance is not null)
 			{
-				AdvanceModel = foundAdvance;
+				if (foundAdvance.Id != AdvanceModel.Id)
+				{
+					await JS.InvokeVoidAsync("alert", "Advance Present for this Person and Date, Please Check Again");
+					NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
+					return;
+				}
 
-				advancePaymentModels.Clear();
-				foreach (var advanceDetail in await AdvanceData.LoadAdvanceDetailByAdvanceId(foundAdvance.Id))
-					advancePaymentModels.Add(new AdvancePaymentModel
-					{
-						PaymentModeId = advanceDetail.PaymentModeId,
-						PaymentModeName = paymentModes.FirstOrDefault(x => x.Id == advanceDetail.PaymentModeId)?.Name,
-						Amount = advanceDetail.Amount
-					});
-				totalAmount = advancePaymentModels.Sum(x => x.Amount);
+				AdvanceModel = foundAdvance;
 			}
 
 			else
 			{
-				AdvanceModel.Id = 0;
 				AdvanceModel.ApprovedBy = string.Empty;
 				AdvanceModel.Booking = 0;
 				AdvanceModel.LocationId = LocationModel.Id;
 				AdvanceModel.PersonId = PersonModel.Id;
-
-				advancePaymentModels.Clear();
-				totalAmount = 0;
 			}
 		}
 
 		else
 		{
-			AdvanceModel.Id = 0;
 			AdvanceModel.ApprovedBy = string.Empty;
 			AdvanceModel.Booking = 0;
 			AdvanceModel.LocationId = LocationModel.Id;
 			AdvanceModel.PersonId = 0;
-
-			advancePaymentModels.Clear();
-			totalAmount = 0;
 		}
-
-		await AdvanceGrid.Refresh();
 	}
 
 	#endregion
-
-	#region DataGrid
-
-	private void OnPaymentModeSelect(ChangeEventArgs e)
-	{
-		if (int.TryParse(e.Value.ToString(), out int paymentModeId))
-			PaymentModeModel = paymentModes.FirstOrDefault(u => u.Id == paymentModeId) ?? new PaymentModeModel();
-		else PaymentModeModel = new() { Status = true };
-	}
-
-	private async Task OnAddButtonClick()
-	{
-		if (advancePaymentModels.Any(x => x.PaymentModeId == PaymentModeModel.Id))
-			advancePaymentModels.FirstOrDefault(x => x.PaymentModeId == PaymentModeModel.Id).Amount += amount;
-
-		else advancePaymentModels.Add(new AdvancePaymentModel
-		{
-			PaymentModeId = PaymentModeModel.Id,
-			PaymentModeName = PaymentModeModel.Name,
-			Amount = amount
-		});
-
-		amount = 0;
-		totalAmount = advancePaymentModels.Sum(x => x.Amount);
-		await AdvanceGrid.Refresh();
-	}
-
-	public void RecordClickHandler(RecordClickEventArgs<AdvancePaymentModel> args)
-	{
-		advancePaymentModels.RemoveAt(args.RowIndex);
-		totalAmount = advancePaymentModels.Sum(x => x.Amount);
-		AdvanceGrid.Refresh();
-	}
-
-	#endregion
-
-	#region Saving
 
 	private bool ValidateForm() =>
 		!string.IsNullOrEmpty(PersonModel.Number) &&
@@ -183,16 +135,7 @@ public partial class Advance
 		}
 
 		await InsertPerson();
-
-		if (AdvanceModel.Id == 0) await InsertAdvance();
-
-		else
-		{
-			await UpdateAdvance();
-			await DeleteAdvanceDetails();
-		}
-
-		await InsertAdvanceDetail();
+		await UpdateAdvanceMain();
 
 		NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
 	}
@@ -203,29 +146,5 @@ public partial class Advance
 		PersonModel.Id = await PersonData.UpdatePerson(PersonModel);
 	}
 
-	private async Task InsertAdvance()
-	{
-		AdvanceModel.PersonId = PersonModel.Id;
-		AdvanceModel.LocationId = LocationModel.Id;
-		AdvanceModel.DateTime = DateTime.Now;
-		AdvanceModel.Id = await AdvanceData.InsertAdvance(AdvanceModel);
-	}
-
-	private async Task UpdateAdvance() => await AdvanceData.UpdateAdvance(AdvanceModel);
-
-	private async Task DeleteAdvanceDetails() => await AdvanceData.DeleteAdvanceDetails(AdvanceModel.Id);
-
-	private async Task InsertAdvanceDetail()
-	{
-		foreach (var advance in advancePaymentModels)
-			await AdvanceData.InsertAdvanceDetail(new AdvanceDetailModel
-			{
-				Id = 0,
-				AdvanceId = AdvanceModel.Id,
-				Amount = advance.Amount,
-				PaymentModeId = advance.PaymentModeId
-			});
-	}
-
-	#endregion
+	private async Task UpdateAdvanceMain() => await AdvanceData.UpdateAdvance(AdvanceModel);
 }

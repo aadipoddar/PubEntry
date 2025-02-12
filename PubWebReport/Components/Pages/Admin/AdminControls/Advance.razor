@@ -38,7 +38,7 @@
 
 				<div class="form-group">
 					<label>Booking Date</label>
-					<SfDatePicker TValue="DateTime" Placeholder="Booking Date" Value="@AdvanceModel.AdvanceDate" Min="@DateTime.Now">
+					<SfDatePicker TValue="DateTime" Placeholder="Booking Date" Value="@AdvanceModel.AdvanceDate" Min="@DateTime.Now.Date">
 						<DatePickerEvents TValue="DateTime" ValueChange="OnBookingDateChanged"></DatePickerEvents>
 					</SfDatePicker>
 				</div>

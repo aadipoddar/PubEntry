@@ -1,0 +1,70 @@
+﻿@page "/admin/updateAdvance"
+
+<PageTitle>Update Advance</PageTitle>
+
+<div class="page">
+	<div class="sidebar">
+		<NavMenu />
+	</div>
+
+	<main>
+		<article class="content px-4">
+			<div class="container">
+				<div class="form-group">
+					<label>Advance Id</label>
+					<input class="input-group-text" type="text" @bind="AdvanceModel.Id" placeholder="Advance Id" />
+				</div>
+
+				<button class="btn btn-primary" type="button" @onclick="OnLoadAdvanceButtonClicked">Load Advance</button>
+
+				@if (AdvanceModel.Id != 0)
+				{
+					<select class="form-select-sm" @onchange="OnLocationSelect">
+						@foreach (var location in locations)
+						{
+							<option value="@location.Id">@location.Name</option>
+						}
+					</select>
+
+					<div class="form-group">
+						<label>Number</label>
+						<input class="input-group-text" type="text" @bind="PersonModel.Number" @bind:after="OnPersonNumberChanged" placeholder="Number" />
+					</div>
+
+					<div class="form-group">
+						<label>Name</label>
+						@if (PersonModel.Id == 0)
+						{
+							<input class="input-group-text" type="text" @bind="PersonModel.Name" placeholder="Name" />
+						}
+						@if (PersonModel.Id != 0)
+						{
+							<input class="input-group-text" type="text" @bind="PersonModel.Name" placeholder="Name" readonly />
+						}
+					</div>
+
+					<SfCheckBox Label="Loyalty" @bind-Checked="PersonModel.Loyalty" />
+
+					<div class="form-group">
+						<label>Booking Date</label>
+						<SfDatePicker TValue="DateTime" Placeholder="Booking Date" Value="@AdvanceModel.AdvanceDate" Min="@DateTime.Now.Date">
+							<DatePickerEvents TValue="DateTime" ValueChange="OnBookingDateChanged"></DatePickerEvents>
+						</SfDatePicker>
+					</div>
+
+					<div class="form-group">
+						<label>Remarks</label>
+						<input class="input-group-text" type="text" @bind="AdvanceModel.ApprovedBy" placeholder="Approved By" />
+					</div>
+
+					<div class="form-group">
+						<label>Booking Amount</label>
+						<input class="input-group-text" type="number" @bind="AdvanceModel.Booking" placeholder="Booking Amount" />
+					</div>
+
+					<button class="btn btn-primary" type="button" @onclick="OnSaveButtonClick">Save</button>
+				}
+			</div>
+		</article>
+	</main>
+</div>

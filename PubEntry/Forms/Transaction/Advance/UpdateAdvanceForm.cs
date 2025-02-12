@@ -112,9 +112,22 @@ public partial class UpdateAdvanceForm : Form
 			return;
 		}
 
+		await InsertPerson();
 		await UpdateAdvance();
 
 		Close();
+	}
+
+	private async Task InsertPerson()
+	{
+		if (await PersonData.LoadPersonByNumber(numberTextBox.Text) is null)
+			await PersonData.InsertPerson(new PersonModel
+			{
+				Id = 0,
+				Number = numberTextBox.Text,
+				Name = nameTextBox.Text,
+				Loyalty = loyaltyCheckBox.Checked
+			});
 	}
 
 	private async Task UpdateAdvance() =>
