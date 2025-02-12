@@ -26,10 +26,10 @@ public partial class Home
 	protected override Task OnAfterRenderAsync(bool firstRender)
 	{
 		// TODO - Testing
-		NavManager.NavigateTo(
-				$"/admin" +
-				$"?UserId={23}" +
-				$"&Password={BCrypt.Net.BCrypt.EnhancedHashPassword("1234", 13)}");
+		//NavManager.NavigateTo(
+		//		$"/admin" +
+		//		$"?UserId={23}" +
+		//		$"&Password={BCrypt.Net.BCrypt.EnhancedHashPassword("1234", 13)}");
 		return base.OnAfterRenderAsync(firstRender);
 	}
 

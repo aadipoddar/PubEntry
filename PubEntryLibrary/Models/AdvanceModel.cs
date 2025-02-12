@@ -54,3 +54,10 @@ public class AdvanceTotalsModel
 	public int RedeemedAdvance { get; set; }
 	public int NotRedeemedAdvance { get; set; }
 }
+
+public class AdvancePaymentModel
+{
+	public int PaymentModeId { get; set; }
+	public string PaymentModeName { get; set; }
+	public int Amount { get; set; }
+}

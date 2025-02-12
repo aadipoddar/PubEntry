@@ -37,7 +37,7 @@ public partial class SqlQuery : Form
 
 	private async Task ExecuteQueries(string[] queries)
 	{
-		SqlConnection connection = new(ConnectionStrings.Local);
+		SqlConnection connection = new(ConnectionStrings.Azure);
 		await connection.OpenAsync();
 
 		foreach (var query in queries)

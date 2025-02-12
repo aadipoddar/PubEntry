@@ -16,6 +16,7 @@ public partial class Detailed
 
 	private SfGrid<TransactionPrintModel> TransactionGrid;
 	private SfGrid<AdvancePrintModel> AdvanceGrid;
+
 	private List<TransactionPrintModel> TransactionPrintModels { get; set; } = [];
 	private List<AdvancePrintModel> AdvancePrintModels { get; set; } = [];
 

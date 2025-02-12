@@ -40,8 +40,7 @@ public partial class Locations
 	{
 		if (int.TryParse(e.Value.ToString(), out int locationId))
 			LocationModel = locations.FirstOrDefault(u => u.Id == locationId) ?? new LocationModel();
-		else
-			LocationModel = new() { Status = true };
+		else LocationModel = new() { Status = true };
 	}
 
 	private bool ValidateForm() =>
@@ -55,12 +54,9 @@ public partial class Locations
 			return;
 		}
 
-		if (LocationModel.Id == 0)
-			await LocationData.InsertLocation(LocationModel);
-		else
-			await LocationData.UpdateLocation(LocationModel);
+		if (LocationModel.Id == 0) await LocationData.InsertLocation(LocationModel);
+		else await LocationData.UpdateLocation(LocationModel);
 
-		LocationModel = new() { Status = true };
 		NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
 	}
 }
