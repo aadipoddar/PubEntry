@@ -12,6 +12,7 @@ public partial class NavMenu
 	private string? locationsHref;
 	private string? paymentModesHref;
 	private string? reservationTypesHref;
+	private string? personsHref;
 #nullable disable
 
 	protected override async Task OnParametersSetAsync()
@@ -33,6 +34,7 @@ public partial class NavMenu
 		locationsHref = $"/admin/locations?UserId={UserId}&Password={Password}";
 		paymentModesHref = $"/admin/paymentModes?UserId={UserId}&Password={Password}";
 		reservationTypesHref = $"/admin/reservationTypes?UserId={UserId}&Password={Password}";
+		personsHref = $"/admin/persons?UserId={UserId}&Password={Password}";
 	}
 
 	private async Task<bool> ValidatePassword() =>

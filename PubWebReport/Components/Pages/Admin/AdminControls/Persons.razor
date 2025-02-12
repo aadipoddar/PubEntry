@@ -1,0 +1,29 @@
+﻿@page "/admin/persons"
+
+<PageTitle>Manage Persons</PageTitle>
+
+<div class="page">
+	<div class="sidebar">
+		<NavMenu />
+	</div>
+
+	<main>
+		<article class="content px-4">
+			<div class="container">
+				<div class="form-group">
+					<label>Number</label>
+					<input class="input-group-text" type="text" @bind="PersonModel.Number" @bind:after="OnPersonNumberChanged" placeholder="Number" />
+				</div>
+
+				<div class="form-group">
+					<label>Name</label>
+					<input class="input-group-text" type="text" @bind="PersonModel.Name" placeholder="Name" />
+				</div>
+
+				<SfCheckBox Label="Loyalty" @bind-Checked="PersonModel.Loyalty" />
+
+				<button class="btn btn-primary" type="submit" @onclick="OnSaveButtonClick">Save</button>
+			</div>
+		</article>
+	</main>
+</div>

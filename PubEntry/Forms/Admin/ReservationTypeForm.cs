@@ -54,7 +54,7 @@ public partial class ReservationTypeForm : Form
 		else
 		{
 			reservationTypeModel.Id = (reservationComboBox.SelectedItem as ReservationTypeModel).Id;
-			await ReservationTypeData.Update_ReservationType(reservationTypeModel);
+			await ReservationTypeData.UpdateReservationType(reservationTypeModel);
 		}
 
 		LoadData();
