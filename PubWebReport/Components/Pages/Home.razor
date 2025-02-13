@@ -15,8 +15,8 @@
 	<SfAccordion ExpandMode="ExpandMode.Single">
 		<AccordionItems>
 			@foreach (var location in locations)
-	{
-		<AccordionItem>
+{
+	<AccordionItem>
 					<HeaderTemplate>
 						<label>@location.Name</label>
 						<button class="btn btn-primary" type="button" @onclick="() => OnDetailedClick(location.Id)">
@@ -152,7 +152,7 @@
 						</div>
 					</ContentTemplate>
 				</AccordionItem>
-	}
+}
 		</AccordionItems>
 	</SfAccordion>
 
@@ -282,9 +282,9 @@
 
 		<select class="form-select-sm" name="locationSelect" @bind="selectedLocationId">
 			@foreach (var location in locations)
-	{
-		<option value="@location.Id">@location.Name</option>
-	}
+{
+	<option value="@location.Id">@location.Name</option>
+}
 		</select>
 
 		<div>
@@ -294,9 +294,9 @@
 
 		<select class="form-select-sm" name="userSelect" @bind="selectedUserId">
 			@foreach (var user in users)
-	{
-		<option value="@user.Id">@user.Name</option>
-	}
+{
+	<option value="@user.Id">@user.Name</option>
+}
 		</select>
 		<input class="input-group-text" type="password" @bind="Password" />
 		<button class="btn btn-primary" type="button" @onclick="AdminButtonClicked">Admin Panel</button>

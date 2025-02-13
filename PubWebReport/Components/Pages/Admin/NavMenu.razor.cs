@@ -10,6 +10,7 @@ public partial class NavMenu
 #nullable enable
 	private string? advanceHref;
 	private string? updateAdvanceHref;
+	private string? updateTransactionHref;
 	private string? usersHref;
 	private string? locationsHref;
 	private string? paymentModesHref;
@@ -34,6 +35,7 @@ public partial class NavMenu
 	{
 		advanceHref = $"/admin/advance?UserId={UserId}&Password={Password}";
 		updateAdvanceHref = $"/admin/updateAdvance?UserId={UserId}&Password={Password}";
+		updateTransactionHref = $"/admin/updateTransaction?UserId={UserId}&Password={Password}";
 		usersHref = $"/admin/users?UserId={UserId}&Password={Password}";
 		locationsHref = $"/admin/locations?UserId={UserId}&Password={Password}";
 		paymentModesHref = $"/admin/paymentModes?UserId={UserId}&Password={Password}";

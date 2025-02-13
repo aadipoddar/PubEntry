@@ -1,8 +1,6 @@
-using Syncfusion.Blazor.Calendars;
-
 namespace PubWebReport.Components.Pages.Admin.AdminControls;
 
-public partial class UpdateAdvance
+public partial class UpdateTransaction
 {
 	[Inject] public NavigationManager NavManager { get; set; }
 	[Inject] public IJSRuntime JS { get; set; }
@@ -10,11 +8,15 @@ public partial class UpdateAdvance
 	[Parameter][SupplyParameterFromQuery] public int UserId { get; set; }
 	[Parameter][SupplyParameterFromQuery] public string Password { get; set; }
 
+	private TransactionModel TransactionModel { get; set; } = new();
 	private LocationModel LocationModel { get; set; } = new();
 	private PersonModel PersonModel { get; set; } = new();
 	private AdvanceModel AdvanceModel { get; set; } = new() { AdvanceDate = DateTime.Now.AddHours(5).AddMinutes(30).Date };
 
 	private readonly List<LocationModel> locations = [];
+	private readonly List<ReservationTypeModel> reservationTypes = [];
+
+	private int totalAdvance = 0;
 
 	#region LoadData
 
@@ -36,23 +38,27 @@ public partial class UpdateAdvance
 		foreach (var location in await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location))
 			locations.Add(location);
 
+		reservationTypes.Clear();
+		foreach (var reservationType in await CommonData.LoadTableDataByStatus<ReservationTypeModel>(Table.ReservationType))
+			reservationTypes.Add(reservationType);
+
 		LocationModel = locations.FirstOrDefault();
 	}
 
-	private async Task OnLoadAdvanceButtonClicked()
+	private async Task OnLoadTransactionButtonClicked()
 	{
-		var advance = await CommonData.LoadTableDataById<AdvanceModel>(Table.Advance, AdvanceModel.Id);
-
-		if (advance is null || advance.TransactionId != 0)
+		var tarnsaction = await CommonData.LoadTableDataById<TransactionModel>(Table.Transaction, TransactionModel.Id);
+		if (tarnsaction is null)
 		{
-			await JS.InvokeVoidAsync("alert", "Invalid Advance Id");
+			await JS.InvokeVoidAsync("alert", "Invalid Transaction Id");
 			return;
 		}
 
-		AdvanceModel = advance;
+		TransactionModel = tarnsaction;
+		PersonModel = await CommonData.LoadTableDataById<PersonModel>(Table.Person, TransactionModel.PersonId);
+		LocationModel = await CommonData.LoadTableDataById<LocationModel>(Table.Location, TransactionModel.LocationId);
 
-		PersonModel = await CommonData.LoadTableDataById<PersonModel>(Table.Person, AdvanceModel.PersonId);
-		LocationModel = await CommonData.LoadTableDataById<LocationModel>(Table.Location, AdvanceModel.LocationId);
+		await LoadPersonAdvance();
 	}
 
 	private async Task OnLocationSelect(ChangeEventArgs e)
@@ -61,6 +67,7 @@ public partial class UpdateAdvance
 			LocationModel = locations.FirstOrDefault(u => u.Id == locationId) ?? new LocationModel();
 		else LocationModel = new() { Status = true };
 
+		TransactionModel.LocationId = LocationModel.Id;
 		await LoadPersonAdvance();
 	}
 
@@ -73,52 +80,44 @@ public partial class UpdateAdvance
 		await LoadPersonAdvance();
 	}
 
-	public async Task OnBookingDateChanged(ChangedEventArgs<DateTime> args)
-	{
-		AdvanceModel.AdvanceDate = args.Value;
-		await LoadPersonAdvance();
-	}
-
 	private async Task LoadPersonAdvance()
 	{
 		if (PersonModel.Id != 0)
 		{
-			var foundAdvance = await AdvanceData.LoadAdvanceByDateLocationPerson(
-				LocationModel.Id,
-				PersonModel.Id,
-				AdvanceModel.AdvanceDate.Date);
+			AdvanceModel foundAdvance;
 
-			if (foundAdvance is not null)
+			if (PersonModel.Id == TransactionModel.PersonId && LocationModel.Id == TransactionModel.LocationId)
 			{
-				if (foundAdvance.Id != AdvanceModel.Id)
+				foundAdvance = await AdvanceData.LoadAdvanceByTransactionId(TransactionModel.Id);
+				if (foundAdvance is not null)
 				{
-					await JS.InvokeVoidAsync("alert", "Advance Present for this Person and Date, Please Check Again");
-					NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
+					AdvanceModel = foundAdvance;
+					totalAdvance = (await AdvanceData.LoadAdvanceDetailByAdvanceId(foundAdvance.Id)).Sum(x => x.Amount);
 					return;
 				}
-
-				AdvanceModel = foundAdvance;
 			}
 
 			else
 			{
-				AdvanceModel.ApprovedBy = string.Empty;
-				AdvanceModel.Booking = 0;
-				AdvanceModel.LocationId = LocationModel.Id;
-				AdvanceModel.PersonId = PersonModel.Id;
+				foundAdvance = TransactionModel.DateTime.TimeOfDay < TimeSpan.FromHours(17) ?
+					await AdvanceData.LoadAdvanceByDateLocationPerson(LocationModel.Id, PersonModel.Id, TransactionModel.DateTime.AddDays(-1))
+					: await AdvanceData.LoadAdvanceByDateLocationPerson(LocationModel.Id, PersonModel.Id, TransactionModel.DateTime);
+				if (foundAdvance is not null)
+				{
+					AdvanceModel = foundAdvance;
+					totalAdvance = (await AdvanceData.LoadAdvanceDetailByAdvanceId(foundAdvance.Id)).Sum(x => x.Amount);
+					return;
+				}
 			}
 		}
 
-		else
-		{
-			AdvanceModel.ApprovedBy = string.Empty;
-			AdvanceModel.Booking = 0;
-			AdvanceModel.LocationId = LocationModel.Id;
-			AdvanceModel.PersonId = 0;
-		}
+		AdvanceModel = new();
+		totalAdvance = 0;
 	}
 
 	#endregion
+
+	#region Saving
 
 	private bool ValidateForm() =>
 		!string.IsNullOrEmpty(PersonModel.Number) &&
@@ -132,8 +131,9 @@ public partial class UpdateAdvance
 			return;
 		}
 
+		await UpdateTransactions();
 		await InsertPerson();
-		await UpdateAdvanceMain();
+		await UpdateAdvances();
 
 		NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
 	}
@@ -144,5 +144,14 @@ public partial class UpdateAdvance
 		PersonModel.Id = await PersonData.UpdatePerson(PersonModel);
 	}
 
-	private async Task UpdateAdvanceMain() => await AdvanceData.UpdateAdvance(AdvanceModel);
+	private async Task UpdateTransactions() => await TransactionData.UpdateTransaction(TransactionModel);
+
+	private async Task UpdateAdvances()
+	{
+		var existingAdvance = await AdvanceData.LoadAdvanceByTransactionId(TransactionModel.Id);
+		if (existingAdvance is not null) await AdvanceData.ClearAdvance(existingAdvance.Id, 0);
+		if (AdvanceModel.Id is not 0) await AdvanceData.ClearAdvance(AdvanceModel.Id, TransactionModel.Id);
+	}
+
+	#endregion
 }
