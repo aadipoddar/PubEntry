@@ -11,14 +11,19 @@ public partial class Detailed
 	[Parameter][SupplyParameterFromQuery] public int SelectedLocationId { get; set; }
 	[Parameter][SupplyParameterFromQuery] public DateTime FromDateTime { get; set; }
 	[Parameter][SupplyParameterFromQuery] public DateTime ToDateTime { get; set; }
+	[Parameter][SupplyParameterFromQuery] public DateTime TakenOnDate { get; set; }
 
-	private DateTime CurrentDateTime { get; set; } = DateTime.Now.AddHours(5).AddMinutes(30);
+	private DateTime CurrentDateTime { get; set; }
 
 	private SfGrid<TransactionPrintModel> TransactionGrid;
 	private SfGrid<AdvancePrintModel> AdvanceGrid;
+	private SfGrid<AdvancePrintModel> AdvanceTakenOnGrid;
+	private SfGrid<AdvancePaymentModeTotalsModel> AdvancePaymentModeGrid;
 
 	private List<TransactionPrintModel> TransactionPrintModels { get; set; } = [];
 	private List<AdvancePrintModel> AdvancePrintModels { get; set; } = [];
+	private List<AdvancePrintModel> AdvanceTakenOnPrintModels { get; set; } = [];
+	private List<AdvancePaymentModeTotalsModel> AdvancePaymentModeTotalsModels { get; set; } = [];
 
 	private readonly List<LocationModel> locations = [];
 	private readonly List<TransactionTotalsModel> transactionTotalsModel = [];
@@ -28,12 +33,16 @@ public partial class Detailed
 
 	private async Task LoadData()
 	{
+		CurrentDateTime = DateTime.Now.AddHours(5).AddMinutes(30);
+		TakenOnDate = CurrentDateTime;
+
 		locations.Clear();
 		var activeLocations = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location);
 		foreach (var location in activeLocations)
 			locations.Add(location);
 
 		await LoadTransactionsAdvances();
+		await LoadAdvanceByTakenOn();
 	}
 
 	private async Task LoadTransactionsAdvances()
@@ -71,7 +80,16 @@ public partial class Detailed
 		}
 	}
 
-	public async Task OnFromValueChanged(ChangedEventArgs<DateTime> args)
+	private async Task LoadAdvanceByTakenOn()
+	{
+		AdvanceTakenOnPrintModels.Clear();
+		AdvanceTakenOnPrintModels.AddRange(await AdvanceData.LoadAdvancesByTakenOnLocation(TakenOnDate, SelectedLocationId));
+
+		AdvancePaymentModeTotalsModels.Clear();
+		AdvancePaymentModeTotalsModels.AddRange(await AdvanceData.LoadAdvancePaymentModeTotalsByTakenOn(TakenOnDate, SelectedLocationId));
+	}
+
+	private async Task OnFromValueChanged(ChangedEventArgs<DateTime> args)
 	{
 		FromDateTime = args.Value;
 		await LoadTransactionsAdvances();
@@ -79,7 +97,7 @@ public partial class Detailed
 		await AdvanceGrid.Refresh();
 	}
 
-	public async Task OnToValueChanged(ChangedEventArgs<DateTime> args)
+	private async Task OnToValueChanged(ChangedEventArgs<DateTime> args)
 	{
 		ToDateTime = args.Value;
 		await LoadTransactionsAdvances();
@@ -87,11 +105,21 @@ public partial class Detailed
 		await AdvanceGrid.Refresh();
 	}
 
+	private async Task OnTakenOnValueChanged(ChangedEventArgs<DateTime> args)
+	{
+		TakenOnDate = args.Value;
+		await LoadAdvanceByTakenOn();
+		await AdvanceTakenOnGrid.Refresh();
+		await AdvancePaymentModeGrid.Refresh();
+	}
+
 	private async Task OnLocationChanged()
 	{
 		await LoadTransactionsAdvances();
 		await TransactionGrid.Refresh();
 		await AdvanceGrid.Refresh();
+		await AdvanceTakenOnGrid.Refresh();
+		await AdvancePaymentModeGrid.Refresh();
 		StateHasChanged();
 	}
 
@@ -104,8 +132,20 @@ public partial class Detailed
 	private async Task ExcelButtonClicked() =>
 		await JS.InvokeVoidAsync(
 			"saveAsFile",
-			"ExcelReport.xlsx",
+			"DetailedReport.xlsx",
 			Convert.ToBase64String((await Excel.TransactionAdvanceExcel(FromDateTime, ToDateTime, SelectedLocationId)).ToArray()));
+
+	private async Task AdvanceTakeOnPDFButtonClicked() =>
+		await JS.InvokeVoidAsync(
+			"saveAsFile",
+			"AdvanceTakeOnReport.pdf",
+			Convert.ToBase64String((await PDF.AdvanceTakeOn(TakenOnDate, SelectedLocationId)).ToArray()));
+
+	private async Task AdvanceTakeOnExcelButtonClicked() =>
+		await JS.InvokeVoidAsync(
+			"saveAsFile",
+			"AdvanceTakeOnReport.xlsx",
+			Convert.ToBase64String((await Excel.AdvanceTakeOnExcel(TakenOnDate, SelectedLocationId)).ToArray()));
 
 	public async Task ToolbarClickHandler(ClickEventArgs args)
 	{
@@ -120,5 +160,11 @@ public partial class Detailed
 
 		if (args.Item.Id == "AdvanceGrid_excelexport")
 			await AdvanceGrid.ExportToExcelAsync();
+
+		if (args.Item.Id == "AdvanceTakenOnGrid_pdfexport")
+			await AdvanceTakenOnGrid.ExportToPdfAsync();
+
+		if (args.Item.Id == "AdvanceTakenOnGrid_excelexport")
+			await AdvanceTakenOnGrid.ExportToExcelAsync();
 	}
 }

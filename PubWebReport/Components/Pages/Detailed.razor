@@ -224,4 +224,85 @@
 			</div>
 		</div>
 	</div>
+
+	<label class="section-label">Advance Take On Details</label>
+
+	<div class="container-bottom">
+		<SfDatePicker TValue="DateTime" Placeholder="Time On" Value="@TakenOnDate" Max="@CurrentDateTime">
+			<DatePickerEvents TValue="DateTime" ValueChange="OnTakenOnValueChanged"></DatePickerEvents>
+		</SfDatePicker>
+
+		<div>
+			<button class="btn btn-primary" type="button" @onclick="AdvanceTakeOnPDFButtonClicked">PDF</button>
+			<button class="btn btn-primary" type="button" @onclick="AdvanceTakeOnExcelButtonClicked">Excel</button>
+		</div>
+	</div>
+
+	<div class="grid-wrapper">
+		<SfGrid DataSource="@AdvanceTakenOnPrintModels"
+				ID="AdvanceTakenOnGrid"
+				@ref="AdvanceTakenOnGrid"
+				Height="300"
+				Width="100%"
+				AllowPaging="true"
+				AllowSorting="true"
+				AllowResizing="true"
+				AllowFiltering="true"
+				AllowGrouping="true"
+				AllowPdfExport="true"
+				AllowExcelExport="true"
+				EnableInfiniteScrolling="true"
+				Toolbar="@(new List<string>() { "PdfExport", "ExcelExport" })"
+				ContextMenuItems="@(new List<object>() { "AutoFit", "AutoFitAll", "SortAscending", "SortDescending","Copy", "Save", "Cancel", "PdfExport", "ExcelExport", "CsvExport", "FirstPage", "PrevPage","LastPage", "NextPage"})"
+				style="min-width: 900px; overflow-x: auto;">
+
+			<GridEvents OnToolbarClick="ToolbarClickHandler" TValue="AdvancePrintModel"></GridEvents>
+
+			<GridPageSettings PageSize="50"></GridPageSettings>
+
+			<GridSortSettings>
+				<GridSortColumns>
+					<GridSortColumn Field="Id" Direction="SortDirection.Ascending"></GridSortColumn>
+				</GridSortColumns>
+			</GridSortSettings>
+
+			<GridColumns>
+				<GridColumn Field="@nameof(AdvancePrintModel.Id)" Type="ColumnType.Integer"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Name)"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Number)"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Loyalty)"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.PaymentDT)" Format="dd/MM/yy HH:mm" Type="ColumnType.DateTime"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.ForDT)" Format="dd/MM/yy" Type="ColumnType.DateOnly"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Remarks)"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.User)"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Booking)" TextAlign="TextAlign.Right" Type="ColumnType.Integer"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Amount)" TextAlign="TextAlign.Right" Type="ColumnType.Integer"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Mode)"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.SlipId)"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Entry)"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.SlipDT)"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePrintModel.Total)" TextAlign="TextAlign.Right" Type="ColumnType.Integer"></GridColumn>
+			</GridColumns>
+
+		</SfGrid>
+	</div>
+
+	<div class="grid-wrapper">
+		<SfGrid DataSource="@AdvancePaymentModeTotalsModels"
+				ID="AdvancePaymentModeGrid"
+				@ref="AdvancePaymentModeGrid"
+				Height="300"
+				Width="100%"
+				AllowSorting="true"
+				AllowResizing="true"
+				EnableInfiniteScrolling="true"
+				style="min-width: 900px; overflow-x: auto;">
+
+			<GridColumns>
+				<GridColumn Field="@nameof(AdvancePaymentModeTotalsModel.PaymentMode)" Type="ColumnType.String"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePaymentModeTotalsModel.Amount)" Type="ColumnType.Integer"></GridColumn>
+			</GridColumns>
+
+		</SfGrid>
+	</div>
 </div>
