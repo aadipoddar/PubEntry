@@ -292,15 +292,14 @@
 				ID="AdvancePaymentModeGrid"
 				@ref="AdvancePaymentModeGrid"
 				Height="300"
-				Width="100%"
+				Width="30%"
 				AllowSorting="true"
 				AllowResizing="true"
-				EnableInfiniteScrolling="true"
-				style="min-width: 900px; overflow-x: auto;">
+				EnableInfiniteScrolling="true">
 
 			<GridColumns>
 				<GridColumn Field="@nameof(AdvancePaymentModeTotalsModel.PaymentMode)" Type="ColumnType.String"></GridColumn>
-				<GridColumn Field="@nameof(AdvancePaymentModeTotalsModel.Amount)" Type="ColumnType.Integer"></GridColumn>
+				<GridColumn Field="@nameof(AdvancePaymentModeTotalsModel.Amount)" Type="ColumnType.Integer" TextAlign="TextAlign.Right"></GridColumn>
 			</GridColumns>
 
 		</SfGrid>
