@@ -32,6 +32,8 @@ partial class AdvanceReport
 		advanceDataGridView = new DataGridView();
 		brandingLabel = new Label();
 		richTextBoxFooter = new RichTextBox();
+		excelButton = new Button();
+		printButton = new Button();
 		((System.ComponentModel.ISupportInitialize)totalDataGridView).BeginInit();
 		((System.ComponentModel.ISupportInitialize)advanceDataGridView).BeginInit();
 		SuspendLayout();
@@ -78,16 +80,41 @@ partial class AdvanceReport
 		richTextBoxFooter.TabIndex = 38;
 		richTextBoxFooter.Text = "";
 		// 
+		// excelButton
+		// 
+		excelButton.Font = new Font("Segoe UI", 15F);
+		excelButton.Location = new Point(388, 504);
+		excelButton.Name = "excelButton";
+		excelButton.Size = new Size(118, 35);
+		excelButton.TabIndex = 40;
+		excelButton.Text = "EXCEL";
+		excelButton.UseVisualStyleBackColor = true;
+		excelButton.Click += excelButton_Click;
+		// 
+		// printButton
+		// 
+		printButton.Font = new Font("Segoe UI", 15F);
+		printButton.Location = new Point(605, 504);
+		printButton.Name = "printButton";
+		printButton.Size = new Size(118, 35);
+		printButton.TabIndex = 41;
+		printButton.Text = "PRINT";
+		printButton.UseVisualStyleBackColor = true;
+		printButton.Click += printButton_Click;
+		// 
 		// AdvanceReport
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
 		ClientSize = new Size(1107, 621);
+		Controls.Add(excelButton);
+		Controls.Add(printButton);
 		Controls.Add(brandingLabel);
 		Controls.Add(richTextBoxFooter);
 		Controls.Add(advanceDataGridView);
 		Controls.Add(totalDataGridView);
 		Name = "AdvanceReport";
+		StartPosition = FormStartPosition.CenterScreen;
 		Text = "AdvanceReport";
 		Load += AdvanceReport_Load;
 		((System.ComponentModel.ISupportInitialize)totalDataGridView).EndInit();
@@ -102,4 +129,6 @@ partial class AdvanceReport
 	private DataGridView advanceDataGridView;
 	private Label brandingLabel;
 	private RichTextBox richTextBoxFooter;
+	private Button excelButton;
+	private Button printButton;
 }

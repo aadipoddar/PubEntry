@@ -37,6 +37,7 @@ partial class Dashboard
 		richTextBoxFooter = new RichTextBox();
 		reportsButton = new Button();
 		adminButton = new Button();
+		advanceButton = new Button();
 		SuspendLayout();
 		// 
 		// locationComboBox
@@ -72,7 +73,7 @@ partial class Dashboard
 		goButton.Name = "goButton";
 		goButton.Size = new Size(118, 38);
 		goButton.TabIndex = 4;
-		goButton.Text = "GO";
+		goButton.Text = "Entry";
 		goButton.UseVisualStyleBackColor = true;
 		goButton.Click += goButton_Click;
 		// 
@@ -91,7 +92,7 @@ partial class Dashboard
 		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 		brandingLabel.AutoSize = true;
 		brandingLabel.BackColor = Color.White;
-		brandingLabel.Location = new Point(257, 451);
+		brandingLabel.Location = new Point(257, 487);
 		brandingLabel.Name = "brandingLabel";
 		brandingLabel.Size = new Size(76, 15);
 		brandingLabel.TabIndex = 30;
@@ -100,7 +101,7 @@ partial class Dashboard
 		// richTextBoxFooter
 		// 
 		richTextBoxFooter.Dock = DockStyle.Bottom;
-		richTextBoxFooter.Location = new Point(0, 445);
+		richTextBoxFooter.Location = new Point(0, 481);
 		richTextBoxFooter.Name = "richTextBoxFooter";
 		richTextBoxFooter.Size = new Size(336, 26);
 		richTextBoxFooter.TabIndex = 29;
@@ -109,10 +110,10 @@ partial class Dashboard
 		// reportsButton
 		// 
 		reportsButton.Font = new Font("Segoe UI", 15F);
-		reportsButton.Location = new Point(70, 290);
+		reportsButton.Location = new Point(70, 367);
 		reportsButton.Name = "reportsButton";
 		reportsButton.Size = new Size(188, 38);
-		reportsButton.TabIndex = 5;
+		reportsButton.TabIndex = 6;
 		reportsButton.Text = "Reports";
 		reportsButton.UseVisualStyleBackColor = true;
 		reportsButton.Click += reportsButton_Click;
@@ -120,20 +121,32 @@ partial class Dashboard
 		// adminButton
 		// 
 		adminButton.Font = new Font("Segoe UI", 15F);
-		adminButton.Location = new Point(70, 387);
+		adminButton.Location = new Point(70, 436);
 		adminButton.Name = "adminButton";
 		adminButton.Size = new Size(188, 38);
-		adminButton.TabIndex = 6;
+		adminButton.TabIndex = 7;
 		adminButton.Text = "Admin Panel";
 		adminButton.UseVisualStyleBackColor = true;
 		adminButton.Click += adminButton_Click;
+		// 
+		// advanceButton
+		// 
+		advanceButton.Font = new Font("Segoe UI", 15F);
+		advanceButton.Location = new Point(70, 278);
+		advanceButton.Name = "advanceButton";
+		advanceButton.Size = new Size(188, 49);
+		advanceButton.TabIndex = 5;
+		advanceButton.Text = "Advance Entry";
+		advanceButton.UseVisualStyleBackColor = true;
+		advanceButton.Click += advanceButton_Click;
 		// 
 		// Dashboard
 		// 
 		AcceptButton = goButton;
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(336, 471);
+		ClientSize = new Size(336, 507);
+		Controls.Add(advanceButton);
 		Controls.Add(adminButton);
 		Controls.Add(reportsButton);
 		Controls.Add(brandingLabel);
@@ -161,4 +174,5 @@ partial class Dashboard
 	private RichTextBox richTextBoxFooter;
 	private Button reportsButton;
 	private Button adminButton;
+	private Button advanceButton;
 }

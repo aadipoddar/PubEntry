@@ -1,4 +1,8 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
+
+using PubEntryLibrary.Printing.Excel;
+using PubEntryLibrary.Printing.PDF;
 
 namespace PubEntry.Forms.Reports;
 
@@ -21,7 +25,7 @@ public partial class AdvanceReport : Form
 	{
 		advanceDataGridView.DataSource = await AdvanceData.LoadAdvancesByTakenOnLocation(_takenOn, _locationId);
 		foreach (DataGridViewColumn column in advanceDataGridView.Columns)
-			if (new[] { 0, 7, 8, 10, 11, 13 }.Contains(column.Index))
+			if (new[] { 0, 8, 9, 11, 12, 14 }.Contains(column.Index))
 				column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
 		totalDataGridView.DataSource = await AdvanceData.LoadAdvancePaymentModeTotalsByTakenOn(_takenOn, _locationId);
@@ -33,5 +37,29 @@ public partial class AdvanceReport : Form
 		}
 
 		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
+	}
+
+	private async void excelButton_Click(object sender, EventArgs e)
+	{
+		LoadingScreen.ShowSplashScreen();
+
+		MemoryStream ms = await Excel.AdvanceTakeOnExcel(_takenOn, _locationId);
+		using FileStream stream = new(Path.Combine(Path.GetTempPath(), "AdvanceTakeOnReport.xlsx"), FileMode.Create, FileAccess.Write);
+		await ms.CopyToAsync(stream);
+		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\AdvanceTakeOnReport.xlsx") { UseShellExecute = true });
+
+		LoadingScreen.CloseForm();
+	}
+
+	private async void printButton_Click(object sender, EventArgs e)
+	{
+		LoadingScreen.ShowSplashScreen();
+
+		MemoryStream ms = await PDF.AdvanceTakeOn(_takenOn, _locationId);
+		using FileStream stream = new(Path.Combine(Path.GetTempPath(), "AdvanceTakeOnReport.pdf"), FileMode.Create, FileAccess.Write);
+		await ms.CopyToAsync(stream);
+		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\AdvanceTakeOnReport.pdf") { UseShellExecute = true });
+
+		LoadingScreen.CloseForm();
 	}
 }

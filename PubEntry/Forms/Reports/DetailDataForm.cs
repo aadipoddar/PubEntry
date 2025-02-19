@@ -58,17 +58,17 @@ public partial class DetailDataForm : Form
 		upiTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.UPI)}";
 		amexTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Amex)}";
 
-		advanceTextBox.Text = $"{detailedAdvancePrintModel.Sum(x => x?.Adv_Paid)}";
-		redeemedAdvanceTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x?.Slip_No != "NOT REDEEMED").Sum(x => x?.Adv_Paid)}";
-		notRedeemedAdvanceTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x?.Slip_No == "NOT REDEEMED").Sum(x => x?.Adv_Paid)}";
+		advanceTextBox.Text = $"{detailedAdvancePrintModel.Sum(x => x?.Amount)}";
+		redeemedAdvanceTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x?.SlipId != "NOT REDEEMED").Sum(x => x?.Amount)}";
+		notRedeemedAdvanceTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x?.SlipId == "NOT REDEEMED").Sum(x => x?.Amount)}";
 
-		bookingTextBox.Text = $"{detailedAdvancePrintModel.Sum(x => x?.Booking_Amt)}";
-		redeemedBookingTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x?.Slip_No != "NOT REDEEMED").Sum(x => x?.Booking_Amt)}";
-		notRedeemedBookingTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x?.Slip_No == "NOT REDEEMED").Sum(x => x?.Booking_Amt)}";
+		bookingTextBox.Text = $"{detailedAdvancePrintModel.Sum(x => x?.Booking)}";
+		redeemedBookingTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x?.SlipId != "NOT REDEEMED").Sum(x => x?.Booking)}";
+		notRedeemedBookingTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x?.SlipId == "NOT REDEEMED").Sum(x => x?.Booking)}";
 
 		advanceDataGridView.DataSource = detailedAdvancePrintModel;
 		foreach (DataGridViewColumn column in advanceDataGridView.Columns)
-			if (new[] { 0, 7, 8, 10, 11, 13 }.Contains(column.Index))
+			if (new[] { 0, 8, 9, 11, 12, 14 }.Contains(column.Index))
 				column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 	}
 
@@ -92,26 +92,26 @@ public partial class DetailDataForm : Form
 		}
 	}
 
-	private async void printButton_Click(object sender, EventArgs e)
-	{
-		LoadingScreen.ShowSplashScreen();
-
-		MemoryStream ms = await DetailPrint.PrintDetail(_fromDateTime, _toDateTime, _locationId);
-		using FileStream stream = new(Path.Combine(Path.GetTempPath(), "DetailedReport.pdf"), FileMode.Create, FileAccess.Write);
-		await ms.CopyToAsync(stream);
-		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\DetailedReport.pdf") { UseShellExecute = true });
-
-		LoadingScreen.CloseForm();
-	}
-
 	private async void excelButton_Click(object sender, EventArgs e)
 	{
 		LoadingScreen.ShowSplashScreen();
 
-		MemoryStream ms = await Excel.ExcelExport(_fromDateTime, _toDateTime, _locationId);
-		using FileStream stream = new(Path.Combine(Path.GetTempPath(), "DetailedReportExcel.xlsx"), FileMode.Create, FileAccess.Write);
+		MemoryStream ms = await Excel.TransactionAdvanceExcel(_fromDateTime, _toDateTime, _locationId);
+		using FileStream stream = new(Path.Combine(Path.GetTempPath(), "DetailedReport.xlsx"), FileMode.Create, FileAccess.Write);
 		await ms.CopyToAsync(stream);
-		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\DetailedReportExcel.xlsx") { UseShellExecute = true });
+		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\DetailedReport.xlsx") { UseShellExecute = true });
+
+		LoadingScreen.CloseForm();
+	}
+
+	private async void printButton_Click(object sender, EventArgs e)
+	{
+		LoadingScreen.ShowSplashScreen();
+
+		MemoryStream ms = await PDF.Detail(_fromDateTime, _toDateTime, _locationId);
+		using FileStream stream = new(Path.Combine(Path.GetTempPath(), "DetailedReport.pdf"), FileMode.Create, FileAccess.Write);
+		await ms.CopyToAsync(stream);
+		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\DetailedReport.pdf") { UseShellExecute = true });
 
 		LoadingScreen.CloseForm();
 	}

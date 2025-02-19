@@ -9,6 +9,7 @@ public class AdvanceModel
 	public DateTime AdvanceDate { get; set; }
 	public int Booking { get; set; }
 	public string ApprovedBy { get; set; }
+	public int UserId { get; set; }
 	public int TransactionId { get; set; }
 }
 
@@ -22,20 +23,21 @@ public class AdvanceDetailModel
 
 public class AdvancePrintModel
 {
-	public int Adv_Id { get; set; }
+	public int Id { get; set; }
 	public string Name { get; set; }
 	public string Number { get; set; }
 	public char Loyalty { get; set; }
-	public DateTime Adv_Pymt_DT { get; set; }
-	public DateTime Adv_For_DT { get; set; }
+	public DateTime PaymentDT { get; set; }
+	public DateTime ForDT { get; set; }
 	public string Remarks { get; set; }
-	public int Booking_Amt { get; set; }
-	public int Adv_Paid { get; set; }
-	public string Pay_Mode { get; set; }
-	public string Slip_No { get; set; }
-	public string Entry_Paid { get; set; }
-	public string Slip_DT { get; set; }
-	public int Total_Amt { get; set; }
+	public string User { get; set; }
+	public int Booking { get; set; }
+	public int Amount { get; set; }
+	public string Mode { get; set; }
+	public string SlipId { get; set; }
+	public string Entry { get; set; }
+	public string SlipDT { get; set; }
+	public int Total { get; set; }
 }
 
 public class AdvancePaymentModeTotalsModel

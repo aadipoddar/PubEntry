@@ -6,6 +6,7 @@
 	@AdvanceDate DATE,
 	@Booking INT,
 	@ApprovedBy VARCHAR(50),
+	@UserId INT,
 	@TransactionId INT
 AS
 BEGIN

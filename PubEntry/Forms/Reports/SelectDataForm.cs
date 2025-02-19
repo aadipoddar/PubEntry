@@ -46,7 +46,7 @@ public partial class SelectDataForm : Form
 
 		LoadingScreen.ShowSplashScreen();
 
-		MemoryStream ms = await SummaryPrint.PrintSummary(fromDateTimePicker.Value, toDateTimePicker.Value);
+		MemoryStream ms = await PDF.Summary(fromDateTimePicker.Value, toDateTimePicker.Value);
 		using FileStream stream = new(Path.Combine(Path.GetTempPath(), "SummaryReport.pdf"), FileMode.Create, FileAccess.Write);
 		await ms.CopyToAsync(stream);
 		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\SummaryReport.pdf") { UseShellExecute = true });

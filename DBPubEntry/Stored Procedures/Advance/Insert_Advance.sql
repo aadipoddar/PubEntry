@@ -6,6 +6,7 @@
 	@AdvanceDate DATE,
 	@Booking INT,
 	@ApprovedBy VARCHAR(50),
+	@UserId INT,
 	@TransactionId INT
 AS
 BEGIN
@@ -16,6 +17,7 @@ BEGIN
 		AdvanceDate,
 		Booking,
 		ApprovedBy,
+		UserId,
 		TransactionId)
 	OUTPUT INSERTED.Id
 	VALUES
@@ -24,6 +26,7 @@ BEGIN
 		@AdvanceDate,
 		@Booking,
 		@ApprovedBy,
+		@UserId,
 		@TransactionId)
 
 END;

@@ -71,8 +71,8 @@ public partial class MainPage : ContentPage
 	private async Task PrintPDF(bool isDetail = false)
 	{
 		MemoryStream ms;
-		if (isDetail) ms = await DetailPrint.PrintDetail(fromDatePicker.Date.Add(fromTimePicker.Time), toDatePicker.Date.Add(toTimePicker.Time), (locationPicker.SelectedItem as LocationModel).Id);
-		else ms = await SummaryPrint.PrintSummary(fromDatePicker.Date.Add(fromTimePicker.Time), toDatePicker.Date.Add(toTimePicker.Time));
+		if (isDetail) ms = await PDF.Detail(fromDatePicker.Date.Add(fromTimePicker.Time), toDatePicker.Date.Add(toTimePicker.Time), (locationPicker.SelectedItem as LocationModel).Id);
+		else ms = await PDF.Summary(fromDatePicker.Date.Add(fromTimePicker.Time), toDatePicker.Date.Add(toTimePicker.Time));
 
 		SaveService saveService = new();
 		if (isDetail) saveService.SaveAndView("DetailReport.pdf", "application/pdf", ms);
@@ -81,7 +81,7 @@ public partial class MainPage : ContentPage
 
 	private async Task ExportToExcel()
 	{
-		MemoryStream ms = await Excel.ExcelExport(fromDatePicker.Date.Add(fromTimePicker.Time), toDatePicker.Date.Add(toTimePicker.Time), (locationPicker.SelectedItem as LocationModel).Id);
+		MemoryStream ms = await Excel.TransactionAdvanceExcel(fromDatePicker.Date.Add(fromTimePicker.Time), toDatePicker.Date.Add(toTimePicker.Time), (locationPicker.SelectedItem as LocationModel).Id);
 		SaveService saveService = new();
 		saveService.SaveAndView("DetailedExcel.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ms);
 	}

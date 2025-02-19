@@ -11,12 +11,6 @@ public partial class AdminPanel : Form
 	private void AdminPanel_Load(object sender, EventArgs e) =>
 		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 
-	private void advanceButton_Click(object sender, EventArgs e)
-	{
-		AdvanceForm advanceForm = new();
-		advanceForm.ShowDialog();
-	}
-
 	private void manageTransactionsButton_Click(object sender, EventArgs e)
 	{
 		SlipIdForm slipIdForm = new();

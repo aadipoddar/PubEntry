@@ -35,7 +35,6 @@ partial class AdminPanel
 		managePersonsButton = new Button();
 		settingsButton = new Button();
 		paymentModeButton = new Button();
-		advanceButton = new Button();
 		brandingLabel = new Label();
 		richTextBoxFooter = new RichTextBox();
 		reservationButton = new Button();
@@ -46,7 +45,7 @@ partial class AdminPanel
 		// manageLocationButton
 		// 
 		manageLocationButton.Font = new Font("Segoe UI", 15F);
-		manageLocationButton.Location = new Point(38, 249);
+		manageLocationButton.Location = new Point(41, 203);
 		manageLocationButton.Name = "manageLocationButton";
 		manageLocationButton.Size = new Size(213, 52);
 		manageLocationButton.TabIndex = 5;
@@ -57,7 +56,7 @@ partial class AdminPanel
 		// manageUsersButton
 		// 
 		manageUsersButton.Font = new Font("Segoe UI", 15F);
-		manageUsersButton.Location = new Point(38, 191);
+		manageUsersButton.Location = new Point(41, 145);
 		manageUsersButton.Name = "manageUsersButton";
 		manageUsersButton.Size = new Size(213, 52);
 		manageUsersButton.TabIndex = 4;
@@ -68,7 +67,7 @@ partial class AdminPanel
 		// manageTransactionsButton
 		// 
 		manageTransactionsButton.Font = new Font("Segoe UI", 15F);
-		manageTransactionsButton.Location = new Point(38, 75);
+		manageTransactionsButton.Location = new Point(41, 29);
 		manageTransactionsButton.Name = "manageTransactionsButton";
 		manageTransactionsButton.Size = new Size(213, 52);
 		manageTransactionsButton.TabIndex = 2;
@@ -79,7 +78,7 @@ partial class AdminPanel
 		// managePersonsButton
 		// 
 		managePersonsButton.Font = new Font("Segoe UI", 15F);
-		managePersonsButton.Location = new Point(38, 307);
+		managePersonsButton.Location = new Point(41, 261);
 		managePersonsButton.Name = "managePersonsButton";
 		managePersonsButton.Size = new Size(213, 52);
 		managePersonsButton.TabIndex = 6;
@@ -90,7 +89,7 @@ partial class AdminPanel
 		// settingsButton
 		// 
 		settingsButton.Font = new Font("Segoe UI", 15F);
-		settingsButton.Location = new Point(38, 481);
+		settingsButton.Location = new Point(41, 435);
 		settingsButton.Name = "settingsButton";
 		settingsButton.Size = new Size(213, 52);
 		settingsButton.TabIndex = 9;
@@ -101,7 +100,7 @@ partial class AdminPanel
 		// paymentModeButton
 		// 
 		paymentModeButton.Font = new Font("Segoe UI", 15F);
-		paymentModeButton.Location = new Point(38, 365);
+		paymentModeButton.Location = new Point(41, 319);
 		paymentModeButton.Name = "paymentModeButton";
 		paymentModeButton.Size = new Size(213, 52);
 		paymentModeButton.TabIndex = 7;
@@ -109,23 +108,12 @@ partial class AdminPanel
 		paymentModeButton.UseVisualStyleBackColor = true;
 		paymentModeButton.Click += paymentModeButton_Click;
 		// 
-		// advanceButton
-		// 
-		advanceButton.Font = new Font("Segoe UI", 15F);
-		advanceButton.Location = new Point(38, 17);
-		advanceButton.Name = "advanceButton";
-		advanceButton.Size = new Size(213, 52);
-		advanceButton.TabIndex = 1;
-		advanceButton.Text = "Advance Entry";
-		advanceButton.UseVisualStyleBackColor = true;
-		advanceButton.Click += advanceButton_Click;
-		// 
 		// brandingLabel
 		// 
 		brandingLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
 		brandingLabel.AutoSize = true;
 		brandingLabel.BackColor = Color.White;
-		brandingLabel.Location = new Point(212, 619);
+		brandingLabel.Location = new Point(212, 564);
 		brandingLabel.Name = "brandingLabel";
 		brandingLabel.Size = new Size(76, 15);
 		brandingLabel.TabIndex = 39;
@@ -134,7 +122,7 @@ partial class AdminPanel
 		// richTextBoxFooter
 		// 
 		richTextBoxFooter.Dock = DockStyle.Bottom;
-		richTextBoxFooter.Location = new Point(0, 613);
+		richTextBoxFooter.Location = new Point(0, 558);
 		richTextBoxFooter.Name = "richTextBoxFooter";
 		richTextBoxFooter.Size = new Size(292, 26);
 		richTextBoxFooter.TabIndex = 38;
@@ -143,7 +131,7 @@ partial class AdminPanel
 		// reservationButton
 		// 
 		reservationButton.Font = new Font("Segoe UI", 15F);
-		reservationButton.Location = new Point(38, 423);
+		reservationButton.Location = new Point(41, 377);
 		reservationButton.Name = "reservationButton";
 		reservationButton.Size = new Size(213, 52);
 		reservationButton.TabIndex = 8;
@@ -154,7 +142,7 @@ partial class AdminPanel
 		// sqlQueryButton
 		// 
 		sqlQueryButton.Font = new Font("Segoe UI", 15F);
-		sqlQueryButton.Location = new Point(38, 539);
+		sqlQueryButton.Location = new Point(41, 493);
 		sqlQueryButton.Name = "sqlQueryButton";
 		sqlQueryButton.Size = new Size(213, 52);
 		sqlQueryButton.TabIndex = 10;
@@ -165,7 +153,7 @@ partial class AdminPanel
 		// button1
 		// 
 		button1.Font = new Font("Segoe UI", 15F);
-		button1.Location = new Point(38, 133);
+		button1.Location = new Point(41, 87);
 		button1.Name = "button1";
 		button1.Size = new Size(213, 52);
 		button1.TabIndex = 3;
@@ -177,13 +165,12 @@ partial class AdminPanel
 		// 
 		AutoScaleDimensions = new SizeF(7F, 15F);
 		AutoScaleMode = AutoScaleMode.Font;
-		ClientSize = new Size(292, 639);
+		ClientSize = new Size(292, 584);
 		Controls.Add(button1);
 		Controls.Add(sqlQueryButton);
 		Controls.Add(reservationButton);
 		Controls.Add(brandingLabel);
 		Controls.Add(richTextBoxFooter);
-		Controls.Add(advanceButton);
 		Controls.Add(paymentModeButton);
 		Controls.Add(settingsButton);
 		Controls.Add(manageTransactionsButton);
@@ -209,7 +196,6 @@ partial class AdminPanel
 	private System.Windows.Forms.Button managePersonsButton;
 	private System.Windows.Forms.Button settingsButton;
 	private System.Windows.Forms.Button paymentModeButton;
-	private Button advanceButton;
 	private System.Windows.Forms.Label brandingLabel;
 	private System.Windows.Forms.RichTextBox richTextBoxFooter;
 	private System.Windows.Forms.Button reservationButton;

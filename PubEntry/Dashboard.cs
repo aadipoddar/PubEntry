@@ -3,6 +3,7 @@
 using PubEntry.Forms.Admin;
 using PubEntry.Forms.Reports;
 using PubEntry.Forms.Transaction;
+using PubEntry.Forms.Transaction.Advance;
 
 namespace PubEntry;
 
@@ -70,6 +71,18 @@ public partial class Dashboard : Form
 
 		TransactionForm entryForm = new((locationComboBox.SelectedItem as LocationModel).Id, (userComboBox.SelectedItem as UserModel).Id);
 		entryForm.ShowDialog();
+	}
+
+	private void advanceButton_Click(object sender, EventArgs e)
+	{
+		if (!ValidatePassword())
+		{
+			MessageBox.Show("Incorrect Password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+			return;
+		}
+
+		AdvanceForm advanceForm = new((locationComboBox.SelectedItem as LocationModel).Id, (userComboBox.SelectedItem as UserModel).Id);
+		advanceForm.ShowDialog();
 	}
 
 	private void reportsButton_Click(object sender, EventArgs e)

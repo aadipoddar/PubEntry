@@ -12,7 +12,7 @@ public partial class AdminPanel
 		if (!await ValidatePassword()) NavManager.NavigateTo("/");
 
 		else NavManager.NavigateTo(
-				$"/admin/advance" +
+				$"/admin/updateAdvance" +
 				$"?UserId={UserId}" +
 				$"&Password={Password}");
 	}

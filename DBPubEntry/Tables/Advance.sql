@@ -6,9 +6,11 @@
     [AdvanceDate]   DATE         NOT NULL,
     [Booking]       INT          NOT NULL,
     [ApprovedBy]    VARCHAR (50) NULL,
+    [UserId] INT NOT NULL, 
     [TransactionId] INT          NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC), 
     CONSTRAINT [FK_Advance_ToLocation] FOREIGN KEY (LocationId) REFERENCES [Location](Id), 
-    CONSTRAINT [FK_Advance_ToPerson] FOREIGN KEY (PersonId) REFERENCES [Person](Id)
+    CONSTRAINT [FK_Advance_ToPerson] FOREIGN KEY (PersonId) REFERENCES [Person](Id), 
+    CONSTRAINT [FK_Advance_ToUser] FOREIGN KEY (UserId) REFERENCES [User](Id)
 );
 

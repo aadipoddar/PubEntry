@@ -7,9 +7,9 @@ public partial class Home
 	[Inject] public NavigationManager NavManager { get; set; }
 	[Inject] public IJSRuntime JS { get; set; }
 
-	private static DateTime CurrentDateTime { get; set; } = DateTime.Now.AddHours(5).AddMinutes(30);
-	private DateTime FromDateTime { get; set; } = CurrentDateTime;
-	private DateTime ToDateTime { get; set; } = CurrentDateTime;
+	private DateTime CurrentDateTime { get; set; }
+	private DateTime FromDateTime { get; set; }
+	private DateTime ToDateTime { get; set; }
 
 	private string Password { get; set; }
 
@@ -23,16 +23,6 @@ public partial class Home
 
 	protected override async Task OnInitializedAsync() => await LoadData();
 
-	protected override Task OnAfterRenderAsync(bool firstRender)
-	{
-		// TODO - Testing
-		//NavManager.NavigateTo(
-		//		$"/admin" +
-		//		$"?UserId={23}" +
-		//		$"&Password={BCrypt.Net.BCrypt.EnhancedHashPassword("1234", 13)}");
-		return base.OnAfterRenderAsync(firstRender);
-	}
-
 	private async Task LoadData()
 	{
 		locations.Clear();
@@ -41,12 +31,13 @@ public partial class Home
 		foreach (var location in await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location))
 			locations.Add(location);
 
-		foreach (var user in await CommonData.LoadTableDataByStatus<UserModel>(Table.User))
-			if (user.Admin)
-				users.Add(user);
+		foreach (var user in await UserData.LoadUsersByLocationId(locations.FirstOrDefault().Id))
+			users.Add(user);
 
 		selectedLocationId = locations.FirstOrDefault().Id;
 		selectedUserId = users.FirstOrDefault().Id;
+
+		CurrentDateTime = DateTime.Now.AddHours(5).AddMinutes(30);
 
 		if (CurrentDateTime.Hour >= TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours)
 		{
@@ -66,6 +57,7 @@ public partial class Home
 	{
 		transactionTotalsModel.Clear();
 		advanceTotalsModel.Clear();
+
 		foreach (var location in locations)
 		{
 			transactionTotalsModel.Add(await TransactionData.LoadTransactionTotalsByDateLocation(FromDateTime, ToDateTime, location.Id));
@@ -113,29 +105,55 @@ public partial class Home
 		await JS.InvokeVoidAsync(
 			"saveAsFile",
 			"SummaryReport.pdf",
-			Convert.ToBase64String((await SummaryPrint.PrintSummary(FromDateTime, ToDateTime)).ToArray()));
+			Convert.ToBase64String((await PDF.Summary(FromDateTime, ToDateTime)).ToArray()));
 
 	private async Task DetailedButtonClicked() =>
 		await JS.InvokeVoidAsync(
 			"saveAsFile",
 			"DetailedReport.pdf",
-			Convert.ToBase64String((await DetailPrint.PrintDetail(FromDateTime, ToDateTime, selectedLocationId)).ToArray()));
+			Convert.ToBase64String((await PDF.Detail(FromDateTime, ToDateTime, selectedLocationId)).ToArray()));
 
 	private async Task ExcelButtonClicked() =>
 		await JS.InvokeVoidAsync(
 			"saveAsFile",
 			"ExcelReport.xlsx",
-			Convert.ToBase64String((await Excel.ExcelExport(FromDateTime, ToDateTime, selectedLocationId)).ToArray()));
+			Convert.ToBase64String((await Excel.TransactionAdvanceExcel(FromDateTime, ToDateTime, selectedLocationId)).ToArray()));
 
-	private async Task AdminButtonClicked()
+	private async Task OnLocationChanged()
+	{
+		users.Clear();
+		foreach (var user in await UserData.LoadUsersByLocationId(selectedLocationId))
+			users.Add(user);
+
+		selectedUserId = users.FirstOrDefault().Id;
+		StateHasChanged();
+	}
+
+	private async Task AdvanceButtonClicked()
 	{
 		if (await ValidatePassword())
 			NavManager.NavigateTo(
-				$"/admin" +
+				$"/advance" +
 				$"?UserId={selectedUserId}" +
-				$"&Password={BCrypt.Net.BCrypt.EnhancedHashPassword(Password, 13)}");
+				$"&Password={BCrypt.Net.BCrypt.EnhancedHashPassword(Password, 13)}" +
+				$"&LocationId={selectedLocationId}");
 
 		else await JS.InvokeVoidAsync("alert", "Invalid Password");
+	}
+
+	private async Task AdminButtonClicked()
+	{
+		if ((await CommonData.LoadTableDataById<UserModel>(Table.User, selectedUserId)).Admin)
+		{
+			if (await ValidatePassword())
+				NavManager.NavigateTo(
+					$"/admin" +
+					$"?UserId={selectedUserId}" +
+					$"&Password={BCrypt.Net.BCrypt.EnhancedHashPassword(Password, 13)}");
+
+			else await JS.InvokeVoidAsync("alert", "Invalid Password");
+		}
+		else await JS.InvokeVoidAsync("alert", "Not an Admin");
 	}
 
 	private async Task<bool> ValidatePassword()

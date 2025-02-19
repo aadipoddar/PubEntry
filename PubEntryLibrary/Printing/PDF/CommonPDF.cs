@@ -1,4 +1,6 @@
-﻿using Syncfusion.Drawing;
+﻿using PubEntryLibrary.Data;
+
+using Syncfusion.Drawing;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 
@@ -8,9 +10,9 @@ using SizeF = Syncfusion.Drawing.SizeF;
 
 namespace PubEntryLibrary.Printing.PDF;
 
-public static class HeaderFooterReport
+internal static class CommonPDF
 {
-	public static PdfPageTemplateElement AddHeader(PdfDocument doc, string title, string description)
+	internal static PdfPageTemplateElement AddHeader(PdfDocument doc, string title, string description)
 	{
 		RectangleF rect = new(0, 0, doc.Pages[0].GetClientSize().Width, 50);
 
@@ -54,7 +56,7 @@ public static class HeaderFooterReport
 		return header;
 	}
 
-	public static PdfPageTemplateElement AddFooter(PdfDocument doc)
+	internal static PdfPageTemplateElement AddFooter(PdfDocument doc)
 	{
 		RectangleF rect = new(0, 0, doc.Pages[0].GetClientSize().Width, 50);
 
@@ -75,5 +77,27 @@ public static class HeaderFooterReport
 		compositeField.Draw(footer.Graphics, new PointF(470, 40));
 
 		return footer;
+	}
+
+	internal static async Task<PdfLayoutResult> LocationHeader(int locationId, PdfPage pdfPage, PdfLayoutResult result)
+	{
+		PdfStandardFont font = new(PdfFontFamily.Helvetica, 25, PdfFontStyle.Bold);
+		PdfLayoutFormat layoutFormat = new()
+		{
+			Layout = PdfLayoutType.Paginate,
+			Break = PdfLayoutBreakType.FitPage
+		};
+
+		string text = $"{(await CommonData.LoadTableDataById<LocationModel>(Table.Location, locationId)).Name}";
+		float textWidth = font.MeasureString(text).Width;
+		float pageWidth = pdfPage.GetClientSize().Width;
+		float textX = (pageWidth - textWidth) / 2f;
+
+		PdfTextElement textElement = new(text, font);
+
+		if (result == null) result = textElement.Draw(pdfPage, new PointF(textX, 20), layoutFormat);
+		else result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 20), layoutFormat);
+
+		return result;
 	}
 }

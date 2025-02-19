@@ -99,13 +99,13 @@ public partial class Detailed
 		await JS.InvokeVoidAsync(
 			"saveAsFile",
 			"DetailedReport.pdf",
-			Convert.ToBase64String((await DetailPrint.PrintDetail(FromDateTime, ToDateTime, SelectedLocationId)).ToArray()));
+			Convert.ToBase64String((await PDF.Detail(FromDateTime, ToDateTime, SelectedLocationId)).ToArray()));
 
 	private async Task ExcelButtonClicked() =>
 		await JS.InvokeVoidAsync(
 			"saveAsFile",
 			"ExcelReport.xlsx",
-			Convert.ToBase64String((await Excel.ExcelExport(FromDateTime, ToDateTime, SelectedLocationId)).ToArray()));
+			Convert.ToBase64String((await Excel.TransactionAdvanceExcel(FromDateTime, ToDateTime, SelectedLocationId)).ToArray()));
 
 	public async Task ToolbarClickHandler(ClickEventArgs args)
 	{

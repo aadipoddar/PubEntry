@@ -2,7 +2,7 @@ using Syncfusion.Blazor.Calendars;
 
 using Syncfusion.Blazor.Grids;
 
-namespace PubWebReport.Components.Pages.Admin.AdminControls;
+namespace PubWebReport.Components.Pages;
 
 public partial class Advance
 {
@@ -11,13 +11,12 @@ public partial class Advance
 
 	[Parameter][SupplyParameterFromQuery] public int UserId { get; set; }
 	[Parameter][SupplyParameterFromQuery] public string Password { get; set; }
+	[Parameter][SupplyParameterFromQuery] public int LocationId { get; set; }
 
-	private LocationModel LocationModel { get; set; } = new();
 	private PaymentModeModel PaymentModeModel { get; set; } = new();
 	private PersonModel PersonModel { get; set; } = new();
 	private AdvanceModel AdvanceModel { get; set; } = new() { AdvanceDate = DateTime.Now.AddHours(5).AddMinutes(30).Date };
 
-	private readonly List<LocationModel> locations = [];
 	private readonly List<PaymentModeModel> paymentModes = [];
 	private readonly List<AdvancePaymentModel> advancePaymentModels = [];
 
@@ -42,26 +41,11 @@ public partial class Advance
 
 	private async Task LoadData()
 	{
-		locations.Clear();
-		foreach (var location in await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location))
-			locations.Add(location);
-
-		LocationModel = locations.FirstOrDefault();
-
 		paymentModes.Clear();
 		foreach (var paymentMode in await CommonData.LoadTableDataByStatus<PaymentModeModel>(Table.PaymentMode))
 			paymentModes.Add(paymentMode);
 
 		PaymentModeModel = paymentModes.FirstOrDefault();
-	}
-
-	private async Task OnLocationSelect(ChangeEventArgs e)
-	{
-		if (int.TryParse(e.Value.ToString(), out int locationId))
-			LocationModel = locations.FirstOrDefault(u => u.Id == locationId) ?? new LocationModel();
-		else LocationModel = new() { Status = true };
-
-		await LoadPersonAdvance();
 	}
 
 	private async Task OnPersonNumberChanged()
@@ -84,7 +68,7 @@ public partial class Advance
 		if (PersonModel.Id != 0)
 		{
 			var foundAdvance = await AdvanceData.LoadAdvanceByDateLocationPerson(
-				LocationModel.Id,
+				LocationId,
 				PersonModel.Id,
 				AdvanceModel.AdvanceDate.Date);
 
@@ -108,7 +92,7 @@ public partial class Advance
 				AdvanceModel.Id = 0;
 				AdvanceModel.ApprovedBy = string.Empty;
 				AdvanceModel.Booking = 0;
-				AdvanceModel.LocationId = LocationModel.Id;
+				AdvanceModel.LocationId = LocationId;
 				AdvanceModel.PersonId = PersonModel.Id;
 
 				advancePaymentModels.Clear();
@@ -121,7 +105,7 @@ public partial class Advance
 			AdvanceModel.Id = 0;
 			AdvanceModel.ApprovedBy = string.Empty;
 			AdvanceModel.Booking = 0;
-			AdvanceModel.LocationId = LocationModel.Id;
+			AdvanceModel.LocationId = LocationId;
 			AdvanceModel.PersonId = 0;
 
 			advancePaymentModels.Clear();
@@ -206,8 +190,9 @@ public partial class Advance
 	private async Task InsertAdvance()
 	{
 		AdvanceModel.PersonId = PersonModel.Id;
-		AdvanceModel.LocationId = LocationModel.Id;
+		AdvanceModel.LocationId = LocationId;
 		AdvanceModel.DateTime = DateTime.Now;
+		AdvanceModel.UserId = UserId;
 		AdvanceModel.Id = await AdvanceData.InsertAdvance(AdvanceModel);
 	}
 

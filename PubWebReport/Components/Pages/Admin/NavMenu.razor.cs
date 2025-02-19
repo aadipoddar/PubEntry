@@ -8,7 +8,6 @@ public partial class NavMenu
 	[Parameter][SupplyParameterFromQuery] public string Password { get; set; }
 
 #nullable enable
-	private string? advanceHref;
 	private string? updateAdvanceHref;
 	private string? updateTransactionHref;
 	private string? usersHref;
@@ -33,7 +32,6 @@ public partial class NavMenu
 
 	private void GenerateHref()
 	{
-		advanceHref = $"/admin/advance?UserId={UserId}&Password={Password}";
 		updateAdvanceHref = $"/admin/updateAdvance?UserId={UserId}&Password={Password}";
 		updateTransactionHref = $"/admin/updateTransaction?UserId={UserId}&Password={Password}";
 		usersHref = $"/admin/users?UserId={UserId}&Password={Password}";

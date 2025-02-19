@@ -4,19 +4,22 @@ namespace PubEntry.Forms.Transaction.Advance;
 
 public partial class AdvanceForm : Form
 {
+	private readonly int _userId, _locationId;
 	private int _foundAdvanceId;
 
-	public AdvanceForm() => InitializeComponent();
+	public AdvanceForm(int locationId, int userId)
+	{
+		InitializeComponent();
+
+		_userId = userId;
+		_locationId = locationId;
+	}
 
 	#region LoadData
 	private void AdvanceForm_Load(object sender, EventArgs e) => LoadData();
 
 	private async void LoadData()
 	{
-		locationComboBox.DataSource = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location);
-		locationComboBox.DisplayMember = nameof(LocationModel.Name);
-		locationComboBox.ValueMember = nameof(LocationModel.Id);
-
 		paymentComboBox.DataSource = await CommonData.LoadTableDataByStatus<PaymentModeModel>(Table.PaymentMode);
 		paymentComboBox.DisplayMember = nameof(PaymentModeModel.Name);
 		paymentComboBox.ValueMember = nameof(PaymentModeModel.Id);
@@ -55,7 +58,7 @@ public partial class AdvanceForm : Form
 		if (foundPerson is not null)
 		{
 			var foundAdvance = await AdvanceData.LoadAdvanceByDateLocationPerson(
-				(locationComboBox.SelectedItem as LocationModel).Id,
+				_locationId,
 				foundPerson.Id,
 				advanceDateTimePicker.Value.Date);
 
@@ -175,12 +178,13 @@ public partial class AdvanceForm : Form
 		return await AdvanceData.InsertAdvance(new AdvanceModel
 		{
 			Id = 0,
-			LocationId = (locationComboBox.SelectedItem as LocationModel).Id,
+			LocationId = _locationId,
 			PersonId = personModel.Id,
 			DateTime = DateTime.Now,
 			AdvanceDate = advanceDateTimePicker.Value.Date,
 			Booking = int.Parse(bookingTextBox.Text),
 			ApprovedBy = approvedByTextBox.Text,
+			UserId = _userId,
 			TransactionId = 0
 		});
 	}
@@ -201,12 +205,13 @@ public partial class AdvanceForm : Form
 		await AdvanceData.UpdateAdvance(new AdvanceModel
 		{
 			Id = _foundAdvanceId,
-			LocationId = (locationComboBox.SelectedItem as LocationModel).Id,
+			LocationId = _locationId,
 			PersonId = (await PersonData.LoadPersonByNumber(numberTextBox.Text)).Id,
 			DateTime = DateTime.Now,
 			AdvanceDate = advanceDateTimePicker.Value.Date,
 			Booking = int.Parse(bookingTextBox.Text),
 			ApprovedBy = approvedByTextBox.Text,
+			UserId = _userId,
 			TransactionId = 0
 		});
 

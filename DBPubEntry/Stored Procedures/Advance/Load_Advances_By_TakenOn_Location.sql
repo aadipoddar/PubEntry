@@ -5,22 +5,23 @@ AS
 BEGIN
 
 	SELECT
-		Adv_Id,
+		Id,
 		Name,
 		Number,
 		Loyalty,
-		Adv_Pymt_DT,
-		Adv_For_DT,
+		PaymentDT,
+		ForDT,
 		Remarks,
-		Booking_Amt,
-		Adv_Paid,
-		Pay_Mode,
-		Slip_No,
-		Entry_Paid,
-		Slip_DT,
-		Total_Amt
+		[User],
+		Booking,
+		Amount,
+		Mode,
+		SlipId,
+		[Entry],
+		SlipDT,
+		Total
 	FROM View_Advances
-	WHERE Adv_Pymt_DT BETWEEN @TakenOn AND DATEADD(DAY, 1, @TakenOn)
+	WHERE PaymentDT BETWEEN @TakenOn AND DATEADD(DAY, 1, @TakenOn)
 		AND LocationId = @LocationId
 	
 END
