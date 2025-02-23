@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <AssemblyVersion>4.0.0.1</AssemblyVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Golder Park.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AadiSoft.Updater" Version="1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PubEntryLibrary\PubEntryLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Golder Park.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="PubEntryLibrary.Data" />
+    <Using Include="PubEntryLibrary.DataAccess" />
+    <Using Include="PubEntryLibrary.Models" />
+  </ItemGroup>
+
+</Project>
