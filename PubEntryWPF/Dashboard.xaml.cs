@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Windows;
+﻿using System.Windows;
 
 namespace PubEntryWPF;
 
@@ -16,11 +15,18 @@ public partial class Dashboard : Window
 
 	private static async void UpdateCheck()
 	{
-		var isUpdateAvailable = await AadiSoftUpdater.AadiSoftUpdater.CheckForUpdates("aadipoddar", $"{Secrets.DatabaseName}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+		try
+		{
+			var isUpdateAvailable = await AadiSoftUpdater.AadiSoftUpdater.CheckForUpdates("aadipoddar", $"{Secrets.DatabaseName}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
 
-		if (!isUpdateAvailable) return;
-		if (MessageBox.Show("New Version Available. Do you want to update?", "Update Available", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-			await AadiSoftUpdater.AadiSoftUpdater.UpdateApp("aadipoddar", $"{Secrets.DatabaseName}", "PubEntrySetup", "477557B4-2908-4106-B360-D2D114F02452");
+			if (!isUpdateAvailable) return;
+			if (MessageBox.Show("New Version Available. Do you want to update?", "Update Available", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+				await AadiSoftUpdater.AadiSoftUpdater.UpdateApp("aadipoddar", $"{Secrets.DatabaseName}", "PubEntrySetup", "477557B4-2908-4106-B360-D2D114F02452");
+		}
+		catch (Exception ex)
+		{
+			MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		}
 	}
 
 	private async void Window_Loaded(object sender, RoutedEventArgs e) => await LoadLocationComboBox();
@@ -67,14 +73,22 @@ public partial class Dashboard : Window
 			return;
 		}
 
-		Transaction.Transaction transaction = new(this);
+		Transaction.Transaction transaction = new(this, int.Parse(locationComboBox.SelectedValue.ToString()), int.Parse(userComboBox.SelectedValue.ToString()));
 		Hide();
 		transaction.ShowDialog();
 	}
 
 	private void advanceButton_Click(object sender, RoutedEventArgs e)
 	{
+		if (!ValidatePassword())
+		{
+			MessageBox.Show("Incorrect Password", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			return;
+		}
 
+		Transaction.Advance.Advance advance = new(this, int.Parse(locationComboBox.SelectedValue.ToString()), int.Parse(userComboBox.SelectedValue.ToString()));
+		Hide();
+		advance.ShowDialog();
 	}
 
 	private void reportsButton_Click(object sender, RoutedEventArgs e)

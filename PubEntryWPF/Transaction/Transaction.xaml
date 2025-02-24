@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:PubEntryWPF.Transaction"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded" Closed="Window_Closed"
-		FontSize="15" Title="Transaction"
-        Height="600" Width="500" Icon="/Golder Park.jpg">
-	<Grid >
+		Title="Transaction"
+        Height="600" Width="550" Icon="/Golder Park.jpg">
+	<Grid>
 		<Grid HorizontalAlignment="Center">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto"/>
@@ -39,7 +39,7 @@
 				</StackPanel>
 
 				<StackPanel>
-					<TextBox x:Name="numberTextBox" Margin="10" Padding="5" PreviewTextInput="textBox_PreviewTextInput" MaxLength="10" MaxWidth="150" MinWidth="100"/>
+					<TextBox x:Name="numberTextBox" Margin="10" Padding="5" PreviewTextInput="textBox_PreviewTextInput" MaxLength="10" MaxWidth="150" MinWidth="100" TextChanged="numberTextBox_TextChanged"/>
 					<TextBox x:Name="nameTextBox" Margin="10" Padding="5" MaxLength="250"  MaxWidth="150" TextWrapping="Wrap" />
 				</StackPanel>
 			</StackPanel>
@@ -79,7 +79,7 @@
 			<!--#endregion-->
 
 			<!--#region Advance -->
-			<StackPanel x:Name="advancePanel" Orientation="Horizontal" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="30,0,0,0">
+			<StackPanel x:Name="advancePanel" Orientation="Horizontal" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="30,0,0,0" Visibility="Hidden">
 				<StackPanel>
 					<TextBlock Margin="5" Padding="5" Text="Booking" />
 					<TextBlock Margin="5" Padding="5" Text="Advance" />
@@ -110,12 +110,11 @@
 			</StackPanel>
 			<!--#endregion-->
 
-			<Button x:Name="saveButton" Content="Save" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="4" Margin="10" Padding="5" MaxWidth="200" />
+			<Button x:Name="saveButton" Content="Save" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="4" Margin="10" Padding="5" MaxWidth="200" Click="saveButton_Click" />
 		</Grid>
 
 		<!--#region Footer -->
-		<Grid VerticalAlignment="Bottom" Background="#F0F0F0"
-              Height="30" Margin="0,10,0,0">
+		<Grid VerticalAlignment="Bottom" Background="#F0F0F0" Height="30" Margin="0,10,0,0">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="Auto"/>
@@ -134,4 +133,5 @@
 		<!--#endregion-->
 
 	</Grid>
+	
 </Window>

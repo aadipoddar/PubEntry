@@ -50,8 +50,6 @@ public partial class AdvanceForm : Form
 
 	private async void advanceDateTimePicker_ValueChanged(object sender, EventArgs e) => await LoadPersonAdvance();
 
-	private async void locationComboBox_SelectedIndexChanged(object sender, EventArgs e) => await LoadPersonAdvance();
-
 	private async Task LoadPersonAdvance()
 	{
 		var foundPerson = await PersonData.LoadPersonByNumber(numberTextBox.Text);
@@ -105,7 +103,9 @@ public partial class AdvanceForm : Form
 
 		return true;
 	}
+	#endregion
 
+	#region DataGrid
 	private void addButton_Click(object sender, EventArgs e)
 	{
 		if (string.IsNullOrEmpty(amountTextBox.Text)) return;
