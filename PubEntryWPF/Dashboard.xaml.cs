@@ -43,7 +43,17 @@ public partial class Dashboard : Window
 
 	private async Task LoadUserComboBox()
 	{
-		userComboBox.ItemsSource = await UserData.LoadUsersByLocationId(int.Parse(locationComboBox.SelectedValue.ToString()));
+		List<UserModel> admins = [];
+
+		foreach (var location in locationComboBox.ItemsSource)
+			admins.AddRange((await UserData.LoadUsersByLocationId((location as LocationModel).Id)).ToList().Where(_ => _.Admin));
+
+		userComboBox.ItemsSource =
+			admins
+				.Concat((await UserData.LoadUsersByLocationId(int.Parse(locationComboBox.SelectedValue.ToString())))
+				.ToList()
+				.Where(_ => !_.Admin))
+				.OrderBy(_ => _.Admin);
 		userComboBox.DisplayMemberPath = nameof(UserModel.Name);
 		userComboBox.SelectedValuePath = nameof(UserModel.Id);
 		userComboBox.SelectedIndex = 0;
@@ -55,6 +65,8 @@ public partial class Dashboard : Window
 	{
 		passwordBox.Clear();
 		passwordBox.Focus();
+
+		if (userComboBox.SelectedItem is null) return;
 
 		if ((userComboBox.SelectedItem as UserModel).Admin)
 			adminButton.Visibility = Visibility.Visible;
@@ -106,6 +118,16 @@ public partial class Dashboard : Window
 
 	private void adminButton_Click(object sender, RoutedEventArgs e)
 	{
+		if (!ValidatePassword())
+		{
+			if (!(userComboBox.SelectedItem as UserModel).Admin)
+				MessageBox.Show("You are not an Admin", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			else MessageBox.Show("Incorrect Password", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			return;
+		}
 
+		Admin.AdminPanel adminPanel = new(this, int.Parse(locationComboBox.SelectedValue.ToString()), int.Parse(userComboBox.SelectedValue.ToString()));
+		Hide();
+		adminPanel.ShowDialog();
 	}
 }

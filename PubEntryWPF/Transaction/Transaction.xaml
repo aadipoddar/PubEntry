@@ -6,8 +6,7 @@
         xmlns:local="clr-namespace:PubEntryWPF.Transaction"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded" Closed="Window_Closed"
-		Title="Transaction"
-        Height="600" Width="550" Icon="/Golder Park.jpg">
+		Title="Transaction" Height="600" Width="550">
 	<Grid>
 		<Grid HorizontalAlignment="Center">
 			<Grid.ColumnDefinitions>
@@ -133,5 +132,5 @@
 		<!--#endregion-->
 
 	</Grid>
-	
+
 </Window>
