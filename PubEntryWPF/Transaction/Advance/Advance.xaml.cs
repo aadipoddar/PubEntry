@@ -24,6 +24,7 @@ public partial class Advance : Window
 	private void Window_Closed(object sender, EventArgs e)
 	{
 		_dashboard.Show();
+		_dashboard.passwordBox.Focus();
 		Close();
 	}
 
@@ -39,6 +40,8 @@ public partial class Advance : Window
 		paymentComboBox.SelectedIndex = 0;
 
 		amountDataGrid.ItemsSource = _advancePaymentModels;
+
+		numberTextBox.Focus();
 
 		bookingDatePicker.SelectedDate = DateTime.Now;
 		bookingDatePicker.DisplayDateStart = DateTime.Now;

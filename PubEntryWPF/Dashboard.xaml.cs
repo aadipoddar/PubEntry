@@ -23,9 +23,9 @@ public partial class Dashboard : Window
 			if (MessageBox.Show("New Version Available. Do you want to update?", "Update Available", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
 				await AadiSoftUpdater.AadiSoftUpdater.UpdateApp("aadipoddar", $"{Secrets.DatabaseName}", "PubEntrySetup", "477557B4-2908-4106-B360-D2D114F02452");
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
-			MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			MessageBox.Show("No Internet Connection", "Network Error", MessageBoxButton.OK, MessageBoxImage.Error);
 		}
 	}
 
@@ -43,7 +43,7 @@ public partial class Dashboard : Window
 
 	private async Task LoadUserComboBox()
 	{
-		userComboBox.ItemsSource = await UserData.LoadUsersByLocationId((locationComboBox.SelectedItem as LocationModel).Id);
+		userComboBox.ItemsSource = await UserData.LoadUsersByLocationId(int.Parse(locationComboBox.SelectedValue.ToString()));
 		userComboBox.DisplayMemberPath = nameof(UserModel.Name);
 		userComboBox.SelectedValuePath = nameof(UserModel.Id);
 		userComboBox.SelectedIndex = 0;
@@ -51,7 +51,15 @@ public partial class Dashboard : Window
 
 	private async void locationComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) => await LoadUserComboBox();
 
-	private void userComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) => passwordBox.Clear();
+	private void userComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+	{
+		passwordBox.Clear();
+		passwordBox.Focus();
+
+		if ((userComboBox.SelectedItem as UserModel).Admin)
+			adminButton.Visibility = Visibility.Visible;
+		else adminButton.Visibility = Visibility.Collapsed;
+	}
 
 	private bool ValidatePassword()
 	{

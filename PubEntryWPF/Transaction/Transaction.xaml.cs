@@ -76,12 +76,15 @@ public partial class Transaction : Window
 		reservationComboBox.SelectedValuePath = nameof(ReservationTypeModel.Id);
 		reservationComboBox.SelectedIndex = 0;
 
+		numberTextBox.Focus();
+
 		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
 	private void Window_Closed(object sender, EventArgs e)
 	{
 		_dashboard.Show();
+		_dashboard.passwordBox.Focus();
 		Close();
 	}
 
