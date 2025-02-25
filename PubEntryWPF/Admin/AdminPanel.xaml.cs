@@ -10,6 +10,8 @@ public partial class AdminPanel : Window
 	private readonly Dashboard _dashboard;
 	private readonly int _userId, _locationId;
 
+	private LocationPage locationPage { get; set; }
+
 	public AdminPanel(Dashboard dashboard, int locationId, int userId)
 	{
 		InitializeComponent();
@@ -23,10 +25,11 @@ public partial class AdminPanel : Window
 		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
-	private void Window_Closed(object sender, EventArgs e)
+	private async void Window_Closed(object sender, EventArgs e)
 	{
 		_dashboard.Show();
 		_dashboard.passwordBox.Focus();
+		await _dashboard.LoadLocationComboBox();
 		Close();
 	}
 
@@ -38,6 +41,11 @@ public partial class AdminPanel : Window
 	private void updateAdvanceButton_Click(object sender, RoutedEventArgs e)
 	{
 
+	}
+
+	private void manageLocationsButton_Click(object sender, RoutedEventArgs e)
+	{
+		mainFrame.Content = locationPage ??= new LocationPage();
 	}
 
 	private void manageUsersButton_Click(object sender, RoutedEventArgs e)

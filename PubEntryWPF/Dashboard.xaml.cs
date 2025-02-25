@@ -31,7 +31,7 @@ public partial class Dashboard : Window
 
 	private async void Window_Loaded(object sender, RoutedEventArgs e) => await LoadLocationComboBox();
 
-	private async Task LoadLocationComboBox()
+	public async Task LoadLocationComboBox()
 	{
 		locationComboBox.ItemsSource = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location);
 		locationComboBox.DisplayMemberPath = nameof(LocationModel.Name);
