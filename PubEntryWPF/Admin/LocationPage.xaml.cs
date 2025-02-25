@@ -81,7 +81,7 @@ public partial class LocationPage : Page
 	{
 		if (string.IsNullOrEmpty(nameTextBox.Text.Trim()))
 		{
-			MessageBox.Show("Please enter a location name", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			MessageBox.Show("Please enter a Location Name", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 			return;
 		}
 

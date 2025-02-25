@@ -41,14 +41,12 @@ public partial class AdminPanel : Window
 
 	}
 
+	private void manageUsersButton_Click(object sender, RoutedEventArgs e) => mainFrame.Content = new UserPage();
+
 	private void manageLocationsButton_Click(object sender, RoutedEventArgs e) => mainFrame.Content = new LocationPage();
 
 	private void managePaymentModeButton_Click(object sender, RoutedEventArgs e) => mainFrame.Content = new PaymentModePage();
 
 	private void manageReservationsButton_Click(object sender, RoutedEventArgs e) => mainFrame.Content = new ReservationTypePage();
 
-	private void manageUsersButton_Click(object sender, RoutedEventArgs e)
-	{
-
-	}
 }
