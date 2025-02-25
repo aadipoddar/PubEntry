@@ -10,8 +10,6 @@ public partial class AdminPanel : Window
 	private readonly Dashboard _dashboard;
 	private readonly int _userId, _locationId;
 
-	private LocationPage locationPage { get; set; }
-
 	public AdminPanel(Dashboard dashboard, int locationId, int userId)
 	{
 		InitializeComponent();
@@ -43,10 +41,11 @@ public partial class AdminPanel : Window
 
 	}
 
-	private void manageLocationsButton_Click(object sender, RoutedEventArgs e)
-	{
-		mainFrame.Content = locationPage ??= new LocationPage();
-	}
+	private void manageLocationsButton_Click(object sender, RoutedEventArgs e) => mainFrame.Content = new LocationPage();
+
+	private void managePaymentModeButton_Click(object sender, RoutedEventArgs e) => mainFrame.Content = new PaymentModePage();
+
+	private void manageReservationsButton_Click(object sender, RoutedEventArgs e) => mainFrame.Content = new ReservationTypePage();
 
 	private void manageUsersButton_Click(object sender, RoutedEventArgs e)
 	{

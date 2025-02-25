@@ -8,10 +8,7 @@ namespace PubEntryWPF.Admin;
 /// </summary>
 public partial class LocationPage : Page
 {
-	public LocationPage()
-	{
-		InitializeComponent();
-	}
+	public LocationPage() => InitializeComponent();
 
 	private async void Page_Loaded(object sender, RoutedEventArgs e) => await LoadData();
 

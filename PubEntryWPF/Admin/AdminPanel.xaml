@@ -29,8 +29,8 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
@@ -38,10 +38,11 @@
 					<Button Content="Update Advance" Grid.Row="1" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="updateAdvanceButton_Click" />
 					<Button Content="Users" Grid.Row="2" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="manageUsersButton_Click" />
 					<Button Content="Locations" Grid.Row="3" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="manageLocationsButton_Click" />
-					<Button Content="Persons" Grid.Row="4" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="manageUsersButton_Click" />
-					<Button Content="Payment Modes" Grid.Row="5" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="manageUsersButton_Click" />
-					<Button Content="Reservations" Grid.Row="6" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="manageUsersButton_Click" />
-					<Button Content="SQL Editor" Grid.Row="7" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="manageUsersButton_Click" />
+					<Button Content="Payment Modes" Grid.Row="4" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="managePaymentModeButton_Click" />
+					<Button Content="Reservations" Grid.Row="5" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="manageReservationsButton_Click" />
+					<Button Content="Persons" Grid.Row="6" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="manageUsersButton_Click" />
+					
+					<Button Content="SQL Editor" Grid.Row="8" Margin="10" Padding="5" MinWidth="120" Click="manageUsersButton_Click" />
 					<Button Content="Settings" Grid.Row="9" Margin="10" Padding="5" MinWidth="120" Click="manageUsersButton_Click" VerticalAlignment="Bottom"/>
                 </Grid>
 			</ScrollViewer>
