@@ -5,33 +5,31 @@ public partial class PaymentModes
 	[Inject] public NavigationManager NavManager { get; set; }
 	[Inject] public IJSRuntime JS { get; set; }
 
-	[Parameter][SupplyParameterFromQuery] public int UserId { get; set; }
-	[Parameter][SupplyParameterFromQuery] public string Password { get; set; }
-
 	private PaymentModeModel PaymentModeModel { get; set; } = new();
-	private readonly List<PaymentModeModel> paymentModes = [];
-
-	protected override async Task OnInitializedAsync()
-	{
-		PaymentModeModel = new();
-		await LoadData();
-	}
+	private readonly List<PaymentModeModel> _paymentModes = [];
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		if (!await ValidatePassword()) NavManager.NavigateTo("/");
+		if (firstRender && !await ValidatePassword()) NavManager.NavigateTo("/");
 	}
 
-	private async Task<bool> ValidatePassword() =>
-		!string.IsNullOrEmpty(Password) &&
-		UserId != 0 &&
-		BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(Table.User, UserId)).Password, Password);
+	private async Task<bool> ValidatePassword()
+	{
+		var userId = await JS.InvokeAsync<string>("getCookie", "UserId");
+		var password = await JS.InvokeAsync<string>("getCookie", "Password");
+
+		return !string.IsNullOrEmpty(userId) &&
+			   !string.IsNullOrEmpty(password) &&
+			   BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(Table.User, int.Parse(userId))).Password, password);
+	}
+
+	protected override async Task OnInitializedAsync() => await LoadData();
 
 	private async Task LoadData()
 	{
-		paymentModes.Clear();
+		_paymentModes.Clear();
 		foreach (var paymentMode in await CommonData.LoadTableData<PaymentModeModel>(Table.PaymentMode))
-			paymentModes.Add(paymentMode);
+			_paymentModes.Add(paymentMode);
 
 		PaymentModeModel = new() { Status = true };
 	}
@@ -39,7 +37,7 @@ public partial class PaymentModes
 	private void OnPaymentModeSelect(ChangeEventArgs e)
 	{
 		if (int.TryParse(e.Value.ToString(), out int paymentModeId))
-			PaymentModeModel = paymentModes.FirstOrDefault(u => u.Id == paymentModeId) ?? new PaymentModeModel();
+			PaymentModeModel = _paymentModes.FirstOrDefault(u => u.Id == paymentModeId) ?? new PaymentModeModel();
 		else
 			PaymentModeModel = new() { Status = true };
 	}

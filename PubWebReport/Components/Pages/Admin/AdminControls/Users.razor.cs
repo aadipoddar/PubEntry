@@ -5,49 +5,47 @@ public partial class Users
 	[Inject] public NavigationManager NavManager { get; set; }
 	[Inject] public IJSRuntime JS { get; set; }
 
-	[Parameter][SupplyParameterFromQuery] public int UserId { get; set; }
-	[Parameter][SupplyParameterFromQuery] public string Password { get; set; }
-
 	private UserModel UserModel { get; set; } = new();
 
-	private readonly List<UserModel> users = [];
-	private readonly List<LocationModel> locations = [];
-
-	protected override async Task OnInitializedAsync()
-	{
-		UserModel = new();
-		await LoadData();
-	}
+	private readonly List<UserModel> _users = [];
+	private readonly List<LocationModel> _locations = [];
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		if (!await ValidatePassword()) NavManager.NavigateTo("/");
+		if (firstRender && !await ValidatePassword()) NavManager.NavigateTo("/");
 	}
 
-	private async Task<bool> ValidatePassword() =>
-		!string.IsNullOrEmpty(Password) &&
-		UserId != 0 &&
-		BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(Table.User, UserId)).Password, Password);
+	private async Task<bool> ValidatePassword()
+	{
+		var userId = await JS.InvokeAsync<string>("getCookie", "UserId");
+		var password = await JS.InvokeAsync<string>("getCookie", "Password");
+
+		return !string.IsNullOrEmpty(userId) &&
+			   !string.IsNullOrEmpty(password) &&
+			   BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(Table.User, int.Parse(userId))).Password, password);
+	}
+
+	protected override async Task OnInitializedAsync() => await LoadData();
 
 	private async Task LoadData()
 	{
-		users.Clear();
+		_users.Clear();
 		foreach (var user in await CommonData.LoadTableData<UserModel>(Table.User))
-			users.Add(user);
+			_users.Add(user);
 
-		locations.Clear();
+		_locations.Clear();
 		foreach (var location in await CommonData.LoadTableData<LocationModel>(Table.Location))
-			locations.Add(location);
+			_locations.Add(location);
 
-		UserModel = new() { Status = true, LocationId = locations.FirstOrDefault().Id };
+		UserModel = new() { Status = true, LocationId = _locations.FirstOrDefault().Id };
 	}
 
 	private void OnUserSelect(ChangeEventArgs e)
 	{
 		if (int.TryParse(e.Value.ToString(), out int userId))
-			UserModel = users.FirstOrDefault(u => u.Id == userId) ?? new UserModel();
+			UserModel = _users.FirstOrDefault(u => u.Id == userId) ?? new UserModel();
 		else
-			UserModel = new() { Status = true, LocationId = locations.FirstOrDefault().Id };
+			UserModel = new() { Status = true, LocationId = _locations.FirstOrDefault().Id };
 	}
 
 	private bool ValidateForm() =>
@@ -67,7 +65,7 @@ public partial class Users
 		else
 			await UserData.UpdateUser(UserModel);
 
-		UserModel = new() { Status = true, LocationId = locations.FirstOrDefault().Id };
+		UserModel = new() { Status = true, LocationId = _locations.FirstOrDefault().Id };
 		NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
 	}
 }

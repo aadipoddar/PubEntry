@@ -12,7 +12,7 @@
 			<div class="container">
 				<select class="form-select-sm" @onchange="OnReservationTypeSelect">
 					<option value="0" selected>Select a Reservation Type</option>
-					@foreach (var reservationType in reservationTypes)
+					@foreach (var reservationType in _reservationTypes)
 					{
 						<option value="@reservationType.Id">@reservationType.Name</option>
 					}

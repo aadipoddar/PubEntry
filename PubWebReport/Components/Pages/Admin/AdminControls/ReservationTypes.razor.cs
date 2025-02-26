@@ -5,33 +5,31 @@ public partial class ReservationTypes
 	[Inject] public NavigationManager NavManager { get; set; }
 	[Inject] public IJSRuntime JS { get; set; }
 
-	[Parameter][SupplyParameterFromQuery] public int UserId { get; set; }
-	[Parameter][SupplyParameterFromQuery] public string Password { get; set; }
-
 	private ReservationTypeModel ReservationTypeModel { get; set; } = new();
-	private readonly List<ReservationTypeModel> reservationTypes = [];
-
-	protected override async Task OnInitializedAsync()
-	{
-		ReservationTypeModel = new();
-		await LoadData();
-	}
+	private readonly List<ReservationTypeModel> _reservationTypes = [];
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		if (!await ValidatePassword()) NavManager.NavigateTo("/");
+		if (firstRender && !await ValidatePassword()) NavManager.NavigateTo("/");
 	}
 
-	private async Task<bool> ValidatePassword() =>
-		!string.IsNullOrEmpty(Password) &&
-		UserId != 0 &&
-		BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(Table.User, UserId)).Password, Password);
+	private async Task<bool> ValidatePassword()
+	{
+		var userId = await JS.InvokeAsync<string>("getCookie", "UserId");
+		var password = await JS.InvokeAsync<string>("getCookie", "Password");
+
+		return !string.IsNullOrEmpty(userId) &&
+			   !string.IsNullOrEmpty(password) &&
+			   BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(Table.User, int.Parse(userId))).Password, password);
+	}
+
+	protected override async Task OnInitializedAsync() => await LoadData();
 
 	private async Task LoadData()
 	{
-		reservationTypes.Clear();
+		_reservationTypes.Clear();
 		foreach (var reservationType in await CommonData.LoadTableData<ReservationTypeModel>(Table.ReservationType))
-			reservationTypes.Add(reservationType);
+			_reservationTypes.Add(reservationType);
 
 		ReservationTypeModel = new() { Status = true };
 	}
@@ -39,7 +37,7 @@ public partial class ReservationTypes
 	private void OnReservationTypeSelect(ChangeEventArgs e)
 	{
 		if (int.TryParse(e.Value.ToString(), out int reservationTypeId))
-			ReservationTypeModel = reservationTypes.FirstOrDefault(u => u.Id == reservationTypeId) ?? new ReservationTypeModel();
+			ReservationTypeModel = _reservationTypes.FirstOrDefault(u => u.Id == reservationTypeId) ?? new ReservationTypeModel();
 		else
 			ReservationTypeModel = new() { Status = true };
 	}

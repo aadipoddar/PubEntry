@@ -41,24 +41,24 @@
 
 	<div class="form-group">
 		<label>Total Amount</label>
-		<input class="input-group-text" type="number" placeholder="Total Amount" readonly @bind="totalAmount" />
+		<input class="input-group-text" type="number" placeholder="Total Amount" readonly @bind="_totalAmount" />
 	</div>
 
 	<div class="form-group">
 		<select class="form-select-sm" @onchange="OnPaymentModeSelect">
-			@foreach (var paymentMode in paymentModes)
+			@foreach (var paymentMode in _paymentModes)
 			{
 				<option value="@paymentMode.Id">@paymentMode.Name</option>
 			}
 		</select>
-		<input class="input-group-text" type="number" placeholder="Amount" @bind="amount" />
+		<input class="input-group-text" type="number" placeholder="Amount" @bind="_amount" />
 	</div>
 
 	<button class="btn btn-primary" type="button" @onclick="OnAddButtonClick">Add</button>
 
-	<SfGrid DataSource="@advancePaymentModels"
+	<SfGrid DataSource="@_advancePaymentModels"
 			ID="AdvanceGrid"
-			@ref="AdvanceGrid"
+			@ref="_advanceGrid"
 			Height="200"
 			Width="300"
 			AllowSorting="true"

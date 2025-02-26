@@ -13,29 +13,29 @@ public partial class Home
 
 	private string Password { get; set; }
 
-	private int selectedLocationId;
-	private int selectedUserId;
+	private int _selectedLocationId;
+	private int _selectedUserId;
 
-	private readonly List<LocationModel> locations = [];
-	private readonly List<UserModel> users = [];
-	private readonly List<TransactionTotalsModel> transactionTotalsModel = [];
-	private readonly List<AdvanceTotalsModel> advanceTotalsModel = [];
+	private readonly List<LocationModel> _locations = [];
+	private readonly List<UserModel> _users = [];
+	private readonly List<TransactionTotalsModel> _transactionTotalsModel = [];
+	private readonly List<AdvanceTotalsModel> _advanceTotalsModel = [];
 
 	protected override async Task OnInitializedAsync() => await LoadData();
 
 	private async Task LoadData()
 	{
-		locations.Clear();
-		users.Clear();
+		_locations.Clear();
+		_users.Clear();
 
 		foreach (var location in await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location))
-			locations.Add(location);
+			_locations.Add(location);
 
-		foreach (var user in await UserData.LoadUsersByLocationId(locations.FirstOrDefault().Id))
-			users.Add(user);
+		foreach (var user in await UserData.LoadUsersByLocationId(_locations.FirstOrDefault().Id))
+			_users.Add(user);
 
-		selectedLocationId = locations.FirstOrDefault().Id;
-		selectedUserId = users.FirstOrDefault().Id;
+		_selectedLocationId = _locations.FirstOrDefault().Id;
+		_selectedUserId = _users.FirstOrDefault().Id;
 
 		CurrentDateTime = DateTime.Now.AddHours(5).AddMinutes(30);
 
@@ -55,27 +55,27 @@ public partial class Home
 
 	private async Task LoadTransactionsAdvance()
 	{
-		transactionTotalsModel.Clear();
-		advanceTotalsModel.Clear();
+		_transactionTotalsModel.Clear();
+		_advanceTotalsModel.Clear();
 
-		foreach (var location in locations)
+		foreach (var location in _locations)
 		{
-			transactionTotalsModel.Add(await TransactionData.LoadTransactionTotalsByDateLocation(FromDateTime, ToDateTime, location.Id));
-			if (transactionTotalsModel.LastOrDefault() is null)
+			_transactionTotalsModel.Add(await TransactionData.LoadTransactionTotalsByDateLocation(FromDateTime, ToDateTime, location.Id));
+			if (_transactionTotalsModel.LastOrDefault() is null)
 			{
-				transactionTotalsModel.Remove(transactionTotalsModel.LastOrDefault());
-				transactionTotalsModel.Add(new TransactionTotalsModel());
-				transactionTotalsModel.LastOrDefault().LocationId = location.Id;
+				_transactionTotalsModel.Remove(_transactionTotalsModel.LastOrDefault());
+				_transactionTotalsModel.Add(new TransactionTotalsModel());
+				_transactionTotalsModel.LastOrDefault().LocationId = location.Id;
 			}
 
-			advanceTotalsModel.Add(ToDateTime.TimeOfDay < TimeSpan.FromHours(17) ?
+			_advanceTotalsModel.Add(ToDateTime.TimeOfDay < TimeSpan.FromHours(17) ?
 				await AdvanceData.LoadAdvanceTotalsByForDateLocation(FromDateTime.Date, ToDateTime.AddDays(-1).Date.AddHours(23).AddMinutes(59), location.Id)
 				: await AdvanceData.LoadAdvanceTotalsByForDateLocation(FromDateTime.Date, ToDateTime.Date, location.Id));
-			if (advanceTotalsModel.LastOrDefault() is null)
+			if (_advanceTotalsModel.LastOrDefault() is null)
 			{
-				advanceTotalsModel.Remove(advanceTotalsModel.LastOrDefault());
-				advanceTotalsModel.Add(new AdvanceTotalsModel());
-				advanceTotalsModel.LastOrDefault().LocationId = location.Id;
+				_advanceTotalsModel.Remove(_advanceTotalsModel.LastOrDefault());
+				_advanceTotalsModel.Add(new AdvanceTotalsModel());
+				_advanceTotalsModel.LastOrDefault().LocationId = location.Id;
 			}
 		}
 	}
@@ -111,45 +111,47 @@ public partial class Home
 		await JS.InvokeVoidAsync(
 			"saveAsFile",
 			"DetailedReport.pdf",
-			Convert.ToBase64String((await PDF.Detail(FromDateTime, ToDateTime, selectedLocationId)).ToArray()));
+			Convert.ToBase64String((await PDF.Detail(FromDateTime, ToDateTime, _selectedLocationId)).ToArray()));
 
 	private async Task ExcelButtonClicked() =>
 		await JS.InvokeVoidAsync(
 			"saveAsFile",
 			"ExcelReport.xlsx",
-			Convert.ToBase64String((await Excel.TransactionAdvanceExcel(FromDateTime, ToDateTime, selectedLocationId)).ToArray()));
+			Convert.ToBase64String((await Excel.TransactionAdvanceExcel(FromDateTime, ToDateTime, _selectedLocationId)).ToArray()));
 
 	private async Task OnLocationChanged()
 	{
-		users.Clear();
-		foreach (var user in await UserData.LoadUsersByLocationId(selectedLocationId))
-			users.Add(user);
+		_users.Clear();
+		foreach (var user in await UserData.LoadUsersByLocationId(_selectedLocationId))
+			_users.Add(user);
 
-		selectedUserId = users.FirstOrDefault().Id;
+		_selectedUserId = _users.FirstOrDefault().Id;
 		StateHasChanged();
 	}
 
 	private async Task AdvanceButtonClicked()
 	{
 		if (await ValidatePassword())
-			NavManager.NavigateTo(
-				$"/advance" +
-				$"?UserId={selectedUserId}" +
-				$"&Password={BCrypt.Net.BCrypt.EnhancedHashPassword(Password, 13)}" +
-				$"&LocationId={selectedLocationId}");
+		{
+			await JS.InvokeVoidAsync("setCookie", "AdvanceUserId", _selectedUserId, 1);
+			await JS.InvokeVoidAsync("setCookie", "AdvancePassword", BCrypt.Net.BCrypt.EnhancedHashPassword(Password, 13), 1);
+			await JS.InvokeVoidAsync("setCookie", "AdvanceLocationId", _selectedLocationId, 1);
+			NavManager.NavigateTo("/advance");
+		}
 
 		else await JS.InvokeVoidAsync("alert", "Invalid Password");
 	}
 
 	private async Task AdminButtonClicked()
 	{
-		if ((await CommonData.LoadTableDataById<UserModel>(Table.User, selectedUserId)).Admin)
+		if ((await CommonData.LoadTableDataById<UserModel>(Table.User, _selectedUserId)).Admin)
 		{
 			if (await ValidatePassword())
-				NavManager.NavigateTo(
-					$"/admin" +
-					$"?UserId={selectedUserId}" +
-					$"&Password={BCrypt.Net.BCrypt.EnhancedHashPassword(Password, 13)}");
+			{
+				await JS.InvokeVoidAsync("setCookie", "UserId", _selectedUserId, 1);
+				await JS.InvokeVoidAsync("setCookie", "Password", BCrypt.Net.BCrypt.EnhancedHashPassword(Password, 13), 1);
+				NavManager.NavigateTo("/admin");
+			}
 
 			else await JS.InvokeVoidAsync("alert", "Invalid Password");
 		}
@@ -160,7 +162,7 @@ public partial class Home
 	{
 		if (string.IsNullOrEmpty(Password)) return false;
 
-		if ((await CommonData.LoadTableDataById<UserModel>(Table.User, selectedUserId)).Password == Password)
+		if ((await CommonData.LoadTableDataById<UserModel>(Table.User, _selectedUserId)).Password == Password)
 			return true;
 
 		Password = string.Empty;

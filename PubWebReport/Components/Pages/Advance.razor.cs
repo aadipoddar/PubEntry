@@ -9,43 +9,51 @@ public partial class Advance
 	[Inject] public NavigationManager NavManager { get; set; }
 	[Inject] public IJSRuntime JS { get; set; }
 
-	[Parameter][SupplyParameterFromQuery] public int UserId { get; set; }
-	[Parameter][SupplyParameterFromQuery] public string Password { get; set; }
-	[Parameter][SupplyParameterFromQuery] public int LocationId { get; set; }
-
 	private PaymentModeModel PaymentModeModel { get; set; } = new();
 	private PersonModel PersonModel { get; set; } = new();
 	private AdvanceModel AdvanceModel { get; set; } = new() { AdvanceDate = DateTime.Now.AddHours(5).AddMinutes(30).Date };
 
-	private readonly List<PaymentModeModel> paymentModes = [];
-	private readonly List<AdvancePaymentModel> advancePaymentModels = [];
+	private readonly List<PaymentModeModel> _paymentModes = [];
+	private readonly List<AdvancePaymentModel> _advancePaymentModels = [];
 
-	private SfGrid<AdvancePaymentModel> AdvanceGrid;
+	private SfGrid<AdvancePaymentModel> _advanceGrid;
 
-	private int amount = 0;
-	private int totalAmount = 0;
+	private int _userId;
+	private string _password;
+	private int _locationId;
+	private int _amount = 0;
+	private int _totalAmount = 0;
 
 	#region LoadData
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		if (!await ValidatePassword()) NavManager.NavigateTo("/");
+		if (firstRender && !await ValidatePassword()) NavManager.NavigateTo("/");
 	}
 
-	private async Task<bool> ValidatePassword() =>
-		!string.IsNullOrEmpty(Password) &&
-		UserId != 0 &&
-		BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(Table.User, UserId)).Password, Password);
+	private async Task<bool> ValidatePassword()
+	{
+		var user = await JS.InvokeAsync<string>("getCookie", "AdvanceUserId");
+		if (user == "") return false;
+
+		_userId = int.Parse(user);
+		_password = await JS.InvokeAsync<string>("getCookie", "AdvancePassword");
+		_locationId = int.Parse(await JS.InvokeAsync<string>("getCookie", "AdvanceLocationId"));
+
+		return !string.IsNullOrEmpty(_userId.ToString()) &&
+			   !string.IsNullOrEmpty(_password) &&
+			   BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(Table.User, _userId)).Password, _password);
+	}
 
 	protected override async Task OnInitializedAsync() => await LoadData();
 
 	private async Task LoadData()
 	{
-		paymentModes.Clear();
+		_paymentModes.Clear();
 		foreach (var paymentMode in await CommonData.LoadTableDataByStatus<PaymentModeModel>(Table.PaymentMode))
-			paymentModes.Add(paymentMode);
+			_paymentModes.Add(paymentMode);
 
-		PaymentModeModel = paymentModes.FirstOrDefault();
+		PaymentModeModel = _paymentModes.FirstOrDefault();
 	}
 
 	private async Task OnPersonNumberChanged()
@@ -68,7 +76,7 @@ public partial class Advance
 		if (PersonModel.Id != 0)
 		{
 			var foundAdvance = await AdvanceData.LoadAdvanceByDateLocationPerson(
-				LocationId,
+				_locationId,
 				PersonModel.Id,
 				AdvanceModel.AdvanceDate.Date);
 
@@ -76,15 +84,15 @@ public partial class Advance
 			{
 				AdvanceModel = foundAdvance;
 
-				advancePaymentModels.Clear();
+				_advancePaymentModels.Clear();
 				foreach (var advanceDetail in await AdvanceData.LoadAdvanceDetailByAdvanceId(foundAdvance.Id))
-					advancePaymentModels.Add(new AdvancePaymentModel
+					_advancePaymentModels.Add(new AdvancePaymentModel
 					{
 						PaymentModeId = advanceDetail.PaymentModeId,
-						PaymentModeName = paymentModes.FirstOrDefault(x => x.Id == advanceDetail.PaymentModeId)?.Name,
+						PaymentModeName = _paymentModes.FirstOrDefault(x => x.Id == advanceDetail.PaymentModeId)?.Name,
 						Amount = advanceDetail.Amount
 					});
-				totalAmount = advancePaymentModels.Sum(x => x.Amount);
+				_totalAmount = _advancePaymentModels.Sum(x => x.Amount);
 			}
 
 			else
@@ -92,11 +100,11 @@ public partial class Advance
 				AdvanceModel.Id = 0;
 				AdvanceModel.ApprovedBy = string.Empty;
 				AdvanceModel.Booking = 0;
-				AdvanceModel.LocationId = LocationId;
+				AdvanceModel.LocationId = _locationId;
 				AdvanceModel.PersonId = PersonModel.Id;
 
-				advancePaymentModels.Clear();
-				totalAmount = 0;
+				_advancePaymentModels.Clear();
+				_totalAmount = 0;
 			}
 		}
 
@@ -105,14 +113,14 @@ public partial class Advance
 			AdvanceModel.Id = 0;
 			AdvanceModel.ApprovedBy = string.Empty;
 			AdvanceModel.Booking = 0;
-			AdvanceModel.LocationId = LocationId;
+			AdvanceModel.LocationId = _locationId;
 			AdvanceModel.PersonId = 0;
 
-			advancePaymentModels.Clear();
-			totalAmount = 0;
+			_advancePaymentModels.Clear();
+			_totalAmount = 0;
 		}
 
-		await AdvanceGrid.Refresh();
+		await _advanceGrid.Refresh();
 	}
 
 	#endregion
@@ -122,32 +130,32 @@ public partial class Advance
 	private void OnPaymentModeSelect(ChangeEventArgs e)
 	{
 		if (int.TryParse(e.Value.ToString(), out int paymentModeId))
-			PaymentModeModel = paymentModes.FirstOrDefault(u => u.Id == paymentModeId) ?? new PaymentModeModel();
+			PaymentModeModel = _paymentModes.FirstOrDefault(u => u.Id == paymentModeId) ?? new PaymentModeModel();
 		else PaymentModeModel = new() { Status = true };
 	}
 
 	private async Task OnAddButtonClick()
 	{
-		if (advancePaymentModels.Any(x => x.PaymentModeId == PaymentModeModel.Id))
-			advancePaymentModels.FirstOrDefault(x => x.PaymentModeId == PaymentModeModel.Id).Amount += amount;
+		if (_advancePaymentModels.Any(x => x.PaymentModeId == PaymentModeModel.Id))
+			_advancePaymentModels.FirstOrDefault(x => x.PaymentModeId == PaymentModeModel.Id).Amount += _amount;
 
-		else advancePaymentModels.Add(new AdvancePaymentModel
+		else _advancePaymentModels.Add(new AdvancePaymentModel
 		{
 			PaymentModeId = PaymentModeModel.Id,
 			PaymentModeName = PaymentModeModel.Name,
-			Amount = amount
+			Amount = _amount
 		});
 
-		amount = 0;
-		totalAmount = advancePaymentModels.Sum(x => x.Amount);
-		await AdvanceGrid.Refresh();
+		_amount = 0;
+		_totalAmount = _advancePaymentModels.Sum(x => x.Amount);
+		await _advanceGrid.Refresh();
 	}
 
 	public void RecordClickHandler(RecordClickEventArgs<AdvancePaymentModel> args)
 	{
-		advancePaymentModels.RemoveAt(args.RowIndex);
-		totalAmount = advancePaymentModels.Sum(x => x.Amount);
-		AdvanceGrid.Refresh();
+		_advancePaymentModels.RemoveAt(args.RowIndex);
+		_totalAmount = _advancePaymentModels.Sum(x => x.Amount);
+		_advanceGrid.Refresh();
 	}
 
 	#endregion
@@ -190,9 +198,9 @@ public partial class Advance
 	private async Task InsertAdvance()
 	{
 		AdvanceModel.PersonId = PersonModel.Id;
-		AdvanceModel.LocationId = LocationId;
+		AdvanceModel.LocationId = _locationId;
 		AdvanceModel.DateTime = DateTime.Now;
-		AdvanceModel.UserId = UserId;
+		AdvanceModel.UserId = _userId;
 		AdvanceModel.Id = await AdvanceData.InsertAdvance(AdvanceModel);
 	}
 
@@ -202,7 +210,7 @@ public partial class Advance
 
 	private async Task InsertAdvanceDetail()
 	{
-		foreach (var advance in advancePaymentModels)
+		foreach (var advance in _advancePaymentModels)
 			await AdvanceData.InsertAdvanceDetail(new AdvanceDetailModel
 			{
 				Id = 0,

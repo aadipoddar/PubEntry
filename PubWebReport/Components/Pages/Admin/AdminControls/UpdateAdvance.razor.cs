@@ -7,9 +7,6 @@ public partial class UpdateAdvance
 	[Inject] public NavigationManager NavManager { get; set; }
 	[Inject] public IJSRuntime JS { get; set; }
 
-	[Parameter][SupplyParameterFromQuery] public int UserId { get; set; }
-	[Parameter][SupplyParameterFromQuery] public string Password { get; set; }
-
 	private LocationModel LocationModel { get; set; } = new();
 	private PersonModel PersonModel { get; set; } = new();
 	private AdvanceModel AdvanceModel { get; set; } = new() { AdvanceDate = DateTime.Now.AddHours(5).AddMinutes(30).Date };
@@ -20,13 +17,18 @@ public partial class UpdateAdvance
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		if (!await ValidatePassword()) NavManager.NavigateTo("/");
+		if (firstRender && !await ValidatePassword()) NavManager.NavigateTo("/");
 	}
 
-	private async Task<bool> ValidatePassword() =>
-		!string.IsNullOrEmpty(Password) &&
-		UserId != 0 &&
-		BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(Table.User, UserId)).Password, Password);
+	private async Task<bool> ValidatePassword()
+	{
+		var userId = await JS.InvokeAsync<string>("getCookie", "UserId");
+		var password = await JS.InvokeAsync<string>("getCookie", "Password");
+
+		return !string.IsNullOrEmpty(userId) &&
+			   !string.IsNullOrEmpty(password) &&
+			   BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(Table.User, int.Parse(userId))).Password, password);
+	}
 
 	protected override async Task OnInitializedAsync() => await LoadData();
 

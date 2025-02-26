@@ -12,7 +12,7 @@
 			<div class="container">
 				<select class="form-select-sm" @onchange="OnLocationSelect">
 					<option value="0" selected>Select a Location</option>
-					@foreach (var location in locations)
+					@foreach (var location in _locations)
 					{
 						<option value="@location.Id">@location.Name</option>
 					}

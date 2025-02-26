@@ -12,7 +12,7 @@
 			<div class="container">
 				<select class="form-select-sm" @onchange="OnPaymentModeSelect">
 					<option value="0" selected>Select a Payment Mode</option>
-					@foreach (var paymentMode in paymentModes)
+					@foreach (var paymentMode in _paymentModes)
 					{
 						<option value="@paymentMode.Id">@paymentMode.Name</option>
 					}

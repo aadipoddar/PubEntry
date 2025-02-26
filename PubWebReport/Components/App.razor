@@ -41,6 +41,28 @@
 			}
 		}
 	</script>
+
+	<script>
+		function setCookie(name, value, hours) {
+			const date = new Date();
+			date.setTime(date.getTime() + (hours * 60 * 60 * 1000)); // Convert hours to milliseconds
+			const expires = "expires=" + date.toUTCString();
+			document.cookie = name + "=" + value + ";" + expires + ";path=/";
+		}
+
+		function getCookie(name) {
+			const cookieName = name + "=";
+			const decodedCookie = decodeURIComponent(document.cookie);
+			const cookies = decodedCookie.split(';');
+			for (let i = 0; i < cookies.length; i++) {
+				let cookie = cookies[i].trim();
+				if (cookie.startsWith(cookieName)) {
+					return cookie.substring(cookieName.length, cookie.length);
+				}
+			}
+			return "";
+		}
+	</script>
 </body>
 
 </html>
