@@ -17,6 +17,7 @@ public static class Views
 {
 	public static string Advances => "View_Advances";
 	public static string Transactions => "View_Transactions";
+	public static string UserLocation => "View_User_Location";
 }
 
 public static class StoredProcedure

@@ -40,7 +40,7 @@
 			</Grid>
 
 			<DataGrid x:Name="userDataGrid" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" Padding="5"
-			  SelectedCellsChanged="userDataGrid_SelectedCellsChanged" IsReadOnly="True"/>
+			  SelectedCellsChanged="userDataGrid_SelectedCellsChanged" IsReadOnly="True" Height="600"/>
 
 			<Grid Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" VerticalAlignment="top">
 				<Grid.ColumnDefinitions>

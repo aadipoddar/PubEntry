@@ -65,21 +65,11 @@
     <Folder Include="Views" />
     <Folder Include="Stored Procedures\Advance" />
     <Folder Include="Stored Procedures\Transaction" />
+    <Folder Include="Stored Procedures\LoadData" />
+    <Folder Include="Stored Procedures\Insert" />
+    <Folder Include="Stored Procedures\Update" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Stored Procedures\Load_Users_By_LocationId.sql" />
-    <Build Include="Stored Procedures\Load_Person_By_Number.sql" />
-    <Build Include="Stored Procedures\Load_TableData.sql" />
-    <Build Include="Stored Procedures\Load_TableData_By_Id.sql" />
-    <Build Include="Stored Procedures\Load_TableData_By_Status.sql" />
-    <Build Include="Stored Procedures\Insert_Location.sql" />
-    <Build Include="Stored Procedures\Update_Location.sql" />
-    <Build Include="Stored Procedures\Insert_PaymentMode.sql" />
-    <Build Include="Stored Procedures\Update_PaymentMode.sql" />
-    <Build Include="Stored Procedures\Insert_Person.sql" />
-    <Build Include="Stored Procedures\Update_Person.sql" />
-    <Build Include="Stored Procedures\Insert_User.sql" />
-    <Build Include="Stored Procedures\Update_User.sql" />
     <Build Include="Tables\AdvanceDetail.sql" />
     <Build Include="Tables\Advance.sql" />
     <Build Include="Tables\Location.sql" />
@@ -90,8 +80,6 @@
     <Build Include="Tables\User.sql" />
     <Build Include="Views\View_Advances.sql" />
     <Build Include="Views\View_Transactions.sql" />
-    <Build Include="Stored Procedures\Insert_ReservationType.sql" />
-    <Build Include="Stored Procedures\Update_ReservationType.sql" />
     <Build Include="Stored Procedures\Advance\Clear_Advance.sql" />
     <Build Include="Stored Procedures\Advance\Load_Advance_By_Date_Location_Person.sql" />
     <Build Include="Stored Procedures\Advance\Load_Advance_By_TransactionId.sql" />
@@ -106,8 +94,15 @@
     <Build Include="Stored Procedures\Transaction\Load_TransactionTotals_By_Date_Location.sql" />
     <Build Include="Stored Procedures\Transaction\Load_Transactions_By_Date_Location.sql" />
     <Build Include="Tables\Settings.sql" />
-    <Build Include="Stored Procedures\Update_Setting.sql" />
-    <Build Include="Stored Procedures\Load_Settings_By_Key.sql" />
+    <Build Include="Stored Procedures\LoadData\Load_Person_By_Number.sql" />
+    <Build Include="Stored Procedures\LoadData\Load_Settings_By_Key.sql" />
+    <Build Include="Stored Procedures\LoadData\Load_TableData.sql" />
+    <Build Include="Stored Procedures\LoadData\Load_TableData_By_Id.sql" />
+    <Build Include="Stored Procedures\LoadData\Load_TableData_By_Status.sql" />
+    <Build Include="Stored Procedures\LoadData\Load_Users_By_LocationId.sql" />
+    <Build Include="Stored Procedures\Insert\Insert_Location.sql" />
+    <Build Include="Stored Procedures\Update\Update_Location.sql" />
+    <Build Include="Views\View_User_Location.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishLocations\LocalDBPubEntry.publish.xml" />
@@ -122,5 +117,14 @@
     <Build Include="Stored Procedures\Advance\Delete_AdvanceDetails.sql" />
     <Build Include="Stored Procedures\Advance\Insert_Advance.sql" />
     <Build Include="Stored Procedures\Advance\Insert_AdvanceDetail.sql" />
+    <Build Include="Stored Procedures\Insert\Insert_PaymentMode.sql" />
+    <Build Include="Stored Procedures\Insert\Insert_Person.sql" />
+    <Build Include="Stored Procedures\Insert\Insert_ReservationType.sql" />
+    <Build Include="Stored Procedures\Insert\Insert_User.sql" />
+    <Build Include="Stored Procedures\Update\Update_PaymentMode.sql" />
+    <Build Include="Stored Procedures\Update\Update_Person.sql" />
+    <Build Include="Stored Procedures\Update\Update_ReservationType.sql" />
+    <Build Include="Stored Procedures\Update\Update_Setting.sql" />
+    <Build Include="Stored Procedures\Update\Update_User.sql" />
   </ItemGroup>
 </Project>

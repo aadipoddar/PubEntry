@@ -14,15 +14,17 @@ public partial class UserPage : Page
 
 	private async Task LoadData()
 	{
-		locationComboBox.ItemsSource = await CommonData.LoadTableData<LocationModel>(Table.Location);
-		locationComboBox.DisplayMemberPath = nameof(LocationModel.Name);
-		locationComboBox.SelectedValuePath = nameof(LocationModel.Id);
-		locationComboBox.SelectedIndex = 0;
+		var locations = await CommonData.LoadTableData<LocationModel>(Table.Location);
 
-		searchLocationComboBox.ItemsSource = await CommonData.LoadTableData<LocationModel>(Table.Location);
+		searchLocationComboBox.ItemsSource = locations;
 		searchLocationComboBox.DisplayMemberPath = nameof(LocationModel.Name);
 		searchLocationComboBox.SelectedValuePath = nameof(LocationModel.Id);
 		searchLocationComboBox.SelectedIndex = -1;
+
+		locationComboBox.ItemsSource = locations;
+		locationComboBox.DisplayMemberPath = nameof(LocationModel.Name);
+		locationComboBox.SelectedValuePath = nameof(LocationModel.Id);
+		locationComboBox.SelectedIndex = 0;
 
 		await ApplySearchFilter();
 	}
@@ -33,26 +35,12 @@ public partial class UserPage : Page
 
 		var nameSearch = searchTextBox.Text.Trim();
 
-		List<UserLocationModel> users = [];
-
-		foreach (var user in await CommonData.LoadTableData<UserModel>(Table.User))
-			users.Add(new UserLocationModel
-			{
-				Id = user.Id,
-				Name = user.Name,
-				Password = user.Password,
-				LocationId = user.LocationId,
-				Location = (await CommonData.LoadTableDataById<LocationModel>(Table.Location, user.LocationId)).Name,
-				Admin = user.Admin,
-				Status = user.Status
-			});
-
 		bool showActive = showActiveCheckBox?.IsChecked ?? false;
 		bool showInactive = showInactiveCheckBox?.IsChecked ?? false;
 		bool showAdmin = showAdminCheckBox?.IsChecked ?? false;
 		bool showNonAdmin = showNonAdminCheckBox?.IsChecked ?? false;
 
-		userDataGrid.ItemsSource = users
+		userDataGrid.ItemsSource = (await CommonData.LoadTableData<UserLocationModel>(Views.UserLocation))
 			.Where(item => string.IsNullOrEmpty(nameSearch) || item.Name.Contains(nameSearch, StringComparison.CurrentCultureIgnoreCase))
 			.Where(item => searchLocationComboBox.SelectedIndex == -1 || item.LocationId == (int)searchLocationComboBox.SelectedValue)
 			.Where(item => (showActive && item.Status) || (showInactive && !item.Status))
