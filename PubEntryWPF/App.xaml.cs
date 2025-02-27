@@ -12,6 +12,8 @@ public partial class App : Application
 {
 	protected override void OnStartup(StartupEventArgs e)
 	{
+		Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Secrets.SyncfusionLicense);
+
 		// Select the text in a TextBox when it receives focus.
 		EventManager.RegisterClassHandler(typeof(TextBox), TextBox.PreviewMouseLeftButtonDownEvent,
 			new MouseButtonEventHandler(SelectivelyIgnoreMouseButton));

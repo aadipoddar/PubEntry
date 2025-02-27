@@ -42,7 +42,7 @@
 					<Button Content="Reservations" Grid.Row="5" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="manageReservationsButton_Click" />
 					<Button Content="Persons" Grid.Row="6" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="managePersonButton_Click" />
 					
-					<Button Content="SQL Editor" Grid.Row="8" Margin="10" Padding="5" MinWidth="120" Click="manageUsersButton_Click" />
+					<Button Content="SQL Editor" Grid.Row="8" Margin="10" Padding="5" MinWidth="120" Click="sqlEditorButton_Click" />
 					<Button Content="Settings" Grid.Row="9" Margin="10" Padding="5" MinWidth="120" Click="manageUsersButton_Click" VerticalAlignment="Bottom"/>
                 </Grid>
 			</ScrollViewer>

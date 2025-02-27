@@ -16,7 +16,6 @@ public partial class SqlQuery : Form
 		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
-
 	private async void queryEditControl_KeyDown(object sender, KeyEventArgs e)
 	{
 		if (e.KeyCode == Keys.F5)
