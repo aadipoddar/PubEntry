@@ -6,14 +6,14 @@ namespace PubEntryWPF.Transaction.Advance;
 /// <summary>
 /// Interaction logic for Advance.xaml
 /// </summary>
-public partial class Advance : Window
+public partial class AdvancePage : Window
 {
 	private readonly Dashboard _dashboard;
 	private readonly int _userId, _locationId;
 	private int _foundAdvanceId;
 	private readonly List<AdvancePaymentModel> _advancePaymentModels = [];
 
-	public Advance(Dashboard dashboard, int locationId, int userId)
+	public AdvancePage(Dashboard dashboard, int locationId, int userId)
 	{
 		InitializeComponent();
 		_dashboard = dashboard;

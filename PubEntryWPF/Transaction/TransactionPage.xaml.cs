@@ -7,7 +7,7 @@ namespace PubEntryWPF.Transaction;
 /// <summary>
 /// Interaction logic for Transaction.xaml
 /// </summary>
-public partial class Transaction : Window
+public partial class TransactionPage : Window
 {
 	#region Timers
 
@@ -54,7 +54,7 @@ public partial class Transaction : Window
 	private readonly int _userId, _locationId;
 	private int _transactionId, _foundAdvanceId;
 
-	public Transaction(Dashboard dashboard, int locationId, int userId)
+	public TransactionPage(Dashboard dashboard, int locationId, int userId)
 	{
 		InitializeComponent();
 		_dashboard = dashboard;

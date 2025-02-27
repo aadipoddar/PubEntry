@@ -7,11 +7,11 @@ namespace PubEntryWPF.Transaction.Advance;
 /// <summary>
 /// Interaction logic for AdvanceId.xaml
 /// </summary>
-public partial class AdvanceId : Page
+public partial class AdvanceIdPage : Page
 {
 	private readonly Frame _parentFrame;
 
-	public AdvanceId(Frame parentFrame)
+	public AdvanceIdPage(Frame parentFrame)
 	{
 		InitializeComponent();
 		_parentFrame = parentFrame;
@@ -41,6 +41,6 @@ public partial class AdvanceId : Page
 			return;
 		}
 
-		_parentFrame.Content = new UpdateAdvance(advance, _parentFrame);
+		_parentFrame.Content = new UpdateAdvancePage(advance, _parentFrame);
 	}
 }

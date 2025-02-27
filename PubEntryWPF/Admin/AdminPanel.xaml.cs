@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 
+using PubEntryWPF.Transaction;
 using PubEntryWPF.Transaction.Advance;
 
 namespace PubEntryWPF.Admin;
@@ -19,6 +20,7 @@ public partial class AdminPanel : Window
 
 	private void Window_Loaded(object sender, RoutedEventArgs e)
 	{
+		mainFrame.Content = new SlipIdPage(mainFrame);
 		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
@@ -30,12 +32,9 @@ public partial class AdminPanel : Window
 		Close();
 	}
 
-	private void manageTransactionButton_Click(object sender, RoutedEventArgs e)
-	{
+	private void manageTransactionButton_Click(object sender, RoutedEventArgs e) => mainFrame.Content = new SlipIdPage(mainFrame);
 
-	}
-
-	private void updateAdvanceButton_Click(object sender, RoutedEventArgs e) => mainFrame.Content = new AdvanceId(mainFrame);
+	private void updateAdvanceButton_Click(object sender, RoutedEventArgs e) => mainFrame.Content = new AdvanceIdPage(mainFrame);
 
 	private void manageUsersButton_Click(object sender, RoutedEventArgs e) => mainFrame.Content = new UserPage();
 

@@ -93,7 +93,7 @@ public partial class Dashboard : Window
 			return;
 		}
 
-		Transaction.Transaction transaction = new(this, int.Parse(locationComboBox.SelectedValue.ToString()), int.Parse(userComboBox.SelectedValue.ToString()));
+		Transaction.TransactionPage transaction = new(this, int.Parse(locationComboBox.SelectedValue.ToString()), int.Parse(userComboBox.SelectedValue.ToString()));
 		Hide();
 		transaction.ShowDialog();
 	}
@@ -106,7 +106,7 @@ public partial class Dashboard : Window
 			return;
 		}
 
-		Transaction.Advance.Advance advance = new(this, int.Parse(locationComboBox.SelectedValue.ToString()), int.Parse(userComboBox.SelectedValue.ToString()));
+		Transaction.Advance.AdvancePage advance = new(this, int.Parse(locationComboBox.SelectedValue.ToString()), int.Parse(userComboBox.SelectedValue.ToString()));
 		Hide();
 		advance.ShowDialog();
 	}

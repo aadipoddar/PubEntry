@@ -7,13 +7,13 @@ namespace PubEntryWPF.Transaction.Advance;
 /// <summary>
 /// Interaction logic for UpdateAdvance.xaml
 /// </summary>
-public partial class UpdateAdvance : Page
+public partial class UpdateAdvancePage : Page
 {
 	private readonly AdvanceModel _advance;
 	private readonly Frame _parentFrame;
 	private int _foundAdvanceId;
 
-	public UpdateAdvance(AdvanceModel advance, Frame parentFrame)
+	public UpdateAdvancePage(AdvanceModel advance, Frame parentFrame)
 	{
 		InitializeComponent();
 		_advance = advance;
@@ -119,7 +119,7 @@ public partial class UpdateAdvance : Page
 		await InsertPerson();
 		await AdvanceUpdate();
 
-		_parentFrame.Content = new AdvanceId(_parentFrame);
+		_parentFrame.Content = new AdvanceIdPage(_parentFrame);
 	}
 
 	private async Task InsertPerson()
