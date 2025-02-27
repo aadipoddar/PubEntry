@@ -49,4 +49,5 @@ public partial class AdminPanel : Window
 
 	private void manageReservationsButton_Click(object sender, RoutedEventArgs e) => mainFrame.Content = new ReservationTypePage();
 
+	private void managePersonButton_Click(object sender, RoutedEventArgs e) => mainFrame.Content = new PersonPage();
 }

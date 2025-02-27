@@ -18,12 +18,10 @@ public partial class ReservationTypePage : Page
 
 		var nameSearch = searchTextBox.Text.Trim();
 
-		var reservations = await CommonData.LoadTableData<ReservationTypeModel>(Table.ReservationType);
-
 		bool showActive = showActiveCheckBox?.IsChecked ?? false;
 		bool showInactive = showInactiveCheckBox?.IsChecked ?? false;
 
-		reservationDataGrid.ItemsSource = reservations
+		reservationDataGrid.ItemsSource = (await CommonData.LoadTableData<ReservationTypeModel>(Table.ReservationType))
 			.Where(item => string.IsNullOrEmpty(nameSearch) || item.Name.Contains(nameSearch, StringComparison.CurrentCultureIgnoreCase))
 			.Where(item => (showActive && item.Status) || (showInactive && !item.Status))
 			.OrderBy(item => !item.Status)

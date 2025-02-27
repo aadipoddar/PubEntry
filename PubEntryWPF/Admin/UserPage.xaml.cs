@@ -99,7 +99,7 @@ public partial class UserPage : Page
 		if (userDataGrid.SelectedItem is null) saveButton.Content = "Save";
 		else saveButton.Content = "Update";
 
-		if (!string.IsNullOrEmpty(nameTextBox.Text)) saveButton.IsEnabled = true;
+		if (!string.IsNullOrEmpty(nameTextBox.Text) && !string.IsNullOrEmpty(passwordBox.Password)) saveButton.IsEnabled = true;
 		else saveButton.IsEnabled = false;
 	}
 
