@@ -44,7 +44,7 @@
 			<CheckBox x:Name="loyaltyCheckBox" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" Padding="5" Content="Loyalty" HorizontalAlignment="Center" />
 			<!--#endregion-->
 
-			<!--#region Reservation Remarks-->
+			<!--#region Booking Remarks-->
 			<TextBlock Grid.Row="5" Grid.Column="0" Margin="10" Padding="5" Text="Booking Date" />
 
 			<Grid Grid.Row="6" Grid.Column="0" Margin="5">

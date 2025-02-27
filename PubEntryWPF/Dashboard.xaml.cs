@@ -126,7 +126,7 @@ public partial class Dashboard : Window
 			return;
 		}
 
-		Admin.AdminPanel adminPanel = new(this, int.Parse(locationComboBox.SelectedValue.ToString()), int.Parse(userComboBox.SelectedValue.ToString()));
+		Admin.AdminPanel adminPanel = new(this);
 		Hide();
 		adminPanel.ShowDialog();
 	}

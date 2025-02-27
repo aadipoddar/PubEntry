@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 
+using PubEntryWPF.Transaction.Advance;
+
 namespace PubEntryWPF.Admin;
 
 /// <summary>
@@ -8,14 +10,11 @@ namespace PubEntryWPF.Admin;
 public partial class AdminPanel : Window
 {
 	private readonly Dashboard _dashboard;
-	private readonly int _userId, _locationId;
 
-	public AdminPanel(Dashboard dashboard, int locationId, int userId)
+	public AdminPanel(Dashboard dashboard)
 	{
 		InitializeComponent();
 		_dashboard = dashboard;
-		_locationId = locationId;
-		_userId = userId;
 	}
 
 	private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -36,10 +35,7 @@ public partial class AdminPanel : Window
 
 	}
 
-	private void updateAdvanceButton_Click(object sender, RoutedEventArgs e)
-	{
-
-	}
+	private void updateAdvanceButton_Click(object sender, RoutedEventArgs e) => mainFrame.Content = new AdvanceId(mainFrame);
 
 	private void manageUsersButton_Click(object sender, RoutedEventArgs e) => mainFrame.Content = new UserPage();
 
