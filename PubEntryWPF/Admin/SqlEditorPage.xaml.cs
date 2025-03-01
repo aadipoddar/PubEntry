@@ -14,7 +14,7 @@ public partial class SqlEditorPage : Page
 {
 	public SqlEditorPage() => InitializeComponent();
 
-	private async void sqlEditControl_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+	private async void sqlEditControl_KeyDown(object sender, KeyEventArgs e)
 	{
 		if (e.Key == Key.F5)
 			await RunQuery();

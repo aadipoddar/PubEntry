@@ -37,8 +37,6 @@ public partial class Dashboard : Window
 		locationComboBox.DisplayMemberPath = nameof(LocationModel.Name);
 		locationComboBox.SelectedValuePath = nameof(LocationModel.Id);
 		locationComboBox.SelectedIndex = 0;
-
-		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
 	private async Task LoadUserComboBox()

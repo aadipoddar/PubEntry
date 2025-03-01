@@ -77,8 +77,6 @@ public partial class TransactionPage : Window
 		reservationComboBox.SelectedIndex = 0;
 
 		numberTextBox.Focus();
-
-		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
 	private void Window_Closed(object sender, EventArgs e)

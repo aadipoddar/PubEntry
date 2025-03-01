@@ -22,8 +22,23 @@
 				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 
-			<TextBox x:Name="searchNameTextBox" Grid.Row="0" Grid.Column="0" Margin="10" Padding="5" TextChanged="searchTextBox_TextChanged" />
-			<TextBox x:Name="searchNumberTextBox" Grid.Row="0" Grid.Column="1" Margin="10" Padding="5" TextChanged="searchTextBox_TextChanged" PreviewTextInput="textBox_PreviewTextInput" />
+			<Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+
+				<Label Grid.Row="0" Grid.Column="0" Margin="10,0" Padding="5" Content="Search By Name"/>
+				<Label Grid.Row="0" Grid.Column="2" Margin="10,0" Padding="5" Content="Search By Number"/>
+
+				<TextBox x:Name="searchNameTextBox" Grid.Row="1" Grid.Column="0" Margin="10" Padding="5" TextChanged="searchTextBox_TextChanged" />
+				<TextBox x:Name="searchNumberTextBox" Grid.Row="1" Grid.Column="1" Margin="10" Padding="5" TextChanged="searchTextBox_TextChanged" PreviewTextInput="textBox_PreviewTextInput" />
+			</Grid>
 
 			<Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
 				<Grid.ColumnDefinitions>

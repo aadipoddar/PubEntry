@@ -18,11 +18,7 @@ public partial class AdminPanel : Window
 		_dashboard = dashboard;
 	}
 
-	private void Window_Loaded(object sender, RoutedEventArgs e)
-	{
-		mainFrame.Content = new SlipIdPage(mainFrame);
-		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
-	}
+	private void Window_Loaded(object sender, RoutedEventArgs e) => mainFrame.Content = new SlipIdPage(mainFrame);
 
 	private async void Window_Closed(object sender, EventArgs e)
 	{

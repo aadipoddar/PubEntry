@@ -45,7 +45,6 @@ public partial class AdvancePage : Window
 
 		bookingDatePicker.SelectedDate = DateTime.Now;
 		bookingDatePicker.DisplayDateStart = DateTime.Now;
-		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}
 
 	private async void numberTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)

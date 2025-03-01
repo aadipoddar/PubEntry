@@ -68,6 +68,8 @@ public partial class UserPage : Page
 
 	private void nameTextBox_TextChanged(object sender, TextChangedEventArgs e) => UpdateButtonField();
 
+	private void passwordTextBox_TextChanged(object sender, RoutedEventArgs e) => UpdateButtonField();
+
 	private void UpdateFields()
 	{
 		if (userDataGrid.SelectedItem is UserLocationModel selectedUser)

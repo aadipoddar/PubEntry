@@ -22,7 +22,7 @@ public partial class UpdateTransactionPage : Page
 
 	#region LoadData
 
-	private async void Page_Loaded(object sender, System.Windows.RoutedEventArgs e) => await LoadData();
+	private async void Page_Loaded(object sender, RoutedEventArgs e) => await LoadData();
 
 	private async Task LoadData()
 	{
@@ -150,7 +150,7 @@ public partial class UpdateTransactionPage : Page
 
 	#region Saving 
 
-	private async void saveButton_Click(object sender, System.Windows.RoutedEventArgs e)
+	private async void saveButton_Click(object sender, RoutedEventArgs e)
 	{
 		if (!ValidateFields())
 		{

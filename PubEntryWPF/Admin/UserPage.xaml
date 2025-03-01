@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:PubEntryWPF.Admin"
       mc:Ignorable="d" Loaded="Page_Loaded"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="User">
+      Title="Manage User">
 
 	<ScrollViewer HorizontalScrollBarVisibility="Visible">
 		<Grid>
@@ -22,17 +22,32 @@
 				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 
-			<TextBox x:Name="searchTextBox" Grid.Row="0" Grid.Column="0" Margin="10" Padding="5" TextChanged="searchTextBox_TextChanged" />
-			<ComboBox x:Name="searchLocationComboBox" Margin="10" Padding="5" Grid.Row="0" Grid.Column="1" SelectionChanged="searchLocationComboBox_SelectionChanged" />
+			<Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+
+				<Label Grid.Row="0" Grid.Column="0" Margin="10,0" Padding="5" Content="Search By Name"/>
+				<Label Grid.Row="0" Grid.Column="2" Margin="10,0" Padding="5" Content="Search By Location"/>
+				
+				<TextBox x:Name="searchTextBox" Grid.Row="1" Grid.Column="0" Margin="10" Padding="5" TextChanged="searchTextBox_TextChanged" />
+				<ComboBox x:Name="searchLocationComboBox" Margin="10" Padding="5" Grid.Row="1" Grid.Column="1" SelectionChanged="searchLocationComboBox_SelectionChanged" />
+			</Grid>
 
 			<Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="Auto"/>
-					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="Auto"/>
 				</Grid.ColumnDefinitions>
-				
+
 				<CheckBox x:Name="showActiveCheckBox" Content="Show Active" Grid.Column="0" Margin="10" IsChecked="True" Checked="showCheckBox_CheckedChanged" Unchecked="showCheckBox_CheckedChanged" />
 				<CheckBox x:Name="showInactiveCheckBox" Content="Show Inactive" Grid.Column="1" Margin="10" IsChecked="True" Checked="showCheckBox_CheckedChanged" Unchecked="showCheckBox_CheckedChanged" />
 				<CheckBox x:Name="showAdminCheckBox" Content="Show Admin" Grid.Column="2" Margin="10" IsChecked="True" Checked="showCheckBox_CheckedChanged" Unchecked="showCheckBox_CheckedChanged" />
@@ -61,7 +76,7 @@
 				<TextBox x:Name="nameTextBox" Margin="10" Padding="5" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" TextChanged="nameTextBox_TextChanged" />
 
 				<Label Margin="10" Padding="5" Grid.Row="1" Grid.Column="0" Content="Password"/>
-				<PasswordBox x:Name="passwordBox" Margin="10" Padding="5" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+				<PasswordBox x:Name="passwordBox" Margin="10" Padding="5" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" PasswordChanged="passwordTextBox_TextChanged"/>
 
 				<Label Margin="10" Padding="5" Grid.Row="2" Grid.Column="0" Content="Location"/>
 				<ComboBox x:Name="locationComboBox" Margin="10" Padding="5" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" SelectedIndex="0"/>
@@ -72,7 +87,6 @@
 				<Button x:Name="saveButton" Margin="10" Padding="5" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" MinWidth="120" MinHeight="40" Content="Save" HorizontalAlignment="Center"
 					IsDefault="True" Style="{DynamicResource AccentButtonStyle}" IsEnabled="False" Click="saveButton_Click"/>
 			</Grid>
-
 		</Grid>
 	</ScrollViewer>
 </Page>

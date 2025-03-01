@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PubEntryWPF.Transaction.Advance"
+        xmlns:common="clr-namespace:PubEntryWPF.Common"
         mc:Ignorable="d" Title="Advance" WindowStartupLocation="CenterScreen"
 		Closed="Window_Closed" Loaded="Window_Loaded"
 		Height="500" Width="600" Icon="/Golder Park.jpg">
@@ -106,23 +107,6 @@
 			<Button x:Name="saveButton" Content="Save" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="4" Margin="10" Padding="5" MinWidth="150" MinHeight="40" Click="saveButton_Click" HorizontalAlignment="Center" Style="{DynamicResource AccentButtonStyle}" />
 		</Grid>
 
-		<!--#region Footer -->
-		<Grid VerticalAlignment="Bottom" Height="30" Margin="0,10,0,0">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="Auto"/>
-			</Grid.ColumnDefinitions>
-
-			<Border BorderBrush="DarkGray" BorderThickness="0,1,0,0" Grid.ColumnSpan="2"/>
-
-			<TextBlock x:Name="richTextBoxFooter" Grid.Column="0" 
-             Margin="10,0" VerticalAlignment="Center"
-             TextWrapping="WrapWithOverflow"/>
-
-			<TextBlock x:Name="rightFooter" Grid.Column="1" 
-             Margin="10,0" VerticalAlignment="Center"
-             Text="© AADISOFT"/>
-		</Grid>
-		<!--#endregion-->
+		<common:FooterControl />
 	</Grid>
 </Window>
