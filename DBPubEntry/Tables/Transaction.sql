@@ -14,7 +14,6 @@
     [UserId]          INT          NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC), 
     CONSTRAINT [FK_Transaction_ToPerson] FOREIGN KEY (PersonId) REFERENCES [Person](Id),
-    CONSTRAINT [FK_Transaction_ToRservationType] FOREIGN KEY ([ReservationTypeId]) REFERENCES [ReservationType](Id), 
     CONSTRAINT [FK_Transaction_ToReservationType] FOREIGN KEY (ReservationTypeId) REFERENCES ReservationType(Id),
     CONSTRAINT [FK_Transaction_ToLocation] FOREIGN KEY (LocationId) REFERENCES [Location](Id), 
     CONSTRAINT [FK_Transaction_ToUser] FOREIGN KEY (UserId) REFERENCES [User](Id)

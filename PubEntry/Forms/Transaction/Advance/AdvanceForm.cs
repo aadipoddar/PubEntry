@@ -20,7 +20,7 @@ public partial class AdvanceForm : Form
 
 	private async void LoadData()
 	{
-		paymentComboBox.DataSource = await CommonData.LoadTableDataByStatus<PaymentModeModel>(Table.PaymentMode);
+		paymentComboBox.DataSource = await CommonData.LoadTableDataByStatus<PaymentModeModel>(TableNames.PaymentMode);
 		paymentComboBox.DisplayMember = nameof(PaymentModeModel.Name);
 		paymentComboBox.ValueMember = nameof(PaymentModeModel.Id);
 

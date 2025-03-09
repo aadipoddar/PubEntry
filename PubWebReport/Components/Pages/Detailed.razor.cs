@@ -37,7 +37,7 @@ public partial class Detailed
 		TakenOnDate = CurrentDateTime;
 
 		locations.Clear();
-		var activeLocations = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location);
+		var activeLocations = await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location);
 		foreach (var location in activeLocations)
 			locations.Add(location);
 

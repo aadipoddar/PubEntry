@@ -19,11 +19,11 @@ public partial class App : Application
 	{
 		Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(Secrets.SyncfusionLicense);
 
-		EventManager.RegisterClassHandler(typeof(TextBox), TextBox.PreviewMouseLeftButtonDownEvent,
+		EventManager.RegisterClassHandler(typeof(TextBox), UIElement.PreviewMouseLeftButtonDownEvent,
 			new MouseButtonEventHandler(SelectivelyIgnoreMouseButton));
-		EventManager.RegisterClassHandler(typeof(TextBox), TextBox.GotKeyboardFocusEvent,
+		EventManager.RegisterClassHandler(typeof(TextBox), UIElement.GotKeyboardFocusEvent,
 			new RoutedEventHandler(SelectAllText));
-		EventManager.RegisterClassHandler(typeof(TextBox), TextBox.MouseDoubleClickEvent,
+		EventManager.RegisterClassHandler(typeof(TextBox), Control.MouseDoubleClickEvent,
 			new RoutedEventHandler(SelectAllText));
 		base.OnStartup(e);
 	}

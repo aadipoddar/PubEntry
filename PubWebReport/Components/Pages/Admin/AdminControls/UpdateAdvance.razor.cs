@@ -27,7 +27,7 @@ public partial class UpdateAdvance
 
 		return !string.IsNullOrEmpty(userId) &&
 			   !string.IsNullOrEmpty(password) &&
-			   BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(Table.User, int.Parse(userId))).Password, password);
+			   BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(TableNames.User, int.Parse(userId))).Password, password);
 	}
 
 	protected override async Task OnInitializedAsync() => await LoadData();
@@ -35,7 +35,7 @@ public partial class UpdateAdvance
 	private async Task LoadData()
 	{
 		locations.Clear();
-		foreach (var location in await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location))
+		foreach (var location in await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location))
 			locations.Add(location);
 
 		LocationModel = locations.FirstOrDefault();
@@ -43,7 +43,7 @@ public partial class UpdateAdvance
 
 	private async Task OnLoadAdvanceButtonClicked()
 	{
-		var advance = await CommonData.LoadTableDataById<AdvanceModel>(Table.Advance, AdvanceModel.Id);
+		var advance = await CommonData.LoadTableDataById<AdvanceModel>(TableNames.Advance, AdvanceModel.Id);
 
 		if (advance is null || advance.TransactionId != 0)
 		{
@@ -53,8 +53,8 @@ public partial class UpdateAdvance
 
 		AdvanceModel = advance;
 
-		PersonModel = await CommonData.LoadTableDataById<PersonModel>(Table.Person, AdvanceModel.PersonId);
-		LocationModel = await CommonData.LoadTableDataById<LocationModel>(Table.Location, AdvanceModel.LocationId);
+		PersonModel = await CommonData.LoadTableDataById<PersonModel>(TableNames.Person, AdvanceModel.PersonId);
+		LocationModel = await CommonData.LoadTableDataById<LocationModel>(TableNames.Location, AdvanceModel.LocationId);
 	}
 
 	private async Task OnLocationSelect(ChangeEventArgs e)

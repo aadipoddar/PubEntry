@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 
+using PubEntryWPF.Common;
+
 namespace PubEntryWPF;
 
 /// <summary>
@@ -29,11 +31,15 @@ public partial class Dashboard : Window
 		}
 	}
 
-	private async void Window_Loaded(object sender, RoutedEventArgs e) => await LoadLocationComboBox();
+	private async void Window_Loaded(object sender, RoutedEventArgs e)
+	{
+		await SettingsManager.LoadSettings();
+		await LoadLocationComboBox();
+	}
 
 	public async Task LoadLocationComboBox()
 	{
-		locationComboBox.ItemsSource = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location);
+		locationComboBox.ItemsSource = await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location);
 		locationComboBox.DisplayMemberPath = nameof(LocationModel.Name);
 		locationComboBox.SelectedValuePath = nameof(LocationModel.Id);
 		locationComboBox.SelectedIndex = 0;

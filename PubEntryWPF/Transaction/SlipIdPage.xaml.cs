@@ -2,8 +2,6 @@
 using System.Windows;
 using System.Windows.Controls;
 
-using PubEntryWPF.Transaction.Advance;
-
 namespace PubEntryWPF.Transaction;
 
 /// <summary>
@@ -35,7 +33,7 @@ public partial class SlipIdPage : Page
 			return;
 		}
 
-		var transaction = await CommonData.LoadTableDataById<TransactionModel>(Table.Transaction, int.Parse(slipIdTextBox.Text));
+		var transaction = await CommonData.LoadTableDataById<TransactionModel>(TableNames.Transaction, int.Parse(slipIdTextBox.Text));
 
 		if (transaction is null)
 		{
@@ -44,5 +42,13 @@ public partial class SlipIdPage : Page
 		}
 
 		_parentFrame.Content = new UpdateTransactionPage(transaction, _parentFrame);
+	}
+
+	private async void Page_Loaded(object sender, RoutedEventArgs e) => await LoadData();
+
+	private async Task LoadData()
+	{
+		//var transactions = await CommonData.LoadTableData<TransactionPrintModel>(Views.Transactions);
+		//transactionDataGrid.ItemsSource = transactions;
 	}
 }

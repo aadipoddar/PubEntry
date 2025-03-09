@@ -88,7 +88,7 @@ internal static class CommonPDF
 			Break = PdfLayoutBreakType.FitPage
 		};
 
-		string text = $"{(await CommonData.LoadTableDataById<LocationModel>(Table.Location, locationId)).Name}";
+		string text = $"{(await CommonData.LoadTableDataById<LocationModel>(TableNames.Location, locationId)).Name}";
 		float textWidth = font.MeasureString(text).Width;
 		float pageWidth = pdfPage.GetClientSize().Width;
 		float textX = (pageWidth - textWidth) / 2f;

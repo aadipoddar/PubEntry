@@ -29,7 +29,7 @@ public partial class DetailDataForm : Form
 		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 
 		dateLabel.Text = $"{_fromDateTime} - {_toDateTime}";
-		locationNameLabel.Text = $"{(await CommonData.LoadTableDataById<LocationModel>(Table.Location, _locationId)).Name}";
+		locationNameLabel.Text = $"{(await CommonData.LoadTableDataById<LocationModel>(TableNames.Location, _locationId)).Name}";
 
 		var detailedTransactionPrintModel = await TransactionData.LoadTransactionsByDateLocation(_fromDateTime, _toDateTime, _locationId);
 

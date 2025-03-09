@@ -10,13 +10,13 @@ public partial class UserForm : Form
 
 	private async void LoadData()
 	{
-		userComboBox.DataSource = (await CommonData.LoadTableData<UserModel>(Table.User)).ToList();
+		userComboBox.DataSource = (await CommonData.LoadTableData<UserModel>(TableNames.User)).ToList();
 		userComboBox.DisplayMember = nameof(UserModel.Name);
 		userComboBox.ValueMember = nameof(UserModel.Id);
 
 		userComboBox.SelectedIndex = -1;
 
-		locationComboBox.DataSource = (await CommonData.LoadTableData<LocationModel>(Table.Location)).ToList();
+		locationComboBox.DataSource = (await CommonData.LoadTableData<LocationModel>(TableNames.Location)).ToList();
 		locationComboBox.DisplayMember = nameof(LocationModel.Name);
 		locationComboBox.ValueMember = nameof(LocationModel.Id);
 

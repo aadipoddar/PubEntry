@@ -27,7 +27,7 @@ internal static class SummaryPDF
 
 		PdfLayoutResult result = null;
 
-		var locations = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location);
+		var locations = await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location);
 
 		foreach (var location in locations)
 		{
@@ -174,7 +174,7 @@ internal static class SummaryPDF
 		List<TransactionTotalsModel> transactionTotalsModel = [];
 		List<AdvanceTotalsModel> advanceTotalsModel = [];
 
-		var locations = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location);
+		var locations = await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location);
 		foreach (var location in locations)
 		{
 			transactionTotalsModel.Add(await TransactionData.LoadTransactionTotalsByDateLocation(fromDateTime, toDateTime, location.Id));

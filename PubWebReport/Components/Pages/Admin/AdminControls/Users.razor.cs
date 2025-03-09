@@ -22,7 +22,7 @@ public partial class Users
 
 		return !string.IsNullOrEmpty(userId) &&
 			   !string.IsNullOrEmpty(password) &&
-			   BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(Table.User, int.Parse(userId))).Password, password);
+			   BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(TableNames.User, int.Parse(userId))).Password, password);
 	}
 
 	protected override async Task OnInitializedAsync() => await LoadData();
@@ -30,11 +30,11 @@ public partial class Users
 	private async Task LoadData()
 	{
 		_users.Clear();
-		foreach (var user in await CommonData.LoadTableData<UserModel>(Table.User))
+		foreach (var user in await CommonData.LoadTableData<UserModel>(TableNames.User))
 			_users.Add(user);
 
 		_locations.Clear();
-		foreach (var location in await CommonData.LoadTableData<LocationModel>(Table.Location))
+		foreach (var location in await CommonData.LoadTableData<LocationModel>(TableNames.Location))
 			_locations.Add(location);
 
 		UserModel = new() { Status = true, LocationId = _locations.FirstOrDefault().Id };

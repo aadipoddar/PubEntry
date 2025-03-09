@@ -1,6 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
 using System.Windows.Threading;
+
+using PubEntryWPF.Transaction.Printing;
 
 namespace PubEntryWPF.Transaction;
 
@@ -11,7 +15,7 @@ public partial class TransactionPage : Window
 {
 	#region Timers
 
-	private readonly DispatcherTimer _inactivityTimer = new() { Interval = TimeSpan.FromMinutes(int.Parse(Task.Run(async () => await SettingsData.LoadSettingsByKey(SettingsKeys.InactivityTime)).Result)) };
+	private readonly DispatcherTimer _inactivityTimer = new() { Interval = TimeSpan.FromMinutes((int)Application.Current.Resources[SettingsKeys.InactivityTime]) };
 	private readonly DispatcherTimer _timer = new() { Interval = TimeSpan.FromSeconds(1) };
 
 	private void InitializeTimers()
@@ -71,7 +75,7 @@ public partial class TransactionPage : Window
 
 	private async Task LoadData()
 	{
-		reservationComboBox.ItemsSource = await CommonData.LoadTableData<ReservationTypeModel>(Table.ReservationType);
+		reservationComboBox.ItemsSource = await CommonData.LoadTableData<ReservationTypeModel>(TableNames.ReservationType);
 		reservationComboBox.DisplayMemberPath = nameof(ReservationTypeModel.Name);
 		reservationComboBox.SelectedValuePath = nameof(ReservationTypeModel.Id);
 		reservationComboBox.SelectedIndex = 0;
@@ -172,6 +176,8 @@ public partial class TransactionPage : Window
 
 		await InsertTransaction();
 		if (_foundAdvanceId is not 0) await AdvanceData.ClearAdvance(_foundAdvanceId, _transactionId);
+
+		await PrintThermal();
 		ClearForm();
 	}
 
@@ -204,6 +210,22 @@ public partial class TransactionPage : Window
 			LocationId = _locationId,
 			UserId = _userId
 		});
+	}
+
+	private async Task PrintThermal()
+	{
+		var receiptModel = await CommonData.LoadTableDataById<TransactionPrintModel>(ViewNames.Transactions, _transactionId);
+
+		int advance = 0;
+		if (_foundAdvanceId is not 0) advance = (await AdvanceData.LoadAdvanceDetailByAdvanceId(_foundAdvanceId)).Sum(x => x.Amount);
+
+		PrintDialog printDialog = new();
+
+		IDocumentPaginatorSource idpSource = ThermalReceipt.Print(receiptModel, "Customer", advance);
+		printDialog.PrintDocument(idpSource.DocumentPaginator, "Thermal Receipt Customer");
+
+		idpSource = ThermalReceipt.Print(receiptModel, "Merchant", advance);
+		printDialog.PrintDocument(idpSource.DocumentPaginator, "Thermal Receipt Merchant");
 	}
 
 	private void ClearForm()

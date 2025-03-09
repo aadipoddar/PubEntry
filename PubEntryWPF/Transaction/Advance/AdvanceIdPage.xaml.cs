@@ -33,7 +33,7 @@ public partial class AdvanceIdPage : Page
 			return;
 		}
 
-		var advance = await CommonData.LoadTableDataById<AdvanceModel>(Table.Advance, int.Parse(advanceIdTextBox.Text));
+		var advance = await CommonData.LoadTableDataById<AdvanceModel>(TableNames.Advance, int.Parse(advanceIdTextBox.Text));
 
 		if (advance is null || advance.TransactionId != 0)
 		{
@@ -42,5 +42,28 @@ public partial class AdvanceIdPage : Page
 		}
 
 		_parentFrame.Content = new UpdateAdvancePage(advance, _parentFrame);
+	}
+
+	private async void Page_Loaded(object sender, RoutedEventArgs e) => await LoadData();
+
+	private async Task LoadData()
+	{
+		if (DateTime.Now.Hour >= TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours)
+		{
+			toDatePicker.SelectedDate = DateTime.Now.Date.AddDays(1).AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)).Hours);
+			fromDatePicker.SelectedDate = DateTime.Now.Date.AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours);
+		}
+		else
+		{
+			toDatePicker.SelectedDate = DateTime.Now.Date.AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)).Hours);
+			fromDatePicker.SelectedDate = DateTime.Now.Date.AddDays(-1).AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours);
+		}
+
+		var advances = await CommonData.LoadTableData<AdvancePrintModel>(ViewNames.Advances);
+		advanceDataGrid.ItemsSource = advances;
+
+		//var detailedAdvancePrintModel = _toDateTime.TimeOfDay < TimeSpan.FromHours(17)
+		//? await AdvanceData.LoadAdvancesByForDateLocation(_fromDateTime.Date, _toDateTime.AddDays(-1).Date.AddHours(23).AddMinutes(59), _locationId)
+		//: await AdvanceData.LoadAdvancesByForDateLocation(_fromDateTime.Date, _toDateTime.Date, _locationId);
 	}
 }

@@ -67,7 +67,7 @@ public partial class TransactionForm : Form
 
 	private async Task LoadData()
 	{
-		reservationComboBox.DataSource = await CommonData.LoadTableData<ReservationTypeModel>(Table.ReservationType);
+		reservationComboBox.DataSource = await CommonData.LoadTableData<ReservationTypeModel>(TableNames.ReservationType);
 		reservationComboBox.DisplayMember = nameof(ReservationTypeModel.Name);
 		reservationComboBox.ValueMember = nameof(ReservationTypeModel.Id);
 

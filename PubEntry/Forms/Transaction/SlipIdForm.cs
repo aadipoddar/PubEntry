@@ -31,7 +31,7 @@ public partial class SlipIdForm : Form
 			return;
 		}
 
-		TransactionModel transaction = await CommonData.LoadTableDataById<TransactionModel>(Table.Transaction, int.Parse(slipIdTextBox.Text));
+		TransactionModel transaction = await CommonData.LoadTableDataById<TransactionModel>(TableNames.Transaction, int.Parse(slipIdTextBox.Text));
 
 		if (transaction is null)
 		{

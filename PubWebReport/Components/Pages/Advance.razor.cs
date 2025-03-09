@@ -42,7 +42,7 @@ public partial class Advance
 
 		return !string.IsNullOrEmpty(_userId.ToString()) &&
 			   !string.IsNullOrEmpty(_password) &&
-			   BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(Table.User, _userId)).Password, _password);
+			   BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(TableNames.User, _userId)).Password, _password);
 	}
 
 	protected override async Task OnInitializedAsync() => await LoadData();
@@ -50,7 +50,7 @@ public partial class Advance
 	private async Task LoadData()
 	{
 		_paymentModes.Clear();
-		foreach (var paymentMode in await CommonData.LoadTableDataByStatus<PaymentModeModel>(Table.PaymentMode))
+		foreach (var paymentMode in await CommonData.LoadTableDataByStatus<PaymentModeModel>(TableNames.PaymentMode))
 			_paymentModes.Add(paymentMode);
 
 		PaymentModeModel = _paymentModes.FirstOrDefault();

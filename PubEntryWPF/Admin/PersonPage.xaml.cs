@@ -25,18 +25,11 @@ public partial class PersonPage : Page
 		bool showLoyalty = showLoyaltyCheckBox?.IsChecked ?? false;
 		bool showNonLoyalty = showNonLoyaltyCheckBox?.IsChecked ?? false;
 
-		personDataGrid.ItemsSource = (await CommonData.LoadTableData<PersonModel>(Table.Person))
+		personDataGrid.ItemsSource = (await CommonData.LoadTableData<PersonModel>(TableNames.Person))
 			.Where(item => string.IsNullOrEmpty(nameSearch) || item.Name.Contains(nameSearch, StringComparison.CurrentCultureIgnoreCase))
 			.Where(item => string.IsNullOrEmpty(numberSearch) || item.Number.Contains(numberSearch, StringComparison.CurrentCultureIgnoreCase))
 			.Where(item => (showLoyalty && item.Loyalty) || (showNonLoyalty && !item.Loyalty))
 			.ToList();
-
-		foreach (var column in personDataGrid.Columns)
-		{
-			column.MinWidth = 100;
-			column.IsReadOnly = true;
-			if (column.Header.ToString() == "Id") column.MinWidth = 50;
-		}
 
 		UpdateFields();
 	}
@@ -135,7 +128,7 @@ public partial class PersonPage : Page
 
 		if (personDataGrid.SelectedItem is PersonModel selectedPerson)
 		{
-			var foundPerson = (await CommonData.LoadTableData<PersonModel>(Table.Person)).FirstOrDefault(_ => _.Number == personModel.Number);
+			var foundPerson = (await CommonData.LoadTableData<PersonModel>(TableNames.Person)).FirstOrDefault(_ => _.Number == personModel.Number);
 			if (foundPerson is not null && foundPerson.Id != selectedPerson.Id)
 			{
 				MessageBox.Show("Number already exists", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -147,7 +140,7 @@ public partial class PersonPage : Page
 		}
 		else
 		{
-			if ((await CommonData.LoadTableData<PersonModel>(Table.Person)).FirstOrDefault(_ => _.Number == personModel.Number) is not null)
+			if ((await CommonData.LoadTableData<PersonModel>(TableNames.Person)).FirstOrDefault(_ => _.Number == personModel.Number) is not null)
 			{
 				MessageBox.Show("Number already exists", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 				return;

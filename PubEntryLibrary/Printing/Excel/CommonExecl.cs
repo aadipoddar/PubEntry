@@ -7,7 +7,7 @@ namespace PubEntryLibrary.Printing.Excel;
 internal static class CommonExecl
 {
 	internal static async Task<string> GetLocationName(int locationId) =>
-		(await CommonData.LoadTableDataById<LocationModel>(Table.Location, locationId)).Name;
+		(await CommonData.LoadTableDataById<LocationModel>(TableNames.Location, locationId)).Name;
 
 	internal static int SetupHeader(IWorksheet worksheet, string dateHeader, string locationName, string detailsHeader)
 	{

@@ -29,7 +29,7 @@ public partial class UpdateTransaction
 
 		return !string.IsNullOrEmpty(userId) &&
 			   !string.IsNullOrEmpty(password) &&
-			   BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(Table.User, int.Parse(userId))).Password, password);
+			   BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(TableNames.User, int.Parse(userId))).Password, password);
 	}
 
 	protected override async Task OnInitializedAsync() => await LoadData();
@@ -37,11 +37,11 @@ public partial class UpdateTransaction
 	private async Task LoadData()
 	{
 		locations.Clear();
-		foreach (var location in await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location))
+		foreach (var location in await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location))
 			locations.Add(location);
 
 		reservationTypes.Clear();
-		foreach (var reservationType in await CommonData.LoadTableDataByStatus<ReservationTypeModel>(Table.ReservationType))
+		foreach (var reservationType in await CommonData.LoadTableDataByStatus<ReservationTypeModel>(TableNames.ReservationType))
 			reservationTypes.Add(reservationType);
 
 		LocationModel = locations.FirstOrDefault();
@@ -49,7 +49,7 @@ public partial class UpdateTransaction
 
 	private async Task OnLoadTransactionButtonClicked()
 	{
-		var tarnsaction = await CommonData.LoadTableDataById<TransactionModel>(Table.Transaction, TransactionModel.Id);
+		var tarnsaction = await CommonData.LoadTableDataById<TransactionModel>(TableNames.Transaction, TransactionModel.Id);
 		if (tarnsaction is null)
 		{
 			await JS.InvokeVoidAsync("alert", "Invalid Transaction Id");
@@ -57,8 +57,8 @@ public partial class UpdateTransaction
 		}
 
 		TransactionModel = tarnsaction;
-		PersonModel = await CommonData.LoadTableDataById<PersonModel>(Table.Person, TransactionModel.PersonId);
-		LocationModel = await CommonData.LoadTableDataById<LocationModel>(Table.Location, TransactionModel.LocationId);
+		PersonModel = await CommonData.LoadTableDataById<PersonModel>(TableNames.Person, TransactionModel.PersonId);
+		LocationModel = await CommonData.LoadTableDataById<LocationModel>(TableNames.Location, TransactionModel.LocationId);
 
 		await LoadPersonAdvance();
 	}

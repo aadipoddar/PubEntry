@@ -1,6 +1,6 @@
 ﻿namespace PubEntryLibrary.DataAccess;
 
-public static class Table
+public static class TableNames
 {
 	public static string Advance => "Advance";
 	public static string AdvanceDetail => "AdvanceDetail";
@@ -13,14 +13,14 @@ public static class Table
 	public static string Settings => "Settings";
 }
 
-public static class Views
+public static class ViewNames
 {
 	public static string Advances => "View_Advances";
 	public static string Transactions => "View_Transactions";
 	public static string UserLocation => "View_User_Location";
 }
 
-public static class StoredProcedure
+public static class StoredProcedureNames
 {
 	public static string ClearAdvance => "Clear_Advance";
 	public static string DeleteAdvanceDetails => "Delete_AdvanceDetails";

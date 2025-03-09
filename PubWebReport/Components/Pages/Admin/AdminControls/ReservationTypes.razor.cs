@@ -20,7 +20,7 @@ public partial class ReservationTypes
 
 		return !string.IsNullOrEmpty(userId) &&
 			   !string.IsNullOrEmpty(password) &&
-			   BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(Table.User, int.Parse(userId))).Password, password);
+			   BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(TableNames.User, int.Parse(userId))).Password, password);
 	}
 
 	protected override async Task OnInitializedAsync() => await LoadData();
@@ -28,7 +28,7 @@ public partial class ReservationTypes
 	private async Task LoadData()
 	{
 		_reservationTypes.Clear();
-		foreach (var reservationType in await CommonData.LoadTableData<ReservationTypeModel>(Table.ReservationType))
+		foreach (var reservationType in await CommonData.LoadTableData<ReservationTypeModel>(TableNames.ReservationType))
 			_reservationTypes.Add(reservationType);
 
 		ReservationTypeModel = new() { Status = true };

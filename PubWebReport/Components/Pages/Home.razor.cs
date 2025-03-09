@@ -28,7 +28,7 @@ public partial class Home
 		_locations.Clear();
 		_users.Clear();
 
-		foreach (var location in await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location))
+		foreach (var location in await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location))
 			_locations.Add(location);
 
 		foreach (var user in await UserData.LoadUsersByLocationId(_locations.FirstOrDefault().Id))
@@ -144,7 +144,7 @@ public partial class Home
 
 	private async Task AdminButtonClicked()
 	{
-		if ((await CommonData.LoadTableDataById<UserModel>(Table.User, _selectedUserId)).Admin)
+		if ((await CommonData.LoadTableDataById<UserModel>(TableNames.User, _selectedUserId)).Admin)
 		{
 			if (await ValidatePassword())
 			{
@@ -162,7 +162,7 @@ public partial class Home
 	{
 		if (string.IsNullOrEmpty(Password)) return false;
 
-		if ((await CommonData.LoadTableDataById<UserModel>(Table.User, _selectedUserId)).Password == Password)
+		if ((await CommonData.LoadTableDataById<UserModel>(TableNames.User, _selectedUserId)).Password == Password)
 			return true;
 
 		Password = string.Empty;

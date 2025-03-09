@@ -18,7 +18,7 @@ public partial class LocationPage : Page
 
 		var nameSearch = searchTextBox.Text.Trim();
 
-		var locations = await CommonData.LoadTableData<LocationModel>(Table.Location);
+		var locations = await CommonData.LoadTableData<LocationModel>(TableNames.Location);
 
 		bool showActive = showActiveCheckBox?.IsChecked ?? false;
 		bool showInactive = showInactiveCheckBox?.IsChecked ?? false;
@@ -28,13 +28,6 @@ public partial class LocationPage : Page
 			.Where(item => (showActive && item.Status) || (showInactive && !item.Status))
 			.OrderBy(item => !item.Status)
 			.ToList();
-
-		foreach (var column in locationDataGrid.Columns)
-		{
-			column.MinWidth = 100;
-			column.IsReadOnly = true;
-			if (column.Header.ToString() == "Id") column.MinWidth = 50;
-		}
 
 		UpdateFields();
 	}

@@ -29,7 +29,7 @@ public partial class AdvanceId : Form
 			return;
 		}
 
-		var advance = await CommonData.LoadTableDataById<AdvanceModel>(Table.Advance, int.Parse(advanceIdTextBox.Text));
+		var advance = await CommonData.LoadTableDataById<AdvanceModel>(TableNames.Advance, int.Parse(advanceIdTextBox.Text));
 
 		if (advance is null || advance.TransactionId != 0)
 		{

@@ -1,6 +1,9 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Documents;
+
+using PubEntryWPF.Transaction.Printing;
 
 namespace PubEntryWPF.Transaction;
 
@@ -26,17 +29,17 @@ public partial class UpdateTransactionPage : Page
 
 	private async Task LoadData()
 	{
-		locationComboBox.ItemsSource = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location);
+		locationComboBox.ItemsSource = await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location);
 		locationComboBox.DisplayMemberPath = nameof(LocationModel.Name);
 		locationComboBox.SelectedValuePath = nameof(LocationModel.Id);
 
-		reservationComboBox.ItemsSource = await CommonData.LoadTableDataByStatus<ReservationTypeModel>(Table.ReservationType);
+		reservationComboBox.ItemsSource = await CommonData.LoadTableDataByStatus<ReservationTypeModel>(TableNames.ReservationType);
 		reservationComboBox.DisplayMemberPath = nameof(ReservationTypeModel.Name);
 		reservationComboBox.SelectedValuePath = nameof(ReservationTypeModel.Id);
 
 		if (_transaction is not null)
 		{
-			var person = await CommonData.LoadTableDataById<PersonModel>(Table.Person, _transaction.PersonId);
+			var person = await CommonData.LoadTableDataById<PersonModel>(TableNames.Person, _transaction.PersonId);
 			if (person is not null)
 			{
 				numberTextBox.Text = person.Number;
@@ -160,9 +163,7 @@ public partial class UpdateTransactionPage : Page
 
 		await UpdateTransaction();
 		await UpdateAdvance();
-
-		// TODO - Print Thermal
-		//PrintTransactionThermal();
+		await PrintThermal();
 
 		_parentFrame.Content = new SlipIdPage(_parentFrame);
 	}
@@ -203,6 +204,22 @@ public partial class UpdateTransactionPage : Page
 			LocationId = (int)locationComboBox.SelectedValue,
 			UserId = _transaction.UserId
 		});
+	}
+
+	private async Task PrintThermal()
+	{
+		var receiptModel = await CommonData.LoadTableDataById<TransactionPrintModel>(ViewNames.Transactions, _transaction.Id);
+
+		int advance = 0;
+		if (_foundAdvanceId is not 0) advance = (await AdvanceData.LoadAdvanceDetailByAdvanceId(_foundAdvanceId)).Sum(x => x.Amount);
+
+		PrintDialog printDialog = new();
+
+		IDocumentPaginatorSource idpSource = ThermalReceipt.Print(receiptModel, "Customer", advance);
+		printDialog.PrintDocument(idpSource.DocumentPaginator, "Thermal Receipt Customer");
+
+		idpSource = ThermalReceipt.Print(receiptModel, "Merchant", advance);
+		printDialog.PrintDocument(idpSource.DocumentPaginator, "Thermal Receipt Merchant");
 	}
 
 	#endregion

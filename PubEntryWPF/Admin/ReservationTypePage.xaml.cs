@@ -21,18 +21,11 @@ public partial class ReservationTypePage : Page
 		bool showActive = showActiveCheckBox?.IsChecked ?? false;
 		bool showInactive = showInactiveCheckBox?.IsChecked ?? false;
 
-		reservationDataGrid.ItemsSource = (await CommonData.LoadTableData<ReservationTypeModel>(Table.ReservationType))
+		reservationDataGrid.ItemsSource = (await CommonData.LoadTableData<ReservationTypeModel>(TableNames.ReservationType))
 			.Where(item => string.IsNullOrEmpty(nameSearch) || item.Name.Contains(nameSearch, StringComparison.CurrentCultureIgnoreCase))
 			.Where(item => (showActive && item.Status) || (showInactive && !item.Status))
 			.OrderBy(item => !item.Status)
 			.ToList();
-
-		foreach (var column in reservationDataGrid.Columns)
-		{
-			column.MinWidth = 100;
-			column.IsReadOnly = true;
-			if (column.Header.ToString() == "Id") column.MinWidth = 50;
-		}
 
 		UpdateFields();
 	}

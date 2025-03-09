@@ -21,11 +21,11 @@ public partial class UpdateTransactionForm : Form
 
 	private async Task LoadData()
 	{
-		locationComboBox.DataSource = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location);
+		locationComboBox.DataSource = await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location);
 		locationComboBox.DisplayMember = nameof(LocationModel.Name);
 		locationComboBox.ValueMember = nameof(LocationModel.Id);
 
-		reservationComboBox.DataSource = await CommonData.LoadTableDataByStatus<ReservationTypeModel>(Table.ReservationType);
+		reservationComboBox.DataSource = await CommonData.LoadTableDataByStatus<ReservationTypeModel>(TableNames.ReservationType);
 		reservationComboBox.DisplayMember = nameof(ReservationTypeModel.Name);
 		reservationComboBox.ValueMember = nameof(ReservationTypeModel.Id);
 
@@ -33,7 +33,7 @@ public partial class UpdateTransactionForm : Form
 
 		if (_transaction is not null)
 		{
-			var person = await CommonData.LoadTableDataById<PersonModel>(Table.Person, _transaction.PersonId);
+			var person = await CommonData.LoadTableDataById<PersonModel>(TableNames.Person, _transaction.PersonId);
 			if (person is not null)
 			{
 				numberTextBox.Text = person.Number;

@@ -19,14 +19,14 @@ public partial class UpdateAdvanceForm : Form
 
 	private async Task LoadData()
 	{
-		locationComboBox.DataSource = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location);
+		locationComboBox.DataSource = await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location);
 		locationComboBox.DisplayMember = nameof(LocationModel.Name);
 		locationComboBox.ValueMember = nameof(LocationModel.Id);
 
 		locationComboBox.SelectedValue = _updateAdvanceModel.LocationId;
 		advanceDateTimePicker.Value = _updateAdvanceModel.AdvanceDate;
 		approvedByTextBox.Text = _updateAdvanceModel.ApprovedBy;
-		numberTextBox.Text = (await CommonData.LoadTableDataById<PersonModel>(Table.Person, _updateAdvanceModel.PersonId)).Number;
+		numberTextBox.Text = (await CommonData.LoadTableDataById<PersonModel>(TableNames.Person, _updateAdvanceModel.PersonId)).Number;
 
 		richTextBoxFooter.Text = $"Version: {Assembly.GetExecutingAssembly().GetName().Version}";
 	}

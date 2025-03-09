@@ -34,7 +34,7 @@ public partial class AdvancePage : Window
 
 	private async Task LoadData()
 	{
-		paymentComboBox.ItemsSource = await CommonData.LoadTableDataByStatus<PaymentModeModel>(Table.PaymentMode);
+		paymentComboBox.ItemsSource = await CommonData.LoadTableDataByStatus<PaymentModeModel>(TableNames.PaymentMode);
 		paymentComboBox.DisplayMemberPath = nameof(PaymentModeModel.Name);
 		paymentComboBox.SelectedValuePath = nameof(PaymentModeModel.Id);
 		paymentComboBox.SelectedIndex = 0;

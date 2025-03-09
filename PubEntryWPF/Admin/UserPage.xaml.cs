@@ -14,7 +14,7 @@ public partial class UserPage : Page
 
 	private async Task LoadData()
 	{
-		var locations = await CommonData.LoadTableData<LocationModel>(Table.Location);
+		var locations = await CommonData.LoadTableData<LocationModel>(TableNames.Location);
 
 		searchLocationComboBox.ItemsSource = locations;
 		searchLocationComboBox.DisplayMemberPath = nameof(LocationModel.Name);
@@ -40,20 +40,13 @@ public partial class UserPage : Page
 		bool showAdmin = showAdminCheckBox?.IsChecked ?? false;
 		bool showNonAdmin = showNonAdminCheckBox?.IsChecked ?? false;
 
-		userDataGrid.ItemsSource = (await CommonData.LoadTableData<UserLocationModel>(Views.UserLocation))
+		userDataGrid.ItemsSource = (await CommonData.LoadTableData<UserLocationModel>(ViewNames.UserLocation))
 			.Where(item => string.IsNullOrEmpty(nameSearch) || item.Name.Contains(nameSearch, StringComparison.CurrentCultureIgnoreCase))
 			.Where(item => searchLocationComboBox.SelectedIndex == -1 || item.LocationId == (int)searchLocationComboBox.SelectedValue)
 			.Where(item => (showActive && item.Status) || (showInactive && !item.Status))
 			.Where(item => (showAdmin && item.Admin) || (showNonAdmin && !item.Admin))
 			.OrderBy(item => !item.Status)
 			.ToList();
-
-		foreach (var column in userDataGrid.Columns)
-		{
-			column.MinWidth = 100;
-			column.IsReadOnly = true;
-			if (column.Header.ToString() == "Id") column.MinWidth = 50;
-		}
 
 		UpdateFields();
 	}

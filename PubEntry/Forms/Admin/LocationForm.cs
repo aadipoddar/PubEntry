@@ -9,7 +9,7 @@ public partial class LocationForm : Form
 
 	private async void LoadData()
 	{
-		locationComboBox.DataSource = await CommonData.LoadTableData<LocationModel>(Table.Location);
+		locationComboBox.DataSource = await CommonData.LoadTableData<LocationModel>(TableNames.Location);
 		locationComboBox.DisplayMember = nameof(LocationModel.Name);
 		locationComboBox.ValueMember = nameof(LocationModel.Id);
 

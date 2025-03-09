@@ -105,7 +105,7 @@ public static class PrintReceipt
 
 	public static void DrawGraphics(PrintPageEventArgs e, string copyOf, int transactionId, int advanceId)
 	{
-		TransactionPrintModel receiptModel = Task.Run(async () => await CommonData.LoadTableDataById<TransactionPrintModel>(Views.Transactions, transactionId)).Result;
+		TransactionPrintModel receiptModel = Task.Run(async () => await CommonData.LoadTableDataById<TransactionPrintModel>(ViewNames.Transactions, transactionId)).Result;
 
 		var advance = 0;
 		if (advanceId is not 0) advance = Task.Run(async () => await AdvanceData.LoadAdvanceDetailByAdvanceId(advanceId)).Result.Sum(x => x.Amount);

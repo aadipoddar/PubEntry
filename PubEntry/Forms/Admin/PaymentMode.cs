@@ -10,7 +10,7 @@ public partial class PaymentMode : Form
 
 	private async void LoadData()
 	{
-		paymentComboBox.DataSource = await CommonData.LoadTableData<PaymentModeModel>(Table.PaymentMode);
+		paymentComboBox.DataSource = await CommonData.LoadTableData<PaymentModeModel>(TableNames.PaymentMode);
 		paymentComboBox.DisplayMember = nameof(PaymentModeModel.Name);
 		paymentComboBox.ValueMember = nameof(PaymentModeModel.Id);
 

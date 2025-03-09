@@ -26,14 +26,14 @@ public partial class UpdateAdvancePage : Page
 
 	private async Task LoadData()
 	{
-		locationComboBox.ItemsSource = await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location);
+		locationComboBox.ItemsSource = await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location);
 		locationComboBox.DisplayMemberPath = nameof(LocationModel.Name);
 		locationComboBox.SelectedValuePath = nameof(LocationModel.Id);
 
 		locationComboBox.SelectedValue = _advance.LocationId;
 		bookingDatePicker.SelectedDate = _advance.AdvanceDate;
 		remarksTextBox.Text = _advance.ApprovedBy;
-		numberTextBox.Text = (await CommonData.LoadTableDataById<PersonModel>(Table.Person, _advance.PersonId)).Number;
+		numberTextBox.Text = (await CommonData.LoadTableDataById<PersonModel>(TableNames.Person, _advance.PersonId)).Number;
 	}
 
 	private async void numberTextBox_TextChanged(object sender, TextChangedEventArgs e)

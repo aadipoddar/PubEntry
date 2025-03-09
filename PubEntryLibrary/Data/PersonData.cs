@@ -3,11 +3,11 @@
 public class PersonData
 {
 	public static async Task<int> InsertPerson(PersonModel personModel) =>
-			(await SqlDataAccess.LoadData<int, dynamic>(StoredProcedure.InsertPerson, personModel)).FirstOrDefault();
+			(await SqlDataAccess.LoadData<int, dynamic>(StoredProcedureNames.InsertPerson, personModel)).FirstOrDefault();
 
 	public static async Task<int> UpdatePerson(PersonModel personModel) =>
-			(await SqlDataAccess.LoadData<int, dynamic>(StoredProcedure.UpdatePerson, personModel)).FirstOrDefault();
+			(await SqlDataAccess.LoadData<int, dynamic>(StoredProcedureNames.UpdatePerson, personModel)).FirstOrDefault();
 
 	public static async Task<PersonModel> LoadPersonByNumber(string Number) =>
-			(await SqlDataAccess.LoadData<PersonModel, dynamic>(StoredProcedure.LoadPersonByNumber, new { Number })).FirstOrDefault();
+			(await SqlDataAccess.LoadData<PersonModel, dynamic>(StoredProcedureNames.LoadPersonByNumber, new { Number })).FirstOrDefault();
 }

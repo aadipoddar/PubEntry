@@ -1,5 +1,4 @@
-﻿
-CREATE PROCEDURE Insert_User
+﻿CREATE PROCEDURE Insert_User
 	@Id INT,
 	@Name VARCHAR(100),
     @Password VARCHAR(100),

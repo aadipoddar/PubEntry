@@ -18,7 +18,7 @@ public partial class PaymentModePage : Page
 
 		var nameSearch = searchTextBox.Text.Trim();
 
-		var paymentModes = await CommonData.LoadTableData<PaymentModeModel>(Table.PaymentMode);
+		var paymentModes = await CommonData.LoadTableData<PaymentModeModel>(TableNames.PaymentMode);
 
 		bool showActive = showActiveCheckBox?.IsChecked ?? false;
 		bool showInactive = showInactiveCheckBox?.IsChecked ?? false;
@@ -28,13 +28,6 @@ public partial class PaymentModePage : Page
 			.Where(item => (showActive && item.Status) || (showInactive && !item.Status))
 			.OrderBy(item => !item.Status)
 			.ToList();
-
-		foreach (var column in paymentDataGrid.Columns)
-		{
-			column.MinWidth = 100;
-			column.IsReadOnly = true;
-			if (column.Header.ToString() == "Id") column.MinWidth = 50;
-		}
 
 		UpdateFields();
 	}

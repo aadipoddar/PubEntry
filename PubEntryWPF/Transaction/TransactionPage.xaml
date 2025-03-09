@@ -7,7 +7,8 @@
         xmlns:common="clr-namespace:PubEntryWPF.Common"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded" Closed="Window_Closed"
-		Title="Transaction" Height="600" Width="550">
+		Title="Transaction" Height="600" Width="550"
+		>
 	<Grid>
 		<Grid HorizontalAlignment="Center">
 			<Grid.ColumnDefinitions>
@@ -110,7 +111,7 @@
 			</StackPanel>
 			<!--#endregion-->
 
-			<Button x:Name="saveButton" Content="Save" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="4" Margin="10" Padding="5" MinWidth="150" MinHeight="40" Click="saveButton_Click" HorizontalAlignment="Center" Style="{DynamicResource AccentButtonStyle}" />
+			<Button x:Name="saveButton" Content="Save" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="4" Margin="10" Padding="5" MinWidth="150" MinHeight="40" Click="saveButton_Click" HorizontalAlignment="Center" IsDefault="True" Style="{DynamicResource AccentButtonStyle}" />
 		</Grid>
 
 		<common:FooterControl />
