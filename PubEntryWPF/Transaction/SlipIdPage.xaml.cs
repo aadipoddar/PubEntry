@@ -50,5 +50,42 @@ public partial class SlipIdPage : Page
 	{
 		//var transactions = await CommonData.LoadTableData<TransactionPrintModel>(Views.Transactions);
 		//transactionDataGrid.ItemsSource = transactions;
+
+
+
+
+
+		//List<int> hours = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+		//List<string> slots = ["AM", "PM"];
+
+		//fromTimePicker.ItemsSource = hours;
+		//toTimePicker.ItemsSource = hours;
+		//fromSlotPicker.ItemsSource = slots;
+		//toSlotPicker.ItemsSource = slots;
+
+		//if (PubOpenTime >= 12)
+		//{
+		//	fromSlotPicker.SelectedItem = "PM";
+		//	if (PubOpenTime > 12) fromTimePicker.SelectedItem = PubOpenTime - 12;
+		//	else fromTimePicker.SelectedItem = PubOpenTime;
+		//}
+
+		//else
+		//{
+		//	fromSlotPicker.SelectedItem = "AM";
+		//	fromTimePicker.SelectedItem = PubOpenTime;
+		//}
+
+		//if (PubCloseTime >= 12)
+		//{
+		//	toSlotPicker.SelectedItem = "PM";
+		//	if (PubCloseTime > 12) toTimePicker.SelectedItem = PubCloseTime - 12;
+		//	else toTimePicker.SelectedItem = PubCloseTime;
+		//}
+		//else
+		//{
+		//	toSlotPicker.SelectedItem = "AM";
+		//	toTimePicker.SelectedItem = PubCloseTime;
+		//}
 	}
 }

@@ -3,8 +3,8 @@ AS
 BEGIN
 	DELETE FROM [Settings]
 
-	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'PubOpenTime', N'17:00:00')
-	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'PubCloseTime', N'05:00:00')
+	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'PubOpenTime', N'17')
+	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'PubCloseTime', N'5')
 
 	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'InactivityTime', N'5')
 

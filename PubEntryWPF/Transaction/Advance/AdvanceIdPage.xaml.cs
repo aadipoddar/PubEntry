@@ -9,6 +9,9 @@ namespace PubEntryWPF.Transaction.Advance;
 /// </summary>
 public partial class AdvanceIdPage : Page
 {
+	private static int PubOpenTime => (int)Application.Current.Resources[SettingsKeys.PubOpenTime];
+	private static int PubCloseTime => (int)Application.Current.Resources[SettingsKeys.PubCloseTime];
+
 	private readonly Frame _parentFrame;
 
 	public AdvanceIdPage(Frame parentFrame)
@@ -21,27 +24,6 @@ public partial class AdvanceIdPage : Page
 	{
 		Regex regex = new("[^0-9]+");
 		e.Handled = regex.IsMatch(e.Text);
-	}
-
-	private bool ValidateForm() => !string.IsNullOrEmpty(advanceIdTextBox.Text);
-
-	private async void loadButton_Click(object sender, RoutedEventArgs e)
-	{
-		if (!ValidateForm())
-		{
-			MessageBox.Show("Please enter Advance Id", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-			return;
-		}
-
-		var advance = await CommonData.LoadTableDataById<AdvanceModel>(TableNames.Advance, int.Parse(advanceIdTextBox.Text));
-
-		if (advance is null || advance.TransactionId != 0)
-		{
-			MessageBox.Show("Invalid Advance Id", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-			return;
-		}
-
-		_parentFrame.Content = new UpdateAdvancePage(advance, _parentFrame);
 	}
 
 	private async void Page_Loaded(object sender, RoutedEventArgs e) => await LoadData();
@@ -59,11 +41,82 @@ public partial class AdvanceIdPage : Page
 			fromDatePicker.SelectedDate = DateTime.Now.Date.AddDays(-1).AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours);
 		}
 
-		var advances = await CommonData.LoadTableData<AdvancePrintModel>(ViewNames.Advances);
-		advanceDataGrid.ItemsSource = advances;
+		locationComboBox.ItemsSource = await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location);
+		locationComboBox.DisplayMemberPath = nameof(LocationModel.Name);
+		locationComboBox.SelectedValuePath = nameof(LocationModel.Id);
+		locationComboBox.SelectedIndex = 0;
 
-		//var detailedAdvancePrintModel = _toDateTime.TimeOfDay < TimeSpan.FromHours(17)
-		//? await AdvanceData.LoadAdvancesByForDateLocation(_fromDateTime.Date, _toDateTime.AddDays(-1).Date.AddHours(23).AddMinutes(59), _locationId)
-		//: await AdvanceData.LoadAdvancesByForDateLocation(_fromDateTime.Date, _toDateTime.Date, _locationId);
+		await LoadAdvances();
+	}
+
+	private async Task LoadAdvances()
+	{
+		fromDatePicker.DisplayDateEnd = toDatePicker.SelectedDate;
+		toDatePicker.DisplayDateStart = fromDatePicker.SelectedDate;
+
+		if (fromDatePicker.SelectedDate is null || toDatePicker.SelectedDate is null || locationComboBox.SelectedValue is null) return;
+		advanceDataGrid.ItemsSource = await AdvanceData.LoadAdvancesByForDateLocation(fromDatePicker.SelectedDate.Value, toDatePicker.SelectedDate.Value, (int)locationComboBox.SelectedValue);
+	}
+
+	private async void values_SelectionChanged(object sender, SelectionChangedEventArgs e) => await LoadAdvances();
+
+	private void advanceDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e) => UpdateFields();
+
+	private void UpdateFields()
+	{
+		if (advanceDataGrid.SelectedItem is AdvancePrintModel selectedAdvance)
+		{
+			advanceIdTextBox.Text = selectedAdvance.Id.ToString();
+
+			if (selectedAdvance.SlipId != "NOT REDEEMED")
+				loadButton.Content = "Load Corresponding Transaction";
+
+			else loadButton.Content = "Load Advance";
+		}
+
+		else
+		{
+			advanceIdTextBox.Clear();
+			loadButton.Content = "Load Advance";
+		}
+	}
+
+	private bool ValidateForm() => !string.IsNullOrEmpty(advanceIdTextBox.Text);
+
+	private async void advanceIdTextBox_TextChanged(object sender, TextChangedEventArgs e)
+	{
+		if (!ValidateForm())
+		{
+			loadButton.Content = "Load Advance";
+			return;
+		}
+		var advance = await CommonData.LoadTableDataById<AdvanceModel>(TableNames.Advance, int.Parse(advanceIdTextBox.Text));
+		if (advance.TransactionId != 0) loadButton.Content = "Load Corresponding Transaction";
+		else loadButton.Content = "Load Advance";
+	}
+
+	private async void loadButton_Click(object sender, RoutedEventArgs e)
+	{
+		if (!ValidateForm())
+		{
+			MessageBox.Show("Please enter Advance Id", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			return;
+		}
+
+		var advance = await CommonData.LoadTableDataById<AdvanceModel>(TableNames.Advance, int.Parse(advanceIdTextBox.Text));
+
+		if (advance is null)
+		{
+			MessageBox.Show("Invalid Advance Id", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			return;
+		}
+
+		if (advance.TransactionId != 0)
+		{
+			var transaction = await CommonData.LoadTableDataById<TransactionModel>(TableNames.Transaction, advance.TransactionId);
+			_parentFrame.Content = new UpdateTransactionPage(transaction, _parentFrame);
+		}
+
+		else _parentFrame.Content = new UpdateAdvancePage(advance, _parentFrame);
 	}
 }

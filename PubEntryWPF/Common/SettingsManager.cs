@@ -9,6 +9,9 @@ internal static class SettingsManager
 	{
 		var resources = Application.Current.Resources;
 
+		resources[SettingsKeys.PubOpenTime] = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime));
+		resources[SettingsKeys.PubCloseTime] = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime));
+
 		resources[SettingsKeys.InactivityTime] = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.InactivityTime));
 
 		resources[SettingsKeys.PageWidthThermal] = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PageWidthThermal));
