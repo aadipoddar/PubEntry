@@ -9,9 +9,6 @@ namespace PubEntryWPF.Transaction.Advance;
 /// </summary>
 public partial class AdvanceIdPage : Page
 {
-	private static int PubOpenTime => (int)Application.Current.Resources[SettingsKeys.PubOpenTime];
-	private static int PubCloseTime => (int)Application.Current.Resources[SettingsKeys.PubCloseTime];
-
 	private readonly Frame _parentFrame;
 
 	public AdvanceIdPage(Frame parentFrame)
@@ -51,10 +48,11 @@ public partial class AdvanceIdPage : Page
 
 	private async Task LoadAdvances()
 	{
+		if (fromDatePicker.SelectedDate is null || toDatePicker.SelectedDate is null || locationComboBox.SelectedValue is null) return;
+
 		fromDatePicker.DisplayDateEnd = toDatePicker.SelectedDate;
 		toDatePicker.DisplayDateStart = fromDatePicker.SelectedDate;
 
-		if (fromDatePicker.SelectedDate is null || toDatePicker.SelectedDate is null || locationComboBox.SelectedValue is null) return;
 		advanceDataGrid.ItemsSource = await AdvanceData.LoadAdvancesByForDateLocation(fromDatePicker.SelectedDate.Value, toDatePicker.SelectedDate.Value, (int)locationComboBox.SelectedValue);
 	}
 
