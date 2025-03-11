@@ -9,16 +9,36 @@
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto"/>
 				<ColumnDefinition Width="Auto"/>
-				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
 
 			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="50"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 
-			<Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+			<Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*" MinWidth="200"/>
+				</Grid.ColumnDefinitions>
+
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+
+				<Label Margin="10" Padding="5" Grid.Row="0" Grid.Column="0" Content="Name"/>
+				<TextBox x:Name="nameTextBox" Margin="10" Padding="5" Grid.Row="0" Grid.Column="1" TextChanged="nameTextBox_TextChanged"/>
+
+				<CheckBox x:Name="statusCheckBox" Margin="10" Padding="5" Grid.Row="1" Grid.Column="0" Content="Status" IsChecked="True"/>
+				<Button x:Name="saveButton" Margin="10" Padding="5" Grid.Row="1" Grid.Column="1" MinWidth="120" MinHeight="40" Content="Save" HorizontalAlignment="Center"
+						IsDefault="True" Style="{DynamicResource AccentButtonStyle}" IsEnabled="False" Click="saveButton_Click"/>
+			</Grid>
+
+			<Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="*" />
@@ -28,30 +48,11 @@
 				<TextBox x:Name="searchTextBox" Grid.Row="0" Grid.Column="1" Margin="10" Padding="5" TextChanged="searchTextBox_TextChanged" />
 			</Grid>
 
-			<CheckBox x:Name="showActiveCheckBox" Content="Show Active" Grid.Row="1" Grid.Column="0" Margin="10" IsChecked="True" Checked="showCheckBox_CheckedChanged" Unchecked="showCheckBox_CheckedChanged" />
-			<CheckBox x:Name="showInactiveCheckBox" Content="Show Inactive" Grid.Row="1" Grid.Column="1" Margin="10" IsChecked="True" Checked="showCheckBox_CheckedChanged" Unchecked="showCheckBox_CheckedChanged" />
+			<CheckBox x:Name="showActiveCheckBox" Content="Show Active" Grid.Row="3" Grid.Column="0" Margin="10" IsChecked="True" Checked="showCheckBox_CheckedChanged" Unchecked="showCheckBox_CheckedChanged" />
+			<CheckBox x:Name="showInactiveCheckBox" Content="Show Inactive" Grid.Row="3" Grid.Column="1" Margin="10" IsChecked="True" Checked="showCheckBox_CheckedChanged" Unchecked="showCheckBox_CheckedChanged" />
 
-			<DataGrid x:Name="reservationDataGrid" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" Padding="5"
+			<DataGrid x:Name="reservationDataGrid" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" Padding="5"
 			  SelectedCellsChanged="reservationDataGrid_SelectedCellsChanged" IsReadOnly="True" MaxHeight="600" MinColumnWidth="100"/>
-
-			<Grid Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" VerticalAlignment="top">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto"/>
-					<ColumnDefinition Width="*"/>
-				</Grid.ColumnDefinitions>
-
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-				</Grid.RowDefinitions>
-
-				<Label Margin="10" Padding="5" Grid.Row="0" Grid.Column="0" Content="Name"/>
-				<TextBox x:Name="nameTextBox" Margin="10" Padding="5" Grid.Row="0" Grid.Column="1" TextChanged="nameTextBox_TextChanged"/>
-				<CheckBox x:Name="statusCheckBox" Margin="10" Padding="5" Grid.Row="1" Grid.Column="1" Content="Status" IsChecked="True"/>
-				<Button x:Name="saveButton" Margin="10" Padding="5" Grid.Row="2" Grid.Column="1" MinWidth="120" MinHeight="40" Content="Save" HorizontalAlignment="Center"
-						IsDefault="True" Style="{DynamicResource AccentButtonStyle}" IsEnabled="False" Click="saveButton_Click"/>
-			</Grid>
 
 		</Grid>
 	</ScrollViewer>

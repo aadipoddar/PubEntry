@@ -4,11 +4,13 @@
     @AdvanceDate DATE
 AS
 BEGIN
-
     DECLARE @CurrentDateTimeOffset DATETIMEOFFSET = SWITCHOFFSET(SYSDATETIMEOFFSET(), '+05:30');
     DECLARE @CurrentDate DATE = CAST(@CurrentDateTimeOffset AS DATE);
     DECLARE @PreviousDate DATE = DATEADD(DAY, -1, @CurrentDate);
     DECLARE @CurrentHour INT = DATEPART(HOUR, @CurrentDateTimeOffset);
+
+    DECLARE @PubOpenHour INT = CAST((SELECT [Value] FROM Settings WHERE [Key] = 'PubOpenTime') AS INT);
+    DECLARE @PubCloseHour INT = CAST((SELECT [Value] FROM Settings WHERE [Key] = 'PubCloseTime') AS INT);
 
     SELECT
         at.*
@@ -19,11 +21,10 @@ BEGIN
         AND (
             (@AdvanceDate IS NULL AND 
                 (
-                    (@CurrentHour >= DATEPART(HOUR, (SELECT [Value] FROM Settings WHERE [Key] = 'PubOpenTime')) AND at.AdvanceDate = @CurrentDate) OR
-                    (@CurrentHour < DATEPART(HOUR, (SELECT [Value] FROM Settings WHERE [Key] = 'PubCloseTime')) AND at.AdvanceDate = @PreviousDate)
+                    (@CurrentHour >= @PubOpenHour AND at.AdvanceDate = @CurrentDate) OR
+                    (@CurrentHour < @PubCloseHour AND at.AdvanceDate = @PreviousDate)
                 )
             )
             OR (@AdvanceDate IS NOT NULL AND at.AdvanceDate = @AdvanceDate)
         )
-
 END

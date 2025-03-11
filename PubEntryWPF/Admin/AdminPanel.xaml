@@ -5,50 +5,69 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PubEntryWPF.Admin"
         xmlns:common="clr-namespace:PubEntryWPF.Common"
+        xmlns:main="clr-namespace:PubEntryWPF"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
         Closed="Window_Closed" Loaded="Window_Loaded" WindowState="Maximized"
-        Title="Admin Panel" Height="650" Width="500">
-    <Grid>
+        Title="Admin Panel">
+	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
-		
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="150" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
 
-            <ScrollViewer Grid.Column="0" HorizontalAlignment="Left">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+		<Grid Grid.Row="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*" />
+			</Grid.ColumnDefinitions>
 
-                    <Button Content="Transactions" Grid.Row="0" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="manageTransactionButton_Click" />
-					<Button Content="Update Advance" Grid.Row="1" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="updateAdvanceButton_Click" />
-					<Button Content="Users" Grid.Row="2" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="manageUsersButton_Click" />
-					<Button Content="Locations" Grid.Row="3" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="manageLocationsButton_Click" />
-					<Button Content="Payment Modes" Grid.Row="4" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="managePaymentModeButton_Click" />
-					<Button Content="Reservations" Grid.Row="5" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="manageReservationsButton_Click" />
-					<Button Content="Persons" Grid.Row="6" Margin="10" Padding="5" MinWidth="120" MinHeight="40" Click="managePersonButton_Click" />
-					
-					<Button Content="SQL Editor" Grid.Row="8" Margin="10" Padding="5" MinWidth="120" Click="sqlEditorButton_Click" />
-					<Button Content="Settings" Grid.Row="9" Margin="10" Padding="5" MinWidth="120" Click="manageUsersButton_Click" VerticalAlignment="Bottom"/>
-                </Grid>
+			<ScrollViewer Grid.Column="0" HorizontalScrollBarVisibility="Auto">
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="*"/>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="Auto"/>
+					</Grid.RowDefinitions>
+
+					<!-- Buttons set to stretch horizontally -->
+					<Button Content="Transactions" Grid.Row="0" Margin="10" Padding="5" MinWidth="120" MinHeight="40" HorizontalAlignment="Stretch" Click="manageTransactionButton_Click" />
+					<Button Content="Update Advance" Grid.Row="1" Margin="10" Padding="5" MinWidth="120" MinHeight="40" HorizontalAlignment="Stretch" Click="updateAdvanceButton_Click" />
+					<Button Content="Users" Grid.Row="2" Margin="10" Padding="5" MinWidth="120" MinHeight="40" HorizontalAlignment="Stretch" Click="manageUsersButton_Click" />
+					<Button Content="Locations" Grid.Row="3" Margin="10" Padding="5" MinWidth="120" MinHeight="40" HorizontalAlignment="Stretch" Click="manageLocationsButton_Click" />
+					<Button Content="Payment Modes" Grid.Row="4" Margin="10" Padding="5" MinWidth="120" MinHeight="40" HorizontalAlignment="Stretch" Click="managePaymentModeButton_Click" />
+					<Button Content="Reservations" Grid.Row="5" Margin="10" Padding="5" MinWidth="120" MinHeight="40" HorizontalAlignment="Stretch" Click="manageReservationsButton_Click" />
+					<Button Content="Persons" Grid.Row="6" Margin="10" Padding="5" MinWidth="120" MinHeight="40" HorizontalAlignment="Stretch" Click="managePersonButton_Click" />
+
+					<Button Content="SQL Editor" Grid.Row="8" Margin="10" Padding="5" MinWidth="120" HorizontalAlignment="Stretch" Click="sqlEditorButton_Click" />
+					<Button Content="Settings" Grid.Row="9" Margin="10" Padding="5" MinWidth="120" HorizontalAlignment="Stretch" Click="settingsButton_Click" VerticalAlignment="Bottom"/>
+				</Grid>
 			</ScrollViewer>
 
-			<Frame Grid.Column="1" x:Name="mainFrame" />
+			<GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"
+                          ResizeDirection="Columns" ResizeBehavior="PreviousAndNext">
+				<GridSplitter.Style>
+					<Style TargetType="GridSplitter">
+						<Style.Triggers>
+							<DataTrigger Binding="{Binding Source={x:Static main:App.IsLightTheme}}" Value="True">
+								<Setter Property="Background" Value="#ffdddddd"/>
+							</DataTrigger>
+							<DataTrigger Binding="{Binding Source={x:Static main:App.IsLightTheme}}" Value="False">
+								<Setter Property="Background" Value="#ff313131"/>
+							</DataTrigger>
+						</Style.Triggers>
+					</Style>
+				</GridSplitter.Style>
+			</GridSplitter>
+
+			<Frame Grid.Column="2" x:Name="mainFrame" />
 		</Grid>
 
 		<common:FooterControl Grid.Row="1"/>

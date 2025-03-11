@@ -9,16 +9,42 @@
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto"/>
 				<ColumnDefinition Width="Auto"/>
-				<ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
 
 			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="50"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 
-			<Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+			<Grid Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+
+				<Label Margin="10" Padding="5" Grid.Row="0" Grid.Column="0" Content="Name"/>
+				<TextBox x:Name="nameTextBox" Margin="10" Padding="5" Grid.Row="0" Grid.Column="1" TextChanged="nameTextBox_TextChanged" />
+
+				<Label Margin="10" Padding="5" Grid.Row="1" Grid.Column="0" Content="Number"/>
+				<TextBox x:Name="numberTextBox" Margin="10" Padding="5" Grid.Row="1" Grid.Column="1" TextChanged="nameTextBox_TextChanged" PreviewTextInput="textBox_PreviewTextInput" MaxLength="10"/>
+
+				<CheckBox x:Name="loyaltyCheckBox" Margin="10" Padding="5" Grid.Row="0" Grid.Column="2" Content="Loyalty"/>
+
+				<Button x:Name="saveButton" Margin="10" Padding="5" Grid.Row="1" Grid.Column="2" MinWidth="120" MinHeight="40" Content="Save"
+						IsDefault="True" Style="{DynamicResource AccentButtonStyle}" IsEnabled="False" Click="saveButton_Click"/>
+			</Grid>
+
+			<Grid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*"/>
 					<ColumnDefinition Width="*"/>
@@ -36,7 +62,7 @@
 				<TextBox x:Name="searchNumberTextBox" Grid.Row="1" Grid.Column="1" Margin="10" Padding="5" TextChanged="searchTextBox_TextChanged" PreviewTextInput="textBox_PreviewTextInput" />
 			</Grid>
 
-			<Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
+			<Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto"/>
 					<ColumnDefinition Width="Auto"/>
@@ -48,35 +74,8 @@
 				<CheckBox x:Name="showNonLoyaltyCheckBox" Content="Show Non Loyalty" Grid.Column="1" Margin="10" IsChecked="True" Checked="showCheckBox_CheckedChanged" Unchecked="showCheckBox_CheckedChanged" />
 			</Grid>
 
-			<DataGrid x:Name="personDataGrid" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" Padding="5"
-		  SelectedCellsChanged="personDataGrid_SelectedCellsChanged" IsReadOnly="True" MaxHeight="600" MinColumnWidth="100"/>
-
-			<Grid Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" VerticalAlignment="top">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="Auto"/>
-					<ColumnDefinition Width="Auto"/>
-					<ColumnDefinition Width="*"/>
-				</Grid.ColumnDefinitions>
-
-				<Grid.RowDefinitions>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-					<RowDefinition Height="Auto"/>
-				</Grid.RowDefinitions>
-
-				<Label Margin="10" Padding="5" Grid.Row="0" Grid.Column="0" Content="Name"/>
-				<TextBox x:Name="nameTextBox" Margin="10" Padding="5" Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" TextChanged="nameTextBox_TextChanged" />
-
-				<Label Margin="10" Padding="5" Grid.Row="1" Grid.Column="0" Content="Number"/>
-				<TextBox x:Name="numberTextBox" Margin="10" Padding="5" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" TextChanged="nameTextBox_TextChanged" PreviewTextInput="textBox_PreviewTextInput" MaxLength="10"/>
-
-				<CheckBox x:Name="loyaltyCheckBox" Margin="10" Padding="5" Grid.Row="2" Grid.Column="1" Content="Loyalty"/>
-
-				<Button x:Name="saveButton" Margin="10" Padding="5" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" MinWidth="120" MinHeight="40" Content="Save" HorizontalAlignment="Center"
-				IsDefault="True" Style="{DynamicResource AccentButtonStyle}" IsEnabled="False" Click="saveButton_Click"/>
-			</Grid>
+			<DataGrid x:Name="personDataGrid" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" Padding="5"
+				SelectedCellsChanged="personDataGrid_SelectedCellsChanged" IsReadOnly="True" MaxHeight="600" MinColumnWidth="100"/>
 
 		</Grid>
 	</ScrollViewer>
