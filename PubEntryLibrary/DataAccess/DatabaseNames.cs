@@ -59,4 +59,5 @@ public static class StoredProcedureNames
 
 	public static string LoadSettingsByKey => "Load_Settings_By_Key";
 	public static string UpdateSettings => "Update_Settings";
+	public static string ResetSettings => "Reset_Settings";
 }

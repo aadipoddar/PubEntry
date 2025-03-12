@@ -24,4 +24,11 @@ static class SqlDataAccess
 
 		await connection.ExecuteAsync(storedProcedure, parameters, commandType: CommandType.StoredProcedure);
 	}
+
+	public static async Task ExecuteProcedure(string storedProcedure)
+	{
+		using IDbConnection connection = new SqlConnection(ConnectionStrings.Local);
+
+		await connection.ExecuteAsync(storedProcedure, commandType: CommandType.StoredProcedure);
+	}
 }
