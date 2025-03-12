@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace PubEntryWPF.Transaction.Advance;
 
@@ -47,31 +48,99 @@ public partial class AdvancePage : Window
 		bookingDatePicker.DisplayDateStart = DateTime.Now;
 	}
 
-	private async void numberTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+	private bool _isUpdating = false;
+
+	private async void numberTextBox_TextChanged(object sender, TextChangedEventArgs e)
 	{
+		if (_isUpdating) return;
+		_isUpdating = true;
+
+		var previousName = nameTextBox.Text;
+
 		var foundPerson = await PersonData.LoadPersonByNumber(numberTextBox.Text);
+
 		if (foundPerson is not null)
 		{
 			nameTextBox.Text = foundPerson.Name;
-			nameTextBox.IsReadOnly = true;
 			loyaltyCheckBox.IsChecked = foundPerson.Loyalty;
 		}
-
 		else
 		{
-			nameTextBox.Text = string.Empty;
-			nameTextBox.IsReadOnly = false;
+			nameTextBox.Text = previousName;
 			loyaltyCheckBox.IsChecked = false;
 		}
 
 		await LoadPersonAdvance();
+		_isUpdating = false;
+	}
+
+	private async void nameTextBox_TextChanged(object sender, TextChangedEventArgs e)
+	{
+		if (_isUpdating) return;
+		_isUpdating = true;
+
+		var previousNumber = numberTextBox.Text;
+
+		var foundPersons = await PersonData.LoadPersonByName(nameTextBox.Text);
+
+		if (foundPersons.Count > 0)
+		{
+			if (foundPersons.Count > 1)
+			{
+				numberTextBox.Visibility = Visibility.Hidden;
+				numberComboBox.Visibility = Visibility.Visible;
+				numberComboBox.ItemsSource = foundPersons;
+				numberComboBox.DisplayMemberPath = nameof(PersonModel.Number);
+				numberComboBox.SelectedValuePath = nameof(PersonModel.Number);
+				numberComboBox.SelectedIndex = 0;
+			}
+			else
+			{
+				numberTextBox.Visibility = Visibility.Visible;
+				numberComboBox.Visibility = Visibility.Hidden;
+				numberTextBox.Text = foundPersons[0].Number;
+				loyaltyCheckBox.IsChecked = foundPersons[0].Loyalty;
+			}
+		}
+		else
+		{
+			numberTextBox.Visibility = Visibility.Visible;
+			numberComboBox.Visibility = Visibility.Hidden;
+			numberTextBox.Text = previousNumber;
+			loyaltyCheckBox.IsChecked = false;
+		}
+
+		await LoadPersonAdvance();
+		_isUpdating = false;
+	}
+
+	private async void numberComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+	{
+		if (_isUpdating) return;
+		_isUpdating = true;
+
+		if (numberComboBox.Visibility == Visibility.Visible && numberComboBox.SelectedValue != null)
+		{
+			string selectedNumber = numberComboBox.SelectedValue.ToString();
+			var foundPerson = await PersonData.LoadPersonByNumber(selectedNumber);
+			if (foundPerson is not null)
+				loyaltyCheckBox.IsChecked = foundPerson.Loyalty;
+
+			await LoadPersonAdvance();
+		}
+
+		_isUpdating = false;
 	}
 
 	private async void bookingDatePicker_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) => await LoadPersonAdvance();
 
 	private async Task LoadPersonAdvance()
 	{
-		var foundPerson = await PersonData.LoadPersonByNumber(numberTextBox.Text);
+		PersonModel foundPerson;
+		if (numberComboBox.Visibility == Visibility.Visible && !_isUpdating)
+			foundPerson = await PersonData.LoadPersonByNumber(numberComboBox.SelectedValue.ToString());
+		else foundPerson = await PersonData.LoadPersonByNumber(numberTextBox.Text);
+
 		if (foundPerson is not null)
 		{
 			var foundAdvance = await AdvanceData.LoadAdvanceByDateLocationPerson(
@@ -160,7 +229,7 @@ public partial class AdvancePage : Window
 
 	private bool ValidateForm()
 	{
-		if (string.IsNullOrEmpty(numberTextBox.Text)) return false;
+		if (string.IsNullOrEmpty(numberTextBox.Text) && numberComboBox.Visibility == Visibility.Hidden) return false;
 		if (string.IsNullOrEmpty(nameTextBox.Text)) return false;
 		if (string.IsNullOrEmpty(bookingTextBox.Text)) bookingTextBox.Text = "0";
 
@@ -187,7 +256,7 @@ public partial class AdvancePage : Window
 
 		else await InsertAdvanceDetail(await InsertAdvance());
 
-		ClearForm();
+		await ClearForm();
 	}
 
 	private async Task<int> InsertAdvance()
@@ -196,12 +265,17 @@ public partial class AdvancePage : Window
 		{
 			Id = 0,
 			Name = nameTextBox.Text,
-			Number = numberTextBox.Text,
+			Number = numberComboBox.Visibility == Visibility.Visible ? numberComboBox.SelectedValue.ToString() : numberTextBox.Text,
 			Loyalty = (bool)loyaltyCheckBox.IsChecked
 		};
 
-		if (!nameTextBox.IsReadOnly) personModel.Id = await PersonData.InsertPerson(personModel);
-		personModel.Id = await PersonData.UpdatePerson(personModel);
+		PersonModel foundPerson;
+		if (numberComboBox.Visibility == Visibility.Visible && !_isUpdating)
+			foundPerson = await PersonData.LoadPersonByNumber(numberComboBox.SelectedValue.ToString());
+		else foundPerson = await PersonData.LoadPersonByNumber(numberTextBox.Text);
+
+		if (foundPerson is null) personModel.Id = await PersonData.InsertPerson(personModel);
+		else personModel.Id = await PersonData.UpdatePerson(personModel);
 
 		return await AdvanceData.InsertAdvance(new AdvanceModel
 		{
@@ -249,10 +323,17 @@ public partial class AdvancePage : Window
 		await InsertAdvanceDetail(_foundAdvanceId);
 	}
 
-	private void ClearForm()
+	private async Task ClearForm()
 	{
-		numberTextBox.Clear();
+		numberTextBox.Visibility = Visibility.Visible;
+		numberComboBox.Visibility = Visibility.Hidden;
+		_isUpdating = true;
+		nameTextBox.Clear();
 		numberTextBox.Focus();
+		numberTextBox.Clear();
+		_isUpdating = false;
+
+		await LoadPersonAdvance();
 	}
 
 	#endregion

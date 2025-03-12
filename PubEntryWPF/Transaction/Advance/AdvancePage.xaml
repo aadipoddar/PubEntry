@@ -7,7 +7,7 @@
         xmlns:common="clr-namespace:PubEntryWPF.Common"
         mc:Ignorable="d" Title="Advance" WindowStartupLocation="CenterScreen"
 		Closed="Window_Closed" Loaded="Window_Loaded"
-		Height="500" Width="600" Icon="/Golder Park.jpg">
+		Height="550" Width="600" Icon="/Golder Park.jpg">
 	<Grid>
 		<Grid HorizontalAlignment="Center">
 			<Grid.ColumnDefinitions>
@@ -30,19 +30,26 @@
 			</Grid.RowDefinitions>
 
 			<!--#region Person -->
-			<StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Orientation="Horizontal" Margin="10">
-				<StackPanel>
-					<TextBlock Margin="10" Padding="5" Text="Mobile" />
-					<TextBlock Margin="10" Padding="5" Text="Name" />
-				</StackPanel>
+			<Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="10">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
 
-				<StackPanel>
-					<TextBox x:Name="numberTextBox" Margin="10" Padding="5" PreviewTextInput="textBox_PreviewTextInput" MaxLength="10" MaxWidth="150" MinWidth="100" TextChanged="numberTextBox_TextChanged"/>
-					<TextBox x:Name="nameTextBox" Margin="10" Padding="5" MaxLength="250"  MaxWidth="150" TextWrapping="Wrap" />
-				</StackPanel>
-			</StackPanel>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
 
-			<CheckBox x:Name="loyaltyCheckBox" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" Padding="5" Content="Loyalty" HorizontalAlignment="Center" />
+				<Label Grid.Row="0" Grid.Column="0" Margin="10" Padding="5" Content="Mobile" />
+				<TextBox x:Name="numberTextBox" Grid.Row="0" Grid.Column="1" Margin="10" Padding="5" PreviewTextInput="textBox_PreviewTextInput" MaxLength="10" MaxWidth="150" MinWidth="100" TextChanged="numberTextBox_TextChanged"/>
+				<ComboBox x:Name="numberComboBox" Grid.Row="0" Grid.Column="1" Margin="10" Padding="5" Visibility="Hidden" SelectionChanged="numberComboBox_SelectionChanged" />
+
+				<Label Grid.Row="1" Grid.Column="0" Margin="10" Padding="5" Content="Name" />
+				<TextBox x:Name="nameTextBox" Grid.Row="1" Grid.Column="1" Margin="10" Padding="5" MaxLength="250" MaxWidth="150" TextWrapping="Wrap" TextChanged="nameTextBox_TextChanged" />
+			</Grid>
+
+			<CheckBox x:Name="loyaltyCheckBox" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" Padding="5" Content="Loyalty" HorizontalAlignment="Center" />
 			<!--#endregion-->
 
 			<!--#region Booking Remarks-->

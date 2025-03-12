@@ -12,7 +12,7 @@ public partial class SettingsPage : Page
 {
 	public SettingsPage() => InitializeComponent();
 
-	private async void Page_Loaded(object sender, System.Windows.RoutedEventArgs e) => await LoadData();
+	private async void Page_Loaded(object sender, RoutedEventArgs e) => await LoadData();
 
 	private async Task LoadData()
 	{

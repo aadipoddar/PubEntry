@@ -45,8 +45,7 @@ public static class StoredProcedureNames
 	public static string InsertPerson => "Insert_Person";
 	public static string InsertReservationType => "Insert_ReservationType";
 	public static string InsertUser => "Insert_User";
-	public static string LoadPersonByNumber => "Load_Person_By_Number";
-	public static string LoadUsersByLocationId => "Load_Users_By_LocationId";
+
 	public static string UpdateLocation => "Update_Location";
 	public static string UpdatePaymentMode => "Update_PaymentMode";
 	public static string UpdatePerson => "Update_Person";
@@ -56,6 +55,9 @@ public static class StoredProcedureNames
 	public static string LoadTableData => "Load_TableData";
 	public static string LoadTableDataById => "Load_TableData_By_Id";
 	public static string LoadTableDataByStatus => "Load_TableData_By_Status";
+	public static string LoadPersonByNumber => "Load_Person_By_Number";
+	public static string LoadPersonByName => "Load_Person_By_Name";
+	public static string LoadUsersByLocationId => "Load_Users_By_LocationId";
 
 	public static string LoadSettingsByKey => "Load_Settings_By_Key";
 	public static string UpdateSettings => "Update_Settings";
