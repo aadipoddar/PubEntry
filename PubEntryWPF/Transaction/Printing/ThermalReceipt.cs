@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Documents;
 
+using NumericWordsConversion;
+
 namespace PubEntryWPF.Transaction.Printing;
 
 internal static class ThermalReceipt
@@ -110,6 +112,15 @@ internal static class ThermalReceipt
 			paymentTable.RowGroups.Add(paymentGroup);
 			document.Blocks.Add(paymentTable);
 		}
+
+		CurrencyWordsConverter numericWords = new(new()
+		{
+			Culture = Culture.Hindi,
+			OutputFormat = OutputFormat.English
+		});
+		string words = numericWords.ToWords(receiptModel.Cash + receiptModel.Card + receiptModel.UPI + receiptModel.Amex);
+		document.Blocks.Add(ThermalParagraphs.FooterParagraph($"{words}Rupees Only", true));
+
 		document.Blocks.Add(ThermalParagraphs.SeparatorParagraph());
 	}
 

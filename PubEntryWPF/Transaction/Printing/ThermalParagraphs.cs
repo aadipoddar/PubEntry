@@ -93,10 +93,11 @@ internal static class ThermalParagraphs
 		};
 	}
 
-	internal static Paragraph FooterParagraph(string text)
+	internal static Paragraph FooterParagraph(string text, bool textCenter = false)
 	{
 		return new(new Run(text))
 		{
+			TextAlignment = textCenter ? TextAlignment.Center : TextAlignment.Left,
 			FontSize = FooterFontSizeThermal,
 			FontFamily = FooterFontFamilyThermal,
 			Margin = new Thickness(FooterFontPaddingLeftThermal, FooterFontPaddingTopThermal, FooterFontPaddingRightThermal, FooterFontPaddingBottomThermal),

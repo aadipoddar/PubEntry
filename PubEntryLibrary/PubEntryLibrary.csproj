@@ -9,8 +9,8 @@
   <ItemGroup>
     <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.1" />
-    <PackageReference Include="Syncfusion.Pdf.NET" Version="28.2.6" />
-    <PackageReference Include="Syncfusion.XlsIO.NET" Version="28.2.6" />
+    <PackageReference Include="Syncfusion.Pdf.NET" Version="28.2.11" />
+    <PackageReference Include="Syncfusion.XlsIO.NET" Version="28.2.11" />
   </ItemGroup>
 
   <ItemGroup>

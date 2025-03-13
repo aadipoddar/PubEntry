@@ -22,10 +22,8 @@
 
   <ItemGroup>
     <PackageReference Include="AadiSoft.Updater" Version="1.0.3" />
-    <PackageReference Include="Syncfusion.Edit.WPF" Version="28.2.7" />
-    <PackageReference Include="Syncfusion.SfGrid.WPF" Version="28.2.7" />
-    <PackageReference Include="Syncfusion.SfSkinManager.WPF" Version="28.2.7" />
-    <PackageReference Include="Syncfusion.Shared.WPF" Version="28.2.9" />
+    <PackageReference Include="NumericWordsConversion" Version="2.1.1" />
+    <PackageReference Include="Syncfusion.Edit.WPF" Version="28.2.11" />
   </ItemGroup>
 
   <ItemGroup>
