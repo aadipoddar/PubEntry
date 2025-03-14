@@ -259,7 +259,11 @@ public partial class UpdateTransactionPage : Page
 		else foundPerson = await PersonData.LoadPersonByNumber(numberTextBox.Text);
 
 		if (foundPerson is null) personModel.Id = await PersonData.InsertPerson(personModel);
-		else personModel.Id = await PersonData.UpdatePerson(personModel);
+		else
+		{
+			personModel.Id = foundPerson.Id;
+			await PersonData.UpdatePerson(personModel);
+		}
 
 		await TransactionData.UpdateTransaction(new TransactionModel
 		{

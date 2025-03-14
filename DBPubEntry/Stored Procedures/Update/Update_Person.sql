@@ -9,8 +9,8 @@ BEGIN
     UPDATE Person
     SET
         Name = @Name,
+        Number = @Number,
         Loyalty = @Loyalty
-	OUTPUT INSERTED.Id
-    WHERE Number = @Number;
+    WHERE Id = @Id;
 
 END;

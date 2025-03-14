@@ -12,8 +12,8 @@ static class SqlDataAccess
 	{
 		using IDbConnection connection = new SqlConnection(ConnectionStrings.Local);
 
-		List<T> rows = [.. (await connection.QueryAsync<T>(storedProcedure, parameters,
-			commandType: CommandType.StoredProcedure))];
+		List<T> rows = [.. await connection.QueryAsync<T>(storedProcedure, parameters,
+			commandType: CommandType.StoredProcedure)];
 
 		return rows;
 	}

@@ -60,15 +60,9 @@ public partial class PersonPage : Page
 	private void UpdateButtonField()
 	{
 		if (personDataGrid.SelectedItem is null)
-		{
 			saveButton.Content = "Save";
-			numberTextBox.IsEnabled = true;
-		}
 		else
-		{
 			saveButton.Content = "Update";
-			numberTextBox.IsEnabled = false;
-		}
 
 		if (!string.IsNullOrEmpty(nameTextBox.Text) && !string.IsNullOrEmpty(numberTextBox.Text)) saveButton.IsEnabled = true;
 		else saveButton.IsEnabled = false;
@@ -124,11 +118,9 @@ public partial class PersonPage : Page
 			Loyalty = (bool)loyaltyCheckBox.IsChecked
 		};
 
-		// TODO - Enable Stored Procedure to Update Number as well
-
 		if (personDataGrid.SelectedItem is PersonModel selectedPerson)
 		{
-			var foundPerson = (await CommonData.LoadTableData<PersonModel>(TableNames.Person)).FirstOrDefault(_ => _.Number == personModel.Number);
+			var foundPerson = await PersonData.LoadPersonByNumber(personModel.Number);
 			if (foundPerson is not null && foundPerson.Id != selectedPerson.Id)
 			{
 				MessageBox.Show("Number already exists", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -140,7 +132,7 @@ public partial class PersonPage : Page
 		}
 		else
 		{
-			if ((await CommonData.LoadTableData<PersonModel>(TableNames.Person)).FirstOrDefault(_ => _.Number == personModel.Number) is not null)
+			if (await PersonData.LoadPersonByNumber(personModel.Number) is not null)
 			{
 				MessageBox.Show("Number already exists", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 				return;

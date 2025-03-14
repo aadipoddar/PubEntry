@@ -90,9 +90,9 @@ internal static class ThermalReceipt
 
 	private static void AddPaymentDetails(FlowDocument document, TransactionPrintModel receiptModel, int advance)
 	{
-		document.Blocks.Add(ThermalParagraphs.SubHeaderParagraph($"Total: {receiptModel.Cash + receiptModel.Card + receiptModel.UPI + receiptModel.Amex}"));
+		document.Blocks.Add(ThermalParagraphs.SubHeaderParagraph($"Total: {receiptModel.Cash + receiptModel.Card + receiptModel.UPI + receiptModel.Amex + advance}"));
 
-		if (receiptModel.Cash + receiptModel.Card + receiptModel.UPI + receiptModel.Amex != 0)
+		if (receiptModel.Cash + receiptModel.Card + receiptModel.UPI + receiptModel.Amex + advance != 0)
 		{
 			Table paymentTable = new()
 			{
@@ -118,7 +118,7 @@ internal static class ThermalReceipt
 			Culture = Culture.Hindi,
 			OutputFormat = OutputFormat.English
 		});
-		string words = numericWords.ToWords(receiptModel.Cash + receiptModel.Card + receiptModel.UPI + receiptModel.Amex);
+		string words = numericWords.ToWords(receiptModel.Cash + receiptModel.Card + receiptModel.UPI + receiptModel.Amex + advance);
 		document.Blocks.Add(ThermalParagraphs.FooterParagraph($"{words}Rupees Only", true));
 
 		document.Blocks.Add(ThermalParagraphs.SeparatorParagraph());

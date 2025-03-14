@@ -143,7 +143,7 @@ public partial class UpdateAdvance
 	private async Task InsertPerson()
 	{
 		if (PersonModel.Id == 0) PersonModel.Id = await PersonData.InsertPerson(PersonModel);
-		PersonModel.Id = await PersonData.UpdatePerson(PersonModel);
+		await PersonData.UpdatePerson(PersonModel);
 	}
 
 	private async Task UpdateAdvanceMain() => await AdvanceData.UpdateAdvance(AdvanceModel);
