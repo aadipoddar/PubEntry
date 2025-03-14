@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 
 using PubEntryWPF.Common;
+using PubEntryWPF.Reports;
 
 namespace PubEntryWPF;
 
@@ -97,7 +98,7 @@ public partial class Dashboard : Window
 			return;
 		}
 
-		Transaction.TransactionPage transaction = new(this, int.Parse(locationComboBox.SelectedValue.ToString()), int.Parse(userComboBox.SelectedValue.ToString()));
+		Transaction.TransactionWindow transaction = new(this, int.Parse(locationComboBox.SelectedValue.ToString()), int.Parse(userComboBox.SelectedValue.ToString()));
 		Hide();
 		transaction.ShowDialog();
 	}
@@ -110,14 +111,15 @@ public partial class Dashboard : Window
 			return;
 		}
 
-		Transaction.Advance.AdvancePage advance = new(this, int.Parse(locationComboBox.SelectedValue.ToString()), int.Parse(userComboBox.SelectedValue.ToString()));
+		Transaction.Advance.AdvanceWindow advance = new(this, int.Parse(locationComboBox.SelectedValue.ToString()), int.Parse(userComboBox.SelectedValue.ToString()));
 		Hide();
 		advance.ShowDialog();
 	}
 
 	private void reportsButton_Click(object sender, RoutedEventArgs e)
 	{
-
+		ReportWindow reportWindow = new();
+		reportWindow.Show();
 	}
 
 	private void adminButton_Click(object sender, RoutedEventArgs e)

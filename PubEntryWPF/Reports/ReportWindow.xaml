@@ -1,0 +1,60 @@
+﻿<Window x:Class="PubEntryWPF.Reports.ReportWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PubEntryWPF.Reports"
+        mc:Ignorable="d" WindowState="Maximized"
+        Title="Reports" Height="450" Width="800"
+		Loaded="Window_Loaded">
+	<ScrollViewer HorizontalScrollBarVisibility="Visible">
+		<Grid>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="*" />
+			</Grid.RowDefinitions>
+
+			<Grid Grid.Row="0" HorizontalAlignment="Center">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+
+				<Label Grid.Row="0" Grid.Column="0" Margin="5" Padding="5" Content="From" />
+				<Label Grid.Row="0" Grid.Column="1" Margin="5" Padding="5" Content="To" />
+
+				<DatePicker x:Name="fromDatePicker" Grid.Row="1" Grid.Column="0" Margin="10" Padding="5" SelectedDateChanged="values_SelectionChanged" />
+				<DatePicker x:Name="toDatePicker" Grid.Row="1" Grid.Column="1" Margin="10" Padding="5" SelectedDateChanged="values_SelectionChanged"/>
+
+				<Grid Grid.Row="2">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
+
+					<ComboBox x:Name="fromTimePicker" Grid.Column="0" Margin="10,10,0,10" Padding="5" MinWidth="70" SelectionChanged="values_SelectionChanged"/>
+					<ComboBox x:Name="fromSlotPicker" Grid.Column="1" Margin="0,10,10,10" Padding="5" SelectionChanged="values_SelectionChanged"/>
+				</Grid>
+
+				<Grid Grid.Row="2" Grid.Column="1">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
+
+					<ComboBox x:Name="toTimePicker" Grid.Column="0" Margin="10,10,0,10" Padding="5" MinWidth="70" SelectionChanged="values_SelectionChanged"/>
+					<ComboBox x:Name="toSlotPicker" Grid.Column="1" Margin="0,10,10,10" Padding="5" SelectionChanged="values_SelectionChanged"/>
+				</Grid>
+
+			</Grid>
+
+			<Grid Grid.Row="1" Margin="20" x:Name="expanderGrid" />
+		</Grid>
+	</ScrollViewer>
+</Window>
