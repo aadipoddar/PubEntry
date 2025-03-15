@@ -4,9 +4,120 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PubEntryWPF.Reports"
-        mc:Ignorable="d"
-        Title="DetailedReportWindow" Height="450" Width="800">
+	    xmlns:common="clr-namespace:PubEntryWPF.Common"
+        mc:Ignorable="d" WindowState="Maximized"
+        Title="Detailed Report" Height="450" Width="800"
+        Loaded="Window_Loaded">
+
+	<Window.Resources>
+		<RoutedUICommand x:Key="RefreshData" Text="RefreshData" />
+		<RoutedUICommand x:Key="PrintPDF" Text="PrintPDF" />
+		<RoutedUICommand x:Key="ExportExcel" Text="ExportExcel" />
+	</Window.Resources>
+
+    <Window.CommandBindings>
+		<CommandBinding Command="{StaticResource RefreshData}" Executed="RefreshData"/>
+		<CommandBinding Command="{StaticResource PrintPDF}" Executed="PrintPDF"/>
+		<CommandBinding Command="{StaticResource ExportExcel}" Executed="ExportExcel"/>
+    </Window.CommandBindings>
+
+    <Window.InputBindings>
+        <KeyBinding Key="F5" Command="{StaticResource RefreshData}"/>
+		<KeyBinding Key="P" Modifiers="Ctrl" Command="{StaticResource PrintPDF}"/>
+		<KeyBinding Key="E" Modifiers="Ctrl" Command="{StaticResource ExportExcel}"/>
+    </Window.InputBindings>
+
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ScrollViewer HorizontalScrollBarVisibility="Visible" Grid.Row="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Row="0" Grid.Column="0" Margin="5" Padding="5" Content="From" />
+                    <Label Grid.Row="0" Grid.Column="1" Margin="5" Padding="5" Content="To" />
+
+                    <DatePicker x:Name="fromDatePicker" Grid.Row="1" Grid.Column="0" Margin="10" Padding="5" SelectedDateChanged="values_SelectionChanged" />
+                    <DatePicker x:Name="toDatePicker" Grid.Row="1" Grid.Column="1" Margin="10" Padding="5" SelectedDateChanged="values_SelectionChanged"/>
+
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <ComboBox x:Name="fromTimePicker" Grid.Column="0" Margin="10,10,0,10" Padding="5" MinWidth="70" SelectionChanged="values_SelectionChanged"/>
+                        <ComboBox x:Name="fromSlotPicker" Grid.Column="1" Margin="0,10,10,10" Padding="5" SelectionChanged="values_SelectionChanged"/>
+                    </Grid>
+
+                    <Grid Grid.Row="2" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <ComboBox x:Name="toTimePicker" Grid.Column="0" Margin="10,10,0,10" Padding="5" MinWidth="70" SelectionChanged="values_SelectionChanged"/>
+                        <ComboBox x:Name="toSlotPicker" Grid.Column="1" Margin="0,10,10,10" Padding="5" SelectionChanged="values_SelectionChanged"/>
+                    </Grid>
+
+                </Grid>
+
+                <ComboBox x:Name="locationComboBox" Grid.Row="1" HorizontalAlignment="Center" Margin="10" Padding="5" MinWidth="150" SelectionChanged="locationComboBox_SelectionChanged" />
+
+                <Grid Grid.Row="2" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+					<Button x:Name="refreshButton" Content="Refresh (F5)" Command="{StaticResource RefreshData}" Margin="10" Padding="5" Grid.Column="0" MinHeight="40" MinWidth="100"/>
+
+					<Button x:Name="pdfButton" Content="Detailed PDF (Ctrl + P)" Command="{StaticResource PrintPDF}" Margin="10" Padding="5" Grid.Column="1" MinHeight="40" MinWidth="200"/>
+
+					<Button x:Name="excelButton" Content="Detailed Excel (Ctrl + E)" Command="{StaticResource ExportExcel}" Margin="10" Padding="5" Grid.Column="2" MinHeight="40" MinWidth="200"
+                             IsDefault="True" Style="{DynamicResource AccentButtonStyle}"/>
+
+                    <Button x:Name="loadTransactionButton" Content="Load Transaction Details" Margin="10" Padding="5" Grid.Column="3" MinHeight="40" MinWidth="200"
+                        Click="loadTransactionButton_Click" Visibility="Collapsed" />
+                </Grid>
+
+                <TextBlock Text="Transaction Details" Grid.Row="3" Margin="10" HorizontalAlignment="Center" FontSize="30" />
+
+                <DataGrid x:Name="transactionDataGrid" Grid.Row="4" Margin="10" Padding="5" SelectionMode="Single" HorizontalAlignment="Center"
+                    SelectedCellsChanged="transactionDataGrid_SelectedCellsChanged" IsReadOnly="True" MinHeight="200" MaxHeight="500" MinColumnWidth="100"/>
+
+                <TextBlock Text="Advance Details" Grid.Row="5" Margin="10" HorizontalAlignment="Center" FontSize="30" />
+
+                <DataGrid x:Name="advanceDataGrid" Grid.Row="6" Margin="10" Padding="5" SelectionMode="Single" HorizontalAlignment="Center"
+                    SelectedCellsChanged="advanceDataGrid_SelectedCellsChanged" IsReadOnly="True" MinHeight="200" MaxHeight="500" MinColumnWidth="100"/>
+            </Grid>
+        </ScrollViewer>
+
+        <common:FooterControl Grid.Row="1"/>
     </Grid>
 </Window>

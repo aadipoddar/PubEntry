@@ -51,7 +51,7 @@
 			<CheckBox x:Name="showActiveCheckBox" Content="Show Active" Grid.Row="3" Grid.Column="0" Margin="10" IsChecked="True" Checked="showCheckBox_CheckedChanged" Unchecked="showCheckBox_CheckedChanged" />
 			<CheckBox x:Name="showInactiveCheckBox" Content="Show Inactive" Grid.Row="3" Grid.Column="1" Margin="10" IsChecked="True" Checked="showCheckBox_CheckedChanged" Unchecked="showCheckBox_CheckedChanged" />
 
-			<DataGrid x:Name="reservationDataGrid" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" Padding="5"
+			<DataGrid x:Name="reservationDataGrid" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" Padding="5" SelectionMode="Single"
 			  SelectedCellsChanged="reservationDataGrid_SelectedCellsChanged" IsReadOnly="True" MaxHeight="600" MinColumnWidth="100"/>
 
 		</Grid>

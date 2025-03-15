@@ -80,7 +80,7 @@
 				<CheckBox x:Name="showNonAdminCheckBox" Content="Show Non Admin" Grid.Column="3" Margin="10" IsChecked="True" Checked="showCheckBox_CheckedChanged" Unchecked="showCheckBox_CheckedChanged" />
 			</Grid>
 
-			<DataGrid x:Name="userDataGrid" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" Padding="5"
+			<DataGrid x:Name="userDataGrid" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" Padding="5" SelectionMode="Single"
 			  SelectedCellsChanged="userDataGrid_SelectedCellsChanged" IsReadOnly="True" MaxHeight="600" MinColumnWidth="100"/>
 		</Grid>
 	</ScrollViewer>

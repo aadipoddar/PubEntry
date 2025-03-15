@@ -78,11 +78,6 @@ public partial class ReportWindow : Window
 
 		fromDatePicker.DisplayDateEnd = toDatePicker.SelectedDate;
 		toDatePicker.DisplayDateStart = fromDatePicker.SelectedDate;
-
-		locationComboBox.ItemsSource = await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location);
-		locationComboBox.DisplayMemberPath = nameof(LocationModel.Name);
-		locationComboBox.SelectedValuePath = nameof(LocationModel.Id);
-		locationComboBox.SelectedIndex = 0;
 	}
 
 	private readonly DispatcherTimer _timer = new() { Interval = TimeSpan.FromSeconds(RefreshReportTimer) };
@@ -120,7 +115,9 @@ public partial class ReportWindow : Window
 
 	#endregion
 
-	private async void summaryReportButton_Click(object sender, RoutedEventArgs e)
+	private async void RefreshData(object sender, System.Windows.Input.ExecutedRoutedEventArgs e) => await LoadData();
+
+	private async void PrintPDF(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
 	{
 		MemoryStream ms = await PDF.Summary(_fromDateTime, _toDateTime);
 		using FileStream stream = new(Path.Combine(Path.GetTempPath(), "SummaryReport.pdf"), FileMode.Create, FileAccess.Write);
@@ -128,9 +125,13 @@ public partial class ReportWindow : Window
 		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\SummaryReport.pdf") { UseShellExecute = true });
 	}
 
-	private void detailedReportButton_Click(object sender, RoutedEventArgs e)
+	private void DetailedReport(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
 	{
-		DetailedReportWindow detailedReportWindow = new(_fromDateTime, _toDateTime, (int)locationComboBox.SelectedValue);
+		DetailedReportWindow detailedReportWindow = new(_fromDateTime, _toDateTime);
 		detailedReportWindow.Show();
+	}
+
+	private void AdvanceReport(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
+	{
 	}
 }
