@@ -12,6 +12,7 @@
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
 				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
 
@@ -58,7 +59,17 @@
 			<Button x:Name="summaryReportButton" Content="Summary Report PDF" HorizontalAlignment="Center" Margin="10" Padding="5" Grid.Row="1" MinHeight="40" MinWidth="200"
 					Click="summaryReportButton_Click" IsDefault="True" Style="{DynamicResource AccentButtonStyle}"/>
 
-			<Grid Grid.Row="2" Margin="20" x:Name="expanderGrid" />
+			<Grid Grid.Row="2" HorizontalAlignment="Center">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+
+				<ComboBox x:Name="locationComboBox" Grid.Column="0" Margin="10" Padding="5" MinWidth="150" />
+				<Button x:Name="detailedReportButton" Content="Detailed Report" Margin="10" Padding="5" Grid.Column="1" MinHeight="40" MinWidth="150" Click="detailedReportButton_Click" />
+			</Grid>
+
+			<Grid Grid.Row="3" Margin="20" x:Name="expanderGrid" />
 		</Grid>
 	</ScrollViewer>
 </Window>

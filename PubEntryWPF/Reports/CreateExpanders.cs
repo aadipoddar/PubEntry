@@ -197,7 +197,7 @@ internal static class CreateExpanders
 		foreach (var location in await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location))
 		{
 			expanderGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-			var expander = CreateLocationExpander(location.Name);
+			var expander = CreateLocationExpander(location.Name, location.Id);
 			Grid.SetRow(expander, expanderGrid.RowDefinitions.Count - 1);
 			expanderGrid.Children.Add(expander);
 		}
@@ -209,7 +209,7 @@ internal static class CreateExpanders
 		expanderGrid.Children.Add(totalExpander);
 	}
 
-	private static Expander CreateLocationExpander(string locationName)
+	private static Expander CreateLocationExpander(string locationName, int locationId = 0)
 	{
 		// Expander
 		var expander = new Expander
@@ -278,14 +278,31 @@ internal static class CreateExpanders
 
 		var detailedButton = new Button
 		{
-			Name = locationName == "Total" ? "summaryPrintButton" : $"{locationName}detailedButton",
+			Name = locationName == "Total" ? "summaryPrintButton" : "detailedButton",
 			Content = locationName == "Total" ? "Print Summary" : "Detailed",
 			Margin = new Thickness(10),
 			Padding = new Thickness(5),
 			MinWidth = 100,
 		};
 
-		detailedButton.Click += headerButton_Click;
+		detailedButton.Click += async (s, e) =>
+		{
+			if (s is not Button button) return;
+
+			if (button.Name == "summaryPrintButton")
+			{
+				MemoryStream ms = await PDF.Summary(_fromDateTime, _toDateTime);
+				using FileStream stream = new(Path.Combine(Path.GetTempPath(), "SummaryReport.pdf"), FileMode.Create, FileAccess.Write);
+				await ms.CopyToAsync(stream);
+				Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\SummaryReport.pdf") { UseShellExecute = true });
+			}
+			else
+			{
+				DetailedReportWindow detailedReportWindow = new(_fromDateTime, _toDateTime, locationId);
+				detailedReportWindow.Show();
+			}
+		};
+
 		Grid.SetColumn(detailedButton, 8);
 		headerGrid.Children.Add(detailedButton);
 
@@ -681,26 +698,6 @@ internal static class CreateExpanders
 		grid.Children.Add(notRedeemedTextBox);
 
 		return grid;
-	}
-
-	private static async void headerButton_Click(object sender, RoutedEventArgs e)
-	{
-		if (sender is Button button)
-		{
-			if (button.Name == "summaryPrintButton")
-			{
-				MemoryStream ms = await PDF.Summary(_fromDateTime, _toDateTime);
-				using FileStream stream = new(Path.Combine(Path.GetTempPath(), "SummaryReport.pdf"), FileMode.Create, FileAccess.Write);
-				await ms.CopyToAsync(stream);
-				Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\SummaryReport.pdf") { UseShellExecute = true });
-			}
-			else
-			{
-				var locationName = button.Name[..^15];
-				DetailedReportWindow detailedReportWindow = new(_fromDateTime, _toDateTime, locationName);
-				detailedReportWindow.Show();
-			}
-		}
 	}
 
 	#endregion

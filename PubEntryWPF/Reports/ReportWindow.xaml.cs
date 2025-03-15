@@ -17,18 +17,20 @@ public partial class ReportWindow : Window
 	private static int PubCloseTime => (int)Application.Current.Resources[SettingsKeys.PubCloseTime];
 	private static int RefreshReportTimer => (int)Application.Current.Resources[SettingsKeys.RefreshReportTimer];
 
+	private static DateTime _fromDateTime, _toDateTime;
+
 	public ReportWindow() => InitializeComponent();
 
 	#region LoadData
 
 	private async void Window_Loaded(object sender, RoutedEventArgs e)
 	{
-		await LoadTime();
+		await LoadComboBox();
 		await LoadData(true);
 		InitializeTimer();
 	}
 
-	private async Task LoadTime()
+	private async Task LoadComboBox()
 	{
 		if (DateTime.Now.Hour >= TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours)
 		{
@@ -76,6 +78,11 @@ public partial class ReportWindow : Window
 
 		fromDatePicker.DisplayDateEnd = toDatePicker.SelectedDate;
 		toDatePicker.DisplayDateStart = fromDatePicker.SelectedDate;
+
+		locationComboBox.ItemsSource = await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location);
+		locationComboBox.DisplayMemberPath = nameof(LocationModel.Name);
+		locationComboBox.SelectedValuePath = nameof(LocationModel.Id);
+		locationComboBox.SelectedIndex = 0;
 	}
 
 	private readonly DispatcherTimer _timer = new() { Interval = TimeSpan.FromSeconds(RefreshReportTimer) };
@@ -105,25 +112,25 @@ public partial class ReportWindow : Window
 		var fromTime = fromSlotPicker.SelectedItem.ToString() == "AM" ? (int)fromTimePicker.SelectedItem : (int)fromTimePicker.SelectedItem + 12;
 		var toTime = toSlotPicker.SelectedItem.ToString() == "AM" ? (int)toTimePicker.SelectedItem : (int)toTimePicker.SelectedItem + 12;
 
-		var fromDateTime = fromDatePicker.SelectedDate.Value.AddHours(fromTime);
-		var toDateTime = toDatePicker.SelectedDate.Value.AddHours(toTime);
+		_fromDateTime = fromDatePicker.SelectedDate.Value.AddHours(fromTime);
+		_toDateTime = toDatePicker.SelectedDate.Value.AddHours(toTime);
 
-		await CreateExpanders.LoadExpandersData(fromDateTime, toDateTime, expanderGrid, initialLoad);
+		await CreateExpanders.LoadExpandersData(_fromDateTime, _toDateTime, expanderGrid, initialLoad);
 	}
 
 	#endregion
 
 	private async void summaryReportButton_Click(object sender, RoutedEventArgs e)
 	{
-		var fromTime = fromSlotPicker.SelectedItem.ToString() == "AM" ? (int)fromTimePicker.SelectedItem : (int)fromTimePicker.SelectedItem + 12;
-		var toTime = toSlotPicker.SelectedItem.ToString() == "AM" ? (int)toTimePicker.SelectedItem : (int)toTimePicker.SelectedItem + 12;
-
-		var fromDateTime = fromDatePicker.SelectedDate.Value.AddHours(fromTime);
-		var toDateTime = toDatePicker.SelectedDate.Value.AddHours(toTime);
-
-		MemoryStream ms = await PDF.Summary(fromDateTime, toDateTime);
+		MemoryStream ms = await PDF.Summary(_fromDateTime, _toDateTime);
 		using FileStream stream = new(Path.Combine(Path.GetTempPath(), "SummaryReport.pdf"), FileMode.Create, FileAccess.Write);
 		await ms.CopyToAsync(stream);
 		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\SummaryReport.pdf") { UseShellExecute = true });
+	}
+
+	private void detailedReportButton_Click(object sender, RoutedEventArgs e)
+	{
+		DetailedReportWindow detailedReportWindow = new(_fromDateTime, _toDateTime, (int)locationComboBox.SelectedValue);
+		detailedReportWindow.Show();
 	}
 }

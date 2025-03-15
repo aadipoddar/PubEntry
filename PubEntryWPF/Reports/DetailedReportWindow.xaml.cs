@@ -7,7 +7,7 @@ namespace PubEntryWPF.Reports
 	/// </summary>
 	public partial class DetailedReportWindow : Window
 	{
-		public DetailedReportWindow(DateTime fromDateTime, DateTime toDateTime, string locationName)
+		public DetailedReportWindow(DateTime fromDateTime, DateTime toDateTime, int locationId)
 		{
 			InitializeComponent();
 		}
