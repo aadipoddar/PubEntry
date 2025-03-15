@@ -1,6 +1,10 @@
-﻿using System.Windows;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+
+using PubEntryLibrary.Printing.PDF;
 
 namespace PubEntryWPF.Reports;
 
@@ -108,4 +112,18 @@ public partial class ReportWindow : Window
 	}
 
 	#endregion
+
+	private async void summaryReportButton_Click(object sender, RoutedEventArgs e)
+	{
+		var fromTime = fromSlotPicker.SelectedItem.ToString() == "AM" ? (int)fromTimePicker.SelectedItem : (int)fromTimePicker.SelectedItem + 12;
+		var toTime = toSlotPicker.SelectedItem.ToString() == "AM" ? (int)toTimePicker.SelectedItem : (int)toTimePicker.SelectedItem + 12;
+
+		var fromDateTime = fromDatePicker.SelectedDate.Value.AddHours(fromTime);
+		var toDateTime = toDatePicker.SelectedDate.Value.AddHours(toTime);
+
+		MemoryStream ms = await PDF.Summary(fromDateTime, toDateTime);
+		using FileStream stream = new(Path.Combine(Path.GetTempPath(), "SummaryReport.pdf"), FileMode.Create, FileAccess.Write);
+		await ms.CopyToAsync(stream);
+		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\SummaryReport.pdf") { UseShellExecute = true });
+	}
 }

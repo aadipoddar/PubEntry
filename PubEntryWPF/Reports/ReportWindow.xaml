@@ -11,6 +11,7 @@
 		<Grid>
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
 				<RowDefinition Height="*" />
 			</Grid.RowDefinitions>
 
@@ -54,7 +55,10 @@
 
 			</Grid>
 
-			<Grid Grid.Row="1" Margin="20" x:Name="expanderGrid" />
+			<Button x:Name="summaryReportButton" Content="Summary Report PDF" HorizontalAlignment="Center" Margin="10" Padding="5" Grid.Row="1" MinHeight="40" MinWidth="200"
+					Click="summaryReportButton_Click" IsDefault="True" Style="{DynamicResource AccentButtonStyle}"/>
+
+			<Grid Grid.Row="2" Margin="20" x:Name="expanderGrid" />
 		</Grid>
 	</ScrollViewer>
 </Window>
