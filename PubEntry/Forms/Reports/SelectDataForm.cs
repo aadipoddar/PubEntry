@@ -1,9 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
-
-using PubEntryLibrary.Printing.PDF;
-
-namespace PubEntry.Forms.Reports;
+﻿namespace PubEntry.Forms.Reports;
 
 public partial class SelectDataForm : Form
 {
@@ -54,7 +49,6 @@ public partial class SelectDataForm : Form
 		LoadingScreen.CloseForm();
 	}
 
-	[STAThread]
 	private void detailReportButton_Click(object sender, EventArgs e)
 	{
 		if (!ValidateTime())
