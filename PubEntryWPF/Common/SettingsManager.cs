@@ -13,6 +13,7 @@ internal static class SettingsManager
 		resources[SettingsKeys.PubCloseTime] = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime));
 
 		resources[SettingsKeys.InactivityTime] = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.InactivityTime));
+		resources[SettingsKeys.RefreshReportTimer] = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.RefreshReportTimer));
 
 		resources[SettingsKeys.PageWidthThermal] = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PageWidthThermal));
 		resources[SettingsKeys.PagePaddingTopThermal] = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PagePaddingTopThermal));

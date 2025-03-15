@@ -16,6 +16,7 @@
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="20" />
 				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
 				<RowDefinition Height="20" />
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="20" />
@@ -47,7 +48,10 @@
 			<Label Content="Inactivity Timer (In Minutes)" Grid.Row="3" Grid.Column="0" Margin="5" Padding="5"/>
 			<TextBox x:Name="inactivityTimerTextBox" Grid.Row="3" Grid.Column="1" Margin="5" Padding="5" PreviewTextInput="textBox_PreviewTextInput"/>
 
-			<Expander Header="Thermal Settings" IsExpanded="True" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="10">
+			<Label Content="Refresh Report Timer (In Seconds)" Grid.Row="4" Grid.Column="0" Margin="5" Padding="5"/>
+			<TextBox x:Name="refreshReportTimerTextBox" Grid.Row="4" Grid.Column="1" Margin="5" Padding="5" PreviewTextInput="textBox_PreviewTextInput"/>
+
+			<Expander Header="Thermal Settings" IsExpanded="True" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="10">
 				<Grid>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto" />
@@ -395,8 +399,8 @@
 				</Grid>
 			</Expander>
 
-			<Button x:Name="saveButton" Grid.Row="7" Grid.Column="0" Margin="10" Padding="5" Content="Save" MinWidth="150" MinHeight="40" Click="saveButton_Click" IsDefault="True" Style="{DynamicResource AccentButtonStyle}" />
-			<Button x:Name="resetDefaultButton" Grid.Row="7" Grid.Column="1" Margin="10" Padding="5" Content="Reset Defalt Settings" MinWidth="150" MinHeight="40" Click="resetDefaultButton_Click" />
+			<Button x:Name="saveButton" Grid.Row="8" Grid.Column="0" Margin="10" Padding="5" Content="Save" MinWidth="150" MinHeight="40" Click="saveButton_Click" IsDefault="True" Style="{DynamicResource AccentButtonStyle}" />
+			<Button x:Name="resetDefaultButton" Grid.Row="8" Grid.Column="1" Margin="10" Padding="5" Content="Reset Defalt Settings" MinWidth="150" MinHeight="40" Click="resetDefaultButton_Click" />
 		</Grid>
 	</ScrollViewer>
 </Page>

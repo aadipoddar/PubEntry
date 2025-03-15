@@ -7,6 +7,7 @@ BEGIN
 	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'PubCloseTime', N'5')
 
 	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'InactivityTime', N'5')
+	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'RefreshReportTimer', N'60')
 
 	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'PageWidthThermal', N'280')
 	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'PagePaddingTopThermal', N'20')

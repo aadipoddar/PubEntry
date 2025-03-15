@@ -11,6 +11,7 @@ public partial class ReportWindow : Window
 {
 	private static int PubOpenTime => (int)Application.Current.Resources[SettingsKeys.PubOpenTime];
 	private static int PubCloseTime => (int)Application.Current.Resources[SettingsKeys.PubCloseTime];
+	private static int RefreshReportTimer => (int)Application.Current.Resources[SettingsKeys.RefreshReportTimer];
 
 	public ReportWindow() => InitializeComponent();
 
@@ -73,7 +74,7 @@ public partial class ReportWindow : Window
 		toDatePicker.DisplayDateStart = fromDatePicker.SelectedDate;
 	}
 
-	private readonly DispatcherTimer _timer = new() { Interval = TimeSpan.FromMinutes(1) };
+	private readonly DispatcherTimer _timer = new() { Interval = TimeSpan.FromSeconds(RefreshReportTimer) };
 
 	private void InitializeTimer()
 	{

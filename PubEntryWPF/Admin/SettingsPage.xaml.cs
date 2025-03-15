@@ -57,6 +57,7 @@ public partial class SettingsPage : Page
 		#endregion
 
 		inactivityTimerTextBox.Text = await SettingsData.LoadSettingsByKey(SettingsKeys.InactivityTime);
+		refreshReportTimerTextBox.Text = await SettingsData.LoadSettingsByKey(SettingsKeys.RefreshReportTimer);
 
 		#region Thermal
 
@@ -228,6 +229,7 @@ public partial class SettingsPage : Page
 				new SettingsModel { Key = SettingsKeys.PubCloseTime, Value = (pubCloseSlotPicker.SelectedItem.ToString() == "AM" ? (int)pubCloseTimePicker.SelectedItem : (int)pubCloseTimePicker.SelectedItem + 12).ToString()},
 
 				new SettingsModel { Key = SettingsKeys.InactivityTime, Value = inactivityTimerTextBox.Text},
+				new SettingsModel { Key = SettingsKeys.RefreshReportTimer, Value = refreshReportTimerTextBox.Text},
 
 				new SettingsModel { Key = SettingsKeys.PageWidthThermal, Value = pageWidthThermalTextBox.Text},
 				new SettingsModel { Key = SettingsKeys.PagePaddingTopThermal, Value = pagePaddingTopThermalTextBox.Text},
