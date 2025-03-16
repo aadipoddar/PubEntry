@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
 
@@ -115,6 +116,15 @@ public partial class DetailedReportWindow : Window
 		if (_locationId > 0) locationComboBox.SelectedValue = _locationId;
 		else locationComboBox.SelectedIndex = 0;
 
+		double width = this.ActualWidth;
+		double height = this.ActualHeight;
+
+		if (width > 1900)
+		{
+			transactionDataGrid.MinColumnWidth = 100;
+			advanceDataGrid.MinColumnWidth = 100;
+		}
+
 		await LoadDateTime();
 	}
 
@@ -126,9 +136,9 @@ public partial class DetailedReportWindow : Window
 		_timer.Start();
 	}
 
-	private async void values_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) => await LoadDateTime();
+	private async void values_SelectionChanged(object sender, SelectionChangedEventArgs e) => await LoadDateTime();
 
-	private async void locationComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) => await LoadDateTime();
+	private async void locationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) => await LoadDateTime();
 
 	private async void RefreshData(object sender, ExecutedRoutedEventArgs e) => await LoadData();
 
@@ -162,8 +172,47 @@ public partial class DetailedReportWindow : Window
 
 	private async Task LoadData()
 	{
-		transactionDataGrid.ItemsSource = await TransactionData.LoadTransactionsByDateLocation(_fromDateTime, _toDateTime, _locationId);
-		advanceDataGrid.ItemsSource = await AdvanceData.LoadAdvancesByForDateLocation(_fromDateTime, _toDateTime, _locationId);
+		var detailedTransactionPrintModel = await TransactionData.LoadTransactionsByDateLocation(_fromDateTime, _toDateTime, _locationId);
+
+		var detailedAdvancePrintModel = _toDateTime.TimeOfDay < TimeSpan.FromHours(17)
+			? await AdvanceData.LoadAdvancesByForDateLocation(_fromDateTime.Date, _toDateTime.AddDays(-1).Date.AddHours(23).AddMinutes(59), _locationId)
+			: await AdvanceData.LoadAdvancesByForDateLocation(_fromDateTime.Date, _toDateTime.Date, _locationId);
+
+
+		transactionDataGrid.ItemsSource = detailedTransactionPrintModel;
+		foreach (DataGridColumn column in transactionDataGrid.Columns)
+		{
+			if (new[] { 1, 2 }.Contains(column.DisplayIndex))
+				column.Visibility = Visibility.Collapsed;
+
+			if (new[] { 0, 7, 8, 9, 10, 11, 12 }.Contains(column.DisplayIndex))
+				column.CellStyle = new Style(typeof(DataGridCell)) { Setters = { new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Right) } };
+		}
+
+		advanceDataGrid.ItemsSource = detailedAdvancePrintModel;
+		foreach (DataGridColumn column in advanceDataGrid.Columns)
+			if (new[] { 0, 8, 9, 11, 12, 14 }.Contains(column.DisplayIndex))
+				column.CellStyle = new Style(typeof(DataGridCell)) { Setters = { new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Right) } };
+
+
+		peopleTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Male + x.Female)}";
+		maleTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Male)}";
+		femaleTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Female)}";
+		loyaltyTextBox.Text = $"{detailedTransactionPrintModel.Count(x => x?.Loyalty == 'L')}";
+
+		amountTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Cash + x.Card + x.UPI + x.Amex)}";
+		cashTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Cash)}";
+		cardTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Card)}";
+		upiTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.UPI)}";
+		amexTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Amex)}";
+
+		advanceTextBox.Text = $"{detailedAdvancePrintModel.Sum(x => x?.Amount)}";
+		redeemedAdvanceTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x?.SlipId != "NOT REDEEMED").Sum(x => x?.Amount)}";
+		notRedeemedAdvanceTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x?.SlipId == "NOT REDEEMED").Sum(x => x?.Amount)}";
+
+		bookingTextBox.Text = $"{detailedAdvancePrintModel.Sum(x => x?.Booking)}";
+		redeemedBookingTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x?.SlipId != "NOT REDEEMED").Sum(x => x?.Booking)}";
+		notRedeemedBookingTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x?.SlipId == "NOT REDEEMED").Sum(x => x?.Booking)}";
 	}
 
 	#endregion
@@ -184,13 +233,13 @@ public partial class DetailedReportWindow : Window
 		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\DetailedReport.xlsx") { UseShellExecute = true });
 	}
 
-	private void transactionDataGrid_SelectedCellsChanged(object sender, System.Windows.Controls.SelectedCellsChangedEventArgs e)
+	private void transactionDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
 	{
 		if (transactionDataGrid.SelectedItem is TransactionPrintModel) loadTransactionButton.Visibility = Visibility.Visible;
 		else loadTransactionButton.Visibility = Visibility.Collapsed;
 	}
 
-	private void advanceDataGrid_SelectedCellsChanged(object sender, System.Windows.Controls.SelectedCellsChangedEventArgs e)
+	private void advanceDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
 	{
 		if (advanceDataGrid.SelectedItem is AdvancePrintModel selectedAdvance)
 		{
@@ -211,6 +260,5 @@ public partial class DetailedReportWindow : Window
 
 	private void loadTransactionButton_Click(object sender, RoutedEventArgs e)
 	{
-
 	}
 }

@@ -54,6 +54,9 @@ public partial class AdvanceIdPage : Page
 		toDatePicker.DisplayDateStart = fromDatePicker.SelectedDate;
 
 		advanceDataGrid.ItemsSource = await AdvanceData.LoadAdvancesByForDateLocation(fromDatePicker.SelectedDate.Value, toDatePicker.SelectedDate.Value, (int)locationComboBox.SelectedValue);
+		foreach (DataGridColumn column in advanceDataGrid.Columns)
+			if (new[] { 0, 8, 9, 11, 12, 14 }.Contains(column.DisplayIndex))
+				column.CellStyle = new Style(typeof(DataGridCell)) { Setters = { new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Right) } };
 	}
 
 	private async void values_SelectionChanged(object sender, SelectionChangedEventArgs e) => await LoadAdvances();

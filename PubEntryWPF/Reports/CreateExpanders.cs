@@ -255,7 +255,8 @@ internal static class CreateExpanders
 			Padding = new Thickness(5),
 			Text = "Amount",
 			MinWidth = 100,
-			TextAlignment = TextAlignment.Right
+			TextAlignment = TextAlignment.Right,
+			IsReadOnly = true
 		};
 		Grid.SetColumn(headerAmountTextBox, 3);
 		headerGrid.Children.Add(headerAmountTextBox);
@@ -271,7 +272,8 @@ internal static class CreateExpanders
 			Padding = new Thickness(5),
 			Text = "0",
 			MinWidth = 100,
-			TextAlignment = TextAlignment.Right
+			TextAlignment = TextAlignment.Right,
+			IsReadOnly = true
 		};
 		Grid.SetColumn(headerPersonTextBox, 6);
 		headerGrid.Children.Add(headerPersonTextBox);
@@ -375,7 +377,8 @@ internal static class CreateExpanders
 			Padding = new Thickness(5),
 			Text = "0",
 			TextAlignment = TextAlignment.Right,
-			MinWidth = 100
+			MinWidth = 100,
+			IsReadOnly = true
 		};
 		Grid.SetRow(peopleTextBox, 0);
 		Grid.SetColumn(peopleTextBox, 1);
@@ -394,7 +397,8 @@ internal static class CreateExpanders
 			Padding = new Thickness(5),
 			Text = "0",
 			TextAlignment = TextAlignment.Right,
-			MinWidth = 100
+			MinWidth = 100,
+			IsReadOnly = true
 		};
 		Grid.SetRow(maleTextBox, 2);
 		Grid.SetColumn(maleTextBox, 1);
@@ -413,7 +417,8 @@ internal static class CreateExpanders
 			Padding = new Thickness(5),
 			Text = "0",
 			TextAlignment = TextAlignment.Right,
-			MinWidth = 100
+			MinWidth = 100,
+			IsReadOnly = true
 		};
 		Grid.SetRow(femaleTextBox, 3);
 		Grid.SetColumn(femaleTextBox, 1);
@@ -432,7 +437,8 @@ internal static class CreateExpanders
 			Padding = new Thickness(5),
 			Text = "0",
 			TextAlignment = TextAlignment.Right,
-			MinWidth = 100
+			MinWidth = 100,
+			IsReadOnly = true
 		};
 		Grid.SetRow(loyaltyTextBox, 4);
 		Grid.SetColumn(loyaltyTextBox, 1);
@@ -469,7 +475,8 @@ internal static class CreateExpanders
 			Padding = new Thickness(5),
 			Text = "0",
 			TextAlignment = TextAlignment.Right,
-			MinWidth = 100
+			MinWidth = 100,
+			IsReadOnly = true
 		};
 		Grid.SetRow(amountTextBox, 0);
 		Grid.SetColumn(amountTextBox, 1);
@@ -488,7 +495,8 @@ internal static class CreateExpanders
 			Padding = new Thickness(5),
 			Text = "0",
 			TextAlignment = TextAlignment.Right,
-			MinWidth = 100
+			MinWidth = 100,
+			IsReadOnly = true
 		};
 		Grid.SetRow(cashTextBox, 2);
 		Grid.SetColumn(cashTextBox, 1);
@@ -507,7 +515,8 @@ internal static class CreateExpanders
 			Padding = new Thickness(5),
 			Text = "0",
 			TextAlignment = TextAlignment.Right,
-			MinWidth = 100
+			MinWidth = 100,
+			IsReadOnly = true
 		};
 		Grid.SetRow(cardTextBox, 3);
 		Grid.SetColumn(cardTextBox, 1);
@@ -526,7 +535,8 @@ internal static class CreateExpanders
 			Padding = new Thickness(5),
 			Text = "0",
 			TextAlignment = TextAlignment.Right,
-			MinWidth = 100
+			MinWidth = 100,
+			IsReadOnly = true
 		};
 		Grid.SetRow(upiTextBox, 4);
 		Grid.SetColumn(upiTextBox, 1);
@@ -545,7 +555,8 @@ internal static class CreateExpanders
 			Padding = new Thickness(5),
 			Text = "0",
 			TextAlignment = TextAlignment.Right,
-			MinWidth = 100
+			MinWidth = 100,
+			IsReadOnly = true
 		};
 		Grid.SetRow(amexTextBox, 5);
 		Grid.SetColumn(amexTextBox, 1);
@@ -580,7 +591,8 @@ internal static class CreateExpanders
 			Padding = new Thickness(5),
 			Text = "0",
 			TextAlignment = TextAlignment.Right,
-			MinWidth = 100
+			MinWidth = 100,
+			IsReadOnly = true
 		};
 		Grid.SetRow(advanceTextBox, 0);
 		Grid.SetColumn(advanceTextBox, 1);
@@ -599,7 +611,8 @@ internal static class CreateExpanders
 			Padding = new Thickness(5),
 			Text = "0",
 			TextAlignment = TextAlignment.Right,
-			MinWidth = 100
+			MinWidth = 100,
+			IsReadOnly = true
 		};
 		Grid.SetRow(redeemedTextBox, 2);
 		Grid.SetColumn(redeemedTextBox, 1);
@@ -618,7 +631,8 @@ internal static class CreateExpanders
 			Padding = new Thickness(5),
 			Text = "0",
 			TextAlignment = TextAlignment.Right,
-			MinWidth = 100
+			MinWidth = 100,
+			IsReadOnly = true
 		};
 		Grid.SetRow(notRedeemedTextBox, 3);
 		Grid.SetColumn(notRedeemedTextBox, 1);
@@ -653,7 +667,8 @@ internal static class CreateExpanders
 			Padding = new Thickness(5),
 			Text = "0",
 			TextAlignment = TextAlignment.Right,
-			MinWidth = 100
+			MinWidth = 100,
+			IsReadOnly = true
 		};
 		Grid.SetRow(bookingTextBox, 0);
 		Grid.SetColumn(bookingTextBox, 1);
@@ -672,7 +687,8 @@ internal static class CreateExpanders
 			Padding = new Thickness(5),
 			Text = "0",
 			TextAlignment = TextAlignment.Right,
-			MinWidth = 100
+			MinWidth = 100,
+			IsReadOnly = true
 		};
 		Grid.SetRow(redeemedTextBox, 2);
 		Grid.SetColumn(redeemedTextBox, 1);
@@ -691,7 +707,8 @@ internal static class CreateExpanders
 			Padding = new Thickness(5),
 			Text = "0",
 			TextAlignment = TextAlignment.Right,
-			MinWidth = 100
+			MinWidth = 100,
+			IsReadOnly = true
 		};
 		Grid.SetRow(notRedeemedTextBox, 3);
 		Grid.SetColumn(notRedeemedTextBox, 1);

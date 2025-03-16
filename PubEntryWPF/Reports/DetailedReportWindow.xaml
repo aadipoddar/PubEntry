@@ -9,6 +9,8 @@
         Title="Detailed Report" Height="450" Width="800"
         Loaded="Window_Loaded">
 
+	<!--#region KeyBindings -->
+
 	<Window.Resources>
 		<RoutedUICommand x:Key="RefreshData" Text="RefreshData" />
 		<RoutedUICommand x:Key="PrintPDF" Text="PrintPDF" />
@@ -26,6 +28,8 @@
 		<KeyBinding Key="P" Modifiers="Ctrl" Command="{StaticResource PrintPDF}"/>
 		<KeyBinding Key="E" Modifiers="Ctrl" Command="{StaticResource ExportExcel}"/>
     </Window.InputBindings>
+	
+	<!--#endregion-->
 
     <Grid>
         <Grid.RowDefinitions>
@@ -36,6 +40,7 @@
         <ScrollViewer HorizontalScrollBarVisibility="Visible" Grid.Row="0">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -106,15 +111,136 @@
                         Click="loadTransactionButton_Click" Visibility="Collapsed" />
                 </Grid>
 
-                <TextBlock Text="Transaction Details" Grid.Row="3" Margin="10" HorizontalAlignment="Center" FontSize="30" />
+				<!--#region DataGrids -->
+				<TextBlock Text="Transaction Details" Grid.Row="3" Margin="10" HorizontalAlignment="Center" FontSize="30" />
 
                 <DataGrid x:Name="transactionDataGrid" Grid.Row="4" Margin="10" Padding="5" SelectionMode="Single" HorizontalAlignment="Center"
-                    SelectedCellsChanged="transactionDataGrid_SelectedCellsChanged" IsReadOnly="True" MinHeight="200" MaxHeight="500" MinColumnWidth="100"/>
+                    SelectedCellsChanged="transactionDataGrid_SelectedCellsChanged" IsReadOnly="True" MinHeight="200" MaxHeight="500" />
 
                 <TextBlock Text="Advance Details" Grid.Row="5" Margin="10" HorizontalAlignment="Center" FontSize="30" />
 
                 <DataGrid x:Name="advanceDataGrid" Grid.Row="6" Margin="10" Padding="5" SelectionMode="Single" HorizontalAlignment="Center"
-                    SelectedCellsChanged="advanceDataGrid_SelectedCellsChanged" IsReadOnly="True" MinHeight="200" MaxHeight="500" MinColumnWidth="100"/>
+                    SelectedCellsChanged="advanceDataGrid_SelectedCellsChanged" IsReadOnly="True" MinHeight="200" MaxHeight="500" />
+				<!--#endregion-->
+
+				<!--#region Totals -->
+				<Grid Grid.Row="7" Margin="10" HorizontalAlignment="Center">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="*" MinWidth="50" />
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="*" MinWidth="50" />
+						<ColumnDefinition Width="Auto" />
+						<ColumnDefinition Width="*" MinWidth="50" />
+						<ColumnDefinition Width="Auto" />
+					</Grid.ColumnDefinitions>
+
+					<Grid Grid.Column="0">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="Auto" />
+						</Grid.ColumnDefinitions>
+
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="20" />
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
+						</Grid.RowDefinitions>
+
+						<TextBlock Grid.Column="0" Grid.Row="0" Text="Total People" Margin="10" Padding="5" />
+						<TextBox x:Name="peopleTextBox" Grid.Column="1" Grid.Row="0" Margin="10" Padding="5" TextAlignment="Right" MinWidth="100" Text="0" IsReadOnly="True" />
+
+						<TextBlock Grid.Column="0" Grid.Row="2" Text="Male" Margin="10" Padding="5" />
+						<TextBox x:Name="maleTextBox" Grid.Column="1" Grid.Row="2" Margin="10" Padding="5" TextAlignment="Right" MinWidth="100" Text="0" IsReadOnly="True" />
+
+						<TextBlock Grid.Column="0" Grid.Row="3" Text="Female" Margin="10" Padding="5" />
+						<TextBox x:Name="femaleTextBox" Grid.Column="1" Grid.Row="3" Margin="10" Padding="5" TextAlignment="Right" MinWidth="100" Text="0" IsReadOnly="True" />
+
+						<TextBlock Grid.Column="0" Grid.Row="4" Text="Loyalty" Margin="10" Padding="5" />
+						<TextBox x:Name="loyaltyTextBox" Grid.Column="1" Grid.Row="4" Margin="10" Padding="5" TextAlignment="Right" MinWidth="100" Text="0" IsReadOnly="True" />
+					</Grid>
+
+					<Grid Grid.Column="2">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="Auto" />
+						</Grid.ColumnDefinitions>
+
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="20" />
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
+						</Grid.RowDefinitions>
+
+						<TextBlock Grid.Column="0" Grid.Row="0" Text="Total Amount" Margin="10" Padding="5" />
+						<TextBox x:Name="amountTextBox" Grid.Column="1" Grid.Row="0" Margin="10" Padding="5" TextAlignment="Right" MinWidth="100" Text="0" IsReadOnly="True" />
+
+						<TextBlock Grid.Column="0" Grid.Row="2" Text="Cash" Margin="10" Padding="5" />
+						<TextBox x:Name="cashTextBox" Grid.Column="1" Grid.Row="2" Margin="10" Padding="5" TextAlignment="Right" MinWidth="100" Text="0" IsReadOnly="True" />
+
+						<TextBlock Grid.Column="0" Grid.Row="3" Text="Card" Margin="10" Padding="5" />
+						<TextBox x:Name="cardTextBox" Grid.Column="1" Grid.Row="3" Margin="10" Padding="5" TextAlignment="Right" MinWidth="100" Text="0" IsReadOnly="True" />
+
+						<TextBlock Grid.Column="0" Grid.Row="4" Text="UPI" Margin="10" Padding="5" />
+						<TextBox x:Name="upiTextBox" Grid.Column="1" Grid.Row="4" Margin="10" Padding="5" TextAlignment="Right" MinWidth="100" Text="0" IsReadOnly="True" />
+
+						<TextBlock Grid.Column="0" Grid.Row="5" Text="Amex" Margin="10" Padding="5" />
+						<TextBox x:Name="amexTextBox" Grid.Column="1" Grid.Row="5" Margin="10" Padding="5" TextAlignment="Right" MinWidth="100" Text="0" IsReadOnly="True" />
+					</Grid>
+
+					<Grid Grid.Column="4">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="Auto" />
+						</Grid.ColumnDefinitions>
+
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="20" />
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
+						</Grid.RowDefinitions>
+
+						<TextBlock Grid.Column="0" Grid.Row="0" Text="Total Advance" Margin="10" Padding="5" />
+						<TextBox x:Name="advanceTextBox" Grid.Column="1" Grid.Row="0" Margin="10" Padding="5" TextAlignment="Right" MinWidth="100" Text="0" IsReadOnly="True" />
+
+						<TextBlock Grid.Column="0" Grid.Row="2" Text="Redeemed" Margin="10" Padding="5" />
+						<TextBox x:Name="redeemedAdvanceTextBox" Grid.Column="1" Grid.Row="2" Margin="10" Padding="5" TextAlignment="Right" MinWidth="100" Text="0" IsReadOnly="True" />
+
+						<TextBlock Grid.Column="0" Grid.Row="3" Text="Not Redeemed" Margin="10" Padding="5" />
+						<TextBox x:Name="notRedeemedAdvanceTextBox" Grid.Column="1" Grid.Row="3" Margin="10" Padding="5" TextAlignment="Right" MinWidth="100" Text="0" IsReadOnly="True" />
+					</Grid>
+
+					<Grid Grid.Column="6">
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto" />
+							<ColumnDefinition Width="Auto" />
+						</Grid.ColumnDefinitions>
+
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="20" />
+							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
+						</Grid.RowDefinitions>
+
+						<TextBlock Grid.Column="0" Grid.Row="0" Text="Total Booking" Margin="10" Padding="5" />
+						<TextBox x:Name="bookingTextBox" Grid.Column="1" Grid.Row="0" Margin="10" Padding="5" TextAlignment="Right" MinWidth="100" Text="0" IsReadOnly="True" />
+
+						<TextBlock Grid.Column="0" Grid.Row="2" Text="Redeemed" Margin="10" Padding="5" />
+						<TextBox x:Name="redeemedBookingTextBox" Grid.Column="1" Grid.Row="2" Margin="10" Padding="5" TextAlignment="Right" MinWidth="100" Text="0" IsReadOnly="True" />
+
+						<TextBlock Grid.Column="0" Grid.Row="3" Text="Not Redeemed" Margin="10" Padding="5" />
+						<TextBox x:Name="notRedeemedBookingTextBox" Grid.Column="1" Grid.Row="3" Margin="10" Padding="5" TextAlignment="Right" MinWidth="100" Text="0" IsReadOnly="True" />
+					</Grid>
+				</Grid>
+				<!--#endregion-->
+				
             </Grid>
         </ScrollViewer>
 

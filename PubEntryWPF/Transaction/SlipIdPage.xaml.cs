@@ -99,6 +99,14 @@ public partial class SlipIdPage : Page
 		var toTime = toSlotPicker.SelectedItem.ToString() == "AM" ? (int)toTimePicker.SelectedItem : (int)toTimePicker.SelectedItem + 12;
 
 		transactionDataGrid.ItemsSource = await TransactionData.LoadTransactionsByDateLocation(fromDatePicker.SelectedDate.Value.AddHours(fromTime), toDatePicker.SelectedDate.Value.AddHours(toTime), (int)locationComboBox.SelectedValue);
+		foreach (DataGridColumn column in transactionDataGrid.Columns)
+		{
+			if (new[] { 1, 2 }.Contains(column.DisplayIndex))
+				column.Visibility = Visibility.Collapsed;
+
+			if (new[] { 0, 7, 8, 9, 10, 11, 12 }.Contains(column.DisplayIndex))
+				column.CellStyle = new Style(typeof(DataGridCell)) { Setters = { new Setter(TextBlock.TextAlignmentProperty, TextAlignment.Right) } };
+		}
 	}
 
 	private async void values_SelectionChanged(object sender, SelectionChangedEventArgs e) => await LoadTransactions();

@@ -132,7 +132,7 @@ public partial class AdvanceWindow : Window
 		_isUpdating = false;
 	}
 
-	private async void bookingDatePicker_SelectedDateChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e) => await LoadPersonAdvance();
+	private async void bookingDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e) => await LoadPersonAdvance();
 
 	private async Task LoadPersonAdvance()
 	{

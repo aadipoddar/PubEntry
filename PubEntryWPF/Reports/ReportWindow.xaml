@@ -9,7 +9,9 @@
         Title="Reports" Height="450" Width="800"
         Loaded="Window_Loaded">
 
-    <Window.Resources>
+	<!--#region KeyBindings -->
+
+	<Window.Resources>
         <RoutedUICommand x:Key="RefreshData" Text="RefreshData" />
         <RoutedUICommand x:Key="PrintPDF" Text="PrintPDF" />
         <RoutedUICommand x:Key="DetailedReport" Text="DetailedReport" />
@@ -29,6 +31,8 @@
         <KeyBinding Key="D" Modifiers="Ctrl" Command="{StaticResource DetailedReport}"/>
         <KeyBinding Key="A" Modifiers="Ctrl" Command="{StaticResource AdvanceReport}"/>
     </Window.InputBindings>
+	
+	<!--#endregion-->
 
     <Grid>
         <Grid.RowDefinitions>
