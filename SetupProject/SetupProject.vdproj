@@ -19,6 +19,12 @@
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_9C0CDE7DC76446EEA782203CFFC0296D"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -51,10 +57,10 @@
                     "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
                     "ProductCode" = "8:.NETFramework,Version=v4.7.2"
                     }
-                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.NetCore.CoreRuntime.8.0.x86"
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.NetCore.CoreRuntime.9.0.x86"
                     {
-                    "Name" = "8:.NET Runtime 8.0.11 (x86)"
-                    "ProductCode" = "8:Microsoft.NetCore.CoreRuntime.8.0.x86"
+                    "Name" = "8:.NET Runtime 9.0.3 (x86)"
+                    "ProductCode" = "8:Microsoft.NetCore.CoreRuntime.9.0.x86"
                     }
                 }
             }
@@ -166,7 +172,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Pub Entry"
         "ProductCode" = "8:{477557B4-2908-4106-B360-D2D114F02452}"
-        "PackageCode" = "8:{C682ADC6-CF70-428A-A9C7-7122C3AFD24F}"
+        "PackageCode" = "8:{7EAF65BE-AAE1-4438-B680-B0AB519AFEB4}"
         "UpgradeCode" = "8:{9E79504C-E059-4F8F-8B9C-DF60E844B1EC}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -286,7 +292,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_BCEB8DAAADA0422281472EFFB72FDF26"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_1DFDADD257E349BB8526683C969686A9"
             {
             "Name" = "8:Pub Entry"
             "Arguments" = "8:"
@@ -294,13 +300,13 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:"
-            "Folder" = "8:_6F27156D86404C9695DEA7D46F0AB49D"
+            "Target" = "8:_9C0CDE7DC76446EEA782203CFFC0296D"
+            "Folder" = "8:_859C644195F945DFB46F59B5F4144EE6"
             "WorkingFolder" = "8:_859C644195F945DFB46F59B5F4144EE6"
-            "Icon" = "8:_01923CB194EB410DB01A4FE2B315A86A"
+            "Icon" = "8:"
             "Feature" = "8:"
             }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_C8CED4BF346A4B9586A80B6866E4D5FF"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_4E43DC7FABF7411C9C80A415AEFB5AF3"
             {
             "Name" = "8:Pub Entry"
             "Arguments" = "8:"
@@ -308,10 +314,24 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:"
+            "Target" = "8:_9C0CDE7DC76446EEA782203CFFC0296D"
             "Folder" = "8:_60CF4C5602FA417DB9944E3B693D9BF6"
             "WorkingFolder" = "8:_859C644195F945DFB46F59B5F4144EE6"
-            "Icon" = "8:_01923CB194EB410DB01A4FE2B315A86A"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_79807CFAFC2C454C8B140AD158A53D86"
+            {
+            "Name" = "8:Pub Entry"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_9C0CDE7DC76446EEA782203CFFC0296D"
+            "Folder" = "8:_6F27156D86404C9695DEA7D46F0AB49D"
+            "WorkingFolder" = "8:_859C644195F945DFB46F59B5F4144EE6"
+            "Icon" = "8:"
             "Feature" = "8:"
             }
         }
@@ -713,6 +733,34 @@
         }
         "ProjectOutput"
         {
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9C0CDE7DC76446EEA782203CFFC0296D"
+            {
+            "SourcePath" = "8:..\\PubEntry\\obj\\Release\\net9.0-windows8.0\\apphost.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_859C644195F945DFB46F59B5F4144EE6"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            "ProjectOutputGroupRegister" = "3:1"
+            "OutputConfiguration" = "8:"
+            "OutputGroupCanonicalName" = "8:PublishItems"
+            "OutputProjectGuid" = "8:{4BE0BAAA-B646-B10B-15DB-61B128413C89}"
+            "ShowKeyOutput" = "11:TRUE"
+                "ExcludeFilters"
+                {
+                }
+            }
         }
     }
 }

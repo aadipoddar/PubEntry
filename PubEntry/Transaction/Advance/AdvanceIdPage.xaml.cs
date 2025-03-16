@@ -9,6 +9,7 @@ namespace PubEntry.Transaction.Advance;
 /// </summary>
 public partial class AdvanceIdPage : Page
 {
+	private static int PubOpenTime => (int)Application.Current.Resources[SettingsKeys.PubOpenTime];
 	private readonly Frame _parentFrame;
 
 	public AdvanceIdPage(Frame parentFrame)
@@ -27,15 +28,15 @@ public partial class AdvanceIdPage : Page
 
 	private async Task LoadData()
 	{
-		if (DateTime.Now.Hour >= TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours)
+		if (DateTime.Now.Hour >= PubOpenTime)
 		{
-			toDatePicker.SelectedDate = DateTime.Now.Date.AddDays(1).AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)).Hours);
-			fromDatePicker.SelectedDate = DateTime.Now.Date.AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours);
+			toDatePicker.SelectedDate = DateTime.Now.Date.AddDays(1);
+			fromDatePicker.SelectedDate = DateTime.Now.Date;
 		}
 		else
 		{
-			toDatePicker.SelectedDate = DateTime.Now.Date.AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)).Hours);
-			fromDatePicker.SelectedDate = DateTime.Now.Date.AddDays(-1).AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours);
+			toDatePicker.SelectedDate = DateTime.Now.Date;
+			fromDatePicker.SelectedDate = DateTime.Now.Date.AddDays(-1);
 		}
 
 		locationComboBox.ItemsSource = await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location);

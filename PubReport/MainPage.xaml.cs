@@ -1,10 +1,4 @@
-﻿using PubEntryLibrary.Data;
-using PubEntryLibrary.DataAccess;
-using PubEntryLibrary.Models;
-using PubEntryLibrary.Printing.Excel;
-using PubEntryLibrary.Printing.PDF;
-
-using PubReport.Services;
+﻿using PubReport.Services;
 
 
 namespace PubReport;
@@ -12,6 +6,9 @@ namespace PubReport;
 public partial class MainPage : ContentPage
 {
 	#region Constructor
+	private static int PubOpenTime => (int)Application.Current.Resources[SettingsKeys.PubOpenTime];
+	private static int PubCloseTime => (int)Application.Current.Resources[SettingsKeys.PubCloseTime];
+
 	public MainPage()
 	{
 		InitializeComponent();
