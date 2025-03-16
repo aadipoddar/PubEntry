@@ -41,13 +41,13 @@ public partial class Home
 
 		if (CurrentDateTime.Hour >= TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours)
 		{
-			ToDateTime = CurrentDateTime.Date.AddDays(1).AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)).Hours);
-			FromDateTime = CurrentDateTime.Date.AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours);
+			ToDateTime = CurrentDateTime.Date.AddDays(1).AddHours(int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)));
+			FromDateTime = CurrentDateTime.Date.AddHours(int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)));
 		}
 		else
 		{
-			ToDateTime = CurrentDateTime.Date.AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)).Hours);
-			FromDateTime = CurrentDateTime.Date.AddDays(-1).AddHours(TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours);
+			ToDateTime = CurrentDateTime.Date.AddHours(int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)));
+			FromDateTime = CurrentDateTime.Date.AddDays(-1).AddHours(int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)));
 		}
 
 		await LoadTransactionsAdvance();

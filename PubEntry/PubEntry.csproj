@@ -9,7 +9,8 @@
     <AssemblyVersion>5.0.0.0</AssemblyVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <UseWindowsForms>False</UseWindowsForms>
-    <ApplicationIcon>Resources\Golder Park.ico</ApplicationIcon>
+    <ApplicationIcon>Golder Park.ico</ApplicationIcon>
+    <PackageIcon>Golder Park.jpg</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\Golder Park.ico" />
+    <Content Include="Golder Park.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +40,13 @@
     <Using Include="PubEntryLibrary.DataAccess" />
     <Using Include="PubEntryLibrary.Models" />
     <Using Include="System.Reflection" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\Golder Park.jpg">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>
