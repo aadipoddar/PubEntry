@@ -2,54 +2,28 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows10.0.17763.0</TargetFramework>
+    <TargetFramework>net9.0-windows8.0</TargetFramework>
     <Nullable>disable</Nullable>
-    <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>d1d5ef43-95ad-42c0-a4cb-f324bfb56f66</UserSecretsId>
-    <StartupObject>PubEntry.Program</StartupObject>
-    <NeutralLanguage>en</NeutralLanguage>
-    <Authors>Aadi Poddar</Authors>
-    <Product>Pub Entry</Product>
-    <SupportedOSPlatformVersion>10.0.17763.0</SupportedOSPlatformVersion>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <RepositoryUrl>https://github.com/aadipoddar/PubEntry</RepositoryUrl>
-    <PackageProjectUrl>aadi.vercel.app</PackageProjectUrl>
+    <UseWPF>true</UseWPF>
     <AssemblyVersion>4.0.0.1</AssemblyVersion>
-    <ApplicationManifest></ApplicationManifest>
-    <PackageIcon>Golder Park.jpg</PackageIcon>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <UseWindowsForms>False</UseWindowsForms>
     <ApplicationIcon>Resources\Golder Park.ico</ApplicationIcon>
   </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-
-  <ItemGroup>
-    <AdditionalFiles Remove="app.manifest" />
-  </ItemGroup>
 
   <ItemGroup>
     <None Remove="Golder Park.jpg" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Golder Park.ico" />
+    <Content Include="Resources\Golder Park.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="AadiSoft.Updater" Version="1.0.3" />
-    <PackageReference Include="Syncfusion.Edit.Windows" Version="28.2.6" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Golder Park.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <PackageReference Include="NumericWordsConversion" Version="2.1.1" />
+    <PackageReference Include="Syncfusion.Edit.WPF" Version="28.2.11" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,28 +31,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Resources\Golder Park.jpg">
-      <Pack>True</Pack>
-      <PackagePath>\</PackagePath>
-    </None>
+    <Resource Include="Golder Park.jpg" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="PubEntryLibrary.Data" />
     <Using Include="PubEntryLibrary.DataAccess" />
     <Using Include="PubEntryLibrary.Models" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Forms\Admin\ReservationTypeForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Forms\Transaction\UpdateTransactionForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="Forms\Transaction\Advance\AdvanceId.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Using Include="System.Reflection" />
   </ItemGroup>
 
 </Project>
