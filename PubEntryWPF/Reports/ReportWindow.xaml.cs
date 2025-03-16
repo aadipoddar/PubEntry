@@ -133,5 +133,7 @@ public partial class ReportWindow : Window
 
 	private void AdvanceReport(object sender, System.Windows.Input.ExecutedRoutedEventArgs e)
 	{
+		AdvanceReportWindow advanceReportWindow = new();
+		advanceReportWindow.Show();
 	}
 }

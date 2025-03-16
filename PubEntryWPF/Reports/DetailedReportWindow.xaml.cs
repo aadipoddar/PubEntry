@@ -116,16 +116,11 @@ public partial class DetailedReportWindow : Window
 		if (_locationId > 0) locationComboBox.SelectedValue = _locationId;
 		else locationComboBox.SelectedIndex = 0;
 
-		double width = this.ActualWidth;
-		double height = this.ActualHeight;
-
-		if (width > 1900)
+		if (ActualWidth > 1900)
 		{
 			transactionDataGrid.MinColumnWidth = 100;
 			advanceDataGrid.MinColumnWidth = 100;
 		}
-
-		await LoadDateTime();
 	}
 
 	private readonly DispatcherTimer _timer = new() { Interval = TimeSpan.FromSeconds(RefreshReportTimer) };
