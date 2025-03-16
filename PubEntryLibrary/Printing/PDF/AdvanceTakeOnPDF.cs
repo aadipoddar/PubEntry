@@ -96,45 +96,18 @@ internal static class AdvanceTakeOnPDF
 
 	private static async Task<PdfLayoutResult> AdvanceTotals(DateTime takenOn, int locationId, PdfPage pdfPage, PdfLayoutResult result)
 	{
-		var font = new PdfStandardFont(PdfFontFamily.Helvetica, 20, PdfFontStyle.Bold);
-
-		string text = "Advance Totals";
-		float textWidth = font.MeasureString(text).Width;
-		float pageWidth = pdfPage.GetClientSize().Width;
-		float textX = (pageWidth - textWidth) / 2f;
-
-		PdfTextElement textElement = new(text, font);
-		PdfGrid pdfGrid;
-
-		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 20), _layoutFormat);
+		var font = new PdfStandardFont(PdfFontFamily.Helvetica, 15, PdfFontStyle.Bold);
 
 		var advancePaymentModeTotals = await AdvanceData.LoadAdvancePaymentModeTotalsByTakenOn(takenOn, locationId);
 
-		if (advancePaymentModeTotals.Count > 0)
+		foreach (var paymentMode in advancePaymentModeTotals)
 		{
-			pdfGrid = new() { DataSource = advancePaymentModeTotals };
-
-			foreach (PdfGridRow row in pdfGrid.Rows)
-			{
-				foreach (PdfGridCell cell in row.Cells)
-				{
-					PdfGridCellStyle cellStyle = new()
-					{
-						CellPadding = new PdfPaddings(5, 5, 5, 5),
-						Font = new PdfStandardFont(PdfFontFamily.Helvetica, 7)
-					};
-					cell.Style = cellStyle;
-				}
-			}
-
-			pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent1);
-
-			foreach (PdfGridColumn column in pdfGrid.Columns)
-				column.Format = new PdfStringFormat(PdfTextAlignment.Right, PdfVerticalAlignment.Middle);
-
-			pdfGrid.Columns[1].Format = new PdfStringFormat(PdfTextAlignment.Center, PdfVerticalAlignment.Middle);
-
-			result = pdfGrid.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 20), _layoutFormat);
+			var text = $"{paymentMode.PaymentMode}: {paymentMode.Amount}";
+			var pageWidth = pdfPage.GetClientSize().Width;
+			var textWidth = font.MeasureString(text).Width;
+			var textX = (pageWidth - textWidth) / 2f;
+			PdfTextElement textElement = new(text, font);
+			result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 15), _layoutFormat);
 		}
 
 		return result;

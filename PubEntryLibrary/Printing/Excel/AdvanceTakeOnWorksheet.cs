@@ -23,7 +23,7 @@ internal class AdvanceTakeOnWorksheet
 		_rowCount += 5;
 
 		var advancePaymentModeTotals = await AdvanceData.LoadAdvancePaymentModeTotalsByTakenOn(takenOn, locationId);
-		FillAdvanceTotals(worksheet, advancePaymentModeTotals);
+		FillPaymentModes(worksheet, advancePaymentModeTotals);
 	}
 
 	private static void FillAdvanceData(IWorksheet worksheet, IEnumerable<AdvancePrintModel> detailedAdvancePrintModels)
@@ -51,15 +51,13 @@ internal class AdvanceTakeOnWorksheet
 		worksheet.Range[$"O{row}"].Number = advance.Total;
 	}
 
-	private static void FillAdvanceTotals(IWorksheet worksheet, IEnumerable<AdvancePaymentModeTotalsModel> advancePaymentModeTotals)
+	private static void FillPaymentModes(IWorksheet worksheet, IEnumerable<AdvancePaymentModeTotalsModel> advancePaymentModeTotals)
 	{
-		string[] headers = ["Payment Mode", "Amount"];
-		_rowCount = CommonExecl.FillData(worksheet, headers, _rowCount, advancePaymentModeTotals, FillAdvancePaymentModeRow);
-	}
-
-	private static void FillAdvancePaymentModeRow(IWorksheet worksheet, AdvancePaymentModeTotalsModel advance, int row)
-	{
-		worksheet.Range[$"A{row}"].Text = advance.PaymentMode;
-		worksheet.Range[$"B{row}"].Number = advance.Amount;
+		foreach (var paymentMode in advancePaymentModeTotals)
+		{
+			CommonExecl.SetTotalCell(worksheet, $"B{_rowCount}", paymentMode.PaymentMode, 20, ExcelHAlign.HAlignCenter);
+			CommonExecl.SetTotalCell(worksheet, $"D{_rowCount}", paymentMode.Amount, 20, ExcelHAlign.HAlignRight);
+			_rowCount++;
+		}
 	}
 }
