@@ -56,7 +56,6 @@ public static class StoredProcedureNames
 	public static string LoadTableDataById => "Load_TableData_By_Id";
 	public static string LoadTableDataByStatus => "Load_TableData_By_Status";
 	public static string LoadPersonByNumber => "Load_Person_By_Number";
-	public static string LoadPersonByName => "Load_Person_By_Name";
 	public static string LoadUsersByLocationId => "Load_Users_By_LocationId";
 
 	public static string LoadSettingsByKey => "Load_Settings_By_Key";

@@ -121,4 +121,10 @@
 	  <Using Include="PubEntryLibrary.Models" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <MauiXaml Update="DetailedReportPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>

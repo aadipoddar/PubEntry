@@ -119,7 +119,7 @@ internal static class ThermalReceipt
 			OutputFormat = OutputFormat.English
 		});
 		string words = numericWords.ToWords(receiptModel.Cash + receiptModel.Card + receiptModel.UPI + receiptModel.Amex + advance);
-		document.Blocks.Add(ThermalParagraphs.FooterParagraph($"{words}Rupees Only", true));
+		document.Blocks.Add(ThermalParagraphs.FooterParagraph($"{(words == "" ? "Zero " : words)}Rupees Only", true));
 
 		document.Blocks.Add(ThermalParagraphs.SeparatorParagraph());
 	}

@@ -71,6 +71,8 @@ public partial class MainPage : ContentPage
 		SaveService.SaveAndView("SummaryReport.pdf", "application/pdf", ms);
 	}
 
+	private async void detailedReportButton_Clicked(object sender, EventArgs e) => await Navigation.PushAsync(new DetailedReportPage());
+
 	private async Task LoadData()
 	{
 		if (_isLoadingData) return;
