@@ -1,4 +1,10 @@
-﻿using PubEntryLibrary.Printing.PDF;
+﻿#if ANDROID
+using System.Reflection;
+
+using PubReport.Platforms.Android;
+#endif
+
+using PubEntryLibrary.Printing.PDF;
 
 using PubReport.Services;
 
@@ -13,12 +19,26 @@ public partial class MainPage : ContentPage
 
 	private async void ContentPage_Loaded(object sender, EventArgs e)
 	{
+		popup.StaysOpen = true;
+		popup.Show();
+
+#if ANDROID
+		//if (await AadiSoftUpdater.CheckForUpdates("aadipoddar", "PubEntry", Assembly.GetExecutingAssembly().GetName().Version.ToString()))
+		//	await AadiSoftUpdater.UpdateApp("aadipoddar", "PubEntry", "com.aadisoft.pubreport");
+#endif
+
 		await LoadComboBox();
 		await LoadData();
+
+		popup.StaysOpen = false;
+		popup.Dismiss();
+		popup.StaysOpen = true;
 	}
 
 	private async Task LoadComboBox()
 	{
+		_isLoadingData = true;
+
 		var openTime = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime));
 		var closeTime = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime));
 
@@ -35,6 +55,8 @@ public partial class MainPage : ContentPage
 
 		fromTimePicker.Time = TimeSpan.FromHours(openTime);
 		toTimePicker.Time = TimeSpan.FromHours(closeTime);
+
+		_isLoadingData = false;
 	}
 
 	private async void datePicker_DateSelected(object sender, DateChangedEventArgs e) => await LoadData();
@@ -46,14 +68,12 @@ public partial class MainPage : ContentPage
 	private async void summaryReportButton_Clicked(object sender, EventArgs e)
 	{
 		MemoryStream ms = await PDF.Summary(_fromDateTime, _toDateTime);
-		SaveService saveService = new();
-		saveService.SaveAndView("SummaryReport.pdf", "application/pdf", ms);
+		SaveService.SaveAndView("SummaryReport.pdf", "application/pdf", ms);
 	}
 
 	private async Task LoadData()
 	{
 		if (_isLoadingData) return;
-
 		_isLoadingData = true;
 
 		fromDatePicker.MaximumDate = toDatePicker.Date;

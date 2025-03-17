@@ -8,7 +8,7 @@
     Title="PubReport">
 
     <ShellContent
-        Title="Home"
+        Title="Summary Report"
         ContentTemplate="{DataTemplate local:MainPage}"
         Route="MainPage" />
 

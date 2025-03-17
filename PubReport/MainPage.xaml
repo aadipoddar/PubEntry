@@ -3,6 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PubReport.MainPage"
 			 xmlns:syncfusion="clr-namespace:Syncfusion.Maui.Expander;assembly=Syncfusion.Maui.Expander"
+			 xmlns:popup="clr-namespace:Syncfusion.Maui.Popup;assembly=Syncfusion.Maui.Popup"
+			 xmlns:core="clr-namespace:Syncfusion.Maui.Core;assembly=Syncfusion.Maui.Core"
+			 Title="Report"
 			 Loaded="ContentPage_Loaded">
 
 	<ScrollView HorizontalOptions="Center">
@@ -58,6 +61,18 @@
 
 			<Grid Grid.Row="3" Margin="20" x:Name="expanderGrid"/>
 
+			<popup:SfPopup x:Name="popup">
+				<popup:SfPopup.HeaderTemplate>
+					<DataTemplate>
+						<Label Text="Loading Data" FontAttributes="Bold" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" Padding="10" FontSize="18" TextColor="{StaticResource PrimaryDarkText}" />
+					</DataTemplate>
+				</popup:SfPopup.HeaderTemplate>
+				<popup:SfPopup.ContentTemplate>
+					<DataTemplate>
+						<core:SfBusyIndicator x:Name="busyIndicator" IsRunning="True" Title="Please Wait..." TitlePlacement="Top" />
+					</DataTemplate>
+				</popup:SfPopup.ContentTemplate>
+			</popup:SfPopup>
 		</Grid>
 	</ScrollView>
 

@@ -1,56 +1,55 @@
-using Foundation;
+﻿using Foundation;
 
 using QuickLook;
 
 using UIKit;
 
-namespace PubReport.Services
+namespace PubReport.Services;
+
+public partial class SaveService
 {
-	public partial class SaveService
+	public static partial void SaveAndView(string filename, string contentType, MemoryStream stream)
 	{
-		public partial void SaveAndView(string filename, string contentType, MemoryStream stream)
-		{
-			string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-			string filePath = Path.Combine(path, filename);
-			stream.Position = 0;
-			//Saves the document
-			using FileStream fileStream = new(filePath, FileMode.Create, FileAccess.ReadWrite);
-			stream.CopyTo(fileStream);
-			fileStream.Flush();
-			fileStream.Dispose();
+		string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+		string filePath = Path.Combine(path, filename);
+		stream.Position = 0;
+		//Saves the document
+		using FileStream fileStream = new(filePath, FileMode.Create, FileAccess.ReadWrite);
+		stream.CopyTo(fileStream);
+		fileStream.Flush();
+		fileStream.Dispose();
 
-			UIWindow window = GetKeyWindow();
-			if (window != null && window.RootViewController != null)
+		UIWindow window = GetKeyWindow();
+		if (window != null && window.RootViewController != null)
+		{
+			UIViewController uiViewController = window.RootViewController;
+			if (uiViewController != null)
 			{
-				UIViewController uiViewController = window.RootViewController;
-				if (uiViewController != null)
-				{
-					QLPreviewController qlPreview = [];
-					QLPreviewItem item = new QLPreviewItemBundle(filename, filePath);
-					qlPreview.DataSource = new PreviewControllerDS(item);
-					uiViewController.PresentViewController((UIViewController)qlPreview, true, null);
-				}
+				QLPreviewController qlPreview = [];
+				QLPreviewItem item = new QLPreviewItemBundle(filename, filePath);
+				qlPreview.DataSource = new PreviewControllerDS(item);
+				uiViewController.PresentViewController(qlPreview, true, null);
 			}
-
 		}
-		public UIWindow GetKeyWindow()
+
+	}
+	public static UIWindow GetKeyWindow()
+	{
+		foreach (var scene in UIApplication.SharedApplication.ConnectedScenes)
 		{
-			foreach (var scene in UIApplication.SharedApplication.ConnectedScenes)
+			if (scene is UIWindowScene windowScene)
 			{
-				if (scene is UIWindowScene windowScene)
+				foreach (var window in windowScene.Windows)
 				{
-					foreach (var window in windowScene.Windows)
+					if (window.IsKeyWindow)
 					{
-						if (window.IsKeyWindow)
-						{
-							return window;
-						}
+						return window;
 					}
 				}
 			}
-
-			return null;
 		}
+
+		return null;
 	}
 }
 
@@ -119,7 +118,7 @@ public class PreviewControllerDS : QLPreviewControllerDataSource
 
 	public override nint PreviewItemCount(QLPreviewController controller)
 	{
-		return (nint)1;
+		return 1;
 	}
 
 	public override IQLPreviewItem GetPreviewItem(QLPreviewController controller, nint index)

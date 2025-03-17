@@ -3,19 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubEntry", "PubEntry\PubEntry.csproj", "{4BE0BAAA-B646-B10B-15DB-61B128413C89}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubEntryLibrary", "PubEntryLibrary\PubEntryLibrary.csproj", "{A6546985-E248-48C6-B1D6-A28CD4F2875A}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupProject", "SetupProject\SetupProject.vdproj", "{39A5183F-2502-4430-80C3-A141228A3238}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubReport", "PubReport\PubReport.csproj", "{888235EC-960E-460A-8BCC-9941500C1E16}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DBPubEntry", "DBPubEntry\DBPubEntry.sqlproj", "{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubWebReport", "PubWebReport\PubWebReport.csproj", "{55BAC6D9-A4D9-42ED-BAD1-2BE1AF30591F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubEntry", "PubEntry\PubEntry.csproj", "{4BE0BAAA-B646-B10B-15DB-61B128413C89}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubEntryWinForms", "PubEntryWinForms\PubEntryWinForms.csproj", "{C72B9269-88A9-9B80-2746-247CD9E9EE60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubReport", "PubReport\PubReport.csproj", "{81FAD607-5454-4A54-B9FC-5EC9FE61DCAB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,15 +35,6 @@ Global
 		{39A5183F-2502-4430-80C3-A141228A3238}.DefaultBuild|Any CPU.Build.0 = Release
 		{39A5183F-2502-4430-80C3-A141228A3238}.Release|Any CPU.ActiveCfg = Release
 		{39A5183F-2502-4430-80C3-A141228A3238}.Release|Any CPU.Build.0 = Release
-		{888235EC-960E-460A-8BCC-9941500C1E16}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{888235EC-960E-460A-8BCC-9941500C1E16}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{888235EC-960E-460A-8BCC-9941500C1E16}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{888235EC-960E-460A-8BCC-9941500C1E16}.DefaultBuild|Any CPU.ActiveCfg = Debug|Any CPU
-		{888235EC-960E-460A-8BCC-9941500C1E16}.DefaultBuild|Any CPU.Build.0 = Debug|Any CPU
-		{888235EC-960E-460A-8BCC-9941500C1E16}.DefaultBuild|Any CPU.Deploy.0 = Debug|Any CPU
-		{888235EC-960E-460A-8BCC-9941500C1E16}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{888235EC-960E-460A-8BCC-9941500C1E16}.Release|Any CPU.Build.0 = Release|Any CPU
-		{888235EC-960E-460A-8BCC-9941500C1E16}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
@@ -70,6 +61,12 @@ Global
 		{C72B9269-88A9-9B80-2746-247CD9E9EE60}.DefaultBuild|Any CPU.Build.0 = Release|Any CPU
 		{C72B9269-88A9-9B80-2746-247CD9E9EE60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C72B9269-88A9-9B80-2746-247CD9E9EE60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81FAD607-5454-4A54-B9FC-5EC9FE61DCAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81FAD607-5454-4A54-B9FC-5EC9FE61DCAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81FAD607-5454-4A54-B9FC-5EC9FE61DCAB}.DefaultBuild|Any CPU.ActiveCfg = Release|Any CPU
+		{81FAD607-5454-4A54-B9FC-5EC9FE61DCAB}.DefaultBuild|Any CPU.Build.0 = Release|Any CPU
+		{81FAD607-5454-4A54-B9FC-5EC9FE61DCAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81FAD607-5454-4A54-B9FC-5EC9FE61DCAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

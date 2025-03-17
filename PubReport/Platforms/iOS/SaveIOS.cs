@@ -1,3 +1,5 @@
+﻿using Foundation;
+
 using QuickLook;
 
 using UIKit;
@@ -6,7 +8,7 @@ namespace PubReport.Services;
 
 public partial class SaveService
 {
-	public partial void SaveAndView(string filename, string contentType, MemoryStream stream)
+	public static partial void SaveAndView(string filename, string contentType, MemoryStream stream)
 	{
 		string exception = string.Empty;
 		string path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
@@ -34,12 +36,12 @@ public partial class SaveService
 					QLPreviewController qlPreview = [];
 					QLPreviewItem item = new QLPreviewItemBundle(filename, filePath);
 					qlPreview.DataSource = new PreviewControllerDS(item);
-					uiViewController.PresentViewController((UIViewController)qlPreview, true, null);
+					uiViewController.PresentViewController(qlPreview, true, null);
 				}
 			}
 		}
 	}
-	public UIWindow GetKeyWindow()
+	public static UIWindow GetKeyWindow()
 	{
 		foreach (var scene in UIApplication.SharedApplication.ConnectedScenes)
 		{
@@ -56,5 +58,73 @@ public partial class SaveService
 		}
 
 		return null;
+	}
+}
+
+public class QLPreviewItemFileSystem(string fileName, string filePath) : QLPreviewItem
+{
+	readonly string _fileName = fileName, _filePath = filePath;
+
+	public override string PreviewItemTitle
+	{
+		get
+		{
+			return _fileName;
+		}
+	}
+	public override NSUrl PreviewItemUrl
+	{
+		get
+		{
+			return NSUrl.FromFilename(_filePath);
+		}
+	}
+}
+
+public class QLPreviewItemBundle : QLPreviewItem
+{
+	readonly string _fileName, _filePath;
+	public QLPreviewItemBundle(string fileName, string filePath)
+	{
+		_fileName = fileName;
+		_filePath = filePath;
+	}
+
+	public override string PreviewItemTitle
+	{
+		get
+		{
+			return _fileName;
+		}
+	}
+	public override NSUrl PreviewItemUrl
+	{
+		get
+		{
+			var documents = NSBundle.MainBundle.BundlePath;
+			var lib = Path.Combine(documents, _filePath);
+			var url = NSUrl.FromFilename(lib);
+			return url;
+		}
+	}
+}
+
+public class PreviewControllerDS : QLPreviewControllerDataSource
+{
+	private readonly QLPreviewItem _item;
+
+	public PreviewControllerDS(QLPreviewItem item)
+	{
+		_item = item;
+	}
+
+	public override nint PreviewItemCount(QLPreviewController controller)
+	{
+		return 1;
+	}
+
+	public override IQLPreviewItem GetPreviewItem(QLPreviewController controller, nint index)
+	{
+		return _item;
 	}
 }

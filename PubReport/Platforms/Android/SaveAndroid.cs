@@ -1,4 +1,4 @@
-using Android.Content;
+﻿using Android.Content;
 using Android.OS;
 
 using Java.IO;
@@ -7,15 +7,12 @@ namespace PubReport.Services;
 
 public partial class SaveService
 {
-	public partial void SaveAndView(string filename, string contentType, MemoryStream stream)
+	public static partial void SaveAndView(string filename, string contentType, MemoryStream stream)
 	{
-		string exception = string.Empty;
-		string root = null;
+		string root;
 
 		if (Android.OS.Environment.IsExternalStorageEmulated)
-		{
 			root = Android.App.Application.Context!.GetExternalFilesDir(Android.OS.Environment.DirectoryDownloads)!.AbsolutePath;
-		}
 		else
 			root = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments);
 
@@ -25,9 +22,7 @@ public partial class SaveService
 		Java.IO.File file = new(myDir, filename);
 
 		if (file.Exists())
-		{
 			file.Delete();
-		}
 
 		try
 		{
@@ -37,13 +32,11 @@ public partial class SaveService
 			outs.Flush();
 			outs.Close();
 		}
-		catch (Exception e)
-		{
-			exception = e.ToString();
-		}
+		catch (Exception) { }
+
 		if (file.Exists())
 		{
-			if (Build.VERSION.SdkInt >= Android.OS.BuildVersionCodes.N)
+			if (Build.VERSION.SdkInt >= BuildVersionCodes.N)
 			{
 				var fileUri = AndroidX.Core.Content.FileProvider.GetUriForFile(Android.App.Application.Context, Android.App.Application.Context.PackageName + ".provider", file);
 				var intent = new Intent(Intent.ActionView);
@@ -61,7 +54,6 @@ public partial class SaveService
 				intent!.AddFlags(ActivityFlags.NewTask);
 				Android.App.Application.Context.StartActivity(intent);
 			}
-
 		}
 	}
 }

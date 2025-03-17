@@ -1,4 +1,4 @@
-using Windows.Storage;
+﻿using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Popups;
@@ -7,7 +7,7 @@ namespace PubReport.Services;
 
 public partial class SaveService
 {
-	public async partial void SaveAndView(string filename, string contentType, MemoryStream stream)
+	public static async partial void SaveAndView(string filename, string contentType, MemoryStream stream)
 	{
 		StorageFile stFile;
 		string extension = Path.GetExtension(filename);

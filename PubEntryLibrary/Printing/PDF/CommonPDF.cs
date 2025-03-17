@@ -6,7 +6,6 @@ using Syncfusion.Pdf.Graphics;
 
 using Color = Syncfusion.Drawing.Color;
 using PointF = Syncfusion.Drawing.PointF;
-using SizeF = Syncfusion.Drawing.SizeF;
 
 namespace PubEntryLibrary.Printing.PDF;
 
@@ -17,15 +16,10 @@ internal static class CommonPDF
 		RectangleF rect = new(0, 0, doc.Pages[0].GetClientSize().Width, 50);
 
 		PdfPageTemplateElement header = new(rect);
-		PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 24);
-		float doubleHeight = font.Height * 2;
 		Color activeColor = Color.FromArgb(44, 71, 120);
-		SizeF imageSize = new(110f, 35f);
 
 		PdfSolidBrush brush = new(activeColor);
-
-		PdfPen pen = new(Color.DarkBlue, 3f);
-		font = new PdfStandardFont(PdfFontFamily.Helvetica, 16, PdfFontStyle.Bold);
+		PdfFont font = new PdfStandardFont(PdfFontFamily.Helvetica, 16, PdfFontStyle.Bold);
 
 		PdfStringFormat format = new()
 		{
@@ -45,7 +39,7 @@ internal static class CommonPDF
 
 		header.Graphics.DrawString(description, font, brush, new RectangleF(0, 0, header.Width, header.Height - 8), format);
 
-		pen = new PdfPen(Color.DarkBlue, 0.7f);
+		PdfPen pen = new(Color.DarkBlue, 0.7f);
 		header.Graphics.DrawLine(pen, 0, 0, header.Width, 0);
 		pen = new PdfPen(Color.DarkBlue, 2f);
 		header.Graphics.DrawLine(pen, 0, 03, header.Width + 3, 03);

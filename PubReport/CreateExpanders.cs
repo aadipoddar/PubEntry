@@ -110,8 +110,7 @@ internal class CreateExpanders
 			if (button.Text == "Print Summary")
 			{
 				MemoryStream ms = await PDF.Summary(_fromDateTime, _toDateTime);
-				SaveService saveService = new();
-				saveService.SaveAndView("SummaryReport.pdf", "application/pdf", ms);
+				SaveService.SaveAndView("SummaryReport.pdf", "application/pdf", ms);
 			}
 			else
 			{
