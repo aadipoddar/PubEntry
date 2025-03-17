@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 using System.Reflection;
 
-using PubEntryLibrary.DataAccess;
+using Syncfusion.Maui.Core.Hosting;
 
 #if ANDROID
 using PubReport.Platforms.Android;
@@ -36,6 +36,8 @@ public static class MauiProgram
 #if DEBUG
 		builder.Logging.AddDebug();
 #endif
+
+		builder.ConfigureSyncfusionCore();
 
 		return builder.Build();
 	}

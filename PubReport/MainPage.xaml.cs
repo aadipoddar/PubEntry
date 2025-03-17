@@ -1,85 +1,69 @@
-﻿using PubReport.Services;
+﻿using PubEntryLibrary.Printing.PDF;
 
+using PubReport.Services;
 
 namespace PubReport;
 
 public partial class MainPage : ContentPage
 {
-	#region Constructor
-	private static int PubOpenTime => (int)Application.Current.Resources[SettingsKeys.PubOpenTime];
-	private static int PubCloseTime => (int)Application.Current.Resources[SettingsKeys.PubCloseTime];
+	private static DateTime _fromDateTime, _toDateTime;
+	private bool _isLoadingData;
 
-	public MainPage()
+	public MainPage() => InitializeComponent();
+
+	private async void ContentPage_Loaded(object sender, EventArgs e)
 	{
-		InitializeComponent();
-		LoadData();
+		await LoadComboBox();
+		await LoadData();
 	}
 
-	private async void LoadData()
+	private async Task LoadComboBox()
 	{
-		if (DateTime.Now.Hour >= 17)
+		var openTime = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime));
+		var closeTime = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime));
+
+		if (DateTime.Now.Hour >= openTime)
 		{
-			toDatePicker.Date = DateTime.Now.Date.AddDays(1);
 			fromDatePicker.Date = DateTime.Now.Date;
+			toDatePicker.Date = DateTime.Now.Date.AddDays(1);
 		}
 		else
 		{
-			toDatePicker.Date = DateTime.Now.Date;
 			fromDatePicker.Date = DateTime.Now.Date.AddDays(-1);
+			toDatePicker.Date = DateTime.Now.Date;
 		}
 
-		locationPicker.ItemsSource = (await CommonData.LoadTableDataByStatus<LocationModel>(Table.Location)).ToList();
-		locationPicker.ItemDisplayBinding = new Binding(nameof(LocationModel.Name));
-		locationPicker.SelectedIndex = 0;
-	}
-	#endregion
-
-	private bool ValidateTime()
-	{
-		if (fromDatePicker.Date > toDatePicker.Date) return false;
-
-		if (fromTimePicker.Time > toTimePicker.Time)
-			if (fromDatePicker.Date == toDatePicker.Date)
-				return false;
-
-		return true;
+		fromTimePicker.Time = TimeSpan.FromHours(openTime);
+		toTimePicker.Time = TimeSpan.FromHours(closeTime);
 	}
 
-	#region Events
-	private async void SummaryReportButtonClicked(object sender, EventArgs e)
-	{
-		if (!ValidateTime()) await DisplayAlert("Alert", "Incorrect Time or Date", "OK");
-		else await PrintPDF();
-	}
+	private async void datePicker_DateSelected(object sender, DateChangedEventArgs e) => await LoadData();
 
-	private async void DetailReportButtonClicked(object sender, EventArgs e)
-	{
-		if (!ValidateTime()) await DisplayAlert("Alert", "Incorrect Time or Date", "OK");
-		else await PrintPDF(true);
-	}
+	private async void timePicker_TimeSelected(object sender, TimeChangedEventArgs e) => await LoadData();
 
-	private async void ExcelDetailReportButtonClicked(object sender, EventArgs e)
-	{
-		if (!ValidateTime()) await DisplayAlert("Alert", "Incorrect Time or Date", "OK");
-		else await ExportToExcel();
-	}
-	#endregion
+	private async void refreshButton_Clicked(object sender, EventArgs e) => await LoadData();
 
-	private async Task PrintPDF(bool isDetail = false)
+	private async void summaryReportButton_Clicked(object sender, EventArgs e)
 	{
-		MemoryStream ms;
-		if (isDetail) ms = await PDF.Detail(fromDatePicker.Date.Add(fromTimePicker.Time), toDatePicker.Date.Add(toTimePicker.Time), (locationPicker.SelectedItem as LocationModel).Id);
-		else ms = await PDF.Summary(fromDatePicker.Date.Add(fromTimePicker.Time), toDatePicker.Date.Add(toTimePicker.Time));
-
+		MemoryStream ms = await PDF.Summary(_fromDateTime, _toDateTime);
 		SaveService saveService = new();
-		if (isDetail) saveService.SaveAndView("DetailReport.pdf", "application/pdf", ms);
-		else saveService.SaveAndView("SummaryReport.pdf", "application/pdf", ms);
+		saveService.SaveAndView("SummaryReport.pdf", "application/pdf", ms);
 	}
 
-	private async Task ExportToExcel()
+	private async Task LoadData()
 	{
-		MemoryStream ms = await Excel.TransactionAdvanceExcel(fromDatePicker.Date.Add(fromTimePicker.Time), toDatePicker.Date.Add(toTimePicker.Time), (locationPicker.SelectedItem as LocationModel).Id);
-		SaveService saveService = new();
-		saveService.SaveAndView("DetailedExcel.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ms);
+		if (_isLoadingData) return;
+
+		_isLoadingData = true;
+
+		fromDatePicker.MaximumDate = toDatePicker.Date;
+		toDatePicker.MinimumDate = fromDatePicker.Date;
+
+		_fromDateTime = fromDatePicker.Date.AddHours(fromTimePicker.Time.Hours);
+		_toDateTime = toDatePicker.Date.AddHours(fromTimePicker.Time.Hours);
+
+		await CreateExpanders.LoadExpandersData(_fromDateTime, _toDateTime, expanderGrid);
+
+		_isLoadingData = false;
 	}
 }
