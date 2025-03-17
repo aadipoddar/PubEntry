@@ -1,9 +1,5 @@
 ﻿using Microsoft.Maui.Controls.Shapes;
 
-using PubEntryLibrary.Printing.PDF;
-
-using PubReport.Services;
-
 using Syncfusion.Maui.Expander;
 
 namespace PubReport;
@@ -90,37 +86,19 @@ internal class CreateExpanders
 		{
 			TextColor = Colors.Black,
 			Text = locationName == "Total" ? "Grand Total" : $"{locationName}",
-			Margin = new Thickness(10),
-			VerticalOptions = LayoutOptions.Center
+			Margin = new Thickness(10)
 		};
 		Grid.SetColumn(locationText, 0);
 		headerGrid.Children.Add(locationText);
 
-		var detailedButton = new Button
+		var amountLabel = new Label
 		{
-			Text = locationName == "Total" ? "Print Summary" : "Detailed",
-			Margin = new Thickness(5),
-			Padding = new Thickness(5)
+			Text = (transactionTotal.Cash + transactionTotal.Card + transactionTotal.UPI + transactionTotal.Amex).ToString(),
+			Margin = new Thickness(10)
 		};
 
-		detailedButton.Clicked += async (s, e) =>
-		{
-			if (s is not Button button) return;
-
-			if (button.Text == "Print Summary")
-			{
-				MemoryStream ms = await PDF.Summary(_fromDateTime, _toDateTime);
-				SaveService.SaveAndView("SummaryReport.pdf", "application/pdf", ms);
-			}
-			else
-			{
-				//DetailedReportWindow detailedReportWindow = new(_fromDateTime, _toDateTime, locationId);
-				//detailedReportWindow.Show();
-			}
-		};
-
-		Grid.SetColumn(detailedButton, 2);
-		headerGrid.Children.Add(detailedButton);
+		Grid.SetColumn(amountLabel, 2);
+		headerGrid.Children.Add(amountLabel);
 
 		#endregion
 

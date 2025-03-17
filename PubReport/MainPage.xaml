@@ -14,9 +14,12 @@
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
 				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
+				<RowDefinition Height="Auto" />
 			</Grid.RowDefinitions>
 
-			<Grid Grid.Row="0" HorizontalOptions="Center">
+			<Grid Grid.Row="0" HorizontalOptions="Center" Margin="0,10,0,0">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="Auto" />
@@ -48,17 +51,31 @@
 				<Button x:Name="summaryReportButton" Text="Sumary Report" Margin="10" Grid.Column="2" Clicked="summaryReportButton_Clicked" />
 			</Grid>
 
-			<Grid Grid.Row="2" HorizontalOptions="Center">
+			<Grid Grid.Row="2" Margin="20" x:Name="expanderGrid"/>
+
+			<Picker x:Name="locationPicker" Grid.Row="3" HorizontalOptions="Center" Margin="10" />
+
+			<Grid Grid.Row="4" HorizontalOptions="Center">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="Auto" />
 					<ColumnDefinition Width="Auto" />
 				</Grid.ColumnDefinitions>
 
-				<Button x:Name="detailedReportButton" Text="Detailed Report" Margin="10" Grid.Column="0" Clicked="detailedReportButton_Clicked"/>
-				<Button x:Name="advanceReportButton" Text="Advance Report" Margin="10" Grid.Column="1"/>
+				<Button x:Name="detailedPDFButton" Text="Detailed PDF" Margin="10" Grid.Column="0" Clicked="detailedPDFButton_Clicked"/>
+				<Button x:Name="detailedExcelButton" Text="Detailed Excel" Margin="10" Grid.Column="1" Clicked="detailedExcelButton_Clicked"/>
 			</Grid>
 
-			<Grid Grid.Row="3" Margin="20" x:Name="expanderGrid"/>
+			<DatePicker x:Name="advanceDatePicker" Grid.Row="5" HorizontalOptions="Center" Margin="10" />
+
+			<Grid Grid.Row="6" HorizontalOptions="Center" Margin="0,0,0,10">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto" />
+					<ColumnDefinition Width="Auto" />
+				</Grid.ColumnDefinitions>
+
+				<Button x:Name="advancePDFButton" Text="Advacne PDF" Margin="10" Grid.Column="0" Clicked="advancePDFButton_Clicked"/>
+				<Button x:Name="advanceExcelButton" Text="Advance Excel" Margin="10" Grid.Column="1" Clicked="advanceExcelButton_Clicked"/>
+			</Grid>
 
 			<popup:SfPopup x:Name="popup">
 				<popup:SfPopup.HeaderTemplate>

@@ -4,6 +4,7 @@ using System.Reflection;
 using PubReport.Platforms.Android;
 #endif
 
+using PubEntryLibrary.Printing.Excel;
 using PubEntryLibrary.Printing.PDF;
 
 using PubReport.Services;
@@ -23,8 +24,8 @@ public partial class MainPage : ContentPage
 		popup.Show();
 
 #if ANDROID
-		//if (await AadiSoftUpdater.CheckForUpdates("aadipoddar", "PubEntry", Assembly.GetExecutingAssembly().GetName().Version.ToString()))
-		//	await AadiSoftUpdater.UpdateApp("aadipoddar", "PubEntry", "com.aadisoft.pubreport");
+		if (await AadiSoftUpdater.CheckForUpdates("aadipoddar", "PubEntry", Assembly.GetExecutingAssembly().GetName().Version.ToString()))
+			await AadiSoftUpdater.UpdateApp("aadipoddar", "PubEntry", "com.aadisoft.pubreport");
 #endif
 
 		await LoadComboBox();
@@ -56,6 +57,12 @@ public partial class MainPage : ContentPage
 		fromTimePicker.Time = TimeSpan.FromHours(openTime);
 		toTimePicker.Time = TimeSpan.FromHours(closeTime);
 
+		locationPicker.ItemsSource = await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location);
+		locationPicker.ItemDisplayBinding = new Binding(nameof(LocationModel.Name));
+		locationPicker.SelectedIndex = 0;
+
+		advanceDatePicker.Date = DateTime.Now.Date;
+
 		_isLoadingData = false;
 	}
 
@@ -64,14 +71,6 @@ public partial class MainPage : ContentPage
 	private async void timePicker_TimeSelected(object sender, TimeChangedEventArgs e) => await LoadData();
 
 	private async void refreshButton_Clicked(object sender, EventArgs e) => await LoadData();
-
-	private async void summaryReportButton_Clicked(object sender, EventArgs e)
-	{
-		MemoryStream ms = await PDF.Summary(_fromDateTime, _toDateTime);
-		SaveService.SaveAndView("SummaryReport.pdf", "application/pdf", ms);
-	}
-
-	private async void detailedReportButton_Clicked(object sender, EventArgs e) => await Navigation.PushAsync(new DetailedReportPage());
 
 	private async Task LoadData()
 	{
@@ -87,5 +86,35 @@ public partial class MainPage : ContentPage
 		await CreateExpanders.LoadExpandersData(_fromDateTime, _toDateTime, expanderGrid);
 
 		_isLoadingData = false;
+	}
+
+	private async void summaryReportButton_Clicked(object sender, EventArgs e)
+	{
+		MemoryStream ms = await PDF.Summary(_fromDateTime, _toDateTime);
+		SaveService.SaveAndView("SummaryReport.pdf", "application/pdf", ms);
+	}
+
+	private async void detailedPDFButton_Clicked(object sender, EventArgs e)
+	{
+		MemoryStream ms = await PDF.Detail(_fromDateTime, _toDateTime, (locationPicker.SelectedItem as LocationModel).Id);
+		SaveService.SaveAndView("DetailedReport.pdf", "application/pdf", ms);
+	}
+
+	private async void detailedExcelButton_Clicked(object sender, EventArgs e)
+	{
+		MemoryStream ms = await Excel.TransactionAdvanceExcel(_fromDateTime, _toDateTime, (locationPicker.SelectedItem as LocationModel).Id);
+		SaveService.SaveAndView("DetailedReport.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ms);
+	}
+
+	private async void advancePDFButton_Clicked(object sender, EventArgs e)
+	{
+		MemoryStream ms = await PDF.AdvanceTakeOn(advanceDatePicker.Date, (locationPicker.SelectedItem as LocationModel).Id);
+		SaveService.SaveAndView("AdvanceReport.pdf", "application/pdf", ms);
+	}
+
+	private async void advanceExcelButton_Clicked(object sender, EventArgs e)
+	{
+		MemoryStream ms = await Excel.AdvanceTakeOnExcel(advanceDatePicker.Date, (locationPicker.SelectedItem as LocationModel).Id);
+		SaveService.SaveAndView("AdvanceReport.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ms);
 	}
 }
