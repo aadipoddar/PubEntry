@@ -13,10 +13,25 @@ namespace PubReport;
 
 public partial class MainPage : ContentPage
 {
+	private readonly IDispatcherTimer _refreshTimer;
+
 	private static DateTime _fromDateTime, _toDateTime;
 	private bool _isLoadingData;
 
-	public MainPage() => InitializeComponent();
+	public MainPage()
+	{
+		InitializeComponent();
+		_refreshTimer = Dispatcher.CreateTimer();
+		InitializeRefreshTimer();
+	}
+
+	private async void InitializeRefreshTimer()
+	{
+		_refreshTimer.Interval = TimeSpan.FromSeconds(int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.RefreshReportTimer)));
+		_refreshTimer.Tick += async (sender, e) => await LoadData();
+	}
+
+	#region LoadData
 
 	private async void ContentPage_Loaded(object sender, EventArgs e)
 	{
@@ -34,6 +49,8 @@ public partial class MainPage : ContentPage
 		popup.StaysOpen = false;
 		popup.Dismiss();
 		popup.StaysOpen = true;
+
+		_refreshTimer.Start();
 	}
 
 	private async Task LoadComboBox()
@@ -88,6 +105,10 @@ public partial class MainPage : ContentPage
 		_isLoadingData = false;
 	}
 
+	#endregion
+
+	#region Button
+
 	private async void summaryReportButton_Clicked(object sender, EventArgs e)
 	{
 		MemoryStream ms = await PDF.Summary(_fromDateTime, _toDateTime);
@@ -117,4 +138,6 @@ public partial class MainPage : ContentPage
 		MemoryStream ms = await Excel.AdvanceTakeOnExcel(advanceDatePicker.Date, (locationPicker.SelectedItem as LocationModel).Id);
 		SaveService.SaveAndView("AdvanceReport.xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ms);
 	}
+
+	#endregion
 }

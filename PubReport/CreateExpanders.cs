@@ -93,6 +93,7 @@ internal class CreateExpanders
 
 		var amountLabel = new Label
 		{
+			TextColor = Colors.Black,
 			Text = (transactionTotal.Cash + transactionTotal.Card + transactionTotal.UPI + transactionTotal.Amex).ToString(),
 			Margin = new Thickness(10)
 		};
