@@ -4,18 +4,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubEntry", "PubEntry\PubEntry.csproj", "{4BE0BAAA-B646-B10B-15DB-61B128413C89}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0} = {CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubEntryLibrary", "PubEntryLibrary\PubEntryLibrary.csproj", "{A6546985-E248-48C6-B1D6-A28CD4F2875A}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SetupProject", "SetupProject\SetupProject.vdproj", "{39A5183F-2502-4430-80C3-A141228A3238}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A6546985-E248-48C6-B1D6-A28CD4F2875A} = {A6546985-E248-48C6-B1D6-A28CD4F2875A}
+		{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0} = {CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}
+	EndProjectSection
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DBPubEntry", "DBPubEntry\DBPubEntry.sqlproj", "{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubWebReport", "PubWebReport\PubWebReport.csproj", "{55BAC6D9-A4D9-42ED-BAD1-2BE1AF30591F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0} = {CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubEntryWinForms", "PubEntryWinForms\PubEntryWinForms.csproj", "{C72B9269-88A9-9B80-2746-247CD9E9EE60}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PubReport", "PubReport\PubReport.csproj", "{81FAD607-5454-4A54-B9FC-5EC9FE61DCAB}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0} = {CC664FBB-261E-4876-8A1A-0F7CCDCEB3C0}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -15,13 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_0BF746C7F99447F698B0BEECBCDB1094"
+        "MsmKey" = "8:_075FA77DBB0F49539558044732F28006"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_DEF7507161654336B04198D1F6F0FF28"
+        "MsmKey" = "8:_C7956535606643CD9CF41F9DF3AA7753"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -95,7 +95,7 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0BF746C7F99447F698B0BEECBCDB1094"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_075FA77DBB0F49539558044732F28006"
             {
             "SourcePath" = "8:..\\PubEntry\\Golder Park.ico"
             "TargetName" = "8:Golder Park.ico"
@@ -292,7 +292,7 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_6A003396C4F44F00A96D8FFA1E89D186"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_1786A5C4CBAF48A4A441DAA868B6CE03"
             {
             "Name" = "8:Pub Entry"
             "Arguments" = "8:"
@@ -300,24 +300,24 @@
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
-            "Target" = "8:_DEF7507161654336B04198D1F6F0FF28"
-            "Folder" = "8:_6F27156D86404C9695DEA7D46F0AB49D"
-            "WorkingFolder" = "8:_859C644195F945DFB46F59B5F4144EE6"
-            "Icon" = "8:"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_90BF81D7597A48DBA2BEC86462564F4C"
-            {
-            "Name" = "8:Pub Entry"
-            "Arguments" = "8:"
-            "Description" = "8:"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_DEF7507161654336B04198D1F6F0FF28"
+            "Target" = "8:_C7956535606643CD9CF41F9DF3AA7753"
             "Folder" = "8:_60CF4C5602FA417DB9944E3B693D9BF6"
             "WorkingFolder" = "8:_859C644195F945DFB46F59B5F4144EE6"
-            "Icon" = "8:"
+            "Icon" = "8:_075FA77DBB0F49539558044732F28006"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_D16A8730B3FC4E36A7FB4B4CF53D42F6"
+            {
+            "Name" = "8:Pub Entry"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_C7956535606643CD9CF41F9DF3AA7753"
+            "Folder" = "8:_6F27156D86404C9695DEA7D46F0AB49D"
+            "WorkingFolder" = "8:_859C644195F945DFB46F59B5F4144EE6"
+            "Icon" = "8:_075FA77DBB0F49539558044732F28006"
             "Feature" = "8:"
             }
         }
@@ -719,7 +719,7 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_DEF7507161654336B04198D1F6F0FF28"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C7956535606643CD9CF41F9DF3AA7753"
             {
             "SourcePath" = "8:..\\PubEntry\\obj\\Release\\net9.0-windows8.0\\apphost.exe"
             "TargetName" = "8:"
