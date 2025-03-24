@@ -21,9 +21,10 @@
             </Grid.RowDefinitions>
 
             <ComboBox x:Name="locationComboBox" Grid.Row="0" Margin="10" Padding="5" MaxWidth="200" SelectionChanged="locationComboBox_SelectionChanged" />
-            <ComboBox x:Name="userComboBox" Grid.Row="1" Margin="10" Padding="5" MaxWidth="200" SelectionChanged="userComboBox_SelectionChanged" />
+			<ComboBox x:Name="userComboBox" Grid.Row="1" Margin="10" Padding="5" MaxWidth="200" SelectionChanged="userComboBox_SelectionChanged"
+					  ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True" ScrollViewer.PanningMode="Both" Stylus.IsFlicksEnabled="False" />
 
-            <PasswordBox x:Name="passwordBox" Grid.Row="2" Margin="10" Padding="5" MaxWidth="200" />
+			<PasswordBox x:Name="passwordBox" Grid.Row="2" Margin="10" Padding="5" MaxWidth="200" />
 
             <Button x:Name="entryButton" HorizontalAlignment="Center" Grid.Row="3" Margin="10" Padding="5" MinWidth="100" Click="entryButton_Click" Content="Entry" IsDefault="True" Style="{DynamicResource AccentButtonStyle}" />
             <Button x:Name="advanceButton" HorizontalAlignment="Center" Grid.Row="4" Margin="10" Padding="5" MinWidth="100" Click="advanceButton_Click" Content="Advance"/>

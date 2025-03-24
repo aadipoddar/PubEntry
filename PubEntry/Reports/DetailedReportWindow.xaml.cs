@@ -228,12 +228,6 @@ public partial class DetailedReportWindow : Window
 		Process.Start(new ProcessStartInfo($"{Path.GetTempPath()}\\DetailedReport.xlsx") { UseShellExecute = true });
 	}
 
-	private void transactionDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
-	{
-		if (transactionDataGrid.SelectedItem is TransactionPrintModel) loadTransactionButton.Visibility = Visibility.Visible;
-		else loadTransactionButton.Visibility = Visibility.Collapsed;
-	}
-
 	private void advanceDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
 	{
 		if (advanceDataGrid.SelectedItem is AdvancePrintModel selectedAdvance)
@@ -251,9 +245,5 @@ public partial class DetailedReportWindow : Window
 				}
 			}
 		}
-	}
-
-	private void loadTransactionButton_Click(object sender, RoutedEventArgs e)
-	{
 	}
 }

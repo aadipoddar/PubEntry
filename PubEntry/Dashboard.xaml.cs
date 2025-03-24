@@ -69,7 +69,6 @@ public partial class Dashboard : Window
 	private void userComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
 	{
 		passwordBox.Clear();
-		passwordBox.Focus();
 
 		if (userComboBox.SelectedItem is null) return;
 
