@@ -106,6 +106,7 @@
     <Build Include="Stored Procedures\Settings\Update_Setting.sql" />
     <Build Include="Stored Procedures\Settings\Load_Settings_By_Key.sql" />
     <Build Include="Stored Procedures\Settings\Reset_Settings.sql" />
+    <Build Include="Stored Procedures\Transaction\Laod_Transaction_By_Location_Person.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="PublishLocations\LocalDBPubEntry.publish.xml" />
