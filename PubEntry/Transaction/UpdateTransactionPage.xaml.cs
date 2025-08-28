@@ -49,7 +49,8 @@ public partial class UpdateTransactionPage : Page
 				cardTextBox.Text = _transaction.Card.ToString();
 				upiTextBox.Text = _transaction.UPI.ToString();
 				amexTextBox.Text = _transaction.Amex.ToString();
-				dateTimeLabel.Content = _transaction.DateTime.ToString();
+				onlineQRTextBox.Text = _transaction.OnlineQR.ToString();
+				dateTimeTextBlock.Text = _transaction.DateTime.ToString();
 				reservationComboBox.SelectedValue = _transaction.ReservationTypeId;
 				remarksTextBox.Text = _transaction.ApprovedBy.ToString();
 				locationComboBox.SelectedValue = _transaction.LocationId;
@@ -146,6 +147,7 @@ public partial class UpdateTransactionPage : Page
 		if (string.IsNullOrEmpty(cardTextBox.Text)) cardTextBox.Text = "0";
 		if (string.IsNullOrEmpty(upiTextBox.Text)) upiTextBox.Text = "0";
 		if (string.IsNullOrEmpty(amexTextBox.Text)) amexTextBox.Text = "0";
+		if (string.IsNullOrEmpty(onlineQRTextBox.Text)) onlineQRTextBox.Text = "0";
 
 		return true;
 	}
@@ -169,13 +171,6 @@ public partial class UpdateTransactionPage : Page
 		_parentFrame.Content = new SlipIdPage(_parentFrame);
 	}
 
-	private async Task UpdateAdvance()
-	{
-		var existingAdvance = await AdvanceData.LoadAdvanceByTransactionId(_transaction.Id);
-		if (existingAdvance is not null) await AdvanceData.ClearAdvance(existingAdvance.Id, 0);
-		if (_foundAdvanceId is not 0) await AdvanceData.ClearAdvance(_foundAdvanceId, _transaction.Id);
-	}
-
 	private async Task UpdateTransaction()
 	{
 		PersonModel personModel = new()
@@ -186,11 +181,11 @@ public partial class UpdateTransactionPage : Page
 			Loyalty = (bool)loyaltyCheckBox.IsChecked
 		};
 
-		if (nameTextBox.IsReadOnly == false) personModel.Id = await PersonData.InsertPerson(personModel);
-		else personModel.Id = (await PersonData.LoadPersonByNumber(numberTextBox.Text)).Id;
-		await PersonData.UpdatePerson(personModel);
+		if (nameTextBox.IsReadOnly)
+			personModel.Id = (await PersonData.LoadPersonByNumber(numberTextBox.Text)).Id;
+		personModel.Id = await PersonData.InsertPerson(personModel);
 
-		await TransactionData.UpdateTransaction(new TransactionModel
+		await TransactionData.InsertTransaction(new()
 		{
 			Id = _transaction.Id,
 			PersonId = personModel.Id,
@@ -200,12 +195,32 @@ public partial class UpdateTransactionPage : Page
 			Card = int.Parse(cardTextBox.Text),
 			UPI = int.Parse(upiTextBox.Text),
 			Amex = int.Parse(amexTextBox.Text),
+			OnlineQR = int.Parse(onlineQRTextBox.Text),
 			ReservationTypeId = (int)reservationComboBox.SelectedValue,
 			DateTime = DateTime.Now,
 			ApprovedBy = remarksTextBox.Text,
 			LocationId = (int)locationComboBox.SelectedValue,
 			UserId = _transaction.UserId
 		});
+	}
+
+	private async Task UpdateAdvance()
+	{
+		var existingAdvance = await AdvanceData.LoadAdvanceByTransactionId(_transaction.Id);
+
+		if (existingAdvance is not null)
+		{
+			var advance = await CommonData.LoadTableDataById<AdvanceModel>(TableNames.Advance, existingAdvance.Id);
+			advance.TransactionId = 0;
+			await AdvanceData.InsertAdvance(advance);
+		}
+
+		if (_foundAdvanceId is not 0)
+		{
+			var advance = await CommonData.LoadTableDataById<AdvanceModel>(TableNames.Advance, _foundAdvanceId);
+			advance.TransactionId = _transaction.Id;
+			await AdvanceData.InsertAdvance(advance);
+		}
 	}
 
 	private async Task PrintThermal()

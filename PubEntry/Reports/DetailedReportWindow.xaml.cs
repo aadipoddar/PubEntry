@@ -131,11 +131,14 @@ public partial class DetailedReportWindow : Window
 		_timer.Start();
 	}
 
-	private async void values_SelectionChanged(object sender, SelectionChangedEventArgs e) => await LoadDateTime();
+	private async void values_SelectionChanged(object sender, SelectionChangedEventArgs e) =>
+		await LoadDateTime();
 
-	private async void locationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) => await LoadDateTime();
+	private async void locationComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) =>
+		await LoadDateTime();
 
-	private async void RefreshData(object sender, ExecutedRoutedEventArgs e) => await LoadData();
+	private async void RefreshData(object sender, ExecutedRoutedEventArgs e) =>
+		await LoadData();
 
 	private async Task LoadDateTime()
 	{
@@ -195,11 +198,12 @@ public partial class DetailedReportWindow : Window
 		femaleTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Female)}";
 		loyaltyTextBox.Text = $"{detailedTransactionPrintModel.Count(x => x?.Loyalty == 'L')}";
 
-		amountTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Cash + x.Card + x.UPI + x.Amex)}";
+		amountTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Cash + x.Card + x.UPI + x.Amex + x.OnlineQR)}";
 		cashTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Cash)}";
 		cardTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Card)}";
 		upiTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.UPI)}";
 		amexTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.Amex)}";
+		onlineQRTextBox.Text = $"{detailedTransactionPrintModel.Sum(x => x?.OnlineQR)}";
 
 		advanceTextBox.Text = $"{detailedAdvancePrintModel.Sum(x => x?.Amount)}";
 		redeemedAdvanceTextBox.Text = $"{detailedAdvancePrintModel.Where(x => x?.SlipId != "NOT REDEEMED").Sum(x => x?.Amount)}";
@@ -238,7 +242,7 @@ public partial class DetailedReportWindow : Window
 				var transaction = transactionDataGrid.Items
 					.OfType<TransactionPrintModel>()
 					.FirstOrDefault(t => t.Id == int.Parse(selectedAdvance.SlipId));
-				if (transaction != null)
+				if (transaction is not null)
 				{
 					transactionDataGrid.ScrollIntoView(transaction);
 					transactionDataGrid.SelectedItem = transaction;

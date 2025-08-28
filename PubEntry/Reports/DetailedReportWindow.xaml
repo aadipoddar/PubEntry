@@ -171,6 +171,7 @@
 							<RowDefinition Height="Auto" />
 							<RowDefinition Height="Auto" />
 							<RowDefinition Height="Auto" />
+							<RowDefinition Height="Auto" />
 						</Grid.RowDefinitions>
 
 						<TextBlock Grid.Column="0" Grid.Row="0" Text="Total Amount" Margin="10" Padding="5" />
@@ -187,6 +188,9 @@
 
 						<TextBlock Grid.Column="0" Grid.Row="5" Text="Amex" Margin="10" Padding="5" />
 						<TextBox x:Name="amexTextBox" Grid.Column="1" Grid.Row="5" Margin="10" Padding="5" TextAlignment="Right" MinWidth="100" Text="0" IsReadOnly="True" />
+
+						<TextBlock Grid.Column="0" Grid.Row="6" Text="Online QR" Margin="10" Padding="5" />
+						<TextBox x:Name="onlineQRTextBox" Grid.Column="1" Grid.Row="6" Margin="10" Padding="5" TextAlignment="Right" MinWidth="100" Text="0" IsReadOnly="True" />
 					</Grid>
 
 					<Grid Grid.Column="4">

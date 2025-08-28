@@ -63,7 +63,7 @@ internal static class SummaryPDF
 		var textElement = new PdfTextElement($"Total People: {transactionTotalsModel.Last().Male + transactionTotalsModel.Last().Female}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), _layoutFormat);
 
-		string text = $"Total Amount: {transactionTotalsModel.Last().Cash + transactionTotalsModel.Last().Card + transactionTotalsModel.Last().UPI + transactionTotalsModel.Last().Amex}";
+		string text = $"Total Amount: {transactionTotalsModel.Last().Cash + transactionTotalsModel.Last().Card + transactionTotalsModel.Last().UPI + transactionTotalsModel.Last().Amex + transactionTotalsModel.Last().OnlineQR}";
 		float textWidth = font.MeasureString(text).Width;
 		float pageWidth = pdfPage.GetClientSize().Width;
 		float textX = pageWidth - textWidth;
@@ -101,6 +101,13 @@ internal static class SummaryPDF
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), _layoutFormat);
 
 		text = $"Amex: {transactionTotalsModel.Last().Amex}";
+		textWidth = font.MeasureString(text).Width;
+		pageWidth = pdfPage.GetClientSize().Width;
+		textX = pageWidth - textWidth;
+		textElement = new PdfTextElement(text, font);
+		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 10), _layoutFormat);
+
+		text = $"Online QR: {transactionTotalsModel.Last().OnlineQR}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
@@ -200,7 +207,7 @@ internal static class SummaryPDF
 		textElement = new PdfTextElement($"Total People: {transactionTotalsModel.Sum(x => x.Male + x.Female)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), _layoutFormat);
 
-		text = $"Total Amount: {transactionTotalsModel.Sum(x => x.Cash + x.Card + x.UPI + x.Amex)}";
+		text = $"Total Amount: {transactionTotalsModel.Sum(x => x.Cash + x.Card + x.UPI + x.Amex + x.OnlineQR)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;
@@ -238,6 +245,13 @@ internal static class SummaryPDF
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), _layoutFormat);
 
 		text = $"Amex: {transactionTotalsModel.Sum(x => x.Amex)}";
+		textWidth = font.MeasureString(text).Width;
+		pageWidth = pdfPage.GetClientSize().Width;
+		textX = pageWidth - textWidth;
+		textElement = new PdfTextElement(text, font);
+		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 10), _layoutFormat);
+
+		text = $"Online QR: {transactionTotalsModel.Sum(x => x.OnlineQR)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;

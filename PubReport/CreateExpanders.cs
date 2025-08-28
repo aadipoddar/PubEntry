@@ -31,7 +31,7 @@ internal class CreateExpanders
 			expanderGrid.Children.Add(expander);
 		}
 
-		TransactionTotalsModel granTransactionTotal = new()
+		TransactionTotalsModel grandTransactionTotal = new()
 		{
 			LocationId = 0,
 			Male = transactionTotalsModels.Sum(x => x.Male),
@@ -41,11 +41,12 @@ internal class CreateExpanders
 			Card = transactionTotalsModels.Sum(x => x.Card),
 			UPI = transactionTotalsModels.Sum(x => x.UPI),
 			Amex = transactionTotalsModels.Sum(x => x.Amex),
+			OnlineQR = transactionTotalsModels.Sum(x => x.OnlineQR),
 		};
 
 		expanderGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(30) });
 		expanderGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-		var totalExpander = CreateLocationExpander(granTransactionTotal, "Total");
+		var totalExpander = CreateLocationExpander(grandTransactionTotal, "Total");
 		Grid.SetRow(totalExpander, expanderGrid.RowDefinitions.Count - 1);
 		expanderGrid.Children.Add(totalExpander);
 	}
@@ -94,7 +95,7 @@ internal class CreateExpanders
 		var amountLabel = new Label
 		{
 			TextColor = Colors.Black,
-			Text = (transactionTotal.Cash + transactionTotal.Card + transactionTotal.UPI + transactionTotal.Amex).ToString(),
+			Text = (transactionTotal.Cash + transactionTotal.Card + transactionTotal.UPI + transactionTotal.Amex + transactionTotal.OnlineQR).ToString(),
 			Margin = new Thickness(10)
 		};
 
@@ -238,7 +239,7 @@ internal class CreateExpanders
 
 		var amountTextBox = new Entry
 		{
-			Text = (transactionTotal.Cash + transactionTotal.Card + transactionTotal.UPI + transactionTotal.Amex).ToString(),
+			Text = (transactionTotal.Cash + transactionTotal.Card + transactionTotal.UPI + transactionTotal.Amex + transactionTotal.OnlineQR).ToString(),
 			HorizontalTextAlignment = TextAlignment.End,
 			IsReadOnly = true
 		};
@@ -309,6 +310,22 @@ internal class CreateExpanders
 		Grid.SetRow(amexTextBox, 5);
 		Grid.SetColumn(amexTextBox, 1);
 		grid.Children.Add(amexTextBox);
+
+
+		var onlineQRText = new Label { Text = "Online QR", Margin = new Thickness(10) };
+		Grid.SetRow(onlineQRText, 5);
+		Grid.SetColumn(onlineQRText, 0);
+		grid.Children.Add(onlineQRText);
+
+		var onlineQRTextBox = new Entry
+		{
+			Text = transactionTotal.OnlineQR.ToString(),
+			HorizontalTextAlignment = TextAlignment.End,
+			IsReadOnly = true
+		};
+		Grid.SetRow(onlineQRTextBox, 5);
+		Grid.SetColumn(onlineQRTextBox, 1);
+		grid.Children.Add(onlineQRTextBox);
 
 		return grid;
 	}

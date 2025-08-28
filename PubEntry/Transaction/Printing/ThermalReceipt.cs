@@ -90,9 +90,9 @@ internal static class ThermalReceipt
 
 	private static void AddPaymentDetails(FlowDocument document, TransactionPrintModel receiptModel, int advance)
 	{
-		document.Blocks.Add(ThermalParagraphs.SubHeaderParagraph($"Total: {receiptModel.Cash + receiptModel.Card + receiptModel.UPI + receiptModel.Amex + advance}"));
+		document.Blocks.Add(ThermalParagraphs.SubHeaderParagraph($"Total: {receiptModel.Cash + receiptModel.Card + receiptModel.UPI + receiptModel.Amex + receiptModel.OnlineQR + advance}"));
 
-		if (receiptModel.Cash + receiptModel.Card + receiptModel.UPI + receiptModel.Amex + advance != 0)
+		if (receiptModel.Cash + receiptModel.Card + receiptModel.UPI + receiptModel.Amex + receiptModel.OnlineQR + advance != 0)
 		{
 			Table paymentTable = new()
 			{
@@ -108,6 +108,7 @@ internal static class ThermalReceipt
 			if (receiptModel.Card > 0) ThermalParagraphs.AddTableRow(paymentGroup, "Card:", receiptModel.Card);
 			if (receiptModel.UPI > 0) ThermalParagraphs.AddTableRow(paymentGroup, "UPI:", receiptModel.UPI);
 			if (receiptModel.Amex > 0) ThermalParagraphs.AddTableRow(paymentGroup, "Amex:", receiptModel.Amex);
+			if (receiptModel.OnlineQR > 0) ThermalParagraphs.AddTableRow(paymentGroup, "Online QR:", receiptModel.OnlineQR);
 
 			paymentTable.RowGroups.Add(paymentGroup);
 			document.Blocks.Add(paymentTable);
@@ -118,7 +119,7 @@ internal static class ThermalReceipt
 			Culture = Culture.Hindi,
 			OutputFormat = OutputFormat.English
 		});
-		string words = numericWords.ToWords(receiptModel.Cash + receiptModel.Card + receiptModel.UPI + receiptModel.Amex + advance);
+		string words = numericWords.ToWords(receiptModel.Cash + receiptModel.Card + receiptModel.UPI + receiptModel.Amex + receiptModel.OnlineQR + advance);
 		document.Blocks.Add(ThermalParagraphs.FooterParagraph($"{(words == "" ? "Zero " : words)}Rupees Only", true));
 
 		document.Blocks.Add(ThermalParagraphs.SeparatorParagraph());

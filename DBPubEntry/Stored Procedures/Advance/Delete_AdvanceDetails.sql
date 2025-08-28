@@ -3,6 +3,7 @@
 AS
 BEGIN
 
-	DELETE FROM AdvanceDetail WHERE AdvanceId = @AdvanceId
+	DELETE FROM AdvanceDetail
+	WHERE AdvanceId = @AdvanceId
 
 END;

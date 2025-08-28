@@ -133,13 +133,13 @@ public partial class UpdateAdvancePage : Page
 			Loyalty = (bool)loyaltyCheckBox.IsChecked
 		};
 
-		if (nameTextBox.IsReadOnly == false) personModel.Id = await PersonData.InsertPerson(personModel);
-		else personModel.Id = (await PersonData.LoadPersonByNumber(numberTextBox.Text)).Id;
-		await PersonData.UpdatePerson(personModel);
+		if (nameTextBox.IsReadOnly)
+			personModel.Id = (await PersonData.LoadPersonByNumber(numberTextBox.Text)).Id;
+		personModel.Id = await PersonData.InsertPerson(personModel);
 	}
 
 	private async Task AdvanceUpdate() =>
-		await AdvanceData.UpdateAdvance(new AdvanceModel
+		await AdvanceData.InsertAdvance(new()
 		{
 			Id = _advance.Id,
 			LocationId = (locationComboBox.SelectedItem as LocationModel).Id,

@@ -17,7 +17,7 @@ internal static class CreateExpanders
 		_fromDateTime = fromDateTime;
 		_toDateTime = toDateTime;
 
-		if (initialLoad) await InitalializeExpanders(expanderGrid);
+		if (initialLoad) await InitializeExpanders(expanderGrid);
 
 		List<TransactionTotalsModel> transactionTotalsModel = [];
 		List<AdvanceTotalsModel> advanceTotalsModel = [];
@@ -44,7 +44,7 @@ internal static class CreateExpanders
 								switch (headerTextBox.Name)
 								{
 									case string name when name == $"{location.Name}headerAmountTextBox":
-										headerTextBox.Text = (transactionTotal.Cash + transactionTotal.Card + transactionTotal.UPI + transactionTotal.Amex).ToString();
+										headerTextBox.Text = (transactionTotal.Cash + transactionTotal.Card + transactionTotal.UPI + transactionTotal.Amex + transactionTotal.OnlineQR).ToString();
 										break;
 									case string name when name == $"{location.Name}headerPersonTextBox":
 										headerTextBox.Text = (transactionTotal.Male + transactionTotal.Female).ToString();
@@ -72,7 +72,7 @@ internal static class CreateExpanders
 												break;
 
 											case string name when name == $"{location.Name}amountTextBox":
-												contentTextBox.Text = (transactionTotal.Cash + transactionTotal.Card + transactionTotal.UPI + transactionTotal.Amex).ToString();
+												contentTextBox.Text = (transactionTotal.Cash + transactionTotal.Card + transactionTotal.UPI + transactionTotal.Amex + transactionTotal.OnlineQR).ToString();
 												break;
 											case string name when name == $"{location.Name}cashTextBox":
 												contentTextBox.Text = transactionTotal.Cash.ToString();
@@ -85,6 +85,9 @@ internal static class CreateExpanders
 												break;
 											case string name when name == $"{location.Name}amexTextBox":
 												contentTextBox.Text = transactionTotal.Amex.ToString();
+												break;
+											case string name when name == $"{location.Name}onlineQRTextBox":
+												contentTextBox.Text = transactionTotal.OnlineQR.ToString();
 												break;
 
 											case string name when name == $"{location.Name}advanceTextBox":
@@ -121,7 +124,7 @@ internal static class CreateExpanders
 							switch (headerTextBox.Name)
 							{
 								case string name when name == $"{totalText}headerAmountTextBox":
-									headerTextBox.Text = transactionTotalsModel.Sum(x => x.Cash + x.Card + x.UPI + x.Amex).ToString();
+									headerTextBox.Text = transactionTotalsModel.Sum(x => x.Cash + x.Card + x.UPI + x.Amex + x.OnlineQR).ToString();
 									break;
 								case string name when name == $"{totalText}headerPersonTextBox":
 									headerTextBox.Text = transactionTotalsModel.Sum(x => x.Male + x.Female).ToString();
@@ -149,7 +152,7 @@ internal static class CreateExpanders
 											break;
 
 										case string name when name == $"{totalText}amountTextBox":
-											contentTextBox.Text = transactionTotalsModel.Sum(x => x.Cash + x.Card + x.UPI + x.Amex).ToString();
+											contentTextBox.Text = transactionTotalsModel.Sum(x => x.Cash + x.Card + x.UPI + x.Amex + x.OnlineQR).ToString();
 											break;
 										case string name when name == $"{totalText}cashTextBox":
 											contentTextBox.Text = transactionTotalsModel.Sum(x => x.Cash).ToString();
@@ -162,6 +165,9 @@ internal static class CreateExpanders
 											break;
 										case string name when name == $"{totalText}amexTextBox":
 											contentTextBox.Text = transactionTotalsModel.Sum(x => x.Amex).ToString();
+											break;
+										case string name when name == $"{totalText}onlineQRTextBox":
+											contentTextBox.Text = transactionTotalsModel.Sum(x => x.OnlineQR).ToString();
 											break;
 
 										case string name when name == $"{totalText}advanceTextBox":
@@ -189,7 +195,7 @@ internal static class CreateExpanders
 
 	#region CreateExpanders
 
-	private static async Task InitalializeExpanders(Grid expanderGrid)
+	private static async Task InitializeExpanders(Grid expanderGrid)
 	{
 		expanderGrid.Children.Clear();
 		expanderGrid.RowDefinitions.Clear();
@@ -461,6 +467,7 @@ internal static class CreateExpanders
 		grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 		grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 		grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+		grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
 		// Controls
 		var amountText = new TextBlock { Text = "Total Amount", Margin = new Thickness(10), Padding = new Thickness(5) };
@@ -561,6 +568,25 @@ internal static class CreateExpanders
 		Grid.SetRow(amexTextBox, 5);
 		Grid.SetColumn(amexTextBox, 1);
 		grid.Children.Add(amexTextBox);
+
+		var onlineQRText = new TextBlock { Text = "Online QR", Margin = new Thickness(10), Padding = new Thickness(5) };
+		Grid.SetRow(onlineQRText, 6);
+		Grid.SetColumn(onlineQRText, 0);
+		grid.Children.Add(onlineQRText);
+
+		var onlineQRTextBox = new TextBox
+		{
+			Name = $"{locationName}onlineQRTextBox",
+			Margin = new Thickness(10),
+			Padding = new Thickness(5),
+			Text = "0",
+			TextAlignment = TextAlignment.Right,
+			MinWidth = 100,
+			IsReadOnly = true
+		};
+		Grid.SetRow(onlineQRTextBox, 6);
+		Grid.SetColumn(onlineQRTextBox, 1);
+		grid.Children.Add(onlineQRTextBox);
 
 		return grid;
 	}

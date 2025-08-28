@@ -202,11 +202,11 @@ public partial class AdvanceWindow : Window
 			Loyalty = (bool)loyaltyCheckBox.IsChecked
 		};
 
-		if (nameTextBox.IsReadOnly == false) personModel.Id = await PersonData.InsertPerson(personModel);
-		else personModel.Id = (await PersonData.LoadPersonByNumber(numberTextBox.Text)).Id;
-		await PersonData.UpdatePerson(personModel);
+		if (nameTextBox.IsReadOnly)
+			personModel.Id = (await PersonData.LoadPersonByNumber(numberTextBox.Text)).Id;
+		personModel.Id = await PersonData.InsertPerson(personModel);
 
-		return await AdvanceData.InsertAdvance(new AdvanceModel
+		return await AdvanceData.InsertAdvance(new()
 		{
 			Id = 0,
 			LocationId = _locationId,
@@ -223,7 +223,7 @@ public partial class AdvanceWindow : Window
 	private async Task InsertAdvanceDetail(int advanceId)
 	{
 		foreach (var item in _advancePaymentModels)
-			await AdvanceData.InsertAdvanceDetail(new AdvanceDetailModel
+			await AdvanceData.InsertAdvanceDetail(new()
 			{
 				Id = 0,
 				AdvanceId = advanceId,
@@ -233,7 +233,7 @@ public partial class AdvanceWindow : Window
 	}
 
 	private async Task UpdateAdvance() =>
-		await AdvanceData.UpdateAdvance(new AdvanceModel
+		await AdvanceData.InsertAdvance(new()
 		{
 			Id = _foundAdvanceId,
 			LocationId = _locationId,

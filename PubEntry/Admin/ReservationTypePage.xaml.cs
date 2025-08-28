@@ -85,7 +85,7 @@ public partial class ReservationTypePage : Page
 		if (reservationDataGrid.SelectedItem is ReservationTypeModel selectedReservation)
 		{
 			reservationTypeModel.Id = selectedReservation.Id;
-			await ReservationTypeData.UpdateReservationType(reservationTypeModel);
+			await ReservationTypeData.InsertReservationType(reservationTypeModel);
 		}
 		else await ReservationTypeData.InsertReservationType(reservationTypeModel);
 

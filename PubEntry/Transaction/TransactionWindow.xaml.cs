@@ -45,6 +45,7 @@ public partial class TransactionWindow : Window
 		cardTextBox.TextChanged += ResetInactivityTimer;
 		upiTextBox.TextChanged += ResetInactivityTimer;
 		amexTextBox.TextChanged += ResetInactivityTimer;
+		onlineQRTextBox.TextChanged += ResetInactivityTimer;
 		remarksTextBox.TextChanged += ResetInactivityTimer;
 		reservationComboBox.SelectionChanged += ResetInactivityTimer;
 		saveButton.Click += ResetInactivityTimer;
@@ -103,6 +104,9 @@ public partial class TransactionWindow : Window
 			nameTextBox.Text = foundPerson.Name;
 			nameTextBox.IsReadOnly = true;
 			loyaltyCheckBox.IsChecked = foundPerson.Loyalty;
+
+			if (numberTextBox.Text == "9007388669")
+				MessageBox.Show("Hi Aadi! The Developer of this Product", "AadiSoft", MessageBoxButton.OK, MessageBoxImage.Information);
 		}
 		else
 		{
@@ -159,6 +163,7 @@ public partial class TransactionWindow : Window
 		if (string.IsNullOrEmpty(cardTextBox.Text)) cardTextBox.Text = "0";
 		if (string.IsNullOrEmpty(upiTextBox.Text)) upiTextBox.Text = "0";
 		if (string.IsNullOrEmpty(amexTextBox.Text)) amexTextBox.Text = "0";
+		if (string.IsNullOrEmpty(onlineQRTextBox.Text)) onlineQRTextBox.Text = "0";
 
 		return true;
 	}
@@ -176,8 +181,7 @@ public partial class TransactionWindow : Window
 		}
 
 		await InsertTransaction();
-		if (_foundAdvanceId is not 0) await AdvanceData.ClearAdvance(_foundAdvanceId, _transactionId);
-
+		await ClearAdvance();
 		await PrintThermal();
 		ClearForm();
 	}
@@ -192,11 +196,11 @@ public partial class TransactionWindow : Window
 			Loyalty = (bool)loyaltyCheckBox.IsChecked
 		};
 
-		if (nameTextBox.IsReadOnly == false) personModel.Id = await PersonData.InsertPerson(personModel);
-		else personModel.Id = (await PersonData.LoadPersonByNumber(numberTextBox.Text)).Id;
-		await PersonData.UpdatePerson(personModel);
+		if (nameTextBox.IsReadOnly)
+			personModel.Id = (await PersonData.LoadPersonByNumber(numberTextBox.Text)).Id;
+		personModel.Id = await PersonData.InsertPerson(personModel);
 
-		_transactionId = await TransactionData.InsertTransaction(new TransactionModel
+		_transactionId = await TransactionData.InsertTransaction(new()
 		{
 			Id = 0,
 			PersonId = personModel.Id,
@@ -206,6 +210,7 @@ public partial class TransactionWindow : Window
 			Card = int.Parse(cardTextBox.Text),
 			UPI = int.Parse(upiTextBox.Text),
 			Amex = int.Parse(amexTextBox.Text),
+			OnlineQR = int.Parse(onlineQRTextBox.Text),
 			ReservationTypeId = int.Parse(reservationComboBox.SelectedValue.ToString()),
 			DateTime = DateTime.Now,
 			ApprovedBy = remarksTextBox.Text,
@@ -214,6 +219,15 @@ public partial class TransactionWindow : Window
 		});
 	}
 
+	private async Task ClearAdvance()
+	{
+		if (_foundAdvanceId is not 0)
+		{
+			var advance = await CommonData.LoadTableDataById<AdvanceModel>(TableNames.Advance, _foundAdvanceId);
+			advance.TransactionId = _transactionId;
+			await AdvanceData.InsertAdvance(advance);
+		}
+	}
 	private async Task PrintThermal()
 	{
 		var receiptModel = await CommonData.LoadTableDataById<TransactionPrintModel>(ViewNames.Transactions, _transactionId);
@@ -249,6 +263,7 @@ public partial class TransactionWindow : Window
 		cardTextBox.Text = "0";
 		upiTextBox.Text = "0";
 		amexTextBox.Text = "0";
+		onlineQRTextBox.Text = "0";
 	}
 
 	#endregion

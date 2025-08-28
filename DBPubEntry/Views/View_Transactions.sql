@@ -14,6 +14,7 @@
         tt.Card,
         tt.UPI,
         tt.Amex,
+        tt.OnlineQR,
         tt.ApprovedBy,
         ut.Name EnteredBy,
         tt.DateTime

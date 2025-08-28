@@ -11,22 +11,42 @@
 AS
 BEGIN
 
-	INSERT INTO Advance
-		(LocationId,
-		PersonId,
-		AdvanceDate,
-		Booking,
-		ApprovedBy,
-		UserId,
-		TransactionId)
-	OUTPUT INSERTED.Id
-	VALUES
-		(@LocationId,
-		@PersonId,
-		@AdvanceDate,
-		@Booking,
-		@ApprovedBy,
-		@UserId,
-		@TransactionId)
+	IF @Id = 0
+	BEGIN
+		INSERT INTO Advance
+			(LocationId,
+			PersonId,
+			AdvanceDate,
+			Booking,
+			ApprovedBy,
+			UserId,
+			TransactionId)
+		VALUES
+			(@LocationId,
+			@PersonId,
+			@AdvanceDate,
+			@Booking,
+			@ApprovedBy,
+			@UserId,
+			@TransactionId)
+
+		SET @Id = SCOPE_IDENTITY();
+	END
+
+	ELSE
+	BEGIN
+		UPDATE Advance
+		SET
+			LocationId = @LocationId,
+			PersonId = @PersonId,
+			AdvanceDate = @AdvanceDate,
+			Booking = @Booking,
+			ApprovedBy = @ApprovedBy,
+			UserId = @UserId,
+			TransactionId = @TransactionId
+		WHERE Id = @Id
+	END
+
+	SELECT @Id AS Id;
 
 END;

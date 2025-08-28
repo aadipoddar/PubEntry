@@ -87,7 +87,7 @@ public partial class PaymentModePage : Page
 		if (paymentDataGrid.SelectedItem is PaymentModeModel selectedPaymentMode)
 		{
 			paymentModeModel.Id = selectedPaymentMode.Id;
-			await PaymentModeData.UpdatePaymentMode(paymentModeModel);
+			await PaymentModeData.InsertPaymentMode(paymentModeModel);
 		}
 		else await PaymentModeData.InsertPaymentMode(paymentModeModel);
 

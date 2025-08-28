@@ -10,6 +10,7 @@ public class TransactionModel
 	public int Card { get; set; }
 	public int UPI { get; set; }
 	public int Amex { get; set; }
+	public int OnlineQR { get; set; }
 	public int ReservationTypeId { get; set; }
 	public DateTime DateTime { get; set; }
 	public string ApprovedBy { get; set; }
@@ -32,6 +33,7 @@ public class TransactionPrintModel
 	public int Card { get; set; }
 	public int UPI { get; set; }
 	public int Amex { get; set; }
+	public int OnlineQR { get; set; }
 	public string ApprovedBy { get; set; }
 	public string EnteredBy { get; set; }
 	public DateTime DateTime { get; set; }
@@ -47,4 +49,5 @@ public class TransactionTotalsModel
 	public int Card { get; set; }
 	public int UPI { get; set; }
 	public int Amex { get; set; }
+	public int OnlineQR { get; set; }
 }

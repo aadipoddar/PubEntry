@@ -131,7 +131,7 @@ public partial class UserPage : Page
 		if (userDataGrid.SelectedItem is UserLocationModel selectedUser)
 		{
 			userModel.Id = selectedUser.Id;
-			await UserData.UpdateUser(userModel);
+			await UserData.InsertUser(userModel);
 		}
 		else await UserData.InsertUser(userModel);
 

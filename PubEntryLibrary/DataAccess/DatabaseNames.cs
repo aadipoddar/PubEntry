@@ -22,11 +22,9 @@ public static class ViewNames
 
 public static class StoredProcedureNames
 {
-	public static string ClearAdvance => "Clear_Advance";
 	public static string DeleteAdvanceDetails => "Delete_AdvanceDetails";
 	public static string InsertAdvance => "Insert_Advance";
 	public static string InsertAdvanceDetail => "Insert_AdvanceDetail";
-	public static string UpdateAdvance => "Update_Advance";
 	public static string LoadAdvanceByDateLocationPerson => "Load_Advance_By_Date_Location_Person";
 	public static string LoadAdvanceByTransactionId => "Load_Advance_By_TransactionId";
 	public static string LoadAdvanceDetailByAdvanceId => "Load_AdvanceDetail_By_AdvanceId";
@@ -36,7 +34,6 @@ public static class StoredProcedureNames
 	public static string LoadAdvanceTotalsByForDateLocation => "Load_AdvanceTotals_By_ForDate_Location";
 
 	public static string InsertTransaction => "Insert_Transaction";
-	public static string UpdateTransaction => "Update_Transaction";
 	public static string LoadTransactionsByDateLocation => "Load_Transactions_By_Date_Location";
 	public static string LoadTransactionTotalsByDateLocation => "Load_TransactionTotals_By_Date_Location";
 
@@ -45,12 +42,6 @@ public static class StoredProcedureNames
 	public static string InsertPerson => "Insert_Person";
 	public static string InsertReservationType => "Insert_ReservationType";
 	public static string InsertUser => "Insert_User";
-
-	public static string UpdateLocation => "Update_Location";
-	public static string UpdatePaymentMode => "Update_PaymentMode";
-	public static string UpdatePerson => "Update_Person";
-	public static string UpdateReservationType => "Update_ReservationType";
-	public static string UpdateUser => "Update_User";
 
 	public static string LoadTableData => "Load_TableData";
 	public static string LoadTableDataById => "Load_TableData_By_Id";

@@ -5,12 +5,19 @@
 AS
 BEGIN
 
-    INSERT INTO PaymentMode (
-        Name,
-        Status
-    ) VALUES (
-        @Name,
-        @Status
-    )
+    IF @Id = 0
+    BEGIN
+        INSERT INTO PaymentMode (Name, Status)
+        VALUES (@Name, @Status)
+    END
+
+    ELSE
+    BEGIN
+        UPDATE PaymentMode
+            SET
+                Name = @Name,
+                Status = @Status
+            WHERE Id = @Id
+    END
 
 END;

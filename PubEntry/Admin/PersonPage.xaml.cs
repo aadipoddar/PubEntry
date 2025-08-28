@@ -128,7 +128,7 @@ public partial class PersonPage : Page
 			}
 
 			personModel.Id = selectedPerson.Id;
-			await PersonData.UpdatePerson(personModel);
+			await PersonData.InsertPerson(personModel);
 		}
 		else
 		{

@@ -73,6 +73,7 @@ internal static class DetailPDF
 					x.Card,
 					x.UPI,
 					x.Amex,
+					x.OnlineQR,
 					Remarks = x.ApprovedBy,
 					x.EnteredBy,
 					x.DateTime
@@ -179,7 +180,7 @@ internal static class DetailPDF
 		PdfTextElement textElement = new($"Total People: {detailedTransactionPrintModel.Sum(x => x.Male + x.Female)}", font);
 		result = textElement.Draw(result.Page, new PointF(10, result.Bounds.Bottom + 10), _layoutFormat);
 
-		string text = $"Total Amount: {detailedTransactionPrintModel.Sum(x => x.Cash + x.Card + x.UPI + x.Amex)}";
+		string text = $"Total Amount: {detailedTransactionPrintModel.Sum(x => x.Cash + x.Card + x.UPI + x.Amex + x.OnlineQR)}";
 		float textWidth = font.MeasureString(text).Width;
 		float pageWidth = pdfPage.GetClientSize().Width;
 		float textX = pageWidth - textWidth;
@@ -217,6 +218,13 @@ internal static class DetailPDF
 		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Top), _layoutFormat);
 
 		text = $"Amex: {detailedTransactionPrintModel.Sum(x => x.Amex)}";
+		textWidth = font.MeasureString(text).Width;
+		pageWidth = pdfPage.GetClientSize().Width;
+		textX = pageWidth - textWidth;
+		textElement = new PdfTextElement(text, font);
+		result = textElement.Draw(result.Page, new PointF(textX, result.Bounds.Bottom + 10), _layoutFormat);
+
+		text = $"Online QR: {detailedTransactionPrintModel.Sum(x => x.OnlineQR)}";
 		textWidth = font.MeasureString(text).Width;
 		pageWidth = pdfPage.GetClientSize().Width;
 		textX = pageWidth - textWidth;

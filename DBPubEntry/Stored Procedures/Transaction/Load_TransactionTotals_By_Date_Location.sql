@@ -13,7 +13,8 @@ BEGIN
 		SUM(tt.Cash) Cash,
 		SUM(tt.Card) Card,
 		SUM(tt.UPI) UPI,
-		SUM(tt.Amex) Amex
+		SUM(tt.Amex) Amex,
+		SUM(tt.OnlineQR) OnlineQR
 	FROM [Transaction] tt
 	JOIN Person pt ON tt.PersonId = pt.Id
 	WHERE DateTime BETWEEN @FromDate AND @ToDate

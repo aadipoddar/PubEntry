@@ -4,116 +4,281 @@
       xmlns:local="clr-namespace:PubEntry.Transaction.Advance"
       Loaded="Page_Loaded" Title="Update Transaction">
 
-	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto"/>
-			<ColumnDefinition Width="Auto"/>
-			<ColumnDefinition Width="Auto"/>
-			<ColumnDefinition Width="Auto"/>
-		</Grid.ColumnDefinitions>
+	<Page.Resources>
+		<!-- Improved styling for better visual appeal -->
+		<Style x:Key="SectionHeaderStyle" TargetType="TextBlock">
+			<Setter Property="FontSize" Value="14"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+			<Setter Property="Margin" Value="0,10,0,5"/>
+		</Style>
 
+		<Style x:Key="LabelStyle" TargetType="Label">
+			<Setter Property="VerticalAlignment" Value="Center"/>
+			<Setter Property="Margin" Value="5"/>
+		</Style>
+
+		<Style x:Key="GroupBoxStyle" TargetType="GroupBox">
+			<Setter Property="Margin" Value="10"/>
+			<Setter Property="Padding" Value="10"/>
+			<Setter Property="BorderThickness" Value="1"/>
+		</Style>
+	</Page.Resources>
+
+	<Grid Margin="5">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 
-		<!--#region DateLocation -->
-		<Label x:Name="dateTimeLabel" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="10" Padding="5" Content="Date Time" />
-		<ComboBox x:Name="locationComboBox" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Margin="10" Padding="5" SelectionChanged="locationComboBox_SelectionChanged" />
-		<!--#endregion-->
+		<!-- Header Section -->
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+			<TextBlock x:Name="dateTimeTextBlock" 
+					Grid.Row="0" 
+					Text="Date Time" 
+					FontSize="16" 
+					FontWeight="Bold" 
+					HorizontalAlignment="Center" 
+					Margin="0,0,10,15"/>
 
-		<!--#region Person -->
-		<Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="10">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto" />
-				<RowDefinition Height="Auto" />
-			</Grid.RowDefinitions>
+			<ComboBox x:Name="locationComboBox" Margin="10,0,0,15" Padding="5" SelectionChanged="locationComboBox_SelectionChanged" />
+		</StackPanel>
 
+		<!-- Main Content Area -->
+		<Grid Grid.Row="1">
 			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto" />
-				<ColumnDefinition Width="Auto" />
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="*"/>
 			</Grid.ColumnDefinitions>
 
-			<Label Grid.Row="0" Grid.Column="0" Margin="10" Padding="5" Content="Mobile" />
-			<TextBox x:Name="numberTextBox" Grid.Row="0" Grid.Column="1" Margin="10" Padding="5" PreviewTextInput="textBox_PreviewTextInput" MaxLength="10" MaxWidth="150" MinWidth="100" TextChanged="numberTextBox_TextChanged"/>
+			<!-- Left Column -->
+			<StackPanel Grid.Column="0" Margin="0,0,10,0">
 
-			<Label Grid.Row="1" Grid.Column="0" Margin="10" Padding="5" Content="Name" />
-			<TextBox x:Name="nameTextBox" Grid.Row="1" Grid.Column="1" Margin="10" Padding="5" MaxLength="250" MaxWidth="150" TextWrapping="Wrap" />
+				<!-- Customer Information -->
+				<GroupBox Header="Guest Information" Style="{StaticResource GroupBoxStyle}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+
+						<Label Grid.Row="0" Grid.Column="0" Content="Mobile:" Style="{StaticResource LabelStyle}"/>
+						<TextBox x:Name="numberTextBox" 
+                         Grid.Row="0" Grid.Column="1" 
+                         Margin="5"
+						 Padding="8,6"
+                         PreviewTextInput="textBox_PreviewTextInput" 
+                         MaxLength="10" 
+                         TextChanged="numberTextBox_TextChanged"
+                         TabIndex="1"/>
+
+						<Label Grid.Row="1" Grid.Column="0" Content="Name:" Style="{StaticResource LabelStyle}"/>
+						<TextBox x:Name="nameTextBox" 
+                         Grid.Row="1" Grid.Column="1" 
+						 Margin="5"
+						 Padding="8,6"
+                         MaxLength="250" 
+                         TextWrapping="Wrap"
+                         TabIndex="2"/>
+
+						<CheckBox x:Name="loyaltyCheckBox" 
+                          Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+						  HorizontalAlignment="Center"
+                          Content="Loyalty Guest" 
+                          Margin="5,10,5,5"
+                          FontSize="12"
+                          TabIndex="3"/>
+					</Grid>
+				</GroupBox>
+
+				<!-- Guest Count -->
+				<GroupBox Header="Guest Count" Style="{StaticResource GroupBoxStyle}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+
+						<Label Grid.Row="0" Grid.Column="0" Content="Male:" Style="{StaticResource LabelStyle}"/>
+						<TextBox x:Name="maleTextBox" 
+                         Grid.Row="0" Grid.Column="1" 
+                         Margin="5" Padding="8,6"
+                         PreviewTextInput="textBox_PreviewTextInput" 
+                         MaxLength="2" 
+                         Text="0" 
+                         TextAlignment="Right"
+                         TabIndex="4"/>
+
+						<Label Grid.Row="0" Grid.Column="2" Content="Female:" Style="{StaticResource LabelStyle}"/>
+						<TextBox x:Name="femaleTextBox" 
+                         Grid.Row="0" Grid.Column="3" 
+                         Margin="5" Padding="8,6"
+                         PreviewTextInput="textBox_PreviewTextInput" 
+                         MaxLength="2" 
+                         Text="0" 
+                         TextAlignment="Right"
+                         TabIndex="5"/>
+					</Grid>
+				</GroupBox>
+
+				<!-- Reservation Details -->
+				<GroupBox Header="Reservation Details" Style="{StaticResource GroupBoxStyle}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+
+						<Label Grid.Row="0" Grid.Column="0" Content="Reservation:" Style="{StaticResource LabelStyle}"/>
+						<ComboBox x:Name="reservationComboBox" 
+                          Grid.Row="0" Grid.Column="1" 
+                          Margin="5" 
+                          Padding="8,6"
+                          BorderBrush="#BDC3C7"
+                          TabIndex="6"/>
+
+						<Label Grid.Row="1" Grid.Column="0" Content="Remarks:" Style="{StaticResource LabelStyle}"/>
+						<TextBox x:Name="remarksTextBox" 
+                         Grid.Row="1" Grid.Column="1" 
+                         Margin="5" Padding="8,6"
+                         TextWrapping="Wrap" 
+                         Height="60"
+                         AcceptsReturn="True"
+                         TabIndex="7"/>
+					</Grid>
+				</GroupBox>
+			</StackPanel>
+
+			<!-- Right Column - Advance Section (conditionally visible) -->
+			<StackPanel Grid.Column="1" Margin="0,0,10,0">
+				<GroupBox x:Name="advancePanel" Header="Advance Details" Style="{StaticResource GroupBoxStyle}" Visibility="Hidden">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+
+						<Label Grid.Row="0" Grid.Column="0" Content="Booking:" Style="{StaticResource LabelStyle}"/>
+						<TextBox x:Name="bookingTextBox" 
+					Grid.Row="0" Grid.Column="1" 
+					Margin="5" Padding="8,6"
+					Text="0" 
+					IsReadOnly="True" 
+					TextAlignment="Right"/>
+
+						<Label Grid.Row="1" Grid.Column="0" Content="Advance:" Style="{StaticResource LabelStyle}"/>
+						<TextBox x:Name="advanceTextBox" 
+					Grid.Row="1" Grid.Column="1" 
+					Margin="5" Padding="8,6"
+					Text="0" 
+					IsReadOnly="True" 
+					TextAlignment="Right"/>
+					</Grid>
+				</GroupBox>
+
+				<!-- Payment Methods -->
+				<GroupBox Grid.Column="1" Header="Payment Methods" Style="{StaticResource GroupBoxStyle}">
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="Auto"/>
+							<ColumnDefinition Width="*"/>
+						</Grid.ColumnDefinitions>
+
+						<Label Grid.Row="0" Grid.Column="0" Content="Cash:" Style="{StaticResource LabelStyle}"/>
+						<TextBox x:Name="cashTextBox" 
+                     Grid.Row="0" Grid.Column="1" 
+                     Margin="5" Padding="8,6"
+                     PreviewTextInput="textBox_PreviewTextInput" 
+                     MaxLength="10" 
+                     Text="0" 
+                     TextAlignment="Right"
+                     TabIndex="8"/>
+
+						<Label Grid.Row="1" Grid.Column="0" Content="Card:" Style="{StaticResource LabelStyle}"/>
+						<TextBox x:Name="cardTextBox" 
+                     Grid.Row="1" Grid.Column="1" 
+                     Margin="5" Padding="8,6"
+                     PreviewTextInput="textBox_PreviewTextInput" 
+                     MaxLength="10" 
+                     Text="0" 
+                     TextAlignment="Right"
+                     TabIndex="9"/>
+
+						<Label Grid.Row="2" Grid.Column="0" Content="UPI:" Style="{StaticResource LabelStyle}"/>
+						<TextBox x:Name="upiTextBox" 
+                     Grid.Row="2" Grid.Column="1" 
+                     Margin="5" Padding="8,6"
+                     PreviewTextInput="textBox_PreviewTextInput" 
+                     MaxLength="10" 
+                     Text="0" 
+                     TextAlignment="Right"
+                     TabIndex="10"/>
+
+						<Label Grid.Row="3" Grid.Column="0" Content="Amex:" Style="{StaticResource LabelStyle}"/>
+						<TextBox x:Name="amexTextBox" 
+                     Grid.Row="3" Grid.Column="1" 
+                     Margin="5" Padding="8,6"
+                     PreviewTextInput="textBox_PreviewTextInput" 
+                     MaxLength="10" 
+                     Text="0" 
+                     TextAlignment="Right"
+                     TabIndex="11"/>
+
+						<Label Grid.Row="4" Grid.Column="0" Content="Online QR:" Style="{StaticResource LabelStyle}"/>
+						<TextBox x:Name="onlineQRTextBox" 
+                     Grid.Row="4" Grid.Column="1" 
+                     Margin="5" Padding="8,6"
+                     PreviewTextInput="textBox_PreviewTextInput" 
+                     MaxLength="10" 
+                     Text="0" 
+                     TextAlignment="Right"
+                     TabIndex="12"/>
+					</Grid>
+				</GroupBox>
+			</StackPanel>
 		</Grid>
 
-		<CheckBox x:Name="loyaltyCheckBox" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="10" Padding="5" Content="Loyalty" HorizontalAlignment="Center" />
-		<!--#endregion-->
-
-		<!--#region Male Female -->
-		<StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2" Orientation="Horizontal" Margin="10">
-			<StackPanel>
-				<Label Margin="10" Padding="5" Content="Male" />
-				<Label Margin="10" Padding="5" Content="Female" />
-			</StackPanel>
-
-			<StackPanel>
-				<TextBox x:Name="maleTextBox" Margin="0,10" Padding="5" PreviewTextInput="textBox_PreviewTextInput" MaxLength="2" Text="0" TextAlignment="Right" MinWidth="100"/>
-				<TextBox x:Name="femaleTextBox" Margin="0,10" Padding="5" PreviewTextInput="textBox_PreviewTextInput" MaxLength="2" Text="0" TextAlignment="Right"/>
-			</StackPanel>
-		</StackPanel>
-		<!--#endregion-->
-
-		<!--#region Reservation Remarks-->
-		<Label Grid.Row="6" Grid.Column="0" Margin="10" Padding="5" Content="Reservation" />
-
-		<Grid Grid.Row="7" Grid.Column="0" Margin="5">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="*"/>
-				<RowDefinition Height="*"/>
-			</Grid.RowDefinitions>
-
-			<Label Grid.Row="0" Grid.Column="0" Padding="5" Content="Approved By" HorizontalAlignment="Center" />
-			<Label Grid.Row="1" Grid.Column="0" Padding="5" Content="Remarks" HorizontalAlignment="Center" />
-		</Grid>
-
-		<ComboBox x:Name="reservationComboBox" Grid.Row="6" Grid.Column="1" Margin="10" Padding="5" />
-		<TextBox x:Name="remarksTextBox" Grid.Row="7" Grid.Column="1" Margin="10" Padding="5" TextWrapping="Wrap" MaxWidth="150" MinWidth="100"/>
-		<!--#endregion-->
-
-		<!--#region Advance -->
-		<StackPanel x:Name="advancePanel" Orientation="Horizontal" Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Grid.RowSpan="2" Margin="30,10,0,0" Visibility="Hidden">
-			<StackPanel>
-				<Label Margin="5" Padding="5" Content="Booking" />
-				<Label Margin="5" Padding="5" Content="Advance" />
-			</StackPanel>
-
-			<StackPanel>
-				<TextBox x:Name="bookingTextBox" Margin="5" Padding="5" Text="0" IsReadOnly="True" TextAlignment="Right" MinWidth="100"/>
-				<TextBox x:Name="advanceTextBox" Margin="5" Padding="5" Text="0" IsReadOnly="True" TextAlignment="Right" />
-			</StackPanel>
-		</StackPanel>
-		<!--#endregion-->
-
-		<!--#region Payments -->
-		<StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="5" Margin="30,0,0,0">
-			<StackPanel>
-				<Label Margin="5" Padding="5" Content="Cash" />
-				<Label Margin="5" Padding="5" Content="Card" />
-				<Label Margin="5" Padding="5" Content="UPI" />
-				<Label Margin="5" Padding="5" Content="Amex" />
-			</StackPanel>
-
-			<StackPanel>
-				<TextBox x:Name="cashTextBox" Margin="5" Padding="5" PreviewTextInput="textBox_PreviewTextInput" MaxLength="10" Text="0" TextAlignment="Right" MinWidth="100"/>
-				<TextBox x:Name="cardTextBox" Margin="5" Padding="5" PreviewTextInput="textBox_PreviewTextInput" MaxLength="10" Text="0" TextAlignment="Right"/>
-				<TextBox x:Name="upiTextBox" Margin="5" Padding="5" PreviewTextInput="textBox_PreviewTextInput" MaxLength="10" Text="0" TextAlignment="Right"/>
-				<TextBox x:Name="amexTextBox" Margin="5" Padding="5" PreviewTextInput="textBox_PreviewTextInput" MaxLength="10" Text="0" TextAlignment="Right"/>
-			</StackPanel>
-		</StackPanel>
-		<!--#endregion-->
-
-		<Button x:Name="saveButton" Content="Save" Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="4" Margin="10" Padding="5" MinWidth="150" MinHeight="40" Click="saveButton_Click" HorizontalAlignment="Center" IsDefault="True" Style="{DynamicResource AccentButtonStyle}" />
+		<!-- Action Button -->
+		<Button x:Name="saveButton" 
+        Grid.Row="2"
+        Content="Save" 
+        Margin="0,15,0,10" 
+        Padding="15,10" 
+        MinWidth="200" 
+        MinHeight="45" 
+        Click="saveButton_Click" 
+        HorizontalAlignment="Center" 
+        IsDefault="True" 
+        Style="{DynamicResource AccentButtonStyle}"
+        FontSize="14"
+        FontWeight="SemiBold"
+        TabIndex="13"/>
 	</Grid>
 </Page>

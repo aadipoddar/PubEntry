@@ -87,7 +87,7 @@ public partial class LocationPage : Page
 		if (locationDataGrid.SelectedItem is LocationModel selectedLocation)
 		{
 			locationModel.Id = selectedLocation.Id;
-			await LocationData.UpdateLocation(locationModel);
+			await LocationData.InsertLocation(locationModel);
 		}
 		else await LocationData.InsertLocation(locationModel);
 

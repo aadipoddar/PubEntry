@@ -23,6 +23,7 @@ BEGIN
 		[tt].[Card],
 		[tt].[UPI],
 		[tt].[Amex],
+		[tt].[OnlineQR],
 		[tt].[DateTime],
 		[tt].[LocationId]
 	FROM [Transaction] tt
