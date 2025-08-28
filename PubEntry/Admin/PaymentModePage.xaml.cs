@@ -10,7 +10,8 @@ public partial class PaymentModePage : Page
 {
 	public PaymentModePage() => InitializeComponent();
 
-	private async void Page_Loaded(object sender, RoutedEventArgs e) => await LoadData();
+	private async void Page_Loaded(object sender, RoutedEventArgs e) =>
+		await LoadData();
 
 	private async Task LoadData()
 	{
@@ -32,13 +33,17 @@ public partial class PaymentModePage : Page
 		UpdateFields();
 	}
 
-	private async void searchTextBox_TextChanged(object sender, TextChangedEventArgs e) => await LoadData();
+	private async void searchTextBox_TextChanged(object sender, TextChangedEventArgs e) =>
+		await LoadData();
 
-	private async void showCheckBox_CheckedChanged(object sender, RoutedEventArgs e) => await LoadData();
+	private async void showCheckBox_CheckedChanged(object sender, RoutedEventArgs e) =>
+		await LoadData();
 
-	private void paymentDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e) => UpdateFields();
+	private void paymentDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e) =>
+		UpdateFields();
 
-	private void nameTextBox_TextChanged(object sender, TextChangedEventArgs e) => UpdateButtonField();
+	private void nameTextBox_TextChanged(object sender, TextChangedEventArgs e) =>
+		UpdateButtonField();
 
 	private void UpdateFields()
 	{
@@ -85,11 +90,9 @@ public partial class PaymentModePage : Page
 		};
 
 		if (paymentDataGrid.SelectedItem is PaymentModeModel selectedPaymentMode)
-		{
 			paymentModeModel.Id = selectedPaymentMode.Id;
-			await PaymentModeData.InsertPaymentMode(paymentModeModel);
-		}
-		else await PaymentModeData.InsertPaymentMode(paymentModeModel);
+
+		await PaymentModeData.InsertPaymentMode(paymentModeModel);
 
 		await LoadData();
 	}

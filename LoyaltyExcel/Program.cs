@@ -32,7 +32,7 @@ while (worksheet.Cells[row, 1].Value != null)
 	{
 		Console.WriteLine($"Found Person: {foundPerson.Name} with Phone: {foundPerson.Number}");
 
-		await PersonData.UpdatePerson(new()
+		await PersonData.InsertPerson(new()
 		{
 			Id = foundPerson.Id,
 			Name = name,

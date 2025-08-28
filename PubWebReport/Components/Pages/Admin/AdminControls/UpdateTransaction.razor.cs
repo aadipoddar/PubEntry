@@ -19,7 +19,8 @@ public partial class UpdateTransaction
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		if (firstRender && !await ValidatePassword()) NavManager.NavigateTo("/");
+		if (firstRender && !await ValidatePassword())
+			NavManager.NavigateTo("/");
 	}
 
 	private async Task<bool> ValidatePassword()
@@ -32,7 +33,8 @@ public partial class UpdateTransaction
 			   BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(TableNames.User, int.Parse(userId))).Password, password);
 	}
 
-	protected override async Task OnInitializedAsync() => await LoadData();
+	protected override async Task OnInitializedAsync() =>
+		await LoadData();
 
 	private async Task LoadData()
 	{
@@ -49,14 +51,14 @@ public partial class UpdateTransaction
 
 	private async Task OnLoadTransactionButtonClicked()
 	{
-		var tarnsaction = await CommonData.LoadTableDataById<TransactionModel>(TableNames.Transaction, TransactionModel.Id);
-		if (tarnsaction is null)
+		var transaction = await CommonData.LoadTableDataById<TransactionModel>(TableNames.Transaction, TransactionModel.Id);
+		if (transaction is null)
 		{
 			await JS.InvokeVoidAsync("alert", "Invalid Transaction Id");
 			return;
 		}
 
-		TransactionModel = tarnsaction;
+		TransactionModel = transaction;
 		PersonModel = await CommonData.LoadTableDataById<PersonModel>(TableNames.Person, TransactionModel.PersonId);
 		LocationModel = await CommonData.LoadTableDataById<LocationModel>(TableNames.Location, TransactionModel.LocationId);
 
@@ -133,26 +135,31 @@ public partial class UpdateTransaction
 			return;
 		}
 
-		await UpdateTransactions();
-		await InsertPerson();
+		PersonModel.Id = await PersonData.InsertPerson(PersonModel);
+		TransactionModel.PersonId = PersonModel.Id;
+		await TransactionData.InsertTransaction(TransactionModel);
 		await UpdateAdvances();
 
 		NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
 	}
 
-	private async Task InsertPerson()
-	{
-		if (PersonModel.Id == 0) PersonModel.Id = await PersonData.InsertPerson(PersonModel);
-		await PersonData.UpdatePerson(PersonModel);
-	}
-
-	private async Task UpdateTransactions() => await TransactionData.UpdateTransaction(TransactionModel);
-
 	private async Task UpdateAdvances()
 	{
 		var existingAdvance = await AdvanceData.LoadAdvanceByTransactionId(TransactionModel.Id);
-		if (existingAdvance is not null) await AdvanceData.ClearAdvance(existingAdvance.Id, 0);
-		if (AdvanceModel.Id is not 0) await AdvanceData.ClearAdvance(AdvanceModel.Id, TransactionModel.Id);
+
+		if (existingAdvance is not null)
+		{
+			var advance = await CommonData.LoadTableDataById<AdvanceModel>(TableNames.Advance, existingAdvance.Id);
+			advance.TransactionId = 0;
+			await AdvanceData.InsertAdvance(advance);
+		}
+
+		if (AdvanceModel.Id is not 0)
+		{
+			var advance = await CommonData.LoadTableDataById<AdvanceModel>(TableNames.Advance, AdvanceModel.Id);
+			advance.TransactionId = TransactionModel.Id;
+			await AdvanceData.InsertAdvance(advance);
+		}
 	}
 
 	#endregion

@@ -128,7 +128,6 @@ public partial class PersonPage : Page
 			}
 
 			personModel.Id = selectedPerson.Id;
-			await PersonData.InsertPerson(personModel);
 		}
 		else
 		{
@@ -137,9 +136,9 @@ public partial class PersonPage : Page
 				MessageBox.Show("Number already exists", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 				return;
 			}
-
-			await PersonData.InsertPerson(personModel);
 		}
+
+		await PersonData.InsertPerson(personModel);
 
 		await LoadData();
 	}

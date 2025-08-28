@@ -67,6 +67,7 @@
 				<GridColumn Field="@nameof(TransactionPrintModel.Card)" TextAlign="TextAlign.Right" Type="ColumnType.Integer"></GridColumn>
 				<GridColumn Field="@nameof(TransactionPrintModel.UPI)" TextAlign="TextAlign.Right" Type="ColumnType.Integer"></GridColumn>
 				<GridColumn Field="@nameof(TransactionPrintModel.Amex)" TextAlign="TextAlign.Right" Type="ColumnType.Integer"></GridColumn>
+				<GridColumn Field="@nameof(TransactionPrintModel.OnlineQR)" TextAlign="TextAlign.Right" Type="ColumnType.Integer"></GridColumn>
 				<GridColumn Field="@nameof(TransactionPrintModel.Reservation)"></GridColumn>
 				<GridColumn Field="@nameof(TransactionPrintModel.ApprovedBy)"></GridColumn>
 				<GridColumn Field="@nameof(TransactionPrintModel.EnteredBy)"></GridColumn>
@@ -137,7 +138,7 @@
 			</div>
 			<div class="form-group">
 				<label>Total Amount</label>
-				<input type="number" value="@((transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.Cash ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.Card ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.UPI ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.Amex ?? 0))" readonly />
+				<input type="number" value="@((transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.Cash ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.Card ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.UPI ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.Amex ?? 0) + (transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.OnlineQR ?? 0))" readonly />
 			</div>
 		</div>
 
@@ -188,7 +189,18 @@
 			</div>
 		</div>
 
-		<!-- Sixth Row -->
+		<!-- Sixth Row (OnlineQR on right) -->
+		<div class="form-row">
+			<div class="form-group">
+				<!-- Empty spacer -->
+			</div>
+			<div class="form-group">
+				<label>Online QR</label>
+				<input type="number" value="@(transactionTotalsModel.FirstOrDefault(_ => _.LocationId == SelectedLocationId)?.OnlineQR ?? 0)" readonly />
+			</div>
+		</div>
+
+		<!-- Seventh Row -->
 		<div class="form-row">
 			<div class="form-group">
 				<label>Total Advance</label>
@@ -200,7 +212,7 @@
 			</div>
 		</div>
 
-		<!-- Seventh Row -->
+		<!-- Eighth Row -->
 		<div class="form-row">
 			<div class="form-group">
 				<label>Redeemed</label>
@@ -212,7 +224,7 @@
 			</div>
 		</div>
 
-		<!-- Eighth Row -->
+		<!-- Ninth Row -->
 		<div class="form-row">
 			<div class="form-group">
 				<label>Not Redeemed</label>

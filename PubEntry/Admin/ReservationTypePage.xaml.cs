@@ -10,7 +10,8 @@ public partial class ReservationTypePage : Page
 {
 	public ReservationTypePage() => InitializeComponent();
 
-	private async void Page_Loaded(object sender, RoutedEventArgs e) => await LoadData();
+	private async void Page_Loaded(object sender, RoutedEventArgs e) =>
+		await LoadData();
 
 	private async Task LoadData()
 	{
@@ -30,13 +31,17 @@ public partial class ReservationTypePage : Page
 		UpdateFields();
 	}
 
-	private async void searchTextBox_TextChanged(object sender, TextChangedEventArgs e) => await LoadData();
+	private async void searchTextBox_TextChanged(object sender, TextChangedEventArgs e) =>
+		await LoadData();
 
-	private async void showCheckBox_CheckedChanged(object sender, RoutedEventArgs e) => await LoadData();
+	private async void showCheckBox_CheckedChanged(object sender, RoutedEventArgs e) =>
+		await LoadData();
 
-	private void reservationDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e) => UpdateFields();
+	private void reservationDataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e) =>
+		UpdateFields();
 
-	private void nameTextBox_TextChanged(object sender, TextChangedEventArgs e) => UpdateButtonField();
+	private void nameTextBox_TextChanged(object sender, TextChangedEventArgs e) =>
+		UpdateButtonField();
 
 	private void UpdateFields()
 	{
@@ -83,11 +88,9 @@ public partial class ReservationTypePage : Page
 		};
 
 		if (reservationDataGrid.SelectedItem is ReservationTypeModel selectedReservation)
-		{
 			reservationTypeModel.Id = selectedReservation.Id;
-			await ReservationTypeData.InsertReservationType(reservationTypeModel);
-		}
-		else await ReservationTypeData.InsertReservationType(reservationTypeModel);
+
+		await ReservationTypeData.InsertReservationType(reservationTypeModel);
 
 		await LoadData();
 	}

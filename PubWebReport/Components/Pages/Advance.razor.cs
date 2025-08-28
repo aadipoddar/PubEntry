@@ -189,11 +189,8 @@ public partial class Advance
 		NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
 	}
 
-	private async Task InsertPerson()
-	{
-		if (PersonModel.Id == 0) PersonModel.Id = await PersonData.InsertPerson(PersonModel);
-		await PersonData.UpdatePerson(PersonModel);
-	}
+	private async Task InsertPerson() =>
+		PersonModel.Id = await PersonData.InsertPerson(PersonModel);
 
 	private async Task InsertAdvance()
 	{
@@ -204,14 +201,16 @@ public partial class Advance
 		AdvanceModel.Id = await AdvanceData.InsertAdvance(AdvanceModel);
 	}
 
-	private async Task UpdateAdvance() => await AdvanceData.UpdateAdvance(AdvanceModel);
+	private async Task UpdateAdvance() =>
+		await AdvanceData.InsertAdvance(AdvanceModel);
 
-	private async Task DeleteAdvanceDetails() => await AdvanceData.DeleteAdvanceDetails(AdvanceModel.Id);
+	private async Task DeleteAdvanceDetails() =>
+		await AdvanceData.DeleteAdvanceDetails(AdvanceModel.Id);
 
 	private async Task InsertAdvanceDetail()
 	{
 		foreach (var advance in _advancePaymentModels)
-			await AdvanceData.InsertAdvanceDetail(new AdvanceDetailModel
+			await AdvanceData.InsertAdvanceDetail(new()
 			{
 				Id = 0,
 				AdvanceId = AdvanceModel.Id,

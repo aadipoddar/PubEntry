@@ -25,7 +25,8 @@ public partial class UpdateTransactionPage : Page
 
 	#region LoadData
 
-	private async void Page_Loaded(object sender, RoutedEventArgs e) => await LoadData();
+	private async void Page_Loaded(object sender, RoutedEventArgs e) =>
+		await LoadData();
 
 	private async Task LoadData()
 	{

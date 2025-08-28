@@ -41,8 +41,7 @@ public partial class Persons
 			return;
 		}
 
-		if (PersonModel.Id == 0) await PersonData.InsertPerson(PersonModel);
-		else await PersonData.UpdatePerson(PersonModel);
+		await PersonData.InsertPerson(PersonModel);
 
 		PersonModel = new();
 	}

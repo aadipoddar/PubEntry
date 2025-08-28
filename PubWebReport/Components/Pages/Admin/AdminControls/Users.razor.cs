@@ -12,7 +12,8 @@ public partial class Users
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		if (firstRender && !await ValidatePassword()) NavManager.NavigateTo("/");
+		if (firstRender && !await ValidatePassword())
+			NavManager.NavigateTo("/");
 	}
 
 	private async Task<bool> ValidatePassword()
@@ -25,7 +26,8 @@ public partial class Users
 			   BCrypt.Net.BCrypt.EnhancedVerify((await CommonData.LoadTableDataById<UserModel>(TableNames.User, int.Parse(userId))).Password, password);
 	}
 
-	protected override async Task OnInitializedAsync() => await LoadData();
+	protected override async Task OnInitializedAsync() =>
+		await LoadData();
 
 	private async Task LoadData()
 	{
@@ -60,10 +62,7 @@ public partial class Users
 			return;
 		}
 
-		if (UserModel.Id == 0)
-			await UserData.InsertUser(UserModel);
-		else
-			await UserData.UpdateUser(UserModel);
+		await UserData.InsertUser(UserModel);
 
 		UserModel = new() { Status = true, LocationId = _locations.FirstOrDefault().Id };
 		NavManager.NavigateTo(NavManager.Uri, forceLoad: true);

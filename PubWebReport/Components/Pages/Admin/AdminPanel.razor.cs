@@ -7,7 +7,8 @@ public partial class AdminPanel
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		if (firstRender && !await ValidatePassword()) NavManager.NavigateTo("/");
+		if (firstRender && !await ValidatePassword())
+			NavManager.NavigateTo("/");
 
 		else NavManager.NavigateTo("/admin/updateAdvance");
 	}

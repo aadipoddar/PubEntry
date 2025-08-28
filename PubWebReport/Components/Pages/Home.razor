@@ -2,293 +2,829 @@
 
 <PageTitle>Pub Report</PageTitle>
 
-<div class="container">
-	<div class="container-bottom">
-		<SfDateTimePicker TValue="DateTime" Placeholder="From Date Time" Value="@FromDateTime" Max="@ToDateTime">
-			<DateTimePickerEvents TValue="DateTime" ValueChange="OnFromValueChanged"></DateTimePickerEvents>
-		</SfDateTimePicker>
-		<SfDateTimePicker TValue="DateTime" Placeholder="To Date Time" Value="@ToDateTime" Min="@FromDateTime">
-			<DateTimePickerEvents TValue="DateTime" ValueChange="OnToValueChanged"></DateTimePickerEvents>
-		</SfDateTimePicker>
+<div class="home-container">
+	<!-- Header Section -->
+	<div class="header-section">
+		<h1 class="app-title">Pub Report</h1>
+		<p class="app-subtitle">Real-time analytics and reporting dashboard</p>
 	</div>
 
-	<SfAccordion ExpandMode="ExpandMode.Single">
-		<AccordionItems>
-			@foreach (var location in _locations)
-			{
-				<AccordionItem>
-					<HeaderTemplate>
-						<label>@location.Name</label>
-						<button class="btn btn-primary" type="button" @onclick="() => OnDetailedClick(location.Id)">
-							Detailed
-						</button>
-					</HeaderTemplate>
-					<ContentTemplate>
-						<div class="accordion-content">
-							<!-- First Row -->
-							<div class="form-row">
-								<div class="form-group">
-									<label>Total People</label>
-									<input type="number"
-										   value="@((_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Male ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Female ?? 0))"
-										   readonly />
+	<!-- Date Range Picker Section -->
+	<div class="date-section">
+		<div class="date-picker-card">
+			<div class="date-picker-group">
+				<div class="date-input-wrapper">
+					<label class="date-label">From Date</label>
+					<SfDateTimePicker TValue="DateTime"
+									  Placeholder="Select start date"
+									  Value="@FromDateTime"
+									  Max="@ToDateTime"
+									  CssClass="custom-date-picker">
+						<DateTimePickerEvents TValue="DateTime" ValueChange="OnFromValueChanged"></DateTimePickerEvents>
+					</SfDateTimePicker>
+				</div>
+				<div class="date-input-wrapper">
+					<label class="date-label">To Date</label>
+					<SfDateTimePicker TValue="DateTime"
+									  Placeholder="Select end date"
+									  Value="@ToDateTime"
+									  Min="@FromDateTime"
+									  CssClass="custom-date-picker">
+						<DateTimePickerEvents TValue="DateTime" ValueChange="OnToValueChanged"></DateTimePickerEvents>
+					</SfDateTimePicker>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Location Reports Section -->
+	<div class="reports-section">
+		<SfAccordion ExpandMode="ExpandMode.Single" CssClass="modern-accordion">
+			<AccordionItems>
+				@foreach (var location in _locations)
+				{
+					<AccordionItem CssClass="location-item">
+						<HeaderTemplate>
+							<div class="accordion-header">
+								<div class="location-info">
+									<span class="location-icon">📍</span>
+									<span class="location-name">@location.Name</span>
 								</div>
-								<div class="form-group">
-									<label>Total Amount</label>
-									<input type="number"
-										   value="@((_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Cash ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Card ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.UPI ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Amex ?? 0))"
-										   readonly />
+								<button class="btn-detailed" type="button" @onclick="() => OnDetailedClick(location.Id)">
+									View Details
+								</button>
+							</div>
+						</HeaderTemplate>
+						<ContentTemplate>
+							<div class="location-content">
+								<!-- Summary Cards -->
+								<div class="summary-cards">
+									<div class="summary-card primary">
+										<div class="card-icon">👥</div>
+										<div class="card-content">
+											<span class="card-value">@((_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Male ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Female ?? 0))</span>
+											<span class="card-label">Total People</span>
+										</div>
+									</div>
+									<div class="summary-card success">
+										<div class="card-icon">💰</div>
+										<div class="card-content">
+											<span class="card-value">₹@((_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Cash ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Card ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.UPI ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Amex ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.OnlineQR ?? 0))</span>
+											<span class="card-label">Total Amount</span>
+										</div>
+									</div>
+								</div>
+
+								<!-- Demographics & Payments Grid -->
+								<div class="data-grid">
+									<div class="grid-section">
+										<h4 class="section-title">👥 Demographics</h4>
+										<div class="data-row">
+											<span class="data-label">Male</span>
+											<span class="data-value">@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Male ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Female</span>
+											<span class="data-value">@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Female ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Loyalty</span>
+											<span class="data-value">@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Loyalty ?? 0)</span>
+										</div>
+									</div>
+
+									<div class="grid-section">
+										<h4 class="section-title">💳 Payments</h4>
+										<div class="data-row">
+											<span class="data-label">Cash</span>
+											<span class="data-value">₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Cash ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Card</span>
+											<span class="data-value">₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Card ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">UPI</span>
+											<span class="data-value">₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.UPI ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Amex</span>
+											<span class="data-value">₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Amex ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Online QR</span>
+											<span class="data-value">₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.OnlineQR ?? 0)</span>
+										</div>
+									</div>
+
+									<div class="grid-section">
+										<h4 class="section-title">🎫 Advance & Booking</h4>
+										<div class="data-row">
+											<span class="data-label">Total Advance</span>
+											<span class="data-value">₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.TotalAdvance ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Total Booking</span>
+											<span class="data-value">₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.TotalBooking ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Redeemed Advance</span>
+											<span class="data-value">₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.RedeemedAdvance ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Redeemed Booking</span>
+											<span class="data-value">₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.RedeemedBooking ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Not Redeemed Advance</span>
+											<span class="data-value">₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.NotRedeemedAdvance ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Not Redeemed Booking</span>
+											<span class="data-value">₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.NotRedeemedBooking ?? 0)</span>
+										</div>
+									</div>
 								</div>
 							</div>
+						</ContentTemplate>
+					</AccordionItem>
+				}
+			</AccordionItems>
+		</SfAccordion>
 
-							<!-- Second Row -->
-							<div class="form-row">
-								<div class="form-group">
-									<label>Male</label>
-									<input type="number"
-										   value="@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Male ?? 0)"
-										   readonly />
+		<!-- Grand Total Section -->
+		<div class="grand-total-section">
+			<SfAccordion CssClass="modern-accordion grand-total">
+				<AccordionItems>
+					<AccordionItem CssClass="grand-total-item">
+						<HeaderTemplate>
+							<div class="grand-total-header">
+								<span class="total-icon">📈</span>
+								<span class="total-title">Grand Total</span>
+							</div>
+						</HeaderTemplate>
+						<ContentTemplate>
+							<div class="grand-total-content">
+								<!-- Grand Total Summary Cards -->
+								<div class="summary-cards">
+									<div class="summary-card primary large">
+										<div class="card-icon">👥</div>
+										<div class="card-content">
+											<span class="card-value">@(_transactionTotalsModel?.Sum(_ => _.Male + _.Female) ?? 0)</span>
+											<span class="card-label">Total People</span>
+										</div>
+									</div>
+									<div class="summary-card success large">
+										<div class="card-icon">💰</div>
+										<div class="card-content">
+											<span class="card-value">₹@(_transactionTotalsModel?.Sum(_ => _.Cash + _.Card + _.UPI + _.Amex + _.OnlineQR) ?? 0)</span>
+											<span class="card-label">Total Revenue</span>
+										</div>
+									</div>
 								</div>
-								<div class="form-group">
-									<label>Cash</label>
-									<input type="number"
-										   value="@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Cash ?? 0)"
-										   readonly />
+
+								<!-- Grand Total Data Grid -->
+								<div class="data-grid">
+									<div class="grid-section">
+										<h4 class="section-title">👥 Demographics</h4>
+										<div class="data-row">
+											<span class="data-label">Male</span>
+											<span class="data-value">@(_transactionTotalsModel?.Sum(_ => _.Male) ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Female</span>
+											<span class="data-value">@(_transactionTotalsModel?.Sum(_ => _.Female) ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Loyalty</span>
+											<span class="data-value">@(_transactionTotalsModel?.Sum(_ => _.Loyalty) ?? 0)</span>
+										</div>
+									</div>
+
+									<div class="grid-section">
+										<h4 class="section-title">💳 Payments</h4>
+										<div class="data-row">
+											<span class="data-label">Cash</span>
+											<span class="data-value">₹@(_transactionTotalsModel?.Sum(_ => _.Cash) ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Card</span>
+											<span class="data-value">₹@(_transactionTotalsModel?.Sum(_ => _.Card) ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">UPI</span>
+											<span class="data-value">₹@(_transactionTotalsModel?.Sum(_ => _.UPI) ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Amex</span>
+											<span class="data-value">₹@(_transactionTotalsModel?.Sum(_ => _.Amex) ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Online QR</span>
+											<span class="data-value">₹@(_transactionTotalsModel?.Sum(_ => _.OnlineQR) ?? 0)</span>
+										</div>
+									</div>
+
+									<div class="grid-section">
+										<h4 class="section-title">🎫 Advance & Booking</h4>
+										<div class="data-row">
+											<span class="data-label">Total Advance</span>
+											<span class="data-value">₹@(_advanceTotalsModel?.Sum(_ => _.TotalAdvance) ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Total Booking</span>
+											<span class="data-value">₹@(_advanceTotalsModel?.Sum(_ => _.TotalBooking) ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Redeemed Advance</span>
+											<span class="data-value">₹@(_advanceTotalsModel?.Sum(_ => _.RedeemedAdvance) ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Redeemed Booking</span>
+											<span class="data-value">₹@(_advanceTotalsModel?.Sum(_ => _.RedeemedBooking) ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Not Redeemed Advance</span>
+											<span class="data-value">₹@(_advanceTotalsModel?.Sum(_ => _.NotRedeemedAdvance) ?? 0)</span>
+										</div>
+										<div class="data-row">
+											<span class="data-label">Not Redeemed Booking</span>
+											<span class="data-value">₹@(_advanceTotalsModel?.Sum(_ => _.TotalBooking) ?? 0)</span>
+										</div>
+									</div>
 								</div>
 							</div>
+						</ContentTemplate>
+					</AccordionItem>
+				</AccordionItems>
+			</SfAccordion>
+		</div>
+	</div>
 
-							<!-- Third Row -->
-							<div class="form-row">
-								<div class="form-group">
-									<label>Female</label>
-									<input type="number"
-										   value="@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Female ?? 0)"
-										   readonly />
-								</div>
-								<div class="form-group">
-									<label>Card</label>
-									<input type="number"
-										   value="@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Card ?? 0)"
-										   readonly />
-								</div>
-							</div>
-
-							<!-- Fourth Row -->
-							<div class="form-row">
-								<div class="form-group">
-									<label>Loyalty</label>
-									<input type="number"
-										   value="@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Loyalty ?? 0)"
-										   readonly />
-								</div>
-								<div class="form-group">
-									<label>UPI</label>
-									<input type="number"
-										   value="@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.UPI ?? 0)"
-										   readonly />
-								</div>
-							</div>
-
-							<!-- Fifth Row (Amex on right) -->
-							<div class="form-row">
-								<div class="form-group">
-									<!-- Empty spacer -->
-								</div>
-								<div class="form-group">
-									<label>Amex</label>
-									<input type="number"
-										   value="@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Amex ?? 0)"
-										   readonly />
-								</div>
-							</div>
-
-							<!-- Sixth Row -->
-							<div class="form-row">
-								<div class="form-group">
-									<label>Total Advance</label>
-									<input type="number"
-										   value="@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.TotalAdvance ?? 0)"
-										   readonly />
-								</div>
-								<div class="form-group">
-									<label>Total Booking</label>
-									<input type="number"
-										   value="@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.TotalBooking ?? 0)"
-										   readonly />
-								</div>
-							</div>
-
-							<!-- Seventh Row -->
-							<div class="form-row">
-								<div class="form-group">
-									<label>Redeemed</label>
-									<input type="number"
-										   value="@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.RedeemedAdvance ?? 0)"
-										   readonly />
-								</div>
-								<div class="form-group">
-									<label>Redeemed</label>
-									<input type="number"
-										   value="@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.RedeemedBooking ?? 0)"
-										   readonly />
-								</div>
-							</div>
-
-							<!-- Eighth Row -->
-							<div class="form-row">
-								<div class="form-group">
-									<label>Not Redeemed</label>
-									<input type="number"
-										   value="@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.NotRedeemedAdvance ?? 0)"
-										   readonly />
-								</div>
-								<div class="form-group">
-									<label>Not Redeemed</label>
-									<input type="number"
-										   value="@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.NotRedeemedBooking ?? 0)"
-										   readonly />
-								</div>
-							</div>
-						</div>
-					</ContentTemplate>
-				</AccordionItem>
-			}
-		</AccordionItems>
-	</SfAccordion>
-
-	<div class="spacing"></div>
-
-	<SfAccordion>
-		<AccordionItems>
-			<AccordionItem Header="Grand Total">
-				<HeaderTemplate>
-					<label style="font-weight:500">Grand Total</label>
-				</HeaderTemplate>
-				<ContentTemplate>
-					<div class="accordion-content">
-						<!-- First Row -->
-						<div class="form-row">
-							<div class="form-group">
-								<label>Total People</label>
-								<input type="number" value="@(_transactionTotalsModel?.Sum(_ => _.Male + _.Female) ?? 0)" readonly />
-							</div>
-							<div class="form-group">
-								<label>Total Amount</label>
-								<input type="number" value="@(_transactionTotalsModel?.Sum(_ => _.Cash + _.Card + _.UPI + _.Amex) ?? 0)" readonly />
-							</div>
-						</div>
-
-						<!-- Second Row -->
-						<div class="form-row">
-							<div class="form-group">
-								<label>Male</label>
-								<input type="number" value="@(_transactionTotalsModel?.Sum(_ => _.Male) ?? 0)" readonly />
-							</div>
-							<div class="form-group">
-								<label>Cash</label>
-								<input type="number" value="@(_transactionTotalsModel?.Sum(_ => _.Cash) ?? 0)" readonly />
-							</div>
-						</div>
-
-						<!-- Third Row -->
-						<div class="form-row">
-							<div class="form-group">
-								<label>Female</label>
-								<input type="number" value="@(_transactionTotalsModel?.Sum(_ => _.Female) ?? 0)" readonly />
-							</div>
-							<div class="form-group">
-								<label>Card</label>
-								<input type="number" value="@(_transactionTotalsModel?.Sum(_ => _.Card) ?? 0)" readonly />
-							</div>
-						</div>
-
-						<!-- Fourth Row -->
-						<div class="form-row">
-							<div class="form-group">
-								<label>Loyalty</label>
-								<input type="number" value="@(_transactionTotalsModel?.Sum(_ => _.Loyalty) ?? 0)" readonly />
-							</div>
-							<div class="form-group">
-								<label>UPI</label>
-								<input type="number" value="@(_transactionTotalsModel?.Sum(_ => _.UPI) ?? 0)" readonly />
-							</div>
-						</div>
-
-						<!-- Fifth Row (Amex on right) -->
-						<div class="form-row">
-							<div class="form-group">
-								<!-- Empty spacer -->
-							</div>
-							<div class="form-group">
-								<label>Amex</label>
-								<input type="number" value="@(_transactionTotalsModel?.Sum(_ => _.Amex) ?? 0)" readonly />
-							</div>
-						</div>
-
-						<!-- Sixth Row -->
-						<div class="form-row">
-							<div class="form-group">
-								<label>Total Advance</label>
-								<input type="number" value="@(_advanceTotalsModel?.Sum(_ => _.TotalAdvance) ?? 0)" readonly />
-							</div>
-							<div class="form-group">
-								<label>Total Booking</label>
-								<input type="number" value="@(_advanceTotalsModel?.Sum(_ => _.TotalBooking) ?? 0)" readonly />
-							</div>
-						</div>
-
-						<!-- Seventh Row -->
-						<div class="form-row">
-							<div class="form-group">
-								<label>Redeemed</label>
-								<input type="number" value="@(_advanceTotalsModel?.Sum(_ => _.RedeemedAdvance) ?? 0)" readonly />
-							</div>
-							<div class="form-group">
-								<label>Redeemed</label>
-								<input type="number" value="@(_advanceTotalsModel?.Sum(_ => _.RedeemedBooking) ?? 0)" readonly />
-							</div>
-						</div>
-
-						<!-- Eighth Row -->
-						<div class="form-row">
-							<div class="form-group">
-								<label>Not Redeemed</label>
-								<input type="number" value="@(_advanceTotalsModel?.Sum(_ => _.NotRedeemedAdvance) ?? 0)" readonly />
-							</div>
-							<div class="form-group">
-								<label>Not Redeemed</label>
-								<input type="number" value="@(_advanceTotalsModel?.Sum(_ => _.TotalBooking) ?? 0)" readonly />
-							</div>
-						</div>
-					</div>
-				</ContentTemplate>
-			</AccordionItem>
-		</AccordionItems>
-	</SfAccordion>
-
-	<div class="container-bottom">
-		<button class="btn btn-primary" type="button" @onclick="SummaryButtonClicked">Summary Report</button>
-
-		<select class="form-select-sm" name="locationSelect" @bind="_selectedLocationId" @bind:after="OnLocationChanged">
-			@foreach (var location in _locations)
-			{
-				<option value="@location.Id">@location.Name</option>
-			}
-		</select>
-
-		<div>
-			<button class="btn btn-primary" type="button" @onclick="DetailedButtonClicked">PDF</button>
-			<button class="btn btn-primary" type="button" @onclick="ExcelButtonClicked">Excel</button>
+	<!-- Actions Section -->
+	<div class="actions-section">
+		<!-- Quick Actions -->
+		<div class="quick-actions">
+			<button class="action-btn primary" type="button" @onclick="SummaryButtonClicked">
+				<span class="btn-icon">📄</span>
+				Summary Report
+			</button>
 		</div>
 
-		<select class="form-select-sm" name="userSelect" @bind="_selectedUserId">
-			@foreach (var user in _users)
-			{
-				<option value="@user.Id">@user.Name</option>
-			}
-		</select>
-		<input class="input-group-text" type="password" @bind="Password" />
-		<button class="btn btn-primary" type="button" @onclick="AdvanceButtonClicked">Advance Entry</button>
-		<button class="btn btn-primary" type="button" @onclick="AdminButtonClicked">Admin Panel</button>
+		<!-- Export & Admin Controls -->
+		<div class="control-groups">
+			<!-- Export Group -->
+			<div class="control-group">
+				<h4 class="group-title">📊 Export Reports</h4>
+				<div class="control-row">
+					<select class="modern-select" @bind="_selectedLocationId" @bind:after="OnLocationChanged">
+						@foreach (var location in _locations)
+						{
+							<option value="@location.Id">@location.Name</option>
+						}
+					</select>
+					<div class="export-buttons">
+						<button class="action-btn secondary" type="button" @onclick="DetailedButtonClicked">
+							<span class="btn-icon">📄</span>
+							PDF
+						</button>
+						<button class="action-btn secondary" type="button" @onclick="ExcelButtonClicked">
+							<span class="btn-icon">📊</span>
+							Excel
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Admin Group -->
+			<div class="control-group">
+				<h4 class="group-title">⚙️ Administration</h4>
+				<div class="control-row">
+					<select class="modern-select" @bind="_selectedUserId">
+						@foreach (var user in _users)
+						{
+							<option value="@user.Id">@user.Name</option>
+						}
+					</select>
+					<input class="modern-input password" type="password" @bind="Password" placeholder="Enter password" />
+				</div>
+				<div class="admin-buttons">
+					<button class="action-btn warning" type="button" @onclick="AdvanceButtonClicked">
+						<span class="btn-icon">💳</span>
+						Advance Entry
+					</button>
+					<button class="action-btn danger" type="button" @onclick="AdminButtonClicked">
+						<span class="btn-icon">⚙️</span>
+						Admin Panel
+					</button>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
+
+<style>
+	/* Modern CSS Variables */
+	:root {
+		--primary-color: #3b82f6;
+		--primary-dark: #2563eb;
+		--secondary-color: #6366f1;
+		--success-color: #10b981;
+		--warning-color: #f59e0b;
+		--danger-color: #ef4444;
+		--gray-50: #f9fafb;
+		--gray-100: #f3f4f6;
+		--gray-200: #e5e7eb;
+		--gray-300: #d1d5db;
+		--gray-400: #9ca3af;
+		--gray-500: #6b7280;
+		--gray-600: #4b5563;
+		--gray-700: #374151;
+		--gray-800: #1f2937;
+		--gray-900: #111827;
+		--white: #ffffff;
+		--shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+		--shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+		--shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+		--radius: 12px;
+		--radius-sm: 8px;
+		--transition: all 0.2s ease-in-out;
+	}
+
+	/* Reset and Base Styles */
+	.home-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 1.5rem;
+		background: linear-gradient(135deg, var(--gray-50) 0%, var(--white) 100%);
+		min-height: 100vh;
+	}
+
+	/* Header Section */
+	.header-section {
+		text-align: center;
+		margin-bottom: 3rem;
+	}
+
+	.app-title {
+		font-size: 2.5rem;
+		font-weight: 700;
+		color: var(--gray-800);
+		margin-bottom: 0.5rem;
+		background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.app-subtitle {
+		font-size: 1.125rem;
+		color: var(--gray-600);
+		margin: 0;
+	}
+
+	/* Date Section */
+	.date-section {
+		margin-bottom: 2.5rem;
+	}
+
+	.date-picker-card {
+		background: var(--white);
+		border-radius: var(--radius);
+		padding: 1.5rem;
+		box-shadow: var(--shadow-md);
+		border: 1px solid var(--gray-200);
+	}
+
+	.date-picker-group {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.5rem;
+	}
+
+	.date-input-wrapper {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.date-label {
+		font-weight: 600;
+		color: var(--gray-700);
+		margin-bottom: 0.5rem;
+		font-size: 0.875rem;
+	}
+
+	.custom-date-picker {
+		width: 100%;
+	}
+
+	/* Reports Section */
+	.reports-section {
+		margin-bottom: 2.5rem;
+	}
+
+	.modern-accordion {
+		border: none !important;
+		box-shadow: none !important;
+	}
+
+	.location-item,
+	.grand-total-item {
+		background: var(--white) !important;
+		border: 1px solid var(--gray-200) !important;
+		border-radius: var(--radius) !important;
+		margin-bottom: 1rem !important;
+		box-shadow: var(--shadow-md) !important;
+		overflow: hidden !important;
+	}
+
+	.accordion-header {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+		padding: 1rem 1.5rem;
+	}
+
+	.location-info {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.location-icon {
+		font-size: 1.25rem;
+	}
+
+	.location-name {
+		font-weight: 600;
+		color: var(--gray-800);
+		font-size: 1.125rem;
+	}
+
+	.btn-detailed {
+		background: var(--primary-color);
+		color: var(--white);
+		border: none;
+		padding: 0.5rem 1rem;
+		border-radius: var(--radius-sm);
+		font-weight: 500;
+		font-size: 0.875rem;
+		cursor: pointer;
+		transition: var(--transition);
+	}
+
+		.btn-detailed:hover {
+			background: var(--primary-dark);
+			transform: translateY(-1px);
+		}
+
+	/* Content Styles */
+	.location-content,
+	.grand-total-content {
+		padding: 1.5rem;
+		background: var(--gray-50);
+	}
+
+	.summary-cards {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 1rem;
+		margin-bottom: 2rem;
+	}
+
+	.summary-card {
+		background: var(--white);
+		border-radius: var(--radius);
+		padding: 1.5rem;
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		box-shadow: var(--shadow-sm);
+		border: 1px solid var(--gray-200);
+		transition: var(--transition);
+	}
+
+		.summary-card:hover {
+			box-shadow: var(--shadow-md);
+			transform: translateY(-2px);
+		}
+
+		.summary-card.primary {
+			border-left: 4px solid var(--primary-color);
+		}
+
+		.summary-card.success {
+			border-left: 4px solid var(--success-color);
+		}
+
+		.summary-card.large {
+			padding: 2rem;
+		}
+
+	.card-icon {
+		font-size: 2rem;
+		opacity: 0.8;
+	}
+
+	.card-content {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.card-value {
+		font-size: 1.5rem;
+		font-weight: 700;
+		color: var(--gray-800);
+		line-height: 1;
+	}
+
+	.card-label {
+		font-size: 0.875rem;
+		color: var(--gray-600);
+		margin-top: 0.25rem;
+	}
+
+	/* Data Grid */
+	.data-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 1.5rem;
+	}
+
+	.grid-section {
+		background: var(--white);
+		border-radius: var(--radius);
+		padding: 1.5rem;
+		box-shadow: var(--shadow-sm);
+		border: 1px solid var(--gray-200);
+	}
+
+	.section-title {
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--gray-800);
+		margin-bottom: 1rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.data-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0.75rem 0;
+		border-bottom: 1px solid var(--gray-100);
+	}
+
+		.data-row:last-child {
+			border-bottom: none;
+		}
+
+	.data-label {
+		color: var(--gray-600);
+		font-size: 0.875rem;
+	}
+
+	.data-value {
+		font-weight: 600;
+		color: var(--gray-800);
+		font-size: 0.875rem;
+	}
+
+	/* Grand Total */
+	.grand-total-section {
+		margin-bottom: 2.5rem;
+	}
+
+	.grand-total-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 1rem 1.5rem;
+	}
+
+	.total-icon {
+		font-size: 1.5rem;
+	}
+
+	.total-title {
+		font-weight: 700;
+		color: var(--gray-800);
+		font-size: 1.25rem;
+	}
+
+	/* Actions Section */
+	.actions-section {
+		background: var(--white);
+		border-radius: var(--radius);
+		padding: 2rem;
+		box-shadow: var(--shadow-md);
+		border: 1px solid var(--gray-200);
+	}
+
+	.quick-actions {
+		margin-bottom: 2rem;
+		text-align: center;
+	}
+
+	.control-groups {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 2rem;
+	}
+
+	.control-group {
+		border: 1px solid var(--gray-200);
+		border-radius: var(--radius);
+		padding: 1.5rem;
+		background: var(--gray-50);
+	}
+
+	.group-title {
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--gray-800);
+		margin-bottom: 1rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.control-row {
+		display: flex;
+		gap: 1rem;
+		margin-bottom: 1rem;
+		flex-wrap: wrap;
+	}
+
+	.modern-select,
+	.modern-input {
+		padding: 0.75rem 1rem;
+		border: 1px solid var(--gray-300);
+		border-radius: var(--radius-sm);
+		font-size: 0.875rem;
+		background: var(--white);
+		color: var(--gray-700);
+		transition: var(--transition);
+		flex: 1;
+		min-width: 140px;
+	}
+
+		.modern-select:focus,
+		.modern-input:focus {
+			outline: none;
+			border-color: var(--primary-color);
+			box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
+		}
+
+	.password {
+		min-width: 160px;
+	}
+
+	/* Buttons */
+	.action-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.75rem 1.5rem;
+		border: none;
+		border-radius: var(--radius-sm);
+		font-weight: 500;
+		font-size: 0.875rem;
+		cursor: pointer;
+		transition: var(--transition);
+		text-decoration: none;
+	}
+
+		.action-btn.primary {
+			background: var(--primary-color);
+			color: var(--white);
+		}
+
+			.action-btn.primary:hover {
+				background: var(--primary-dark);
+				transform: translateY(-1px);
+			}
+
+		.action-btn.secondary {
+			background: var(--gray-600);
+			color: var(--white);
+		}
+
+			.action-btn.secondary:hover {
+				background: var(--gray-700);
+			}
+
+		.action-btn.warning {
+			background: var(--warning-color);
+			color: var(--white);
+		}
+
+			.action-btn.warning:hover {
+				background: #d97706;
+			}
+
+		.action-btn.danger {
+			background: var(--danger-color);
+			color: var(--white);
+		}
+
+			.action-btn.danger:hover {
+				background: #dc2626;
+			}
+
+	.export-buttons,
+	.admin-buttons {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	.admin-buttons {
+		justify-content: stretch;
+	}
+
+		.admin-buttons .action-btn {
+			flex: 1;
+		}
+
+	.btn-icon {
+		font-size: 1rem;
+	}
+
+	/* Mobile Responsive */
+	@@media (max-width: 768px) {
+		.home-container {
+			padding: 1rem;
+		}
+
+		.app-title {
+			font-size: 2rem;
+		}
+
+		.date-picker-group {
+			grid-template-columns: 1fr;
+			gap: 1rem;
+		}
+
+		.summary-cards {
+			grid-template-columns: 1fr;
+		}
+
+		.data-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.control-groups {
+			grid-template-columns: 1fr;
+		}
+
+		.control-row {
+			flex-direction: column;
+		}
+
+		.export-buttons,
+		.admin-buttons {
+			flex-direction: column;
+		}
+
+		.accordion-header {
+			flex-direction: column;
+			gap: 1rem;
+			align-items: stretch;
+		}
+
+		.location-info {
+			justify-content: center;
+		}
+	}
+
+	@@media (max-width: 480px) {
+		.home-container {
+			padding: 0.75rem;
+		}
+
+		.app-title {
+			font-size: 1.75rem;
+		}
+
+		.date-picker-card,
+		.actions-section {
+			padding: 1rem;
+		}
+
+		.grid-section {
+			padding: 1rem;
+		}
+
+		.summary-card {
+			padding: 1rem;
+		}
+
+			.summary-card.large {
+				padding: 1.25rem;
+			}
+	}
+</style>

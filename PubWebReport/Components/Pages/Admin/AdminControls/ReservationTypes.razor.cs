@@ -53,10 +53,7 @@ public partial class ReservationTypes
 			return;
 		}
 
-		if (ReservationTypeModel.Id == 0)
-			await ReservationTypeData.InsertReservationType(ReservationTypeModel);
-		else
-			await ReservationTypeData.UpdateReservationType(ReservationTypeModel);
+		await ReservationTypeData.InsertReservationType(ReservationTypeModel);
 
 		ReservationTypeModel = new() { Status = true };
 		NavManager.NavigateTo(NavManager.Uri, forceLoad: true);

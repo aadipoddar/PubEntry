@@ -52,8 +52,7 @@ public partial class Locations
 			return;
 		}
 
-		if (LocationModel.Id == 0) await LocationData.InsertLocation(LocationModel);
-		else await LocationData.UpdateLocation(LocationModel);
+		await LocationData.InsertLocation(LocationModel);
 
 		NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
 	}

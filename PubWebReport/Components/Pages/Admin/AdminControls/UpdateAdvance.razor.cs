@@ -140,11 +140,9 @@ public partial class UpdateAdvance
 		NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
 	}
 
-	private async Task InsertPerson()
-	{
-		if (PersonModel.Id == 0) PersonModel.Id = await PersonData.InsertPerson(PersonModel);
-		await PersonData.UpdatePerson(PersonModel);
-	}
+	private async Task InsertPerson() =>
+		PersonModel.Id = await PersonData.InsertPerson(PersonModel);
 
-	private async Task UpdateAdvanceMain() => await AdvanceData.UpdateAdvance(AdvanceModel);
+	private async Task UpdateAdvanceMain() =>
+		await AdvanceData.InsertAdvance(AdvanceModel);
 }

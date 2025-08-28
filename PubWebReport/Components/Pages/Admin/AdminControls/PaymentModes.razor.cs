@@ -10,7 +10,8 @@ public partial class PaymentModes
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
-		if (firstRender && !await ValidatePassword()) NavManager.NavigateTo("/");
+		if (firstRender && !await ValidatePassword())
+			NavManager.NavigateTo("/");
 	}
 
 	private async Task<bool> ValidatePassword()
@@ -53,10 +54,7 @@ public partial class PaymentModes
 			return;
 		}
 
-		if (PaymentModeModel.Id == 0)
-			await PaymentModeData.InsertPaymentMode(PaymentModeModel);
-		else
-			await PaymentModeData.UpdatePaymentMode(PaymentModeModel);
+		await PaymentModeData.InsertPaymentMode(PaymentModeModel);
 
 		PaymentModeModel = new() { Status = true };
 		NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
