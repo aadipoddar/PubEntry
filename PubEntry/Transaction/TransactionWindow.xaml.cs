@@ -180,10 +180,25 @@ public partial class TransactionWindow : Window
 			return;
 		}
 
+		MakeFieldsReadOnly();
 		await InsertTransaction();
 		await ClearAdvance();
 		await PrintThermal();
 		ClearForm();
+	}
+
+	private void MakeFieldsReadOnly()
+	{
+		numberTextBox.IsReadOnly = true;
+		maleTextBox.IsReadOnly = true;
+		femaleTextBox.IsReadOnly = true;
+		cashTextBox.IsReadOnly = true;
+		cardTextBox.IsReadOnly = true;
+		upiTextBox.IsReadOnly = true;
+		amexTextBox.IsReadOnly = true;
+		onlineQRTextBox.IsReadOnly = true;
+		remarksTextBox.IsReadOnly = true;
+		saveButton.IsEnabled = false;
 	}
 
 	private async Task InsertTransaction()
@@ -228,9 +243,15 @@ public partial class TransactionWindow : Window
 			await AdvanceData.InsertAdvance(advance);
 		}
 	}
+
 	private async Task PrintThermal()
 	{
 		var receiptModel = await CommonData.LoadTableDataById<TransactionPrintModel>(ViewNames.Transactions, _transactionId);
+		receiptModel.Cash = int.Parse(cashTextBox.Text);
+		receiptModel.Card = int.Parse(cardTextBox.Text);
+		receiptModel.UPI = int.Parse(upiTextBox.Text);
+		receiptModel.Amex = int.Parse(amexTextBox.Text);
+		receiptModel.OnlineQR = int.Parse(onlineQRTextBox.Text);
 
 		int advance = 0;
 		if (_foundAdvanceId is not 0) advance = (await AdvanceData.LoadAdvanceDetailByAdvanceId(_foundAdvanceId)).Sum(x => x.Amount);
@@ -264,6 +285,17 @@ public partial class TransactionWindow : Window
 		upiTextBox.Text = "0";
 		amexTextBox.Text = "0";
 		onlineQRTextBox.Text = "0";
+
+		numberTextBox.IsReadOnly = false;
+		maleTextBox.IsReadOnly = false;
+		femaleTextBox.IsReadOnly = false;
+		cashTextBox.IsReadOnly = false;
+		cardTextBox.IsReadOnly = false;
+		upiTextBox.IsReadOnly = false;
+		amexTextBox.IsReadOnly = false;
+		onlineQRTextBox.IsReadOnly = false;
+		remarksTextBox.IsReadOnly = false;
+		saveButton.IsEnabled = true;
 	}
 
 	#endregion
