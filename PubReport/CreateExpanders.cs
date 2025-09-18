@@ -230,6 +230,7 @@ internal class CreateExpanders
 		grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 		grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 		grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+		grid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
 
 		// Controls
 		var amountText = new Label { Text = "Amount", Margin = new Thickness(10) };
@@ -313,7 +314,7 @@ internal class CreateExpanders
 
 
 		var onlineQRText = new Label { Text = "Online QR", Margin = new Thickness(10) };
-		Grid.SetRow(onlineQRText, 5);
+		Grid.SetRow(onlineQRText, 6);
 		Grid.SetColumn(onlineQRText, 0);
 		grid.Children.Add(onlineQRText);
 
@@ -323,7 +324,7 @@ internal class CreateExpanders
 			HorizontalTextAlignment = TextAlignment.End,
 			IsReadOnly = true
 		};
-		Grid.SetRow(onlineQRTextBox, 5);
+		Grid.SetRow(onlineQRTextBox, 6);
 		Grid.SetColumn(onlineQRTextBox, 1);
 		grid.Children.Add(onlineQRTextBox);
 

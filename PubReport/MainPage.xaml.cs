@@ -22,10 +22,9 @@ public partial class MainPage : ContentPage
 	{
 		InitializeComponent();
 		_refreshTimer = Dispatcher.CreateTimer();
-		InitializeRefreshTimer();
 	}
 
-	private async void InitializeRefreshTimer()
+	private async Task InitializeRefreshTimer()
 	{
 		_refreshTimer.Interval = TimeSpan.FromSeconds(int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.RefreshReportTimer)));
 		_refreshTimer.Tick += async (sender, e) => await LoadData();
@@ -43,12 +42,20 @@ public partial class MainPage : ContentPage
 			await AadiSoftUpdater.UpdateApp("aadipoddar", "PubEntry", "com.aadisoft.pubreport");
 #endif
 
+		await InitializeRefreshTimer();
+
 		await LoadComboBox();
 		await LoadData();
 
 		popup.StaysOpen = false;
 		popup.Dismiss();
 		popup.StaysOpen = true;
+
+#if ANDROID
+		await Permissions.RequestAsync<Permissions.PostNotifications>();
+		if (!PubReport.Platforms.Android.AndroidServiceManager.IsRunning)
+			PubReport.Platforms.Android.AndroidServiceManager.StartMyService();
+#endif
 
 		_refreshTimer.Start();
 	}
@@ -83,11 +90,14 @@ public partial class MainPage : ContentPage
 		_isLoadingData = false;
 	}
 
-	private async void datePicker_DateSelected(object sender, DateChangedEventArgs e) => await LoadData();
+	private async void datePicker_DateSelected(object sender, DateChangedEventArgs e) =>
+		await LoadData();
 
-	private async void timePicker_TimeSelected(object sender, TimeChangedEventArgs e) => await LoadData();
+	private async void timePicker_TimeSelected(object sender, TimeChangedEventArgs e) =>
+		await LoadData();
 
-	private async void refreshButton_Clicked(object sender, EventArgs e) => await LoadData();
+	private async void refreshButton_Clicked(object sender, EventArgs e) =>
+		await LoadData();
 
 	private async Task LoadData()
 	{

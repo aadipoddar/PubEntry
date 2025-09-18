@@ -6,7 +6,7 @@
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <AssemblyVersion>5.0.0.4</AssemblyVersion>
+    <AssemblyVersion>5.0.0.5</AssemblyVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <UseWindowsForms>False</UseWindowsForms>
     <ApplicationIcon>Golder Park.ico</ApplicationIcon>
@@ -20,7 +20,7 @@
   <ItemGroup>
     <PackageReference Include="AadiSoft.Updater" Version="1.0.3" />
     <PackageReference Include="NumericWordsConversion" Version="2.1.1" />
-    <PackageReference Include="Syncfusion.Edit.WPF" Version="31.1.19" />
+    <PackageReference Include="Syncfusion.Edit.WPF" Version="31.1.20" />
   </ItemGroup>
 
   <ItemGroup>
