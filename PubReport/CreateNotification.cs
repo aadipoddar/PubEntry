@@ -6,19 +6,20 @@ public static class CreateNotification
 	{
 		if (DateTime.Now.Hour < int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)) &&
 			DateTime.Now.Hour > int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)) + 1)
+		{
+			SecureStorage.RemoveAll();
 			return (null, null);
+		}
 
 		var transactionTotalsModels = await LoadTransactionTotals();
 
 		if (DateTime.Now.Hour == int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)) && DateTime.Now.Minute <= 15)
 		{
-			foreach (var _ in transactionTotalsModels)
-				SecureStorage.RemoveAll();
+			SecureStorage.RemoveAll();
 			return ("Pub Entry Report", await GetNotificationContent(transactionTotalsModels));
 		}
 
 		var backgroundServiceLocationMark = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.BackgroundServiceLocationMark));
-
 		foreach (var transactionTotalsModel in transactionTotalsModels)
 		{
 			var locationMark = await SecureStorage.GetAsync($"Location_{transactionTotalsModel.LocationId}_Mark");
