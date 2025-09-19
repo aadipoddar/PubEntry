@@ -44,12 +44,47 @@ public class MyBackgroundService : Service
 		else
 			StartForeground(myId, notification.Build());
 
-		var backgroundServiceTimer = int.Parse(SettingsData.LoadSettingsByKey(SettingsKeys.BackgroundServiceTimer).Result);
-		timer = new Timer(Timer_Elapsed, notification, 0, backgroundServiceTimer * 60 * 1000);
+		// Start the timer initialization in a background task
+		_ = Task.Run(async () => await InitializeTimerAsync(notification));
 
 		// You can stop the service from inside the service by calling StopSelf();
 
 		return StartCommandResult.Sticky;
+	}
+
+	private async Task InitializeTimerAsync(NotificationCompat.Builder notification)
+	{
+		try
+		{
+			int backgroundServiceTimer = await GetBackgroundServiceTimerAsync();
+			timer = new Timer(Timer_Elapsed, notification, 0, backgroundServiceTimer * 60 * 1000);
+		}
+		catch (Exception ex)
+		{
+			System.Diagnostics.Debug.WriteLine($"Error initializing timer: {ex.Message}");
+			// Use default timer value
+			timer = new Timer(Timer_Elapsed, notification, 0, 5 * 60 * 1000); // 5 minutes default
+		}
+	}
+
+	private async Task<int> GetBackgroundServiceTimerAsync()
+	{
+		try
+		{
+			var settingValue = await SettingsData.LoadSettingsByKey(SettingsKeys.BackgroundServiceTimer);
+
+			if (string.IsNullOrWhiteSpace(settingValue))
+				return 5; // Default to 5 minutes
+
+			if (int.TryParse(settingValue, out int timerValue) && timerValue > 0)
+				return timerValue;
+			else
+				return 5; // Default to 5 minutes for invalid values
+		}
+		catch
+		{
+			return 5; // Default to 5 minutes on any error
+		}
 	}
 
 	/// <summary>
