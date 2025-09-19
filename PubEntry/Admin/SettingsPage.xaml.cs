@@ -56,8 +56,16 @@ public partial class SettingsPage : Page
 
 		#endregion
 
+		#region Timers
 		inactivityTimerTextBox.Text = await SettingsData.LoadSettingsByKey(SettingsKeys.InactivityTime);
 		refreshReportTimerTextBox.Text = await SettingsData.LoadSettingsByKey(SettingsKeys.RefreshReportTimer);
+		#endregion
+
+		#region Background Service
+		backgroundServiceTimerTextBox.Text = await SettingsData.LoadSettingsByKey(SettingsKeys.BackgroundServiceTimer);
+		backgroundServiceLocationMarkTextBox.Text = await SettingsData.LoadSettingsByKey(SettingsKeys.BackgroundServiceLocationMark);
+		backgroundServiceGrandTotalMarkTextBox.Text = await SettingsData.LoadSettingsByKey(SettingsKeys.BackgroundServiceGrandTotalMark);
+		#endregion
 
 		#region Thermal
 
@@ -209,6 +217,11 @@ public partial class SettingsPage : Page
 	private bool ValidateForm()
 	{
 		if (string.IsNullOrEmpty(inactivityTimerTextBox.Text)) inactivityTimerTextBox.Text = "5";
+		if (string.IsNullOrEmpty(refreshReportTimerTextBox.Text)) refreshReportTimerTextBox.Text = "60";
+
+		if (string.IsNullOrEmpty(backgroundServiceTimerTextBox.Text)) backgroundServiceTimerTextBox.Text = "5";
+		if (string.IsNullOrEmpty(backgroundServiceLocationMarkTextBox.Text)) backgroundServiceLocationMarkTextBox.Text = "25000";
+		if (string.IsNullOrEmpty(backgroundServiceGrandTotalMarkTextBox.Text)) backgroundServiceGrandTotalMarkTextBox.Text = "50000";
 
 		return true;
 	}
@@ -230,6 +243,10 @@ public partial class SettingsPage : Page
 
 				new SettingsModel { Key = SettingsKeys.InactivityTime, Value = inactivityTimerTextBox.Text},
 				new SettingsModel { Key = SettingsKeys.RefreshReportTimer, Value = refreshReportTimerTextBox.Text},
+
+				new SettingsModel { Key = SettingsKeys.BackgroundServiceTimer, Value = backgroundServiceTimerTextBox.Text},
+				new SettingsModel { Key = SettingsKeys.BackgroundServiceLocationMark, Value = backgroundServiceLocationMarkTextBox.Text},
+				new SettingsModel { Key = SettingsKeys.BackgroundServiceGrandTotalMark, Value = backgroundServiceGrandTotalMarkTextBox.Text},
 
 				new SettingsModel { Key = SettingsKeys.PageWidthThermal, Value = pageWidthThermalTextBox.Text},
 				new SettingsModel { Key = SettingsKeys.PagePaddingTopThermal, Value = pagePaddingTopThermalTextBox.Text},

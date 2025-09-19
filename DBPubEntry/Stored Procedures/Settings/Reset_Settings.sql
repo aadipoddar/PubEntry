@@ -9,6 +9,10 @@ BEGIN
 	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'InactivityTime', N'5')
 	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'RefreshReportTimer', N'60')
 
+	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'BackgroundServiceTimer', N'5')
+	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'BackgroundServiceLocationMark', N'25000')
+	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'BackgroundServiceGrandTotalMark', N'50000')
+
 	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'PageWidthThermal', N'280')
 	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'PagePaddingTopThermal', N'20')
 	INSERT INTO [dbo].[Settings] ([Key], [Value]) VALUES (N'PagePaddingBottomThermal', N'20')

@@ -15,6 +15,10 @@ public static class SettingsKeys
 	public static string InactivityTime => "InactivityTime";
 	public static string RefreshReportTimer => "RefreshReportTimer";
 
+	public static string BackgroundServiceTimer => "BackgroundServiceTimer";
+	public static string BackgroundServiceLocationMark => "BackgroundServiceLocationMark";
+	public static string BackgroundServiceGrandTotalMark => "BackgroundServiceGrandTotalMark";
+
 	public static string PageWidthThermal => "PageWidthThermal";
 	public static string PagePaddingTopThermal => "PagePaddingTopThermal";
 	public static string PagePaddingBottomThermal => "PagePaddingBottomThermal";

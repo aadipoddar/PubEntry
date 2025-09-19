@@ -44,7 +44,8 @@ public class MyBackgroundService : Service
 		else
 			StartForeground(myId, notification.Build());
 
-		timer = new Timer(Timer_Elapsed, notification, 0, 5 * 60 * 1000);
+		var backgroundServiceTimer = int.Parse(SettingsData.LoadSettingsByKey(SettingsKeys.BackgroundServiceTimer).Result);
+		timer = new Timer(Timer_Elapsed, notification, 0, backgroundServiceTimer);
 
 		// You can stop the service from inside the service by calling StopSelf();
 
