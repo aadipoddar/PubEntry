@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Runtime;
+using Android.Widget;
 
 using AndroidX.Core.Content;
 
@@ -15,7 +16,7 @@ public class MyBootReceiver : BroadcastReceiver
 	{
 		if (intent.Action == Intent.ActionBootCompleted)
 		{
-			// Toast.MakeText(context, "Pub Entry is Running in the Background", ToastLength.Short).Show();
+			Toast.MakeText(context, "Pub Entry is Running in the Background", ToastLength.Short).Show();
 
 			var serviceIntent = new Intent(context, typeof(MyBackgroundService));
 			ContextCompat.StartForegroundService(context, serviceIntent);
