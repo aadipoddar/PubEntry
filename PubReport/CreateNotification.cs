@@ -73,9 +73,9 @@ public static class CreateNotification
 
 			return (null, null);
 		}
-		catch (Exception ex)
+		catch (Exception)
 		{
-			return ("Error Occurred", $"{ex.Message}");
+			return (null, null);
 		}
 	}
 
