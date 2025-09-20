@@ -4,21 +4,26 @@ public static class CreateNotification
 {
 	public static async Task<(string title, string text)> CreateNotificationText()
 	{
-		if (DateTime.Now.Hour < int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)) &&
-			DateTime.Now.Hour > int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)) + 1)
+		var openTime = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime));
+		var closeTime = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime));
+
+		if (DateTime.Now.Hour < openTime && DateTime.Now.Hour > closeTime + 1)
 		{
 			SecureStorage.RemoveAll();
 			return (null, null);
 		}
 
-		var transactionTotalsModels = await LoadTransactionTotals();
+		var transactionTotalsModels = await LoadTransactionTotals(openTime, closeTime);
 
-		if (DateTime.Now.Hour == int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)) && DateTime.Now.Minute <= 15)
+		#region EOD Report
+		if (DateTime.Now.Hour == closeTime && DateTime.Now.Minute <= 15)
 		{
 			SecureStorage.RemoveAll();
 			return ("Pub Entry Report", await GetNotificationContent(transactionTotalsModels));
 		}
+		#endregion
 
+		#region Location Wise
 		var backgroundServiceLocationMark = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.BackgroundServiceLocationMark));
 		foreach (var transactionTotalsModel in transactionTotalsModels)
 		{
@@ -35,7 +40,9 @@ public static class CreateNotification
 				return ($"{location.Name} Crossed ₹{amount}+", await GetNotificationContent(transactionTotalsModels));
 			}
 		}
+		#endregion
 
+		#region Grand Total
 		var grandTotalMark = await SecureStorage.GetAsync("GrandTotal_Mark");
 		var backgroundServiceGrandTotalMark = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.BackgroundServiceGrandTotalMark));
 		var grandTotalAmount = transactionTotalsModels.Sum(x => x.Card + x.Cash + x.UPI + x.Amex + x.OnlineQR);
@@ -48,6 +55,7 @@ public static class CreateNotification
 			await SecureStorage.SetAsync("GrandTotal_Mark", grandTotalAmount.ToString());
 			return ($"Grand Total Crossed ₹{grandTotalAmount}+", await GetNotificationContent(transactionTotalsModels));
 		}
+		#endregion
 
 		return (null, null);
 	}
@@ -66,12 +74,9 @@ public static class CreateNotification
 		return content;
 	}
 
-	private static async Task<List<TransactionTotalsModel>> LoadTransactionTotals()
+	private static async Task<List<TransactionTotalsModel>> LoadTransactionTotals(int openTime, int closeTime)
 	{
 		DateTime fromDate, toDate;
-
-		var openTime = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime));
-		var closeTime = int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime));
 
 		if (DateTime.Now.Hour >= openTime)
 		{
