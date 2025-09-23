@@ -25,7 +25,7 @@ public static class CreateNotification
 				x => x.Card + x.Cash + x.UPI + x.Amex + x.OnlineQR);
 
 			#region EOD Report
-			if (DateTime.Now.Hour == closeTime && DateTime.Now.Minute <= 15)
+			if (DateTime.Now.Hour == closeTime && DateTime.Now.Minute <= 45)
 			{
 				SecureStorage.RemoveAll();
 				return ("Pub Entry Report", await GetNotificationContent(transactionTotalsModels, locationAmounts));

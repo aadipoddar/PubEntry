@@ -56,7 +56,7 @@ public class MyBackgroundService : Service
 		else
 			StartForeground(myId, notification.Build());
 
-		timer = new Timer(Timer_Elapsed, notification, 0, 20000);
+		timer = new Timer(Timer_Elapsed, notification, 0, 30 * 60 * 1000);
 
 
 		// Return START_STICKY to ensure the service is restarted if killed

@@ -1,0 +1,175 @@
+﻿@page "/"
+
+<SfDateTimePicker TValue="DateTime"
+				  Placeholder="Select start date"
+				  Value="@_fromDateTime"
+				  Max="@_toDateTime">
+	<DateTimePickerEvents TValue="DateTime" ValueChange="OnFromValueChanged" />
+</SfDateTimePicker>
+
+<SfDateTimePicker TValue="DateTime"
+				  Placeholder="Select end date"
+				  Value="@_toDateTime"
+				  Min="@_fromDateTime">
+	<DateTimePickerEvents TValue="DateTime" ValueChange="OnToValueChanged" />
+</SfDateTimePicker>
+
+<SfButton Content="Refresh"
+		  OnClick="LoadTransactionsAdvance" />
+
+<SfButton Content="Summary PDF"
+		  OnClick="SummaryButtonClicked" />
+
+<SfAccordion ExpandMode="ExpandMode.Single">
+	<AccordionItems>
+		@foreach (var location in _locations)
+		{
+			<AccordionItem Header="@location.Name">
+				<ContentTemplate>
+					<div>
+						<h4>👥 Demographics</h4>
+						<span>@((_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Male ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Female ?? 0))</span>
+						<span>Total People</span>
+
+						<span>Male</span>
+						<span>@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Male ?? 0)</span>
+
+						<span>Female</span>
+						<span>@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Female ?? 0)</span>
+
+						<span>Loyalty</span>
+						<span>@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Loyalty ?? 0)</span>
+
+						<h4>💳 Payments</h4>
+
+						<span>Total Amount</span>
+						<span>₹@((_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Cash ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Card ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.UPI ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Amex ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.OnlineQR ?? 0))</span>
+
+						<span>Cash</span>
+						<span>₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Cash ?? 0)</span>
+
+						<span>Card</span>
+						<span>₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Card ?? 0)</span>
+
+						<span>UPI</span>
+						<span>₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.UPI ?? 0)</span>
+
+						<span>Amex</span>
+						<span>₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Amex ?? 0)</span>
+
+						<span>Online QR</span>
+						<span>₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.OnlineQR ?? 0)</span>
+
+						<h4>🎫 Advance & Booking</h4>
+
+						<span>Total Advance</span>
+						<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.TotalAdvance ?? 0)</span>
+
+						<span>Total Booking</span>
+						<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.TotalBooking ?? 0)</span>
+
+						<span>Redeemed Advance</span>
+						<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.RedeemedAdvance ?? 0)</span>
+
+						<span>Redeemed Booking</span>
+						<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.RedeemedBooking ?? 0)</span>
+
+						<span>Not Redeemed Advance</span>
+						<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.NotRedeemedAdvance ?? 0)</span>
+
+						<span>Not Redeemed Booking</span>
+						<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.NotRedeemedBooking ?? 0)</span>
+					</div>
+				</ContentTemplate>
+			</AccordionItem>
+		}
+	</AccordionItems>
+</SfAccordion>
+
+<SfAccordion>
+	<AccordionItems>
+		<AccordionItem Header="Grand Total">
+			<ContentTemplate>
+				<div>
+					<h4>👥 Demographics</h4>
+					<span class="card-value">@(_transactionTotalsModel?.Sum(_ => _.Male + _.Female) ?? 0)</span>
+					<span>Total People</span>
+
+					<span>Male</span>
+					<span>@(_transactionTotalsModel?.Sum(_ => _.Male) ?? 0)</span>
+
+					<span>Female</span>
+					<span>@(_transactionTotalsModel?.Sum(_ => _.Female) ?? 0)</span>
+
+					<span>Loyalty</span>
+					<span>@(_transactionTotalsModel?.Sum(_ => _.Loyalty) ?? 0)</span>
+
+					<h4>💳 Payments</h4>
+
+					<span>Total Amount</span>
+					<span class="card-value">₹@(_transactionTotalsModel?.Sum(_ => _.Cash + _.Card + _.UPI + _.Amex + _.OnlineQR) ?? 0)</span>
+
+					<span>Cash</span>
+					<span>₹@(_transactionTotalsModel?.Sum(_ => _.Cash) ?? 0)</span>
+
+					<span>Card</span>
+					<span>₹@(_transactionTotalsModel?.Sum(_ => _.Card) ?? 0)</span>
+
+					<span>UPI</span>
+					<span>₹@(_transactionTotalsModel?.Sum(_ => _.UPI) ?? 0)</span>
+
+					<span>Amex</span>
+					<span>₹@(_transactionTotalsModel?.Sum(_ => _.Amex) ?? 0)</span>
+
+					<span>Online QR</span>
+					<span>₹@(_transactionTotalsModel?.Sum(_ => _.OnlineQR) ?? 0)</span>
+
+					<h4>🎫 Advance & Booking</h4>
+
+					<span>Total Advance</span>
+					<span>₹@(_advanceTotalsModel?.Sum(_ => _.TotalAdvance) ?? 0)</span>
+
+					<span>Total Booking</span>
+					<span>₹@(_advanceTotalsModel?.Sum(_ => _.TotalBooking) ?? 0)</span>
+
+					<span>Redeemed Advance</span>
+					<span>₹@(_advanceTotalsModel?.Sum(_ => _.RedeemedAdvance) ?? 0)</span>
+
+					<span>Redeemed Booking</span>
+					<span>₹@(_advanceTotalsModel?.Sum(_ => _.RedeemedBooking) ?? 0)</span>
+
+					<span>Not Redeemed Advance</span>
+					<span>₹@(_advanceTotalsModel?.Sum(_ => _.NotRedeemedAdvance) ?? 0)</span>
+
+					<span>Not Redeemed Booking</span>
+					<span>₹@(_advanceTotalsModel?.Sum(_ => _.NotRedeemedBooking) ?? 0)</span>
+				</div>
+			</ContentTemplate>
+		</AccordionItem>
+	</AccordionItems>
+</SfAccordion>
+
+<SfComboBox TValue="int"
+			TItem="LocationModel"
+			FloatLabelType='@FloatLabelType.Auto'
+			Placeholder="Select a Location"
+			DataSource="_locations"
+			@bind-Value="_selectedLocationId">
+	<ComboBoxFieldSettings Value="Id" Text="Name" />
+</SfComboBox>
+
+<SfButton Content="Detailed PDF"
+		  OnClick="DetailedPDFButtonClicked" />
+
+<SfButton Content="Detailed Excel"
+		  OnClick="DetailedExcelButtonClicked" />
+
+<SfDatePicker TValue="DateTime"
+			  @bind-Value="_advanceDate"
+			  Placeholder="Select an Advance Take On Date" />
+
+<SfButton Content="Advance PDF"
+		  OnClick="AdvancePDFButtonClicked" />
+
+<SfButton Content="Advance Excel"
+		  OnClick="AdvanceExcelButtonClicked" />
