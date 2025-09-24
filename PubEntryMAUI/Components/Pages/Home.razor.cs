@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Components;
+
 using PubEntryLibrary.Data;
 using PubEntryLibrary.DataAccess;
 using PubEntryLibrary.Models;
@@ -12,6 +14,8 @@ namespace PubEntryMAUI.Components.Pages;
 
 public partial class Home
 {
+	[Inject] private NavigationManager NavManager { get; set; }
+
 	private DateTime _fromDateTime = DateTime.Now;
 	private DateTime _toDateTime = DateTime.Now;
 	private DateTime _advanceDate = DateTime.Now;
@@ -22,16 +26,11 @@ public partial class Home
 	private readonly List<TransactionTotalsModel> _transactionTotalsModel = [];
 	private readonly List<AdvanceTotalsModel> _advanceTotalsModel = [];
 
-	private void LogOut()
-	{
-
-	}
-
 	#region Load Data
 	protected override async Task OnInitializedAsync()
 	{
+		await ValidateUser();
 		await LoadData();
-		await base.OnInitializedAsync();
 	}
 
 	private async Task LoadData()
@@ -138,6 +137,30 @@ public partial class Home
 		var fileName = $"AdvanceExcelReport_{_locations.FirstOrDefault(_ => _.Id == _selectedLocationId).Name}_{DateTime.Now}.xlsx";
 		SaveService saveService = new();
 		saveService.SaveAndView(fileName, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ms);
+	}
+	#endregion
+
+	#region Authentication
+	private void LogOut()
+	{
+		SecureStorage.Default.RemoveAll();
+		NavManager.NavigateTo("/Login", true);
+	}
+
+	private async Task ValidateUser()
+	{
+		var userId = await SecureStorage.Default.GetAsync("UserId");
+		var password = await SecureStorage.Default.GetAsync("Password");
+
+		if (userId is null || password is null)
+		{
+			LogOut();
+			return;
+		}
+
+		var user = await CommonData.LoadTableDataById<UserModel>(TableNames.User, int.Parse(userId));
+		if (user is null || user.Password != password)
+			LogOut();
 	}
 	#endregion
 }

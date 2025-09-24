@@ -1,0 +1,28 @@
+﻿@page "/Login"
+
+<SfComboBox TValue="int"
+			TItem="LocationModel"
+			FloatLabelType='@FloatLabelType.Auto'
+			Placeholder="Choose Location"
+			DataSource="_locations"
+			Value="@_selectedLocationId">
+	<ComboBoxFieldSettings Value="Id" Text="Name" />
+	<ComboBoxEvents TValue="int" TItem="LocationModel" ValueChange="OnLocationChanged" />
+</SfComboBox>
+
+<SfComboBox TValue="int"
+			TItem="UserModel"
+			FloatLabelType='@FloatLabelType.Auto'
+			Placeholder="Choose User"
+			DataSource="_users"
+			@bind-Value="_selectedUserId">
+	<ComboBoxFieldSettings Value="Id" Text="Name" />
+</SfComboBox>
+
+<SfTextBox Type="InputType.Password"
+		   FloatLabelType='@FloatLabelType.Auto'
+		   Placeholder="Enter a Password"
+		   @bind-Value="_password" />
+
+<SfButton Content="Log In"
+		  OnClick="LogIn" />
