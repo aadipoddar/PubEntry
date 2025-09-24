@@ -16,6 +16,21 @@
 			<h2 class="form-title">Sign In</h2>
 
 			<div class="form-group">
+				<label class="form-label">Location</label>
+				<SfComboBox TValue="int"
+							TItem="LocationModel"
+							FloatLabelType='@FloatLabelType.Never'
+							Placeholder="Choose Location"
+							DataSource="_locations"
+							PopupDisplayMode="PopupDisplayMode.Inline"
+							Value="@_selectedLocationId"
+							CssClass="modern-input">
+					<ComboBoxFieldSettings Value="Id" Text="Name" />
+					<ComboBoxEvents TValue="int" TItem="LocationModel" ValueChange="OnLocationChanged" />
+				</SfComboBox>
+			</div>
+
+			<div class="form-group">
 				<label class="form-label">User</label>
 				<SfComboBox TValue="int"
 							TItem="UserModel"
@@ -23,7 +38,7 @@
 							Placeholder="Choose User"
 							DataSource="_users"
 							@bind-Value="_selectedUserId"
-							CssClass="modern-input">in UI
+							CssClass="modern-input">
 					<ComboBoxFieldSettings Value="Id" Text="Name" />
 				</SfComboBox>
 			</div>
@@ -79,7 +94,6 @@
 		justify-content: center;
 		align-items: center;
 		padding: 2rem 1rem;
-		font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 	}
 
 	/* Header Section */
