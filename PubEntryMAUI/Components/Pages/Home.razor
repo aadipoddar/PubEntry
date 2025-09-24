@@ -310,6 +310,61 @@
 	</div>
 </div>
 
+<!-- Update Dialog - Fixed and Styled -->
+<SfDialog Header="🔄 Application Update"
+		  @ref="_sfUpdateDialog"
+		  @bind-Visible="_isLoadingDialogVisible"
+		  Width="450px"
+		  Height="auto"
+		  ShowCloseIcon="false"
+		  IsModal="true"
+		  CloseOnEscape="false"
+		  CssClass="update-dialog">
+	<DialogTemplates>
+		<Content>
+			<div class="update-content">
+				<!-- Progress Section -->
+				<div class="progress-section">
+					<div class="update-icon">
+						<div class="spinner"></div>
+					</div>
+					<div class="progress-info">
+						<h4 class="update-title">@_isLoadingText</h4>
+						<div class="progress-bar-container">
+							<div class="progress-bar">
+								<div class="progress-fill" style="width: @(_progressPercentage)%"></div>
+							</div>
+							<span class="progress-text">@_progressPercentage%</span>
+						</div>
+						@if (!string.IsNullOrEmpty(_estimatedTime))
+						{
+							<p class="time-estimate">@_estimatedTime</p>
+						}
+					</div>
+				</div>
+
+				<!-- Fun Fact Section -->
+				@if (!string.IsNullOrEmpty(_currentFunFact))
+				{
+					<div class="fun-fact-section">
+						<div class="fun-fact-icon">💡</div>
+						<div class="fun-fact-content">
+							<h5>Did you know?</h5>
+							<p>@_currentFunFact</p>
+						</div>
+					</div>
+				}
+
+				<!-- Warning Message -->
+				<div class="warning-section">
+					<div class="warning-icon">⚠️</div>
+					<p class="warning-text">Please don't close the app during the update process.</p>
+				</div>
+			</div>
+		</Content>
+	</DialogTemplates>
+</SfDialog>
+
 <style>
 	/* Company Colors & Variables */
 	:root {
@@ -669,6 +724,168 @@
 		border-bottom: 2px solid var(--accent-color);
 	}
 
+	/* Update Dialog Styles */
+	.update-dialog .e-dlg-content {
+		padding: 0 !important;
+		background: var(--background) !important;
+	}
+
+	.update-dialog .e-dlg-header-content {
+		background: var(--primary-color) !important;
+		color: var(--white) !important;
+		border-bottom: none !important;
+		font-weight: 600 !important;
+		padding: 1rem 1.5rem !important;
+	}
+
+	.update-content {
+		padding: 2rem;
+		text-align: center;
+	}
+
+	.progress-section {
+		margin-bottom: 2rem;
+	}
+
+	.update-icon {
+		margin-bottom: 1rem;
+	}
+
+	.spinner {
+		width: 60px;
+		height: 60px;
+		border: 4px solid var(--border);
+		border-top: 4px solid var(--primary-color);
+		border-radius: 50%;
+		animation: spin 1s linear infinite;
+		margin: 0 auto;
+	}
+
+	@@keyframes spin {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
+	}
+
+	.progress-info {
+		margin-top: 1rem;
+	}
+
+	.update-title {
+		color: var(--primary-color);
+		font-size: 1.1rem;
+		font-weight: 600;
+		margin-bottom: 1rem;
+	}
+
+	.progress-bar-container {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		margin-bottom: 0.75rem;
+	}
+
+	.progress-bar {
+		flex: 1;
+		height: 8px;
+		background: var(--border);
+		border-radius: 4px;
+		overflow: hidden;
+		position: relative;
+	}
+
+	.progress-fill {
+		height: 100%;
+		background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+		border-radius: 4px;
+		transition: width 0.3s ease;
+		position: relative;
+	}
+
+		.progress-fill::after {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+			animation: shimmer 2s infinite;
+		}
+
+	@@keyframes shimmer {
+		0% { transform: translateX(-100%); }
+		100% { transform: translateX(100%); }
+	}
+
+	.progress-text {
+		font-weight: 600;
+		color: var(--primary-color);
+		font-size: 0.9rem;
+		min-width: 40px;
+	}
+
+	.time-estimate {
+		color: var(--text-light);
+		font-size: 0.85rem;
+		margin: 0;
+	}
+
+	.fun-fact-section {
+		background: var(--white);
+		border-radius: var(--radius);
+		padding: 1.5rem;
+		margin-bottom: 1.5rem;
+		box-shadow: var(--shadow);
+		border: 1px solid var(--border);
+		display: flex;
+		align-items: flex-start;
+		gap: 1rem;
+		text-align: left;
+	}
+
+	.fun-fact-icon {
+		font-size: 1.5rem;
+		flex-shrink: 0;
+		margin-top: 0.25rem;
+	}
+
+	.fun-fact-content h5 {
+		color: var(--primary-color);
+		font-size: 1rem;
+		font-weight: 600;
+		margin: 0 0 0.5rem 0;
+	}
+
+	.fun-fact-content p {
+		color: var(--text-dark);
+		font-size: 0.9rem;
+		margin: 0;
+		line-height: 1.4;
+	}
+
+	.warning-section {
+		background: rgba(255, 193, 7, 0.1);
+		border: 1px solid rgba(255, 193, 7, 0.3);
+		border-radius: var(--radius);
+		padding: 1rem;
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		text-align: left;
+	}
+
+	.warning-icon {
+		font-size: 1.25rem;
+		flex-shrink: 0;
+	}
+
+	.warning-text {
+		color: var(--text-dark);
+		font-size: 0.85rem;
+		margin: 0;
+		font-weight: 500;
+	}
+
 	/* Responsive Design */
 	@@media (max-width: 768px) {
 		.home-container {
@@ -699,6 +916,22 @@
 
 		.controls-section {
 			grid-template-columns: 1fr;
+		}
+
+		.update-content {
+			padding: 1.5rem;
+		}
+
+		.fun-fact-section {
+			flex-direction: column;
+			text-align: center;
+			gap: 0.75rem;
+		}
+
+		.warning-section {
+			flex-direction: column;
+			text-align: center;
+			gap: 0.5rem;
 		}
 	}
 
@@ -731,6 +964,15 @@
 		.header-section {
 			padding: 1rem;
 		}
+
+		.update-content {
+			padding: 1rem;
+		}
+
+		.update-dialog {
+			width: 95% !important;
+			max-width: 400px !important;
+		}
 	}
 
 	/* Syncfusion Component Overrides */
@@ -762,5 +1004,20 @@
 	.e-accordion .e-acrdn-content {
 		border: none !important;
 		background: transparent !important;
+	}
+
+	/* Update Dialog Syncfusion Overrides */
+	.update-dialog.e-dialog {
+		border-radius: var(--radius) !important;
+		box-shadow: var(--shadow-hover) !important;
+		border: none !important;
+	}
+
+	.update-dialog .e-dlg-header {
+		border-radius: var(--radius) var(--radius) 0 0 !important;
+	}
+
+	.update-dialog .e-dlg-container {
+		border-radius: var(--radius) !important;
 	}
 </style>

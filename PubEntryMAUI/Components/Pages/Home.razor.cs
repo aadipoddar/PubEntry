@@ -1,3 +1,5 @@
+using System.Reflection;
+
 using Microsoft.AspNetCore.Components;
 
 using PubEntryLibrary.Data;
@@ -8,7 +10,12 @@ using PubEntryLibrary.Printing.PDF;
 
 using PubEntryMAUI.Services;
 
+#if ANDROID
+using PubEntryMAUI.Services.Android;
+#endif
+
 using Syncfusion.Blazor.Calendars;
+using Syncfusion.Blazor.Popups;
 
 namespace PubEntryMAUI.Components.Pages;
 
@@ -21,17 +28,99 @@ public partial class Home
 	private DateTime _advanceDate = DateTime.Now;
 
 	private int _selectedLocationId;
+	private string _updatingText = "Loading...";
+	private bool _isLoadingDialogVisible = false;
+
+	// Added missing fields for update dialog
+	private DateTime _updateStartTime;
+	private string _currentFunFact = "";
+	private string _isLoadingText = "Loading...";
+	private int _progressPercentage = 0;
+	private string _estimatedTime = "";
+
+	// Fun facts array for display during updates
+	private readonly string[] _funFacts = [
+		"Did you know? The first computer bug was an actual bug found in 1947!",
+		"Fun fact: The term 'debugging' was coined by Grace Hopper.",
+		"Coffee fact: Programmers consume 12% of the world's coffee supply!",
+		"Tech trivia: The first 1GB hard drive weighed over 500 pounds!",
+		"Code wisdom: There are only 10 types of people: those who understand binary and those who don't."
+	];
 
 	private List<LocationModel> _locations = [];
 	private readonly List<TransactionTotalsModel> _transactionTotalsModel = [];
 	private readonly List<AdvanceTotalsModel> _advanceTotalsModel = [];
 
+	private SfDialog _sfUpdateDialog;
+
 	#region Load Data
 	protected override async Task OnInitializedAsync()
 	{
+#if ANDROID
+		await UpdateApplication();
+#endif
 		await ValidateUser();
 		await LoadData();
 	}
+
+#if ANDROID
+	private async Task UpdateApplication()
+	{
+		try
+		{
+			var currentVersion = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.0.0.0";
+
+			if (await AadiSoftUpdater.CheckForUpdates("aadipoddar", "PubEntry", currentVersion))
+			{
+				_isLoadingDialogVisible = true;
+				_updateStartTime = DateTime.Now;
+				_currentFunFact = _funFacts[new Random().Next(_funFacts.Length)];
+				_isLoadingText = "Updating application... 0%";
+				_progressPercentage = 0;
+				_estimatedTime = "Calculating...";
+				StateHasChanged();
+
+				var progress = new Progress<int>(percentage =>
+				{
+					_progressPercentage = percentage;
+					_isLoadingText = $"Updating application... {percentage}%";
+
+					// Calculate estimated time remaining
+					if (percentage > 0)
+					{
+						var elapsed = DateTime.Now - _updateStartTime;
+						var totalEstimated = TimeSpan.FromMilliseconds(elapsed.TotalMilliseconds * 100 / percentage);
+						var remaining = totalEstimated - elapsed;
+
+						if (remaining.TotalSeconds > 0)
+						{
+							_estimatedTime = remaining.TotalMinutes >= 1
+								? $"~{remaining.Minutes}m {remaining.Seconds}s remaining"
+								: $"~{remaining.Seconds}s remaining";
+						}
+						else
+							_estimatedTime = "Almost done...";
+					}
+
+					InvokeAsync(StateHasChanged);
+				});
+
+				await AadiSoftUpdater.UpdateApp("aadipoddar", "PubEntry", "com.aadisoft.pubEntry", progress);
+
+				// Hide dialog after update completes
+				_isLoadingDialogVisible = false;
+				StateHasChanged();
+			}
+		}
+		catch (Exception ex)
+		{
+			_updatingText = "Please check your Internet Connection.";
+			_isLoadingDialogVisible = false;
+			StateHasChanged();
+			// Optionally log the exception: Console.WriteLine($"Update error: {ex.Message}");
+		}
+	}
+#endif
 
 	private async Task LoadData()
 	{
@@ -75,25 +164,44 @@ public partial class Home
 
 		foreach (var location in _locations)
 		{
-			_transactionTotalsModel.Add(await TransactionData.LoadTransactionTotalsByDateLocation(_fromDateTime, _toDateTime, location.Id));
-			if (_transactionTotalsModel.LastOrDefault() is null)
+			var transactionTotal = await TransactionData.LoadTransactionTotalsByDateLocation(_fromDateTime, _toDateTime, location.Id);
+			if (transactionTotal is not null)
 			{
-				_transactionTotalsModel.Remove(_transactionTotalsModel.LastOrDefault());
-				_transactionTotalsModel.Add(new TransactionTotalsModel());
-				_transactionTotalsModel.LastOrDefault().LocationId = location.Id;
+				_transactionTotalsModel.Add(transactionTotal);
+			}
+			else
+			{
+				_transactionTotalsModel.Add(new TransactionTotalsModel { LocationId = location.Id });
 			}
 
-			_advanceTotalsModel.Add(_toDateTime.TimeOfDay < TimeSpan.FromHours(17) ?
+			var advanceTotal = _toDateTime.TimeOfDay < TimeSpan.FromHours(17) ?
 				await AdvanceData.LoadAdvanceTotalsByForDateLocation(_fromDateTime.Date, _toDateTime.AddDays(-1).Date.AddHours(23).AddMinutes(59), location.Id)
-				: await AdvanceData.LoadAdvanceTotalsByForDateLocation(_fromDateTime.Date, _toDateTime.Date, location.Id));
-			if (_advanceTotalsModel.LastOrDefault() is null)
+				: await AdvanceData.LoadAdvanceTotalsByForDateLocation(_fromDateTime.Date, _toDateTime.Date, location.Id);
+
+			if (advanceTotal is not null)
 			{
-				_advanceTotalsModel.Remove(_advanceTotalsModel.LastOrDefault());
-				_advanceTotalsModel.Add(new AdvanceTotalsModel());
-				_advanceTotalsModel.LastOrDefault().LocationId = location.Id;
+				_advanceTotalsModel.Add(advanceTotal);
+			}
+			else
+			{
+				_advanceTotalsModel.Add(new AdvanceTotalsModel { LocationId = location.Id });
 			}
 		}
 
+		StateHasChanged();
+	}
+	#endregion
+
+	#region Update Dialog Methods
+	public void ShowUpdateDialog()
+	{
+		_isLoadingDialogVisible = true;
+		StateHasChanged();
+	}
+
+	public void HideUpdateDialog()
+	{
+		_isLoadingDialogVisible = false;
 		StateHasChanged();
 	}
 	#endregion
@@ -102,7 +210,7 @@ public partial class Home
 	private async Task SummaryButtonClicked()
 	{
 		var ms = await PDF.Summary(_fromDateTime, _toDateTime);
-		var fileName = $"SummaryReport_{DateTime.Now}.pdf";
+		var fileName = $"SummaryReport_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
 		SaveService saveService = new();
 		saveService.SaveAndView(fileName, "application/pdf", ms);
 	}
@@ -110,7 +218,8 @@ public partial class Home
 	private async Task DetailedPDFButtonClicked()
 	{
 		var ms = await PDF.Detail(_fromDateTime, _toDateTime, _selectedLocationId);
-		var fileName = $"DetailedPDFReport_{_locations.FirstOrDefault(_ => _.Id == _selectedLocationId).Name}_{DateTime.Now}.pdf";
+		var locationName = _locations.FirstOrDefault(_ => _.Id == _selectedLocationId)?.Name ?? "Unknown";
+		var fileName = $"DetailedPDFReport_{locationName}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
 		SaveService saveService = new();
 		saveService.SaveAndView(fileName, "application/pdf", ms);
 	}
@@ -118,7 +227,8 @@ public partial class Home
 	private async Task DetailedExcelButtonClicked()
 	{
 		var ms = await Excel.TransactionAdvanceExcel(_fromDateTime, _toDateTime, _selectedLocationId);
-		var fileName = $"DetailedExcelReport_{_locations.FirstOrDefault(_ => _.Id == _selectedLocationId).Name}_{DateTime.Now}.xlsx";
+		var locationName = _locations.FirstOrDefault(_ => _.Id == _selectedLocationId)?.Name ?? "Unknown";
+		var fileName = $"DetailedExcelReport_{locationName}_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
 		SaveService saveService = new();
 		saveService.SaveAndView(fileName, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ms);
 	}
@@ -126,7 +236,8 @@ public partial class Home
 	private async Task AdvancePDFButtonClicked()
 	{
 		var ms = await PDF.AdvanceTakeOn(_advanceDate, _selectedLocationId);
-		var fileName = $"AdvancePDFReport_{_locations.FirstOrDefault(_ => _.Id == _selectedLocationId).Name}_{DateTime.Now}.xlsx";
+		var locationName = _locations.FirstOrDefault(_ => _.Id == _selectedLocationId)?.Name ?? "Unknown";
+		var fileName = $"AdvancePDFReport_{locationName}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
 		SaveService saveService = new();
 		saveService.SaveAndView(fileName, "application/pdf", ms);
 	}
@@ -134,7 +245,8 @@ public partial class Home
 	private async Task AdvanceExcelButtonClicked()
 	{
 		var ms = await Excel.AdvanceTakeOnExcel(_advanceDate, _selectedLocationId);
-		var fileName = $"AdvanceExcelReport_{_locations.FirstOrDefault(_ => _.Id == _selectedLocationId).Name}_{DateTime.Now}.xlsx";
+		var locationName = _locations.FirstOrDefault(_ => _.Id == _selectedLocationId)?.Name ?? "Unknown";
+		var fileName = $"AdvanceExcelReport_{locationName}_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx";
 		SaveService saveService = new();
 		saveService.SaveAndView(fileName, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", ms);
 	}
