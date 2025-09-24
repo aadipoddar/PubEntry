@@ -28,6 +28,12 @@ public partial class Home
 	private DateTime _advanceDate = DateTime.Now;
 
 	private int _selectedLocationId;
+
+	private List<LocationModel> _locations = [];
+	private readonly List<TransactionTotalsModel> _transactionTotalsModel = [];
+	private readonly List<AdvanceTotalsModel> _advanceTotalsModel = [];
+
+	#region Updating
 	private string _updatingText = "Loading...";
 	private bool _isLoadingDialogVisible = false;
 
@@ -47,21 +53,7 @@ public partial class Home
 		"Code wisdom: There are only 10 types of people: those who understand binary and those who don't."
 	];
 
-	private List<LocationModel> _locations = [];
-	private readonly List<TransactionTotalsModel> _transactionTotalsModel = [];
-	private readonly List<AdvanceTotalsModel> _advanceTotalsModel = [];
-
 	private SfDialog _sfUpdateDialog;
-
-	#region Load Data
-	protected override async Task OnInitializedAsync()
-	{
-#if ANDROID
-		await UpdateApplication();
-#endif
-		await ValidateUser();
-		await LoadData();
-	}
 
 #if ANDROID
 	private async Task UpdateApplication()
@@ -121,6 +113,17 @@ public partial class Home
 		}
 	}
 #endif
+	#endregion
+
+	#region Load Data
+	protected override async Task OnInitializedAsync()
+	{
+#if ANDROID
+		await UpdateApplication();
+#endif
+		await ValidateUser();
+		await LoadData();
+	}
 
 	private async Task LoadData()
 	{
