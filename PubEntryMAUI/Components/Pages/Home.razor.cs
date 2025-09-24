@@ -22,6 +22,11 @@ public partial class Home
 	private readonly List<TransactionTotalsModel> _transactionTotalsModel = [];
 	private readonly List<AdvanceTotalsModel> _advanceTotalsModel = [];
 
+	private void LogOut()
+	{
+
+	}
+
 	#region Load Data
 	protected override async Task OnInitializedAsync()
 	{
@@ -34,7 +39,7 @@ public partial class Home
 		_locations = await CommonData.LoadTableDataByStatus<LocationModel>(TableNames.Location);
 		_selectedLocationId = _locations.FirstOrDefault()?.Id ?? 0;
 
-		if (DateTime.Now.Hour >= TimeSpan.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)).Hours)
+		if (DateTime.Now.Hour >= int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)))
 		{
 			_toDateTime = DateTime.Now.Date.AddDays(1).AddHours(int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubCloseTime)));
 			_fromDateTime = DateTime.Now.Date.AddHours(int.Parse(await SettingsData.LoadSettingsByKey(SettingsKeys.PubOpenTime)));

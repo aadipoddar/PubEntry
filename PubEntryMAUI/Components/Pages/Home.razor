@@ -1,175 +1,766 @@
 ﻿@page "/"
 
-<SfDateTimePicker TValue="DateTime"
-				  Placeholder="Select start date"
-				  Value="@_fromDateTime"
-				  Max="@_toDateTime">
-	<DateTimePickerEvents TValue="DateTime" ValueChange="OnFromValueChanged" />
-</SfDateTimePicker>
+<div class="home-container">
+	<!-- Header Section -->
+	<div class="header-section">
+		<h1 class="app-title">Pub Entry - Dashboard</h1>
+		<SfButton Content="Log Out"
+				  OnClick="LogOut"
+				  CssClass="logout-btn" />
+	</div>
 
-<SfDateTimePicker TValue="DateTime"
-				  Placeholder="Select end date"
-				  Value="@_toDateTime"
-				  Min="@_fromDateTime">
-	<DateTimePickerEvents TValue="DateTime" ValueChange="OnToValueChanged" />
-</SfDateTimePicker>
-
-<SfButton Content="Refresh"
-		  OnClick="LoadTransactionsAdvance" />
-
-<SfButton Content="Summary PDF"
-		  OnClick="SummaryButtonClicked" />
-
-<SfAccordion ExpandMode="ExpandMode.Single">
-	<AccordionItems>
-		@foreach (var location in _locations)
-		{
-			<AccordionItem Header="@location.Name">
-				<ContentTemplate>
-					<div>
-						<h4>👥 Demographics</h4>
-						<span>@((_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Male ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Female ?? 0))</span>
-						<span>Total People</span>
-
-						<span>Male</span>
-						<span>@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Male ?? 0)</span>
-
-						<span>Female</span>
-						<span>@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Female ?? 0)</span>
-
-						<span>Loyalty</span>
-						<span>@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Loyalty ?? 0)</span>
-
-						<h4>💳 Payments</h4>
-
-						<span>Total Amount</span>
-						<span>₹@((_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Cash ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Card ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.UPI ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Amex ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.OnlineQR ?? 0))</span>
-
-						<span>Cash</span>
-						<span>₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Cash ?? 0)</span>
-
-						<span>Card</span>
-						<span>₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Card ?? 0)</span>
-
-						<span>UPI</span>
-						<span>₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.UPI ?? 0)</span>
-
-						<span>Amex</span>
-						<span>₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Amex ?? 0)</span>
-
-						<span>Online QR</span>
-						<span>₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.OnlineQR ?? 0)</span>
-
-						<h4>🎫 Advance & Booking</h4>
-
-						<span>Total Advance</span>
-						<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.TotalAdvance ?? 0)</span>
-
-						<span>Total Booking</span>
-						<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.TotalBooking ?? 0)</span>
-
-						<span>Redeemed Advance</span>
-						<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.RedeemedAdvance ?? 0)</span>
-
-						<span>Redeemed Booking</span>
-						<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.RedeemedBooking ?? 0)</span>
-
-						<span>Not Redeemed Advance</span>
-						<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.NotRedeemedAdvance ?? 0)</span>
-
-						<span>Not Redeemed Booking</span>
-						<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.NotRedeemedBooking ?? 0)</span>
-					</div>
-				</ContentTemplate>
-			</AccordionItem>
-		}
-	</AccordionItems>
-</SfAccordion>
-
-<SfAccordion>
-	<AccordionItems>
-		<AccordionItem Header="Grand Total">
-			<ContentTemplate>
-				<div>
-					<h4>👥 Demographics</h4>
-					<span class="card-value">@(_transactionTotalsModel?.Sum(_ => _.Male + _.Female) ?? 0)</span>
-					<span>Total People</span>
-
-					<span>Male</span>
-					<span>@(_transactionTotalsModel?.Sum(_ => _.Male) ?? 0)</span>
-
-					<span>Female</span>
-					<span>@(_transactionTotalsModel?.Sum(_ => _.Female) ?? 0)</span>
-
-					<span>Loyalty</span>
-					<span>@(_transactionTotalsModel?.Sum(_ => _.Loyalty) ?? 0)</span>
-
-					<h4>💳 Payments</h4>
-
-					<span>Total Amount</span>
-					<span class="card-value">₹@(_transactionTotalsModel?.Sum(_ => _.Cash + _.Card + _.UPI + _.Amex + _.OnlineQR) ?? 0)</span>
-
-					<span>Cash</span>
-					<span>₹@(_transactionTotalsModel?.Sum(_ => _.Cash) ?? 0)</span>
-
-					<span>Card</span>
-					<span>₹@(_transactionTotalsModel?.Sum(_ => _.Card) ?? 0)</span>
-
-					<span>UPI</span>
-					<span>₹@(_transactionTotalsModel?.Sum(_ => _.UPI) ?? 0)</span>
-
-					<span>Amex</span>
-					<span>₹@(_transactionTotalsModel?.Sum(_ => _.Amex) ?? 0)</span>
-
-					<span>Online QR</span>
-					<span>₹@(_transactionTotalsModel?.Sum(_ => _.OnlineQR) ?? 0)</span>
-
-					<h4>🎫 Advance & Booking</h4>
-
-					<span>Total Advance</span>
-					<span>₹@(_advanceTotalsModel?.Sum(_ => _.TotalAdvance) ?? 0)</span>
-
-					<span>Total Booking</span>
-					<span>₹@(_advanceTotalsModel?.Sum(_ => _.TotalBooking) ?? 0)</span>
-
-					<span>Redeemed Advance</span>
-					<span>₹@(_advanceTotalsModel?.Sum(_ => _.RedeemedAdvance) ?? 0)</span>
-
-					<span>Redeemed Booking</span>
-					<span>₹@(_advanceTotalsModel?.Sum(_ => _.RedeemedBooking) ?? 0)</span>
-
-					<span>Not Redeemed Advance</span>
-					<span>₹@(_advanceTotalsModel?.Sum(_ => _.NotRedeemedAdvance) ?? 0)</span>
-
-					<span>Not Redeemed Booking</span>
-					<span>₹@(_advanceTotalsModel?.Sum(_ => _.NotRedeemedBooking) ?? 0)</span>
+	<!-- Date Range Section -->
+	<div class="date-section">
+		<div class="date-card">
+			<h3 class="section-title">📅 Select Date Range</h3>
+			<div class="date-inputs">
+				<div class="input-group">
+					<label>From Date</label>
+					<SfDateTimePicker TValue="DateTime"
+									  Placeholder="Select start date"
+									  Value="@_fromDateTime"
+									  Max="@_toDateTime"
+									  CssClass="custom-datepicker">
+						<DateTimePickerEvents TValue="DateTime" ValueChange="OnFromValueChanged" />
+					</SfDateTimePicker>
 				</div>
-			</ContentTemplate>
-		</AccordionItem>
-	</AccordionItems>
-</SfAccordion>
+				<div class="input-group">
+					<label>To Date</label>
+					<SfDateTimePicker TValue="DateTime"
+									  Placeholder="Select end date"
+									  Value="@_toDateTime"
+									  Min="@_fromDateTime"
+									  CssClass="custom-datepicker">
+						<DateTimePickerEvents TValue="DateTime" ValueChange="OnToValueChanged" />
+					</SfDateTimePicker>
+				</div>
+			</div>
+			<div class="action-buttons">
+				<SfButton Content="Refresh"
+						  OnClick="LoadTransactionsAdvance"
+						  CssClass="primary-btn" />
+				<SfButton Content="📄 Summary"
+						  OnClick="SummaryButtonClicked"
+						  CssClass="action-btn summary" />
+			</div>
+		</div>
+	</div>
 
-<SfComboBox TValue="int"
-			TItem="LocationModel"
-			FloatLabelType='@FloatLabelType.Auto'
-			Placeholder="Select a Location"
-			DataSource="_locations"
-			@bind-Value="_selectedLocationId">
-	<ComboBoxFieldSettings Value="Id" Text="Name" />
-</SfComboBox>
+	<!-- Location Analytics -->
+	<div class="analytics-section">
+		<SfAccordion ExpandMode="ExpandMode.Single" CssClass="modern-accordion">
+			<AccordionItems>
+				@foreach (var location in _locations)
+				{
+					<AccordionItem CssClass="location-accordion">
+						<HeaderTemplate>
+							<div class="accordion-header">
+								<span class="location-icon">📍</span>
+								<span class="location-name">@location.Name</span>
+							</div>
+						</HeaderTemplate>
+						<ContentTemplate>
+							<div class="location-stats">
+								<!-- Key Metrics Cards -->
+								<div class="metrics-grid">
+									<div class="metric-card success">
+										<div class="metric-icon">💰</div>
+										<div class="metric-value">₹@((_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Cash ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Card ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.UPI ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Amex ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.OnlineQR ?? 0))</div>
+										<div class="metric-label">Total Revenue</div>
+									</div>
 
-<SfButton Content="Detailed PDF"
-		  OnClick="DetailedPDFButtonClicked" />
+									<div class="metric-card primary">
+										<div class="metric-icon">👥</div>
+										<div class="metric-value">@((_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Male ?? 0) + (_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Female ?? 0))</div>
+										<div class="metric-label">Total People</div>
+									</div>
+								</div>
 
-<SfButton Content="Detailed Excel"
-		  OnClick="DetailedExcelButtonClicked" />
+								<!-- Detailed Stats -->
+								<div class="stats-grid">
+									<div class="stats-section">
+										<h4>💳 Payments</h4>
+										<div class="stats-row">
+											<span>Cash</span>
+											<span>₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Cash ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Card</span>
+											<span>₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Card ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>UPI</span>
+											<span>₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.UPI ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Amex</span>
+											<span>₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Amex ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Online QR</span>
+											<span>₹@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.OnlineQR ?? 0)</span>
+										</div>
+									</div>
 
-<SfDatePicker TValue="DateTime"
-			  @bind-Value="_advanceDate"
-			  Placeholder="Select an Advance Take On Date" />
+									<div class="stats-section">
+										<h4>👥 Demographics</h4>
+										<div class="stats-row">
+											<span>Male</span>
+											<span>@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Male ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Female</span>
+											<span>@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Female ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Loyalty</span>
+											<span>@(_transactionTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.Loyalty ?? 0)</span>
+										</div>
+									</div>
 
-<SfButton Content="Advance PDF"
-		  OnClick="AdvancePDFButtonClicked" />
+									<div class="stats-section">
+										<h4>🎫 Advance & Booking</h4>
+										<div class="stats-row">
+											<span>Total Advance</span>
+											<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.TotalAdvance ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Total Booking</span>
+											<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.TotalBooking ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Redeemed Advance</span>
+											<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.RedeemedAdvance ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Redeemed Booking</span>
+											<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.RedeemedBooking ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Not Redeemed Advance</span>
+											<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.NotRedeemedAdvance ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Not Redeemed Booking</span>
+											<span>₹@(_advanceTotalsModel.FirstOrDefault(_ => _.LocationId == location.Id)?.NotRedeemedBooking ?? 0)</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</ContentTemplate>
+					</AccordionItem>
+				}
+			</AccordionItems>
+		</SfAccordion>
 
-<SfButton Content="Advance Excel"
-		  OnClick="AdvanceExcelButtonClicked" />
+		<!-- Grand Total Section -->
+		<div class="grand-total-section">
+			<SfAccordion CssClass="modern-accordion grand-total">
+				<AccordionItems>
+					<AccordionItem CssClass="grand-total-accordion">
+						<HeaderTemplate>
+							<div class="grand-total-header">
+								<span class="total-icon">📈</span>
+								<span class="total-title">Grand Total Summary</span>
+							</div>
+						</HeaderTemplate>
+						<ContentTemplate>
+							<div class="grand-total-stats">
+								<!-- Grand Total Key Metrics -->
+								<div class="metrics-grid">
+									<div class="metric-card success large">
+										<div class="metric-icon">💰</div>
+										<div class="metric-value">₹@(_transactionTotalsModel?.Sum(_ => _.Cash + _.Card + _.UPI + _.Amex + _.OnlineQR) ?? 0)</div>
+										<div class="metric-label">Total Revenue</div>
+									</div>
+
+									<div class="metric-card primary large">
+										<div class="metric-icon">👥</div>
+										<div class="metric-value">@(_transactionTotalsModel?.Sum(_ => _.Male + _.Female) ?? 0)</div>
+										<div class="metric-label">Total People</div>
+									</div>
+								</div>
+
+								<!-- Grand Total Detailed Stats -->
+								<div class="stats-grid">
+									<div class="stats-section">
+										<h4>💳 Payments</h4>
+										<div class="stats-row">
+											<span>Cash</span>
+											<span>₹@(_transactionTotalsModel?.Sum(_ => _.Cash) ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Card</span>
+											<span>₹@(_transactionTotalsModel?.Sum(_ => _.Card) ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>UPI</span>
+											<span>₹@(_transactionTotalsModel?.Sum(_ => _.UPI) ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Amex</span>
+											<span>₹@(_transactionTotalsModel?.Sum(_ => _.Amex) ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Online QR</span>
+											<span>₹@(_transactionTotalsModel?.Sum(_ => _.OnlineQR) ?? 0)</span>
+										</div>
+									</div>
+
+									<div class="stats-section">
+										<h4>👥 Demographics</h4>
+										<div class="stats-row">
+											<span>Male</span>
+											<span>@(_transactionTotalsModel?.Sum(_ => _.Male) ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Female</span>
+											<span>@(_transactionTotalsModel?.Sum(_ => _.Female) ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Loyalty</span>
+											<span>@(_transactionTotalsModel?.Sum(_ => _.Loyalty) ?? 0)</span>
+										</div>
+									</div>
+
+									<div class="stats-section">
+										<h4>🎫 Advance & Booking</h4>
+										<div class="stats-row">
+											<span>Total Advance</span>
+											<span>₹@(_advanceTotalsModel?.Sum(_ => _.TotalAdvance) ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Total Booking</span>
+											<span>₹@(_advanceTotalsModel?.Sum(_ => _.TotalBooking) ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Redeemed Advance</span>
+											<span>₹@(_advanceTotalsModel?.Sum(_ => _.RedeemedAdvance) ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Redeemed Booking</span>
+											<span>₹@(_advanceTotalsModel?.Sum(_ => _.RedeemedBooking) ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Not Redeemed Advance</span>
+											<span>₹@(_advanceTotalsModel?.Sum(_ => _.NotRedeemedAdvance) ?? 0)</span>
+										</div>
+										<div class="stats-row">
+											<span>Not Redeemed Booking</span>
+											<span>₹@(_advanceTotalsModel?.Sum(_ => _.NotRedeemedBooking) ?? 0)</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</ContentTemplate>
+					</AccordionItem>
+				</AccordionItems>
+			</SfAccordion>
+		</div>
+	</div>
+
+	<!-- Export & Controls Section -->
+	<div class="controls-section">
+		<div class="control-card">
+			<h3 class="section-title">📊 Export & Reports</h3>
+
+			<div class="control-group">
+				<label>Select Location</label>
+				<SfComboBox TValue="int"
+							TItem="LocationModel"
+							FloatLabelType='@FloatLabelType.Auto'
+							Placeholder="Choose Location"
+							DataSource="_locations"
+							@bind-Value="_selectedLocationId"
+							CssClass="modern-combobox">
+					<ComboBoxFieldSettings Value="Id" Text="Name" />
+				</SfComboBox>
+			</div>
+
+			<div class="export-buttons">
+				<SfButton Content="📄 PDF"
+						  OnClick="DetailedPDFButtonClicked"
+						  CssClass="action-btn export" />
+				<SfButton Content="📊 Excel"
+						  OnClick="DetailedExcelButtonClicked"
+						  CssClass="action-btn export" />
+			</div>
+		</div>
+
+		<div class="control-card">
+			<h3 class="section-title">🎫 Advance Reports</h3>
+
+			<div class="control-group">
+				<label>Advance Date</label>
+				<SfDatePicker TValue="DateTime"
+							  @bind-Value="_advanceDate"
+							  Placeholder="Select Date"
+							  CssClass="modern-datepicker" />
+			</div>
+
+			<div class="export-buttons">
+				<SfButton Content="📄 PDF"
+						  OnClick="AdvancePDFButtonClicked"
+						  CssClass="action-btn advance" />
+				<SfButton Content="📊 Excel"
+						  OnClick="AdvanceExcelButtonClicked"
+						  CssClass="action-btn advance" />
+			</div>
+		</div>
+	</div>
+</div>
+
+<style>
+	/* Company Colors & Variables */
+	:root {
+		--primary-color: #363555;
+		--accent-color: #DFBA6A;
+		--primary-light: #4a476b;
+		--accent-light: #e5c47a;
+		--red-color: #dc3545;
+		--red-hover: #c82333;
+		--text-dark: #2d2d2d;
+		--text-light: #666666;
+		--background: #fafafa;
+		--white: #ffffff;
+		--border: #e1e5e9;
+		--shadow: 0 2px 10px rgba(54, 53, 85, 0.1);
+		--shadow-hover: 0 4px 20px rgba(54, 53, 85, 0.15);
+		--radius: 12px;
+		--transition: all 0.3s ease;
+	}
+
+	/* Base Styles */
+	.home-container {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 1.5rem;
+		background: var(--background);
+		min-height: 100vh;
+	}
+
+	/* Header Section - Updated to single line */
+	.header-section {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 2.5rem;
+		padding: 1.5rem;
+		background: var(--white);
+		border-radius: var(--radius);
+		box-shadow: var(--shadow);
+		border: 1px solid var(--border);
+	}
+
+	.app-title {
+		font-size: 1.75rem;
+		font-weight: 700;
+		color: var(--primary-color);
+		margin: 0;
+	}
+
+	.logout-btn {
+		background: var(--red-color) !important;
+		color: var(--white) !important;
+		border: none !important;
+		border-radius: var(--radius) !important;
+		padding: 0.75rem 1.5rem !important;
+		font-weight: 500 !important;
+		cursor: pointer !important;
+		transition: var(--transition) !important;
+		box-shadow: var(--shadow) !important;
+	}
+
+		.logout-btn:hover {
+			background: var(--red-hover) !important;
+			transform: translateY(-1px) !important;
+			box-shadow: var(--shadow-hover) !important;
+		}
+
+	/* Section Styles */
+	.date-section,
+	.analytics-section,
+	.controls-section {
+		margin-bottom: 2rem;
+	}
+
+	.section-title {
+		font-size: 1.25rem;
+		font-weight: 600;
+		color: var(--primary-color);
+		margin-bottom: 1rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	/* Card Styles */
+	.date-card,
+	.control-card {
+		background: var(--white);
+		border-radius: var(--radius);
+		padding: 1.5rem;
+		box-shadow: var(--shadow);
+		border: 1px solid var(--border);
+		transition: var(--transition);
+	}
+
+		.date-card:hover,
+		.control-card:hover {
+			box-shadow: var(--shadow-hover);
+			transform: translateY(-2px);
+		}
+
+	/* Date Inputs */
+	.date-inputs {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 1.5rem;
+		margin-bottom: 1.5rem;
+	}
+
+	.input-group {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+		.input-group label {
+			font-weight: 500;
+			color: var(--text-dark);
+			font-size: 0.9rem;
+		}
+
+	/* Action Buttons - Updated to align horizontally */
+	.action-buttons {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
+
+	/* Button Styles */
+	.primary-btn,
+	.action-btn {
+		background: var(--primary-color) !important;
+		color: var(--white) !important;
+		border: none !important;
+		border-radius: var(--radius) !important;
+		padding: 0.75rem 1.5rem !important;
+		font-weight: 500 !important;
+		cursor: pointer !important;
+		transition: var(--transition) !important;
+		box-shadow: var(--shadow) !important;
+	}
+
+		.primary-btn:hover,
+		.action-btn:hover {
+			background: var(--primary-light) !important;
+			transform: translateY(-1px) !important;
+			box-shadow: var(--shadow-hover) !important;
+		}
+
+		.action-btn.summary {
+			background: var(--accent-color) !important;
+			color: var(--primary-color) !important;
+			font-weight: 600 !important;
+		}
+
+			.action-btn.summary:hover {
+				background: var(--accent-light) !important;
+			}
+
+		.action-btn.export {
+			background: #4CAF50 !important;
+		}
+
+			.action-btn.export:hover {
+				background: #45a049 !important;
+			}
+
+		.action-btn.advance {
+			background: #2196F3 !important;
+		}
+
+			.action-btn.advance:hover {
+				background: #1976D2 !important;
+			}
+
+	/* Accordion Styles - Updated location header */
+	.modern-accordion {
+		border: none !important;
+		box-shadow: none !important;
+	}
+
+	.location-accordion,
+	.grand-total-accordion {
+		background: var(--white) !important;
+		border: 1px solid var(--border) !important;
+		border-radius: var(--radius) !important;
+		margin-bottom: 1rem !important;
+		box-shadow: var(--shadow) !important;
+		overflow: hidden !important;
+	}
+
+	.accordion-header,
+	.grand-total-header {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 1rem 1.5rem;
+		background: transparent; /* Removed background */
+		color: var(--primary-color); /* Changed text color */
+		border-bottom: 1px solid var(--border);
+	}
+
+	.location-icon,
+	.total-icon {
+		font-size: 1.25rem;
+		color: var(--accent-color);
+	}
+
+	.location-name,
+	.total-title {
+		font-weight: 600;
+		font-size: 1.1rem;
+		color: var(--primary-color); /* Changed location text color */
+	}
+
+	/* Stats Content */
+	.location-stats,
+	.grand-total-stats {
+		padding: 1.5rem;
+		background: var(--background);
+	}
+
+	.metrics-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		gap: 1rem;
+		margin-bottom: 2rem;
+	}
+
+	.metric-card {
+		background: var(--white);
+		border-radius: var(--radius);
+		padding: 1.5rem;
+		text-align: center;
+		box-shadow: var(--shadow);
+		border: 1px solid var(--border);
+		transition: var(--transition);
+	}
+
+		.metric-card:hover {
+			transform: translateY(-3px);
+			box-shadow: var(--shadow-hover);
+		}
+
+		.metric-card.primary {
+			border-left: 4px solid var(--primary-color);
+		}
+
+		.metric-card.success {
+			border-left: 4px solid var(--accent-color);
+		}
+
+		.metric-card.large {
+			padding: 2rem;
+		}
+
+	.metric-icon {
+		font-size: 2rem;
+		margin-bottom: 0.5rem;
+	}
+
+	.metric-value {
+		font-size: 1.75rem;
+		font-weight: 700;
+		color: var(--primary-color);
+		margin-bottom: 0.25rem;
+	}
+
+	.metric-label {
+		color: var(--text-light);
+		font-size: 0.9rem;
+		font-weight: 500;
+	}
+
+	/* Stats Grid */
+	.stats-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		gap: 1.5rem;
+	}
+
+	.stats-section {
+		background: var(--white);
+		border-radius: var(--radius);
+		padding: 1.5rem;
+		box-shadow: var(--shadow);
+		border: 1px solid var(--border);
+	}
+
+		.stats-section h4 {
+			color: var(--primary-color);
+			font-size: 1rem;
+			font-weight: 600;
+			margin-bottom: 1rem;
+			border-bottom: 2px solid var(--accent-color);
+			padding-bottom: 0.5rem;
+		}
+
+	.stats-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0.75rem 0;
+		border-bottom: 1px solid var(--border);
+	}
+
+		.stats-row:last-child {
+			border-bottom: none;
+		}
+
+		.stats-row span:first-child {
+			color: var(--text-light);
+			font-size: 0.9rem;
+		}
+
+		.stats-row span:last-child {
+			color: var(--text-dark);
+			font-weight: 600;
+			font-size: 0.9rem;
+		}
+
+	/* Controls Section */
+	.controls-section {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+		gap: 1.5rem;
+	}
+
+	.control-group {
+		margin-bottom: 1rem;
+	}
+
+		.control-group label {
+			display: block;
+			font-weight: 500;
+			color: var(--text-dark);
+			margin-bottom: 0.5rem;
+			font-size: 0.9rem;
+		}
+
+	.export-buttons {
+		display: flex;
+		gap: 1rem;
+		flex-wrap: wrap;
+	}
+
+	/* Grand Total Specific */
+	.grand-total-section {
+		margin-top: 2rem;
+	}
+
+	.grand-total .accordion-header,
+	.grand-total .grand-total-header {
+		background: transparent; /* Removed background */
+		color: var(--primary-color);
+		border-bottom: 2px solid var(--accent-color);
+	}
+
+	/* Responsive Design */
+	@@media (max-width: 768px) {
+		.home-container {
+			padding: 1rem;
+		}
+
+		.header-section {
+			gap: 1rem;
+			text-align: center;
+		}
+
+		.app-title {
+			font-size: 1.5rem;
+		}
+
+		.date-inputs {
+			grid-template-columns: 1fr;
+			gap: 1rem;
+		}
+
+		.metrics-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.stats-grid {
+			grid-template-columns: 1fr;
+		}
+
+		.controls-section {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@@media (max-width: 480px) {
+		.home-container {
+			padding: 0.75rem;
+		}
+
+		.app-title {
+			font-size: 1.25rem;
+		}
+
+		.date-card,
+		.control-card {
+			padding: 1rem;
+		}
+
+		.stats-section {
+			padding: 1rem;
+		}
+
+		.metric-card {
+			padding: 1rem;
+		}
+
+			.metric-card.large {
+				padding: 1.25rem;
+			}
+
+		.header-section {
+			padding: 1rem;
+		}
+	}
+
+	/* Syncfusion Component Overrides */
+	.e-input-group,
+	.e-ddl,
+	.e-combobox,
+	.e-datepicker {
+		border-radius: var(--radius) !important;
+		border-color: var(--border) !important;
+	}
+
+		.e-input-group:focus-within,
+		.e-ddl:focus-within,
+		.e-combobox:focus-within,
+		.e-datepicker:focus-within {
+			border-color: var(--primary-color) !important;
+			box-shadow: 0 0 0 2px rgba(54, 53, 85, 0.2) !important;
+		}
+
+	.e-accordion .e-acrdn-item {
+		border: none !important;
+	}
+
+	.e-accordion .e-acrdn-header {
+		background: transparent !important;
+		border: none !important;
+	}
+
+	.e-accordion .e-acrdn-content {
+		border: none !important;
+		background: transparent !important;
+	}
+</style>
