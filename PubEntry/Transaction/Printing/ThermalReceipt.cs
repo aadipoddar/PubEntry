@@ -34,7 +34,7 @@ internal static class ThermalReceipt
 		AddPersonDetails(document, receiptModel);
 		AddPaymentDetails(document, receiptModel, advance);
 		AddFooterDetails(document, receiptModel);
-		// AddAdvertisements(document);
+		AddAdvertisements(document);
 
 		return document;
 	}
