@@ -80,10 +80,11 @@ internal static class ThermalParagraphs
 		};
 	}
 
-	internal static Paragraph RegularParagraph(string text)
+	internal static Paragraph RegularParagraph(string text, bool textCenter = false)
 	{
 		return new(new Run(text))
 		{
+			TextAlignment = textCenter ? TextAlignment.Center : TextAlignment.Left,
 			FontSize = RegularFontSizeThermal,
 			FontFamily = RegularFontFamilyThermal,
 			Margin = new Thickness(RegularFontPaddingLeftThermal, RegularFontPaddingTopThermal, RegularFontPaddingRightThermal, RegularFontPaddingBottomThermal),

@@ -1,5 +1,8 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 using NumericWordsConversion;
 
@@ -15,6 +18,8 @@ internal static class ThermalReceipt
 	private static string FooterLine1 => Application.Current.Resources[SettingsKeys.FooterLine1].ToString();
 	private static string FooterLine2 => Application.Current.Resources[SettingsKeys.FooterLine2].ToString();
 
+	private const int AdvertisementGapThermal = 10;
+
 	internal static FlowDocument Print(TransactionPrintModel receiptModel, string copyOf, int advance)
 	{
 		FlowDocument document = new()
@@ -29,6 +34,7 @@ internal static class ThermalReceipt
 		AddPersonDetails(document, receiptModel);
 		AddPaymentDetails(document, receiptModel, advance);
 		AddFooterDetails(document, receiptModel);
+		AddAdvertisements(document);
 
 		return document;
 	}
@@ -133,5 +139,49 @@ internal static class ThermalReceipt
 		document.Blocks.Add(ThermalParagraphs.FooterParagraph(FooterLine1));
 		document.Blocks.Add(ThermalParagraphs.FooterParagraph($"{receiptModel.DateTime:dd/MM/yy HH:mm}"));
 		document.Blocks.Add(ThermalParagraphs.FooterParagraph(FooterLine2));
+	}
+
+	private static void AddAdvertisements(FlowDocument document)
+	{
+		document.Blocks.Add(ThermalParagraphs.SeparatorParagraph());
+
+		document.Blocks.Add(ThermalParagraphs.SubHeaderParagraph("PROMOTION"));
+		document.Blocks.Add(ThermalParagraphs.RegularParagraph("Enjoy Jameson and stand a chance to win a Harley-Davidson bike!", true));
+		document.Blocks.Add(ThermalParagraphs.RegularParagraph("The grand giveaway will be held on 21st October, Vijay Dashami.", true));
+
+		StackPanel advertisements = new()
+		{
+			Orientation = Orientation.Horizontal,
+			HorizontalAlignment = HorizontalAlignment.Center
+		};
+
+		advertisements.Children.Add(CreateAdvertisement("advertisement 1.jpeg"));
+		advertisements.Children.Add(CreateAdvertisement("advertisement 2.jpeg"));
+
+		document.Blocks.Add(new BlockUIContainer(advertisements)
+		{
+			Margin = new Thickness(0, 5, 0, 5)
+		});
+	}
+
+	private static Image CreateAdvertisement(string fileName)
+	{
+		BitmapImage bitmap = new();
+		bitmap.BeginInit();
+		bitmap.UriSource = new Uri($"pack://application:,,,/Transaction/Printing/Advertisement/{fileName}", UriKind.Absolute);
+		bitmap.CacheOption = BitmapCacheOption.OnLoad;
+		bitmap.EndInit();
+		bitmap.Freeze();
+
+		double width = (PageWidthThermal - PagePaddingLeftThermal - PagePaddingRightThermal - AdvertisementGapThermal * 2) / 2d;
+
+		return new Image
+		{
+			Source = bitmap,
+			Stretch = Stretch.Uniform,
+			Width = width,
+			Height = width * bitmap.PixelHeight / bitmap.PixelWidth,
+			Margin = new Thickness(AdvertisementGapThermal / 2d, 0, AdvertisementGapThermal / 2d, 0)
+		};
 	}
 }
