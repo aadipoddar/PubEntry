@@ -1,10 +1,10 @@
-﻿using System.Windows;
+﻿using NumericWordsConversion;
+
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-
-using NumericWordsConversion;
 
 namespace PubEntry.Transaction.Printing;
 
@@ -146,7 +146,7 @@ internal static class ThermalReceipt
 		document.Blocks.Add(ThermalParagraphs.SeparatorParagraph());
 
 		document.Blocks.Add(ThermalParagraphs.SubHeaderParagraph("PROMOTION"));
-		document.Blocks.Add(ThermalParagraphs.RegularParagraph("Enjoy Jameson and stand a chance to win a Harley-Davidson bike!", true));
+		document.Blocks.Add(ThermalParagraphs.RegularParagraph("Enjoy Jameson and the Top customer with most billing to win a Harley-Davidson bike!", true));
 		document.Blocks.Add(ThermalParagraphs.RegularParagraph("The grand giveaway will be held on 21st October, Vijay Dashami.", true));
 
 		StackPanel advertisements = new()
