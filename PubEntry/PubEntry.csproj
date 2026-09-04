@@ -6,7 +6,7 @@
     <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
-    <AssemblyVersion>5.0.1.3</AssemblyVersion>
+    <AssemblyVersion>5.0.1.4</AssemblyVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <UseWindowsForms>False</UseWindowsForms>
     <ApplicationIcon>Golder Park.ico</ApplicationIcon>
@@ -29,8 +29,6 @@
 
   <ItemGroup>
     <Resource Include="Golder Park.jpg" />
-    <Resource Include="Transaction\Printing\Advertisement\advertisement 1.jpeg" />
-    <Resource Include="Transaction\Printing\Advertisement\advertisement 2.jpeg" />
   </ItemGroup>
 
   <ItemGroup>
